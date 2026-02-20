@@ -12,7 +12,7 @@
 <body>
   <!-- Security Classification Banner -->
   <div class="classification-banner">
-    FOR OFFICIAL USE ONLY &mdash; SC DSS INTERNAL SYSTEM
+    FOR OFFICIAL USE ONLY &mdash; SC DSS INTERNAL SYSTEM &mdash; AUTHORIZED USERS ONLY
   </div>
 
   <!-- Header -->
@@ -36,8 +36,8 @@
         </svg>
       </div>
       <div class="header-text">
-        <div class="header-title">Legal Case Intelligence</div>
-        <div class="header-subtitle">South Carolina Department of Social Services &mdash; Office of General Counsel</div>
+        <div class="header-title">Office of General Counsel</div>
+        <div class="header-subtitle">South Carolina Department of Social Services</div>
       </div>
     </div>
     <div class="header-right">
@@ -46,104 +46,312 @@
     </div>
   </header>
 
-  <!-- Tabs -->
-  <nav class="tabs">
-    <div class="tabs-inner">
-      <button class="tab active" data-panel="chat">
-        <svg viewBox="0 0 20 20" fill="currentColor" class="tab-icon"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H8.5l-4 3.5V14H4a2 2 0 01-2-2V5z"/></svg>
-        Agent Chat
-      </button>
-      <button class="tab" data-panel="browser">
-        <svg viewBox="0 0 20 20" fill="currentColor" class="tab-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h14v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm5 2a1 1 0 100 2h4a1 1 0 100-2H8z"/></svg>
-        Case Browser
-      </button>
+  <!-- Global Navigation -->
+  <nav class="global-nav">
+    <div class="global-nav-inner">
+      <div class="nav-links">
+        <a href="#" class="nav-link" onclick="return false;">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+          Home
+        </a>
+        <a href="#" class="nav-link active" onclick="return false;">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Case Intelligence
+        </a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="return false;">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+            Legal Resources
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-chevron"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="return false;">SC Code of Laws &mdash; Title 63 (Children)</a>
+            <a href="#" onclick="return false;">SC Family Court Rules</a>
+            <a href="#" onclick="return false;">DSS Policy &amp; Procedure Manual</a>
+            <a href="#" onclick="return false;">Federal CAPTA Guidelines</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" onclick="return false;">Westlaw (SC DSS License)</a>
+            <a href="#" onclick="return false;">LexisNexis</a>
+            <a href="#" onclick="return false;">SC Judicial Department</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="return false;">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/></svg>
+            Forms &amp; Templates
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-chevron"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="return false;">TPR Petition Template</a>
+            <a href="#" onclick="return false;">Emergency Removal Checklist</a>
+            <a href="#" onclick="return false;">GAL Appointment Order</a>
+            <a href="#" onclick="return false;">Treatment Plan Template</a>
+            <a href="#" onclick="return false;">Kinship Placement Agreement</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" onclick="return false;">Court Filing Cover Sheet</a>
+            <a href="#" onclick="return false;">Subpoena Template</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link" onclick="return false;">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3.001zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+            Training &amp; CLE
+            <svg viewBox="0 0 20 20" fill="currentColor" class="nav-chevron"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" onclick="return false;">CLE Credit Tracker</a>
+            <a href="#" onclick="return false;">SC Bar CLE Requirements</a>
+            <a href="#" onclick="return false;">New Attorney Orientation</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" onclick="return false;">Child Welfare Law Updates (2026)</a>
+            <a href="#" onclick="return false;">ICWA Compliance Training</a>
+            <a href="#" onclick="return false;">Courtroom Technology Guide</a>
+          </div>
+        </div>
+        <a href="#" class="nav-link" onclick="return false;">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="nav-icon"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"/></svg>
+          Support
+        </a>
+      </div>
+      <div class="nav-search">
+        <svg viewBox="0 0 20 20" fill="currentColor" class="search-icon"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+        <input type="text" placeholder="Search cases, statutes, policies..." disabled />
+      </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <main class="main">
-    <!-- Agent Chat Panel -->
-    <div class="panel active" id="panel-chat">
-      <div class="chat-panel">
-        <div class="chat-messages" id="chatMessages">
-          <div class="suggested-prompts" id="suggestedPrompts">
-            <div class="welcome-hero">
-              <svg viewBox="0 0 64 64" class="welcome-icon" aria-hidden="true">
-                <circle cx="32" cy="32" r="30" fill="var(--navy)" opacity="0.08"/>
-                <rect x="30" y="12" width="4" height="32" rx="1" fill="var(--navy)" opacity="0.3"/>
-                <rect x="22" y="44" width="20" height="4" rx="2" fill="var(--navy)" opacity="0.3"/>
-                <rect x="26" y="48" width="12" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
-                <rect x="12" y="14" width="40" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
-                <line x1="16" y1="17" x2="16" y2="26" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                <line x1="48" y1="17" x2="48" y2="22" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                <path d="M8 26 Q8 32 16 32 Q24 32 24 26 Z" fill="var(--navy)" opacity="0.2"/>
-                <path d="M40 22 Q40 28 48 28 Q56 28 56 22 Z" fill="var(--navy)" opacity="0.2"/>
-              </svg>
-              <h2>Legal Case Intelligence Agent</h2>
-              <p>Ask questions about DSS cases, timelines, statements, and discrepancies. The agent queries structured case data in real time using MCP tools.</p>
-            </div>
-            <div class="prompt-chips">
-              <button class="prompt-chip" data-prompt="List available cases">
-                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h14v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8z"/></svg>
-                List available cases
-              </button>
-              <button class="prompt-chip" data-prompt="Give me a detailed timeline for case 2024-DR-42-0892">
-                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4v4.586l2.707 2.707a1 1 0 01-1.414 1.414l-3-3A1 1 0 019 11V6a1 1 0 112 0z"/></svg>
-                Detailed timeline for case 2024-DR-42-0892
-              </button>
-              <button class="prompt-chip" data-prompt="Show me the discrepancies between the parents' accounts in case 2024-DR-42-0892">
-                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zM9 5a1 1 0 112 0v4a1 1 0 11-2 0V5zm1 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
-                Discrepancies in parents' accounts
-              </button>
-            </div>
-          </div>
+  <!-- Page Layout: Sidebar + Main -->
+  <div class="page-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Quick Links -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Quick Links</h3>
+        <ul class="sidebar-links">
+          <li><a href="#" onclick="return false;">SCCIS Case Management</a></li>
+          <li><a href="#" onclick="return false;">SC Judicial Odyssey</a></li>
+          <li><a href="#" onclick="return false;">LegalServer Portal</a></li>
+          <li><a href="#" onclick="return false;">CAPSS Reporting</a></li>
+          <li><a href="#" onclick="return false;">SC Courts eFiling</a></li>
+          <li><a href="#" onclick="return false;">DSS Policy Manual</a></li>
+        </ul>
+      </div>
+
+      <!-- Alerts -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Alerts &amp; Notices</h3>
+        <div class="sidebar-alert alert-warning">
+          <div class="alert-date">Feb 14, 2026</div>
+          <div class="alert-text">New DV screening protocol effective March 1. Review updated Form DSS-1572B.</div>
         </div>
-        <div class="chat-input-area">
-          <div class="chat-input-wrapper">
-            <textarea
-              class="chat-input"
-              id="chatInput"
-              placeholder="Ask about a case, timeline, statement, or discrepancy..."
-              rows="1"
-            ></textarea>
-            <button class="send-btn" id="sendBtn" title="Send message">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-          <div class="chat-input-footer">
-            Powered by Azure OpenAI &mdash; Responses may contain errors. Verify all case details against source documents.
-          </div>
+        <div class="sidebar-alert alert-info">
+          <div class="alert-date">Feb 10, 2026</div>
+          <div class="alert-text">SC Supreme Court Order 2026-02: Updated Family Court bench book available on Judicial Dept. site.</div>
+        </div>
+        <div class="sidebar-alert alert-info">
+          <div class="alert-date">Jan 28, 2026</div>
+          <div class="alert-text">ICWA compliance training deadline extended to April 30. Contact L. Marshall for registration.</div>
         </div>
       </div>
-    </div>
 
-    <!-- Case Browser Panel -->
-    <div class="panel" id="panel-browser">
+      <!-- Upcoming Deadlines -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Upcoming Deadlines</h3>
+        <ul class="sidebar-deadlines">
+          <li>
+            <span class="deadline-date">Mar 1</span>
+            <span class="deadline-text">CLE reporting period ends</span>
+          </li>
+          <li>
+            <span class="deadline-date">Mar 7</span>
+            <span class="deadline-text">Quarterly case review &mdash; All circuits</span>
+          </li>
+          <li>
+            <span class="deadline-date">Mar 15</span>
+            <span class="deadline-text">TPR best practices memo due to GC</span>
+          </li>
+          <li>
+            <span class="deadline-date">Apr 1</span>
+            <span class="deadline-text">FY2026 case outcome data to Fed. reporting</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Circuit Directory -->
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Circuit Contacts</h3>
+        <ul class="sidebar-contacts">
+          <li><strong>1st Circuit</strong> <span>Orangeburg, Dorchester, Calhoun</span></li>
+          <li><strong>2nd Circuit</strong> <span>Aiken, Bamberg, Barnwell</span></li>
+          <li><strong>5th Circuit</strong> <span>Richland, Kershaw</span></li>
+          <li><strong>7th Circuit</strong> <span>Spartanburg, Cherokee</span></li>
+          <li><strong>9th Circuit</strong> <span>Charleston, Berkeley</span></li>
+          <li><strong>13th Circuit</strong> <span>Greenville, Pickens</span></li>
+        </ul>
+        <a href="#" class="sidebar-more" onclick="return false;">View all 16 circuits &rarr;</a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="#" onclick="return false;">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Case Intelligence</span>
+      </div>
+
+      <!-- Case Browser (main content) -->
       <div class="browser-panel">
         <div class="browser-header">
           <h2>Case Data Browser</h2>
-          <p class="browser-subtitle">Browse all cases in the DSS Legal Case Intelligence database. Click a case ID to view details.</p>
+          <p class="browser-subtitle">Browse all 50 cases in the DSS Legal Case Intelligence database. Click a case ID to view parties, timeline events, statements, and discrepancies.</p>
         </div>
         <div id="caseList"></div>
         <div id="caseDetail" style="display:none;"></div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-left">
-        SC Department of Social Services &mdash; Office of General Counsel
+      <div class="footer-col">
+        <h4>Office of General Counsel</h4>
+        <p>SC Department of Social Services</p>
+        <p>1535 Confederate Avenue</p>
+        <p>Columbia, SC 29201</p>
+        <p class="footer-phone">(803) 898-7601</p>
       </div>
-      <div class="footer-right">
-        Internal Use Only &bull; Demo Environment
+      <div class="footer-col">
+        <h4>Internal Systems</h4>
+        <ul>
+          <li><a href="#" onclick="return false;">SCCIS Case Management</a></li>
+          <li><a href="#" onclick="return false;">SC Courts eFiling</a></li>
+          <li><a href="#" onclick="return false;">DSS Employee Portal</a></li>
+          <li><a href="#" onclick="return false;">IT Service Desk</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal References</h4>
+        <ul>
+          <li><a href="#" onclick="return false;">SC Code Title 63</a></li>
+          <li><a href="#" onclick="return false;">Family Court Rules</a></li>
+          <li><a href="#" onclick="return false;">DSS Policy Manual</a></li>
+          <li><a href="#" onclick="return false;">Federal CAPTA</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Administration</h4>
+        <ul>
+          <li><a href="#" onclick="return false;">Contact OGC</a></li>
+          <li><a href="#" onclick="return false;">Report a Security Issue</a></li>
+          <li><a href="#" onclick="return false;">Accessibility</a></li>
+          <li><a href="#" onclick="return false;">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <span>&copy; 2026 South Carolina Department of Social Services. All rights reserved.</span>
+        <span>Internal Use Only &bull; Contains Confidential Case Information &bull; S.C. Code Ann. &sect; 63-7-1990</span>
       </div>
     </div>
   </footer>
+
+  <!-- Floating Chat Widget -->
+  <button class="chat-fab" id="chatFab" title="Open AI Case Agent">
+    <svg class="fab-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+    </svg>
+    <svg class="fab-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+    <span class="chat-fab-badge">AI</span>
+  </button>
+
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-widget-header">
+      <div>
+        <div class="chat-widget-title">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.2"/>
+            <rect x="30" y="12" width="4" height="32" rx="1" fill="currentColor" opacity="0.6"/>
+            <rect x="22" y="44" width="20" height="4" rx="2" fill="currentColor" opacity="0.6"/>
+            <rect x="12" y="14" width="40" height="3" rx="1.5" fill="currentColor" opacity="0.6"/>
+            <path d="M8 26 Q8 32 16 32 Q24 32 24 26 Z" fill="currentColor" opacity="0.4"/>
+            <path d="M40 22 Q40 28 48 28 Q56 28 56 22 Z" fill="currentColor" opacity="0.4"/>
+          </svg>
+          AI Case Agent
+        </div>
+        <div class="chat-widget-subtitle">Legal Case Intelligence &mdash; MCP Tools</div>
+      </div>
+      <div class="chat-widget-actions">
+        <button class="widget-action-btn" id="clearChatBtn" title="Start new conversation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+          </svg>
+          New Chat
+        </button>
+      </div>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-messages" id="chatMessages">
+        <div class="suggested-prompts" id="suggestedPrompts">
+          <div class="welcome-hero">
+            <svg viewBox="0 0 64 64" class="welcome-icon" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="var(--navy)" opacity="0.08"/>
+              <rect x="30" y="12" width="4" height="32" rx="1" fill="var(--navy)" opacity="0.3"/>
+              <rect x="22" y="44" width="20" height="4" rx="2" fill="var(--navy)" opacity="0.3"/>
+              <rect x="26" y="48" width="12" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
+              <rect x="12" y="14" width="40" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
+              <line x1="16" y1="17" x2="16" y2="26" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+              <line x1="48" y1="17" x2="48" y2="22" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+              <path d="M8 26 Q8 32 16 32 Q24 32 24 26 Z" fill="var(--navy)" opacity="0.2"/>
+              <path d="M40 22 Q40 28 48 28 Q56 28 56 22 Z" fill="var(--navy)" opacity="0.2"/>
+            </svg>
+            <h2>Legal Case Intelligence Agent</h2>
+            <p>Query structured case data &mdash; timelines, statements, discrepancies, and party info across all DSS cases.</p>
+          </div>
+          <div class="prompt-chips">
+            <button class="prompt-chip" data-prompt="List available cases">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h14v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8z"/></svg>
+              List available cases
+            </button>
+            <button class="prompt-chip" data-prompt="Give me a detailed timeline for case 2024-DR-42-0892">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4v4.586l2.707 2.707a1 1 0 01-1.414 1.414l-3-3A1 1 0 019 11V6a1 1 0 112 0z"/></svg>
+              Timeline for 2024-DR-42-0892
+            </button>
+            <button class="prompt-chip" data-prompt="Show me the discrepancies between the parents' accounts in case 2024-DR-42-0892">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zM9 5a1 1 0 112 0v4a1 1 0 11-2 0V5zm1 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+              Discrepancies in parents' accounts
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <textarea
+            class="chat-input"
+            id="chatInput"
+            placeholder="Ask about a case, timeline, statement, or discrepancy..."
+            rows="1"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" title="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-input-footer">
+          Powered by Azure OpenAI (GPT-4.1) via MCP &mdash; AI-generated. Verify before use in filings.
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Markdown rendering via marked.js (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.4/marked.min.js"></script>

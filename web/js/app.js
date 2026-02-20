@@ -1,35 +1,32 @@
 /**
  * DSS Legal Case Intelligence — Main App Logic
- * Handles tab switching, auth display, and initialization.
+ * Handles floating chat widget, clear/reset, auth display, and initialization.
  */
 
 (function () {
   "use strict";
 
-  // ---- Tab Switching ----
-  const tabs = document.querySelectorAll(".tab");
-  const panels = document.querySelectorAll(".panel");
+  // ---- Floating Chat Widget ----
+  const chatFab = document.getElementById("chatFab");
+  const chatWidget = document.getElementById("chatWidget");
+  const clearChatBtn = document.getElementById("clearChatBtn");
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const targetPanel = tab.getAttribute("data-panel");
-
-      tabs.forEach((t) => t.classList.remove("active"));
-      panels.forEach((p) => p.classList.remove("active"));
-
-      tab.classList.add("active");
-      const panel = document.getElementById(`panel-${targetPanel}`);
-      if (panel) {
-        panel.classList.add("active");
-      }
-
-      // Load case data on first visit to browser tab
-      if (targetPanel === "browser" && !window.__casesLoaded) {
-        window.__casesLoaded = true;
-        CaseBrowser.loadCases();
-      }
-    });
+  chatFab.addEventListener("click", () => {
+    const isOpen = chatWidget.classList.toggle("open");
+    chatFab.classList.toggle("open", isOpen);
+    if (isOpen) {
+      const input = document.getElementById("chatInput");
+      if (input) input.focus();
+    }
   });
+
+  // ---- Clear / New Chat ----
+  clearChatBtn.addEventListener("click", () => {
+    AgentChat.reset();
+  });
+
+  // ---- Load Cases on startup ----
+  CaseBrowser.loadCases();
 
   // ---- Auth: display user email ----
   async function loadUserInfo() {

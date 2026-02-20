@@ -163,5 +163,22 @@ const AgentChat = (function () {
     });
   });
 
-  return { sendMessage };
+  // ---- Reset / Clear ----
+  function reset() {
+    conversationHistory.length = 0;
+    messagesContainer.innerHTML = "";
+    if (suggestedPrompts) {
+      suggestedPrompts.style.display = "";
+      messagesContainer.appendChild(suggestedPrompts);
+    }
+    // Re-bind prompt chip listeners (they were re-inserted into DOM)
+    document.querySelectorAll(".prompt-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const prompt = chip.getAttribute("data-prompt");
+        sendMessage(prompt);
+      });
+    });
+  }
+
+  return { sendMessage, reset };
 })();

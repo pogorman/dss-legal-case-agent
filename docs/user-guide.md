@@ -63,6 +63,49 @@ Switch to the **Case Browser** tab to view the underlying structured data.
 4. **Run a follow-up** — prove consistency by asking for the same data in a different way
 5. **Compare with SharePoint results** (shown separately) — the contrast sells itself
 
+## SharePoint Comparison Demo
+
+The `sharepoint-docs/` folder contains 11 realistic legal documents for Cases 1 and 2, ready to upload to SharePoint. These contain the same facts as the SQL database but in unstructured narrative prose.
+
+### Setting Up the SharePoint Agent
+
+1. Upload all files from `sharepoint-docs/Case-2024-DR-42-0892/` and `sharepoint-docs/Case-2024-DR-15-0341/` to a SharePoint document library
+2. Create a new Copilot Studio agent grounded in that SharePoint library
+3. Use the same prompts on both agents to compare results
+
+### Comparison Prompts
+
+See `sharepoint-docs/Demo_Comparison_Prompts.md` for 19 ready-made prompts across 6 categories:
+1. **Factual Retrieval** — timelines, dates, names
+2. **Cross-Referencing Statements** — comparing what different people said
+3. **Discrepancy Identification** — finding contradictions
+4. **Filtering and Precision** — medical-only events, law-enforcement-only statements
+5. **Multi-Case / Aggregate Queries** — counts, circuit filtering (MCP-only, 50 cases)
+6. **Precision Stress Tests** — page numbers, session counts, time gap calculations
+
+Each prompt includes expected MCP vs. SharePoint responses and why MCP wins.
+
+### Document Inventory
+
+**Case 2024-DR-42-0892 (CPS Emergency Removal) — 6 documents:**
+| Document | Content |
+|----------|---------|
+| `DSS_Investigation_Report.md` | Case manager notes, interviews, recommendations |
+| `Medical_Records.md` | Hospital admission, radiology, Dr. Chowdhury's assessment, nursing notes |
+| `Sheriff_Report_24-06-4418.md` | Lt. Odom investigation, parent interviews |
+| `Court_Orders_and_Filings.md` | Emergency order, probable cause hearing, 30-day review |
+| `Home_Study_Report.md` | Kinship placement assessment for Theresa Holloway |
+| `GAL_Report.md` | Karen Milford's Guardian ad Litem report |
+
+**Case 2024-DR-15-0341 (TPR) — 5 documents:**
+| Document | Content |
+|----------|---------|
+| `DSS_Investigation_Report.md` | Full investigation from referral through TPR filing |
+| `Substance_Abuse_Evaluation.md` | Dr. Ellis clinical eval, OUD diagnosis |
+| `Court_Orders_and_Filings.md` | All 6 court events including voluntary relinquishment |
+| `TPR_Petition_and_Affidavit.md` | Formal petition with statutory grounds + sworn affidavit |
+| `GAL_Reports.md` | Thomas Reed's initial and updated reports |
+
 ## Available Cases
 
 The system contains **50 synthetic cases** across all 16 SC judicial circuits.

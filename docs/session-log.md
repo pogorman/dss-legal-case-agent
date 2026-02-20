@@ -83,3 +83,62 @@
 ### Open items
 - Set up Copilot Studio agent pointing at `/mcp` endpoint (instructions now in user-guide.md)
 - Demo dry run with live audience walkthrough
+
+---
+
+## Session 4 — 2026-02-19
+
+### What was done
+
+#### SharePoint Documents for Copilot Studio Comparison Demo
+- Created `sharepoint-docs/` folder with realistic legal documents for Cases 1 and 2
+- **Case 1 (2024-DR-42-0892) — 6 documents:**
+  - `DSS_Investigation_Report.md` — Case manager Renee Dawson's investigation notes, interviews, observations, recommendations
+  - `Medical_Records.md` — Spartanburg Medical Center records: admission, radiology, Dr. Chowdhury's assessment, nursing notes with parent statements
+  - `Sheriff_Report_24-06-4418.md` — Lt. Odom's investigation, Marcus Webb interview (pp. 3-5), Dena Holloway interview (pp. 6-8)
+  - `Court_Orders_and_Filings.md` — Emergency removal order, probable cause hearing, 30-day review
+  - `Home_Study_Report.md` — Kinship placement assessment for Theresa Holloway
+  - `GAL_Report.md` — Karen Milford's Guardian ad Litem report
+- **Case 2 (2024-DR-15-0341) — 5 documents:**
+  - `DSS_Investigation_Report.md` — Monica Vance's full investigation from referral through TPR filing
+  - `Substance_Abuse_Evaluation.md` — Dr. Raymond Ellis's clinical evaluation of Crystal Price
+  - `Court_Orders_and_Filings.md` — All 6 court events: emergency order, probable cause, 90-day review, voluntary relinquishment, TPR petition, TPR probable cause
+  - `TPR_Petition_and_Affidavit.md` — Formal petition with statutory grounds, Monica Vance's sworn affidavit
+  - `GAL_Reports.md` — Thomas Reed's initial and updated reports recommending TPR
+- **Demo_Comparison_Prompts.md** — 6 categories of prompts with expected MCP vs SharePoint agent responses
+- All documents use page markers matching seed data `page_reference` values
+- All key statements, dates, and facts match the SQL seed data
+- Fixed factual errors in sheriff report (DOBs, address, doctor/case manager names)
+
+#### Web Front End Redesign
+- Modernized `web/index.html` with professional government application look:
+  - Gold "FOR OFFICIAL USE ONLY" classification banner
+  - Redesigned header with scales of justice logo, DSS Office of General Counsel subtitle, PRODUCTION badge
+  - Tab icons (chat bubble, file cabinet)
+  - Welcome hero area with branding and description
+  - Prompt chips with icons
+  - Chat input footer with AI disclaimer
+  - Dark navy footer with DSS branding
+- Overhauled `web/css/style.css`:
+  - Extended design token system (shadows, radii, more color variants)
+  - Classification banner styling
+  - Refined typography hierarchy
+  - Message animation (fade-in slide-up)
+  - Polished blockquote styling with gold accent
+  - Status badge dot indicators
+  - Custom scrollbar styling
+  - Better table styling with hover states
+  - Responsive improvements
+
+### Decisions made
+- Markdown format for SharePoint docs (easy to upload, Copilot Studio indexes them)
+- Documents contain same facts as SQL data in unstructured prose — tests retrieval precision
+- Some information intentionally spread across multiple documents to test cross-document synthesis
+- Kept existing JS files unchanged — UI redesign is HTML/CSS only
+- Classification banner adds "internal system" feel appropriate for government demo
+
+### Open items
+- Upload documents to SharePoint and create Copilot Studio agent grounded in them
+- Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
+- Deploy updated SWA with new UI
+- Demo dry run with side-by-side comparison

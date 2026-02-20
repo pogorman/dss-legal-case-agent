@@ -16,6 +16,7 @@ After every session or when O'G asks, update these files in `docs/`:
 - Functions: `functions/src/functions/` (5 files), `functions/src/db/client.ts`
 - MCP Server: `mcp-server/src/index.ts`, `mcp-server/src/mcp/server.ts`, `mcp-server/src/mcp/tools.ts`, `mcp-server/src/chat/completions.ts`
 - Web: `web/index.html`, `web/js/chat.js`, `web/js/cases.js` (50 embedded cases), `web/js/app.js`, `web/css/style.css`
+- SharePoint docs: `sharepoint-docs/` — 11 realistic legal documents for Cases 1-2, plus `Demo_Comparison_Prompts.md`
 - Infra: `infra/main.bicep`, `infra/parameters.json`, `deploy.sh`
 
 ## Conventions

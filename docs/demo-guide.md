@@ -24,7 +24,9 @@ The audience should experience the difference themselves before you explain what
 
 - [ ] Sign into the SWA URL and verify you see the app (do this 10 min before)
 - [ ] The Container App may cold-start — send a quick "List available cases" to warm it up
-- [ ] Have the SharePoint agent results ready for side-by-side comparison (screenshots or live)
+- [ ] Upload `sharepoint-docs/` files to SharePoint and connect Copilot Studio agent (or have screenshots ready)
+- [ ] Have the SharePoint agent open in a separate browser tab for side-by-side comparison
+- [ ] Have `sharepoint-docs/Demo_Comparison_Prompts.md` open for reference (19 ready-made prompts)
 - [ ] Know the primary case number: **2024-DR-42-0892** (CPS) and secondary: **2024-DR-15-0341** (TPR)
 - [ ] There are **50 total cases** across all SC circuits — the agent can list and query any of them
 
@@ -160,6 +162,34 @@ Give me a summary of case 2024-DR-21-0149. What was the outcome?
 
 ---
 
+### Act 6: Side-by-Side Comparison (3-5 min, optional)
+
+If you have the SharePoint agent set up, run the same prompt on both agents:
+
+**Switch to the SharePoint agent tab. Type:**
+```
+What are the key discrepancies between Marcus Webb's and Dena Holloway's accounts in case 2024-DR-42-0892?
+```
+
+> "Now let's ask the same question to the SharePoint-grounded agent. Same AI model, same prompt — the only difference is the data source."
+
+*Wait for both responses. Compare them side by side.*
+
+> "Notice the differences. The MCP agent returns all 6 discrepancies from the database, each with specific page citations and the 'contradicted by' evidence. The SharePoint agent returns... [react to whatever it shows]. It might find 2 or 3 discrepancies, miss the medical evidence contradictions, and won't have structured source/page references."
+
+**More comparison prompts from `Demo_Comparison_Prompts.md`:**
+
+| Category | Sample Prompt |
+|----------|--------------|
+| Cross-referencing | "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom" |
+| Filtering | "Show me only the medical events in the Webb case timeline" |
+| Aggregate | "How many active cases does DSS currently have?" |
+| Precision | "How many IOP sessions had Crystal Price completed as of November 2023 vs April 2024?" |
+
+> "The SharePoint agent can't do aggregate queries across 50 cases — it only has documents for 2. It can't filter by event type because that's a structured concept. And it can't reliably give you session counts at two different points in time because those numbers are buried in paragraphs."
+
+---
+
 ## Backup Prompts (If the Demo Goes Long or Q&A Gets Specific)
 
 | Prompt | What It Shows |
@@ -217,6 +247,7 @@ Give me a summary of case 2024-DR-21-0149. What was the outcome?
 | Act 3: Consistency Proof | 1 min | 8 min |
 | Act 4: Deep Dive (optional) | 1 min | 9 min |
 | Act 5: The "So What" | 2 min | 11 min |
-| Q&A | 5-10 min | ~20 min |
+| Act 6: Side-by-Side (optional) | 3-5 min | 16 min |
+| Q&A | 5-10 min | ~25 min |
 
-**Total: ~20 minutes** including Q&A. Can compress to 10 if needed by skipping Acts 4 and shortening the walkthrough.
+**Total: ~25 minutes** with comparison, ~20 without. Can compress to 10 by skipping Acts 4 and 6 and shortening the walkthrough.

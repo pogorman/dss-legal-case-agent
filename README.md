@@ -51,6 +51,10 @@ dss-legal-case-agent/
 ├── infra/                Bicep templates
 │   ├── main.bicep
 │   └── parameters.json
+├── sharepoint-docs/       SharePoint comparison documents
+│   ├── Case-2024-DR-42-0892/  6 legal documents (CPS case)
+│   ├── Case-2024-DR-15-0341/  5 legal documents (TPR case)
+│   └── Demo_Comparison_Prompts.md
 ├── docs/                 Documentation
 │   ├── architecture.md
 │   ├── demo-guide.md
@@ -121,3 +125,17 @@ cd web && npx serve .
 - **2024-DR-42-0892** — CPS emergency removal (Webb/Holloway, Spartanburg): 12 timeline events, 15 statements, 6 discrepancies — primary demo case
 - **2024-DR-15-0341** — TPR (Price, Richland): 10 timeline events, 12 statements, 4 discrepancies — secondary demo case
 - **48 generated cases** — varied case types (CPS, TPR, Neglect, Physical Abuse, Guardianship, Kinship) across 46 counties
+
+## SharePoint Comparison Documents
+
+The `sharepoint-docs/` folder contains realistic legal documents for Cases 1 and 2, formatted as Markdown files ready for upload to SharePoint. These documents contain the same facts as the SQL database but embedded in unstructured narrative prose — simulating what a real legal office would have in their document library.
+
+Use these to create a second Copilot Studio agent grounded in SharePoint, then compare it side-by-side with the MCP-backed agent. See `sharepoint-docs/Demo_Comparison_Prompts.md` for ready-made prompts that highlight the MCP advantage.
+
+### Document Inventory (11 files)
+
+**Case 2024-DR-42-0892 (CPS Emergency Removal):**
+- DSS Investigation Report, Medical Records, Sheriff Report, Court Orders, Home Study Report, GAL Report
+
+**Case 2024-DR-15-0341 (TPR):**
+- DSS Investigation Report, Substance Abuse Evaluation, Court Orders, TPR Petition & Affidavit, GAL Reports

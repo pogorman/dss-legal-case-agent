@@ -10,16 +10,54 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <!-- Security Classification Banner -->
+  <div class="classification-banner">
+    FOR OFFICIAL USE ONLY &mdash; SC DSS INTERNAL SYSTEM
+  </div>
+
   <!-- Header -->
   <header class="header">
-    <div class="header-title">SC DSS <span>|</span> Legal Case Intelligence</div>
-    <div class="header-user" id="userEmail"></div>
+    <div class="header-left">
+      <div class="header-logo">
+        <svg viewBox="0 0 64 64" class="header-icon" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="#C8962E"/>
+          <rect x="30" y="12" width="4" height="32" rx="1" fill="#1B3A6B"/>
+          <rect x="22" y="44" width="20" height="4" rx="2" fill="#1B3A6B"/>
+          <rect x="26" y="48" width="12" height="3" rx="1.5" fill="#1B3A6B"/>
+          <rect x="12" y="14" width="40" height="3" rx="1.5" fill="#1B3A6B"/>
+          <line x1="16" y1="17" x2="16" y2="26" stroke="#1B3A6B" stroke-width="2" stroke-linecap="round"/>
+          <line x1="48" y1="17" x2="48" y2="22" stroke="#1B3A6B" stroke-width="2" stroke-linecap="round"/>
+          <path d="M8 26 Q8 32 16 32 Q24 32 24 26 Z" fill="#1B3A6B" opacity="0.9"/>
+          <path d="M40 22 Q40 28 48 28 Q56 28 56 22 Z" fill="#1B3A6B" opacity="0.9"/>
+          <line x1="16" y1="26" x2="8" y2="26" stroke="#1B3A6B" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="26" x2="24" y2="26" stroke="#1B3A6B" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="48" y1="22" x2="40" y2="22" stroke="#1B3A6B" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="48" y1="22" x2="56" y2="22" stroke="#1B3A6B" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <div class="header-title">Legal Case Intelligence</div>
+        <div class="header-subtitle">South Carolina Department of Social Services &mdash; Office of General Counsel</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-user" id="userEmail"></div>
+      <div class="header-env">PRODUCTION</div>
+    </div>
   </header>
 
   <!-- Tabs -->
   <nav class="tabs">
-    <button class="tab active" data-panel="chat">Agent Chat</button>
-    <button class="tab" data-panel="browser">Case Browser</button>
+    <div class="tabs-inner">
+      <button class="tab active" data-panel="chat">
+        <svg viewBox="0 0 20 20" fill="currentColor" class="tab-icon"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H8.5l-4 3.5V14H4a2 2 0 01-2-2V5z"/></svg>
+        Agent Chat
+      </button>
+      <button class="tab" data-panel="browser">
+        <svg viewBox="0 0 20 20" fill="currentColor" class="tab-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h14v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm5 2a1 1 0 100 2h4a1 1 0 100-2H8z"/></svg>
+        Case Browser
+      </button>
+    </div>
   </nav>
 
   <!-- Main Content -->
@@ -29,16 +67,33 @@
       <div class="chat-panel">
         <div class="chat-messages" id="chatMessages">
           <div class="suggested-prompts" id="suggestedPrompts">
-            <h3>Try a prompt to get started</h3>
+            <div class="welcome-hero">
+              <svg viewBox="0 0 64 64" class="welcome-icon" aria-hidden="true">
+                <circle cx="32" cy="32" r="30" fill="var(--navy)" opacity="0.08"/>
+                <rect x="30" y="12" width="4" height="32" rx="1" fill="var(--navy)" opacity="0.3"/>
+                <rect x="22" y="44" width="20" height="4" rx="2" fill="var(--navy)" opacity="0.3"/>
+                <rect x="26" y="48" width="12" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
+                <rect x="12" y="14" width="40" height="3" rx="1.5" fill="var(--navy)" opacity="0.3"/>
+                <line x1="16" y1="17" x2="16" y2="26" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+                <line x1="48" y1="17" x2="48" y2="22" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+                <path d="M8 26 Q8 32 16 32 Q24 32 24 26 Z" fill="var(--navy)" opacity="0.2"/>
+                <path d="M40 22 Q40 28 48 28 Q56 28 56 22 Z" fill="var(--navy)" opacity="0.2"/>
+              </svg>
+              <h2>Legal Case Intelligence Agent</h2>
+              <p>Ask questions about DSS cases, timelines, statements, and discrepancies. The agent queries structured case data in real time using MCP tools.</p>
+            </div>
             <div class="prompt-chips">
               <button class="prompt-chip" data-prompt="List available cases">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h14v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8z"/></svg>
                 List available cases
               </button>
               <button class="prompt-chip" data-prompt="Give me a detailed timeline for case 2024-DR-42-0892">
-                Give me a detailed timeline for case 2024-DR-42-0892
+                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4v4.586l2.707 2.707a1 1 0 01-1.414 1.414l-3-3A1 1 0 019 11V6a1 1 0 112 0z"/></svg>
+                Detailed timeline for case 2024-DR-42-0892
               </button>
               <button class="prompt-chip" data-prompt="Show me the discrepancies between the parents' accounts in case 2024-DR-42-0892">
-                Show me the discrepancies between the parents' accounts in case 2024-DR-42-0892
+                <svg viewBox="0 0 20 20" fill="currentColor" class="chip-icon"><path d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zM9 5a1 1 0 112 0v4a1 1 0 11-2 0V5zm1 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+                Discrepancies in parents' accounts
               </button>
             </div>
           </div>
@@ -48,7 +103,7 @@
             <textarea
               class="chat-input"
               id="chatInput"
-              placeholder="Ask about a case..."
+              placeholder="Ask about a case, timeline, statement, or discrepancy..."
               rows="1"
             ></textarea>
             <button class="send-btn" id="sendBtn" title="Send message">
@@ -58,6 +113,9 @@
               </svg>
             </button>
           </div>
+          <div class="chat-input-footer">
+            Powered by Azure OpenAI &mdash; Responses may contain errors. Verify all case details against source documents.
+          </div>
         </div>
       </div>
     </div>
@@ -65,12 +123,27 @@
     <!-- Case Browser Panel -->
     <div class="panel" id="panel-browser">
       <div class="browser-panel">
-        <h2>Case Data Browser</h2>
+        <div class="browser-header">
+          <h2>Case Data Browser</h2>
+          <p class="browser-subtitle">Browse all cases in the DSS Legal Case Intelligence database. Click a case ID to view details.</p>
+        </div>
         <div id="caseList"></div>
         <div id="caseDetail" style="display:none;"></div>
       </div>
     </div>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        SC Department of Social Services &mdash; Office of General Counsel
+      </div>
+      <div class="footer-right">
+        Internal Use Only &bull; Demo Environment
+      </div>
+    </div>
+  </footer>
 
   <!-- Markdown rendering via marked.js (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.4/marked.min.js"></script>

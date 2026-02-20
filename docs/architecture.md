@@ -90,11 +90,13 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 
 ### Static Web App (`swa-dss-legal-case`)
 
-- Vanilla HTML/CSS/JS (no framework)
+- Vanilla HTML/CSS/JS (no framework, no build step)
 - AAD built-in authentication
-- Two panels: Agent Chat and Case Browser
+- Modern government-application UI: classification banner, DSS branding, scales of justice logo
+- Two panels: Agent Chat (with welcome hero, prompt chips, tool badges) and Case Browser (sortable table, detail views)
 - Calls Container App /chat endpoint for agent interaction
 - Case Browser uses embedded data (no API dependency)
+- AI disclaimer footer, responsive design
 
 ## Authentication Flow
 
@@ -104,6 +106,43 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 4. **APIM → Functions**: HTTPS + `x-functions-key` header (injected by policy)
 5. **Functions → SQL**: Azure AD token via `DefaultAzureCredential`
 6. **Container App → Azure OpenAI**: Azure AD token via `DefaultAzureCredential`
+
+## SharePoint Comparison Layer
+
+In addition to the MCP-backed agent, the demo includes unstructured legal documents in `sharepoint-docs/` for creating a second Copilot Studio agent grounded in SharePoint. This enables a side-by-side comparison:
+
+```
+┌──────────────────────────────────┐    ┌──────────────────────────────────┐
+│   Copilot Studio Agent (MCP)     │    │ Copilot Studio Agent (SharePoint)│
+│   Queries structured SQL via     │    │  Searches uploaded documents via │
+│   MCP tools — precise, complete  │    │  semantic search — approximate   │
+└──────────────┬───────────────────┘    └──────────────┬───────────────────┘
+               │                                      │
+               ▼                                      ▼
+┌──────────────────────────────────┐    ┌──────────────────────────────────┐
+│  Container App → APIM →         │    │  SharePoint Document Library     │
+│  Functions → Azure SQL           │    │  11 Markdown files (Cases 1-2)  │
+│  50 cases, fully structured      │    │  Same facts, narrative prose    │
+└──────────────────────────────────┘    └──────────────────────────────────┘
+```
+
+### SharePoint Documents (11 files)
+
+**Case 2024-DR-42-0892 (CPS):** DSS Investigation Report, Medical Records, Sheriff Report #24-06-4418, Court Orders and Filings (3 orders), Home Study Report, GAL Report
+
+**Case 2024-DR-15-0341 (TPR):** DSS Investigation Report, Substance Abuse Evaluation, Court Orders and Filings (6 orders), TPR Petition and Affidavit, GAL Reports (initial + updated)
+
+All documents use page markers matching the `page_reference` values in the SQL seed data. Key statements are embedded verbatim in narrative prose. Some information is intentionally spread across multiple documents to test cross-document synthesis.
+
+## Web Front End
+
+The Static Web App features a modern government-application design:
+
+- **Classification banner**: Gold "FOR OFFICIAL USE ONLY — SC DSS INTERNAL SYSTEM" bar
+- **Header**: Scales of justice icon, "Legal Case Intelligence" title, Office of General Counsel subtitle, PRODUCTION badge, user email display
+- **Agent Chat**: Welcome hero with branding, icon-labeled prompt chips, animated message bubbles, tool badges, AI disclaimer footer
+- **Case Browser**: Searchable case table with status badges, detail views with stat cards
+- **Footer**: Dark navy with DSS branding and "Internal Use Only" notice
 
 ## Design Decisions
 

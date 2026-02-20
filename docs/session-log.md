@@ -67,3 +67,19 @@
 - Set up Copilot Studio agent pointing at `/mcp` endpoint
 - Demo dry run with live audience walkthrough
 - Demo guide backup prompt for closed case now references `2024-DR-21-0149` (a generated closed case)
+
+---
+
+## Session 3 — 2026-02-19
+
+### What was done
+- **Favicon**: Created scales of justice icon (navy/gold DSS branding) — SVG + 32px PNG + 180px Apple touch icon
+- **Fixed favicon auth**: Favicon routes were behind AAD `/*` auth rule. Added anonymous access for `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` in `staticwebapp.config.json`
+- **Fixed stale case reference**: Demo guide backup prompt referenced non-existent `2024-DR-08-0156`, updated to `2024-DR-21-0149` (actual closed case)
+- **Copilot Studio MCP guide**: Added full connection instructions to `docs/user-guide.md` — MCP onboarding wizard steps, server config values, tool verification, troubleshooting, and fallback OpenAPI YAML schema
+- **Full doc audit**: Verified all data counts match live DB (50/275/325/338/150), all URLs consistent, no stale references
+- **Initial git commit + push**: All project files committed and pushed to `github.com/pogorman/dss-legal-case-agent` (5 commits on main)
+
+### Open items
+- Set up Copilot Studio agent pointing at `/mcp` endpoint (instructions now in user-guide.md)
+- Demo dry run with live audience walkthrough

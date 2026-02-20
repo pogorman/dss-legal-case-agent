@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "existingSqlServerName": {
+      "value": "philly-stats-sql-01"
+    },
+    "existingApimName": {
+      "value": "philly-profiteering-apim"
+    },
+    "existingResourceGroupName": {
+      "value": "rg-philly-profiteering"
+    },
+    "existingVnetName": {
+      "value": "vnet-philly-profiteering"
+    },
+    "azureOpenAIEndpoint": {
+      "value": "https://foundry-og-agents.openai.azure.com/"
+    },
+    "azureOpenAIDeployment": {
+      "value": "gpt-4.1"
+    }
+  }
+}

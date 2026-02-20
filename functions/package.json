@@ -1,0 +1,22 @@
+{
+  "name": "dss-demo-func",
+  "version": "1.0.0",
+  "description": "Azure Functions for DSS Legal Case Agent demo",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "func start",
+    "prestart": "npm run build"
+  },
+  "dependencies": {
+    "@azure/functions": "4.6.0",
+    "@azure/identity": "4.5.0",
+    "mssql": "11.0.1"
+  },
+  "devDependencies": {
+    "@types/mssql": "9.1.5",
+    "@types/node": "20.17.12",
+    "typescript": "5.7.3"
+  },
+  "main": "dist/src/functions/*.js"
+}

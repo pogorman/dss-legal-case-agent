@@ -1,0 +1,23 @@
+{
+  "name": "dss-case-agent",
+  "version": "1.0.0",
+  "description": "MCP server and chat endpoint for DSS Legal Case Agent demo",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@azure/identity": "4.5.0",
+    "express": "4.21.2",
+    "openai": "4.77.0",
+    "uuid": "11.0.5"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "@types/node": "20.17.12",
+    "@types/uuid": "10.0.0",
+    "tsx": "4.19.2",
+    "typescript": "5.7.3"
+  }
+}

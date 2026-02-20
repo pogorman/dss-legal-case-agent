@@ -4,11 +4,11 @@
 
 1. Navigate to the Static Web App URL (provided after deployment)
 2. Sign in with your Azure AD credentials
-3. You'll land on the **Agent Chat** tab
+3. You'll land on the **Case Browser** — the main portal page
 
 ## Agent Chat
 
-The Agent Chat panel lets you interact with the AI agent backed by structured case data.
+The AI Case Agent is accessed via the floating chat button in the bottom-right corner of the screen. Click the navy circle with the chat icon to open the agent widget.
 
 ### Suggested Prompts
 
@@ -47,9 +47,13 @@ You can ask follow-ups in the same conversation:
 
 The key demo point: **follow-up questions return consistent results** because the agent queries the same structured data every time.
 
+### Clearing the Conversation
+
+Click the **New Chat** button in the widget header to reset the conversation. This clears all messages and returns to the welcome screen with suggested prompts.
+
 ## Case Browser
 
-Switch to the **Case Browser** tab to view the underlying structured data.
+The Case Browser is the main content area, always visible behind the chat widget.
 
 - The table shows all cases with ID, title, type, county, filed date, and status
 - Click a case ID to see details: parties, stat counts (timeline events, statements, discrepancies)
@@ -57,11 +61,12 @@ Switch to the **Case Browser** tab to view the underlying structured data.
 
 ## Tips for Presenters
 
-1. **Start with Case Browser** to establish that structured data exists
-2. **Switch to Agent Chat** and run the demo prompt
-3. **Point out tool badges** — show the audience which specific queries ran
+1. **Start with Case Browser** (it's the default view) to establish that structured data exists
+2. **Click the chat button** in the bottom-right corner to open the agent
+3. **Run the demo prompt** and point out tool badges showing which queries ran
 4. **Run a follow-up** — prove consistency by asking for the same data in a different way
-5. **Compare with SharePoint results** (shown separately) — the contrast sells itself
+5. **Click "New Chat"** to reset between demo scenarios
+6. **Compare with SharePoint results** (shown separately) — the contrast sells itself
 
 ## SharePoint Comparison Demo
 

@@ -140,5 +140,45 @@
 ### Open items
 - Upload documents to SharePoint and create Copilot Studio agent grounded in them
 - Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
-- Deploy updated SWA with new UI
+- Demo dry run with side-by-side comparison
+
+## Session 5 — 2026-02-19
+
+### What was done
+
+#### Full Portal Layout
+- Rewrote `web/index.html` with complete internal government portal:
+  - Global navigation bar with dropdowns (Home, Case Intelligence, Legal Resources, Forms & Templates, Training & CLE, Support)
+  - Search bar in nav (disabled, decorative)
+  - Left sidebar with Quick Links (SCCIS, Odyssey, LegalServer, CAPSS, eFiling, Policy Manual), Alerts & Notices (3 SC-specific items), Upcoming Deadlines (4 items), Circuit Contacts (6 of 16 circuits)
+  - Breadcrumb navigation
+  - Multi-column footer with Office of General Counsel address, Internal Systems, Legal References, Administration links
+  - Footer bottom with copyright and SC Code citation
+
+#### Floating Chat Widget
+- Converted agent chat from tab panel to floating bottom-right widget:
+  - Floating action button (FAB) with chat bubble icon and "AI" badge
+  - Chat widget as floating panel (440px wide, 600px tall) with navy header
+  - "New Chat" button to clear conversation history and reset to welcome screen
+  - Open/close animation
+  - Responsive sizing for mobile
+- Case Browser is now the default main content (always visible)
+- Removed tab switching — no more chat/browser tabs
+- Updated `app.js` for FAB toggle and clear functionality
+- Updated `chat.js` with `reset()` function to clear conversation and restore suggested prompts
+
+#### Deployment
+- Pushed to origin/main
+- Deployed to SWA production: https://happy-wave-016cd330f.1.azurestaticapps.net
+- Worked around SWA CLI `crypto is not defined` error with `NODE_OPTIONS="--experimental-global-webcrypto"`
+
+### Decisions made
+- Floating widget pattern (like Intercom/Drift) rather than tab — portal content stays visible while chatting
+- Case Browser loads automatically on page load (no lazy loading behind tab)
+- FAB button has "AI" badge to draw attention before first use
+- Shorter welcome text in widget to fit the smaller viewport
+
+### Open items
+- Upload documents to SharePoint and create Copilot Studio agent grounded in them
+- Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
 - Demo dry run with side-by-side comparison

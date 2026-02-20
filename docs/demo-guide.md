@@ -36,7 +36,7 @@ The audience should experience the difference themselves before you explain what
 
 ### Opening (2 min)
 
-**Click the Case Browser tab.**
+**The Case Browser is already showing — it's the default view.**
 
 > "Before we start talking to the agent, let me show you what's behind it. There are 50 synthetic cases in the database — completely fictional, no real data — modeled on real DSS case structures across all 16 judicial circuits."
 
@@ -48,7 +48,7 @@ The audience should experience the difference themselves before you explain what
 
 > "The key difference from the SharePoint approach: this data isn't buried in PDFs. Every statement has a speaker, a date, a recipient, and a page citation. Every timeline event has a type and source document. The AI doesn't have to guess what's in a document — it queries exactly what it needs."
 
-**Click Back, then switch to Agent Chat tab.**
+**Click Back, then click the floating chat button in the bottom-right corner to open the AI agent.**
 
 ---
 

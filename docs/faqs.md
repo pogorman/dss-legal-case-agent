@@ -46,7 +46,7 @@ A: `sharepoint-docs/Demo_Comparison_Prompts.md` has 19 prompts across 6 categori
 ## Web UI
 
 **Q: What does the web app look like?**
-A: A modern government internal application with a gold classification banner ("FOR OFFICIAL USE ONLY"), navy header with scales of justice branding, Office of General Counsel subtitle, Agent Chat with welcome hero and icon-labeled prompt chips, Case Browser with styled tables, and a dark footer. Designed to look like a production internal tool, not a demo prototype.
+A: A full internal government portal with: gold classification banner ("FOR OFFICIAL USE ONLY"), navy header with scales of justice branding, global navigation with dropdown menus (Legal Resources, Forms & Templates, Training & CLE), left sidebar with quick links/alerts/deadlines/circuit contacts, Case Browser as the main content area, and a multi-column dark footer. The AI Case Agent is a floating chat widget in the bottom-right corner, accessible via a FAB button with open/close animation and a "New Chat" reset button. Designed to look like a production internal tool, not a demo prototype.
 
 ---
 

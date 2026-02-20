@@ -1,6 +1,18 @@
 {
   "routes": [
     {
+      "route": "/favicon.svg",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/favicon-32.png",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/apple-touch-icon.png",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
       "route": "/*",
       "allowedRoles": ["authenticated"]
     }

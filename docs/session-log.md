@@ -66,4 +66,4 @@
 ### Open items
 - Set up Copilot Studio agent pointing at `/mcp` endpoint
 - Demo dry run with live audience walkthrough
-- Consider adding a third hand-crafted case (closed case `2024-DR-08-0156` referenced in demo guide) for richer demo variety
+- Demo guide backup prompt for closed case now references `2024-DR-21-0149` (a generated closed case)

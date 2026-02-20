@@ -139,7 +139,7 @@ Switch to case 2024-DR-15-0341. What progress has Crystal Price made on her cour
 
 For showing the closed case:
 ```
-Give me a summary of case 2024-DR-08-0156. What was the outcome?
+Give me a summary of case 2024-DR-21-0149. What was the outcome?
 ```
 
 ---

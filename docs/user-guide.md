@@ -111,6 +111,33 @@ Each prompt includes expected MCP vs. SharePoint responses and why MCP wins.
 | `TPR_Petition_and_Affidavit.md` | Formal petition with statutory grounds + sworn affidavit |
 | `GAL_Reports.md` | Thomas Reed's initial and updated reports |
 
+## Database Access
+
+The SQL server (`philly-stats-sql-01`) has **public network access disabled**. All application traffic flows through a private endpoint on the VNet.
+
+### Portal Query Editor
+
+The Azure Portal Query Editor **will not work** — it requires public network access. You'll see this error:
+
+> An instance-specific error occurred while establishing a connection to SQL Server. Connection was denied because Deny Public Network Access is set to Yes.
+
+### Running Ad-Hoc Queries
+
+Options for running queries against the database:
+
+1. **Azure Data Studio / SSMS** from a VNet-connected machine (VM or VPN)
+2. **Temporarily enable public access** on the SQL server, run your query, then disable it again
+3. **Cloud Shell** with VNet integration (if configured)
+
+### Redeploying Seed Data
+
+The `deploy-sql.js` script runs from your local machine, so it requires temporarily enabling public access:
+
+1. Azure Portal → SQL Server → Networking → Public network access → **Selected networks**
+2. Add your client IP to the firewall rules
+3. Run `node database/deploy-sql.js`
+4. Set Public network access back to **Disabled**
+
 ## Available Cases
 
 The system contains **50 synthetic cases** across all 16 SC judicial circuits.

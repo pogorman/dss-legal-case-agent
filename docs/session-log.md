@@ -182,3 +182,80 @@
 - Upload documents to SharePoint and create Copilot Studio agent grounded in them
 - Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
 - Demo dry run with side-by-side comparison
+
+---
+
+## Session 6 — 2026-02-23
+
+### What was done
+
+#### Investigated SQL Portal Access Issue
+- O'G reported inability to run queries via Azure Portal Query Editor on both databases
+- Confirmed root cause: SQL Server `philly-stats-sql-01` has **public network access disabled** (`Deny Public Network Access = Yes`)
+- Portal Query Editor requires public access — this is expected behavior, not a misconfiguration
+
+#### Verified Private Networking Already in Place
+- Ran Azure CLI audit of the full networking stack — everything is already correctly configured:
+  - Private endpoint `pe-sql-philly` on `snet-private-endpoints` (10.0.2.0/24)
+  - Private DNS zone `privatelink.database.windows.net` linked to VNet
+  - Function App `dss-demo-func` VNet-integrated via `snet-dss-functions` (10.0.3.0/24)
+  - Additional private endpoints for blob/queue/table storage
+- SQL traffic flows: Function App → VNet → private endpoint → SQL (all private, no public internet)
+
+#### Updated Bicep to Reflect Actual Deployed State
+- Added existing VNet and subnet references (`vnet`, `funcSubnet`, `peSubnet`)
+- Added private endpoint resource (`pe-sql-philly`) with SQL Server private link connection
+- Added private DNS zone (`privatelink.database.windows.net`) and VNet link
+- Added private endpoint DNS zone group for automatic DNS record management
+- Added `virtualNetworkSubnetId` and `vnetRouteAllEnabled` to Function App definition
+- Fixed `functionSubnetName` default to match actual subnet name (`snet-dss-functions`)
+- Removed empty string default from `existingVnetName` (now required)
+
+#### Updated All Documentation
+- **architecture.md**: Added full Network Architecture section with VNet/subnet/private endpoint diagram, updated SQL and Function App component details with networking info
+- **user-guide.md**: Added "Database Access" section explaining Portal Query Editor limitation and alternatives for ad-hoc queries and seed data deployment
+- **faqs.md**: Added 3 FAQs about Portal Query Editor, public access, and impact on apps
+- **CLAUDE.md**: Added Networking section, updated SQL Deployment instructions with explicit steps
+
+#### Data Provenance Documentation
+- O'G moved source Word docs and Outlook message to `docs/` folder — 3 `.docx` legal pleadings from an active Spartanburg case (Erickson, 2023SPA00144) + 1 `.msg` email thread with attorney feedback (Kathryn Walsh screenshots, Laurel's detailed prompt/output from Thompson/Legette case)
+- Analyzed all source documents to understand how real data was used to create synthetic data
+- Confirmed: real case structure and attorney prompt patterns were used as templates; all PII was replaced with synthetic data; no real data was ever loaded into Azure SQL
+- Added `.docx`, `.msg`, `.pdf` to `.gitignore` to prevent source documents from being committed
+- Verified source files are not tracked in git
+- Added comprehensive "Data Provenance" section to `architecture.md` documenting: source material, what was synthesized vs kept, how Laurel's prompt shaped the MCP tools, and source document handling
+- Updated `CLAUDE.md` with data provenance summary
+- Updated `faqs.md` with data origin FAQ
+- Updated memory file for cross-session context
+
+### Decisions made
+- Bicep now manages the private endpoint and DNS zone resources (previously created outside of Bicep)
+- Documented that Portal Query Editor won't work as a known limitation, not a bug
+- Kept `deploy-sql.js` workflow as-is (temporarily enable public access) since it's an infrequent operation
+- Source documents with real case data excluded from git via `.gitignore` — kept locally for reference only
+- Data provenance fully documented so the synthetic-vs-real boundary is clear for anyone reviewing the project
+
+#### Sanitized Source Word Documents
+- Created `docs/sanitize-docs.py` — Python script using python-docx to find/replace all real PII with synthetic data
+- Replacement mapping: Erickson→Webb/Holloway, Lydia→Jaylen, Walela McDaniel→Renee Dawson, Kathryn Walsh→Jennifer Torres, Tim Edwards→David Chen, Shawn Campbell→Rachel Simmons, Jamia Foster→Karen Milford, plus case numbers and dates
+- Ran script on all 6 Word documents — 163 paragraphs updated across all files
+- Renamed files from `2023SPA00144-*` to `2024SPA00892-*`
+- Verification: zero real names found in any document, all synthetic names present
+- Updated architecture.md with full sanitization mapping table and handling notes
+- Updated CLAUDE.md data provenance section with sanitization status
+- The `.msg` email still contains real names/screenshots — cannot be sanitized with python-docx, kept local only
+
+### Decisions made
+- Bicep now manages the private endpoint and DNS zone resources (previously created outside of Bicep)
+- Documented that Portal Query Editor won't work as a known limitation, not a bug
+- Kept `deploy-sql.js` workflow as-is (temporarily enable public access) since it's an infrequent operation
+- Source documents with real case data excluded from git via `.gitignore` — kept locally for reference only
+- Data provenance fully documented so the synthetic-vs-real boundary is clear for anyone reviewing the project
+- Word docs sanitized in-place rather than creating copies — originals no longer needed since all data is now synthetic
+- Sanitize script kept in repo (`docs/sanitize-docs.py`) in case documents need to be re-processed
+
+### Open items
+- Upload documents to SharePoint and create Copilot Studio agent grounded in them
+- Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
+- Demo dry run with side-by-side comparison
+- Consider deleting `.msg` email file once no longer needed for reference (still contains real names)

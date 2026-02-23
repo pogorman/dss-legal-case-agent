@@ -12,11 +12,14 @@ param existingApimName string
 @description('Name of the existing resource group')
 param existingResourceGroupName string
 
-@description('Name of the existing VNet (for Function App VNet integration)')
-param existingVnetName string = ''
+@description('Name of the existing VNet (for Function App VNet integration and private endpoints)')
+param existingVnetName string
 
 @description('Subnet name for Function App VNet integration')
-param functionSubnetName string = 'func-subnet-dss'
+param functionSubnetName string = 'snet-dss-functions'
+
+@description('Subnet name for private endpoints')
+param privateEndpointSubnetName string = 'snet-private-endpoints'
 
 @description('Azure OpenAI endpoint URL')
 param azureOpenAIEndpoint string
@@ -29,6 +32,23 @@ param location string = resourceGroup().location
 
 @description('Container image for the MCP server')
 param containerImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+
+// =============================================================
+// Existing VNet & Subnets
+// =============================================================
+resource vnet 'Microsoft.Network/virtualNetworks@2023-09-01' existing = {
+  name: existingVnetName
+}
+
+resource funcSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' existing = {
+  parent: vnet
+  name: functionSubnetName
+}
+
+resource peSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' existing = {
+  parent: vnet
+  name: privateEndpointSubnetName
+}
 
 // =============================================================
 // Azure SQL Database
@@ -49,6 +69,63 @@ resource sqlDb 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   properties: {
     collation: 'SQL_Latin1_General_CP1_CI_AS'
     maxSizeBytes: 2147483648
+  }
+}
+
+// =============================================================
+// Private Endpoint for SQL Server
+// The SQL server has publicNetworkAccess: Disabled.
+// This private endpoint + DNS zone allows VNet-integrated
+// resources (Function App) to reach SQL over the private network.
+// =============================================================
+resource sqlPrivateEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
+  name: 'pe-sql-philly'
+  location: location
+  properties: {
+    subnet: {
+      id: peSubnet.id
+    }
+    privateLinkServiceConnections: [
+      {
+        name: 'pe-sql-philly'
+        properties: {
+          privateLinkServiceId: sqlServer.id
+          groupIds: ['sqlServer']
+        }
+      }
+    ]
+  }
+}
+
+resource sqlPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.database.windows.net'
+  location: 'global'
+}
+
+resource sqlPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: sqlPrivateDnsZone
+  name: '${existingVnetName}-link'
+  location: 'global'
+  properties: {
+    virtualNetwork: {
+      id: vnet.id
+    }
+    registrationEnabled: false
+  }
+}
+
+resource sqlPrivateEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
+  parent: sqlPrivateEndpoint
+  name: 'default'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-database-windows-net'
+        properties: {
+          privateDnsZoneId: sqlPrivateDnsZone.id
+        }
+      }
+    ]
   }
 }
 
@@ -84,6 +161,7 @@ resource funcApp 'Microsoft.Web/sites@2023-01-01' = {
   }
   properties: {
     serverFarmId: funcPlan.id
+    virtualNetworkSubnetId: funcSubnet.id
     siteConfig: {
       appSettings: [
         { name: 'AzureWebJobsStorage__accountName', value: funcStorageAccount.name }
@@ -94,6 +172,7 @@ resource funcApp 'Microsoft.Web/sites@2023-01-01' = {
         { name: 'SQL_DATABASE', value: 'dss-demo' }
       ]
       linuxFxVersion: 'NODE|20'
+      vnetRouteAllEnabled: true
     }
   }
 }

@@ -36,5 +36,23 @@ After every session or when O'G asks, update these files in `docs/`:
 ## Data Counts
 - 50 cases, 275 people, 325 timeline events, 338 statements, 150 discrepancies
 
+## Data Provenance
+- Source material: real SC DSS legal pleadings (Spartanburg case) + attorney feedback (Laurel's prompt), provided by Arya Hekmat (SC DSS)
+- **All data in the system is synthetic** — real case structure was used as a template, all PII replaced with fictional names/dates/facts
+- Laurel's 4-part prompt (timeline, discrepancies, statements by each parent) shaped the MCP tools and SQL schema
+- Source Word docs have been **sanitized** via `docs/sanitize-docs.py` — all real PII replaced with synthetic data, verified clean
+- Source documents (`.docx`, `.msg`) are in `docs/` locally but **excluded from git** via `.gitignore`
+- The `.msg` email still contains real names/screenshots — local only, not sanitizable
+- No real PII was ever loaded into Azure SQL
+- See `docs/architecture.md` → "Data Provenance" section for full details including replacement mapping
+
+## Networking
+- SQL Server (`philly-stats-sql-01`) has **public network access disabled**
+- Private endpoint `pe-sql-philly` on `snet-private-endpoints` (10.0.2.0/24)
+- Private DNS zone `privatelink.database.windows.net` linked to VNet
+- Function App VNet-integrated via `snet-dss-functions` (10.0.3.0/24) with `vnetRouteAllEnabled`
+- All SQL traffic flows: Function App → VNet → private endpoint → SQL (never public internet)
+- Portal Query Editor does NOT work (requires public access)
+
 ## SQL Deployment
-To redeploy data: temporarily enable SQL public access, run `node database/deploy-sql.js`, then disable public access. The script drops and recreates all tables, loads schema.sql, then seed-expanded.sql.
+To redeploy data: temporarily enable SQL public access in the Azure Portal (SQL Server → Networking), add your client IP to the firewall, run `node database/deploy-sql.js`, then set public access back to **Disabled**. The script drops and recreates all tables, loads schema.sql, then seed-expanded.sql.

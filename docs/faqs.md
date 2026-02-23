@@ -10,6 +10,9 @@ A: No. All names, dates, case numbers, and details are entirely fictional and sy
 **Q: Is this a production system?**
 A: No. This is a sales demo / proof of concept. It demonstrates the value of structured data for AI agents. Production deployment would require additional security, compliance, and scale considerations.
 
+**Q: Where did the case data come from? Is any of it real?**
+A: SC DSS OGC provided real legal pleading templates and attorney feedback as reference material. These were used to understand the case lifecycle structure (complaint → removal → permanency planning → TPR → dismissal) and the attorneys' desired prompt patterns. All PII (names, case numbers, dates, specific facts) was replaced with entirely synthetic data. No real case data was ever loaded into Azure SQL or committed to the repository. Source documents are kept locally but excluded from git. See `docs/architecture.md` → "Data Provenance" for full details.
+
 ## Architecture
 
 **Q: Why not call the Azure Functions directly from the Container App?**
@@ -20,6 +23,15 @@ A: For POC simplicity — same approach used in the philly-profiteering demo. Th
 
 **Q: Why embedded data in the Case Browser instead of API calls?**
 A: The Case Browser is a read-only view for the demo audience. Embedding the data eliminates a runtime dependency and ensures the browser panel loads instantly even if the backend is cold-starting.
+
+**Q: Why can't I use the Azure Portal Query Editor?**
+A: Public network access is disabled on the SQL server (`philly-stats-sql-01`). The Portal Query Editor requires public access. Use Azure Data Studio from a VNet-connected machine, or temporarily enable public access to run ad-hoc queries. See the User Guide "Database Access" section for details.
+
+**Q: Why is public network access disabled on the SQL server?**
+A: Security best practice. All application traffic flows through a private endpoint (`pe-sql-philly`) on the VNet. The Function App reaches SQL via VNet integration → private endpoint → private DNS resolution. No SQL traffic goes over the public internet.
+
+**Q: Will disabling public access break anything?**
+A: No — all runtime application traffic (Function App → SQL) uses the private endpoint. The only things that require public access are the Portal Query Editor and running `deploy-sql.js` from a local machine. For those, temporarily enable public access and disable it when done.
 
 ## Demo
 

@@ -9,3 +9,8 @@ local.settings.json
 .azure/
 __azurite*
 .claude/
+
+# Source documents containing real case data — never commit
+docs/*.docx
+docs/*.msg
+docs/*.pdf

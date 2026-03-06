@@ -16,7 +16,8 @@ After every session or when O'G asks, update these files in `docs/`:
 - Functions: `functions/src/functions/` (5 files), `functions/src/db/client.ts`
 - MCP Server: `mcp-server/src/index.ts`, `mcp-server/src/mcp/server.ts`, `mcp-server/src/mcp/tools.ts`, `mcp-server/src/chat/completions.ts`
 - Web: `web/index.html`, `web/js/chat.js`, `web/js/cases.js` (50 embedded cases), `web/js/app.js`, `web/css/style.css`
-- SharePoint docs: `sharepoint-docs/` — 11 realistic legal documents for Cases 1-2, plus `Demo_Comparison_Prompts.md`
+- SharePoint docs: `sharepoint-docs/` — 11 realistic legal documents for Cases 1-2 in md/docx/pdf formats, plus `Demo_Comparison_Prompts.md`
+- Scripts: `scripts/sanitize-docs.py` (PII replacement), `scripts/convert-md-to-docs.py` (md→docx/pdf)
 - Infra: `infra/main.bicep`, `infra/parameters.json`, `deploy.sh`
 
 ## Conventions
@@ -40,7 +41,7 @@ After every session or when O'G asks, update these files in `docs/`:
 - Source material: real SC DSS legal pleadings (Spartanburg case) + attorney feedback (Laurel's prompt), provided by Arya Hekmat (SC DSS)
 - **All data in the system is synthetic** — real case structure was used as a template, all PII replaced with fictional names/dates/facts
 - Laurel's 4-part prompt (timeline, discrepancies, statements by each parent) shaped the MCP tools and SQL schema
-- Source Word docs have been **sanitized** via `docs/sanitize-docs.py` — all real PII replaced with synthetic data, verified clean
+- Source Word docs have been **sanitized** via `scripts/sanitize-docs.py` — all real PII replaced with synthetic data, verified clean
 - Source documents (`.docx`, `.msg`) are in `docs/` locally but **excluded from git** via `.gitignore`
 - The `.msg` email still contains real names/screenshots — local only, not sanitizable
 - No real PII was ever loaded into Azure SQL

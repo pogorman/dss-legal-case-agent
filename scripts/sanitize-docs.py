@@ -2,7 +2,7 @@
 Sanitize source Word documents by replacing real case data with synthetic data.
 Maps the real Erickson/Spartanburg case to the synthetic Webb/Holloway Case 1.
 
-Usage: python docs/sanitize-docs.py
+Usage: python scripts/sanitize-docs.py
 """
 
 from docx import Document

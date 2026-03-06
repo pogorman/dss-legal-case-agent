@@ -225,7 +225,7 @@
 - Updated `CLAUDE.md` with data provenance summary, `faqs.md` with data origin FAQ
 
 #### Sanitized Source Word Documents
-- Created `docs/sanitize-docs.py` — Python script using python-docx to find/replace all real PII with synthetic data
+- Created `scripts/sanitize-docs.py` — Python script using python-docx to find/replace all real PII with synthetic data
 - Ran script on all 6 Word documents — 163 paragraphs updated across all files
 - Verification: zero real names found in any document, all synthetic names present
 
@@ -323,3 +323,48 @@
 - Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (currently created via CLI, not in IaC)
+
+---
+
+## Session 9 — 2026-03-05
+
+### What was done
+
+#### Copilot Studio MCP Testing — 5-Way Response Comparison
+- Tested the same question ("What time was Jaylen Webb brought to the ER, and who was the admitting nurse?") across 5 agent configurations:
+  1. **GCC Copilot Studio (MCP tool)** — hallucinated the time (2:00 AM vs actual 3:15 AM) and fabricated a source citation (Dictation PDF p. 4)
+  2. **Commercial Copilot Studio (MCP tool)** — correct time, correct citation, noted nurse not in structured data
+  3. **Web SPA (GPT-4.1 /chat)** — nearly identical to Commercial, correct on all points
+  4. **Commercial Copilot Studio (Knowledge — uploaded docs)** — found the nurse (Rebecca Torres, RN, BSN) from Medical_Records.md but didn't return the admission time
+  5. **Commercial Copilot Studio (SharePoint library)** — total failure, "No information was found"
+- Key finding: Rebecca Torres exists in the markdown documents but was never modeled into the SQL schema — neither structured nor unstructured approach alone gave a complete answer
+- Documented the SharePoint indexing pipeline difference: direct upload to Copilot Studio processes and indexes immediately; SharePoint library depends on Microsoft Search crawler which may not index `.md` files
+
+#### Organized docs/ Folder
+- Created `docs/README.md` — index file linking all documentation
+- Created `docs/copilot-studio-testing.md` — full writeup of the 5-way comparison with analysis
+- Moved `docs/sanitize-docs.py` to `scripts/sanitize-docs.py`
+- Deleted `docs/test-responses.txt` (raw data absorbed into the testing doc)
+- Updated all path references in `CLAUDE.md`, `docs/architecture.md`, `docs/session-log.md`, and the script docstring
+
+#### Generated docx/pdf Versions of SharePoint Documents
+- Created `scripts/convert-md-to-docs.py` — converts all markdown files to `.docx` (python-docx) and `.pdf` (fpdf2)
+- Converted all 12 markdown files in `sharepoint-docs/`
+- Reorganized into format-specific subfolders for easy drag-and-drop into separate SharePoint libraries:
+  - `Case-2024-DR-42-0892/Case-2024-DR-42-0892-md/`
+  - `Case-2024-DR-42-0892/Case-2024-DR-42-0892-docx/`
+  - `Case-2024-DR-42-0892/Case-2024-DR-42-0892-pdf/`
+  - (same pattern for Case-2024-DR-15-0341)
+- Removed loose files from case folder roots — only subfolders remain
+
+### Decisions made
+- Demo narrative shifted from "structured is better" to "structured and unstructured are complementary" — stronger sales message
+- GCC hallucination (2:00 AM) is a cautionary tale worth showing in demos
+- SharePoint `.md` indexing failure motivates having `.docx`/`.pdf` versions available
+- `scripts/` folder created to separate utility scripts from documentation
+
+### Open items
+- Retest SharePoint Copilot Studio agent with `.docx` and `.pdf` versions after indexing completes
+- Retest GCC MCP agent to determine if hallucination is consistent or intermittent
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still created via CLI, not in IaC)

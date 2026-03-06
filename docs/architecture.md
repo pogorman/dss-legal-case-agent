@@ -243,7 +243,7 @@ This directly shaped the 5 MCP tools (list_cases, get_case_summary, get_timeline
 
 ### Source Document Sanitization
 
-The original Word documents contained real case data. These were sanitized using `docs/sanitize-docs.py`, which replaced all real PII with synthetic data:
+The original Word documents contained real case data. These were sanitized using `scripts/sanitize-docs.py`, which replaced all real PII with synthetic data:
 
 | Real | Synthetic |
 |---|---|
@@ -264,7 +264,7 @@ Sanitization verified: zero real names remain in any document.
 
 - Sanitized Word documents (`.docx`) are stored in `docs/` but **excluded from git** via `.gitignore`
 - The `.msg` email file still contains real names and screenshots — kept locally only, excluded from git
-- `docs/sanitize-docs.py` can be re-run if documents are re-obtained from DSS
+- `scripts/sanitize-docs.py` can be re-run if documents are re-obtained from DSS
 - No real PII was ever loaded into Azure SQL — only synthetic data from `seed.sql` / `seed-expanded.sql`
 - The `sharepoint-docs/` folder contains entirely synthetic documents written from scratch
 

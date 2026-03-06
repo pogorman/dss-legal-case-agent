@@ -278,3 +278,48 @@
 - Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
 - Demo dry run with side-by-side comparison
 - Consider deleting `.msg` email file once no longer needed for reference (still contains real names)
+
+---
+
+## Session 8 — 2026-03-05
+
+### What was done
+
+#### Diagnosed Function App 503 Outage
+- Function App `dss-demo-func` was returning 503 Service Unavailable on all requests
+- Azure reported state as "Running" / "Normal" but no requests could complete
+- Root cause: Storage account `dssdemofuncsa` had `publicNetworkAccess: Disabled`, preventing the Function App runtime (and Kudu deployment engine) from accessing the deployment package blob
+- Previous workaround of toggling public access was unsustainable for a demo environment
+
+#### Permanent Fix: Private Endpoints for Function App Storage
+- Created three private endpoints on `snet-private-endpoints` (10.0.2.0/24):
+  - `pe-blob-dss` → `dssdemofuncsa` blob (10.0.2.8)
+  - `pe-queue-dss` → `dssdemofuncsa` queue (10.0.2.9)
+  - `pe-table-dss` → `dssdemofuncsa` table (10.0.2.10)
+- Registered DNS A records in existing private DNS zones (`privatelink.blob/queue/table.core.windows.net`)
+- Function App now reaches its storage account entirely over the VNet — no public access needed, ever
+
+#### Fixed APIM Function Key Injection
+- APIM had no API-level policy for `dss-case-api` — was not injecting the function key
+- Added inbound policy to inject function key as `?code=` query parameter from named value `dss-func-key`
+- Previously worked because the Function App was configured with anonymous auth level or the key was injected differently; after redeployment the auth requirement was enforced
+
+#### Redeployed Functions Successfully
+- `func azure functionapp publish dss-demo-func --typescript` now succeeds via Kudu → VNet → private endpoint → storage
+- All 5 functions verified working through APIM
+
+#### Verified Full Pipeline End-to-End
+- APIM `/dss/cases` → returns all 50 cases
+- Container App `/chat` with "What do you know about Jaylen Webb?" → agent called `list_cases` + `get_case_summary`, returned full case summary with parties, injuries, timeline, and source citations
+
+### Decisions made
+- Private endpoints for storage (matching the SQL private endpoint pattern) rather than toggling public access
+- ~$8/month added cost is justified for demo reliability
+- APIM policy uses `?code=` query parameter (not `x-functions-key` header) — both work, but query param is simpler for Functions auth
+- Created temp `infra/apim-policy.json` for the az rest call, then deleted it
+
+### Open items
+- Upload documents to SharePoint and create Copilot Studio agent grounded in them
+- Set up Copilot Studio MCP agent pointing at `/mcp` endpoint
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (currently created via CLI, not in IaC)

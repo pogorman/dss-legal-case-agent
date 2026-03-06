@@ -26,9 +26,10 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 │  Azure API Management (shared)       │
 │  Product: dss-demo                   │
 │  API: dss-case-api (5 operations)    │
-│  Policy: inject x-functions-key      │
+│  Policy: inject function key via      │
+│  query param from named value        │
 └──────────────┬───────────────────────┘
-               │ HTTPS + x-functions-key
+               │ HTTPS + ?code= query param
                ▼
 ┌──────────────────────────────────────┐
 │  Azure Functions: dss-demo-func      │
@@ -74,8 +75,13 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 - System-assigned managed identity with `db_datareader` on dss-demo
 - Flex Consumption plan
 - **VNet integrated** via `snet-dss-functions` (10.0.3.0/24) — all outbound traffic routes through the VNet
-- `vnetRouteAllEnabled: true` — ensures SQL DNS resolution uses the private DNS zone
+- `vnetRouteAllEnabled: true` — ensures DNS resolution uses the private DNS zones
 - SQL connection via `@azure/identity` DefaultAzureCredential + access token → private endpoint
+- **Storage account `dssdemofuncsa`** — public network access disabled, accessed via private endpoints:
+  - `pe-blob-dss` (10.0.2.8), `pe-queue-dss` (10.0.2.9), `pe-table-dss` (10.0.2.10)
+  - DNS records in `privatelink.blob/queue/table.core.windows.net` zones
+  - Identity-based auth (managed identity with Storage Blob Data Owner, Storage Account Contributor, Storage Queue/Table Data Contributor roles)
+  - Deployment via `func azure functionapp publish` works because Kudu uploads through the VNet → private endpoint path
 
 ### Container App (`dss-case-agent`)
 
@@ -90,7 +96,7 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 
 - New product: `dss-demo` with subscription key requirement
 - New API: `dss-case-api` with 5 GET operations
-- Inbound policy injects `x-functions-key` from named value `dss-func-key`
+- Inbound policy injects function key as `?code=` query parameter from named value `dss-func-key`
 - Routes: /dss/cases, /dss/cases/{caseId}, etc.
 
 ### Static Web App (`swa-dss-legal-case`)
@@ -108,7 +114,7 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 1. **User → SWA**: AAD built-in auth (`/.auth/login/aad`)
 2. **SWA → Container App /chat**: Direct HTTPS call (CORS enabled)
 3. **Container App → APIM**: HTTPS + `Ocp-Apim-Subscription-Key` header
-4. **APIM → Functions**: HTTPS + `x-functions-key` header (injected by policy)
+4. **APIM → Functions**: HTTPS + `?code=` query parameter (injected by policy from named value)
 5. **Functions → SQL**: Azure AD token via `DefaultAzureCredential`
 6. **Container App → Azure OpenAI**: Azure AD token via `DefaultAzureCredential`
 
@@ -126,9 +132,13 @@ All SQL traffic is private — the SQL server has public network access **disabl
 │  │                          │  │                              │  │
 │  │ Function App (outbound)  │  │ pe-sql-philly ──→ SQL Server │  │
 │  │ dss-demo-func            │──│                              │  │
-│  │ (VNet integration)       │  │ pe-blob-philly ──→ Storage   │  │
-│  └──────────────────────────┘  │ pe-queue-philly ──→ Storage  │  │
-│                                │ pe-table-philly ──→ Storage  │  │
+│  │ (VNet integration)       │  │ pe-blob-philly ──→ phillyfuncsa│ │
+│  └──────────────────────────┘  │ pe-queue-philly──→ phillyfuncsa│ │
+│                                │ pe-table-philly──→ phillyfuncsa│ │
+│                                │                              │  │
+│                                │ pe-blob-dss ───→ dssdemofuncsa│  │
+│                                │ pe-queue-dss ──→ dssdemofuncsa│  │
+│                                │ pe-table-dss ──→ dssdemofuncsa│  │
 │  ┌──────────────────────────┐  └──────────────────────────────┘  │
 │  │ snet-functions           │                                    │
 │  │ 10.0.1.0/24              │  Private DNS Zones:                │
@@ -142,13 +152,16 @@ All SQL traffic is private — the SQL server has public network access **disabl
 **How it works:**
 1. Function App outbound traffic routes through `snet-dss-functions` (VNet integration + `vnetRouteAllEnabled`)
 2. DNS for `philly-stats-sql-01.database.windows.net` resolves via the private DNS zone to the private endpoint IP
-3. Traffic flows entirely within the Azure backbone — never touches the public internet
-4. Both databases on the server (`dss-demo` and PhillyStats) benefit from the same private endpoint
+3. DNS for `dssdemofuncsa.blob.core.windows.net` (and queue/table) resolves via private DNS zones to private endpoint IPs
+4. Traffic flows entirely within the Azure backbone — never touches the public internet
+5. Both databases on the server (`dss-demo` and PhillyStats) benefit from the same SQL private endpoint
+6. Both storage accounts (`phillyfuncsa` and `dssdemofuncsa`) have their own private endpoints on the same subnet
 
 **Implications:**
-- Azure Portal Query Editor **does not work** (requires public network access)
+- Azure Portal Query Editor **does not work** (requires public network access on SQL)
 - `deploy-sql.js` requires temporarily enabling public access on the SQL server
-- Any new app that needs SQL access must be VNet-integrated or use a private endpoint
+- Function App deployments (`func azure functionapp publish`) work because Kudu runs within the Function App's VNet context, reaching storage via private endpoints
+- Any new app that needs SQL or storage access must be VNet-integrated or use a private endpoint
 
 ## SharePoint Comparison Layer
 
@@ -273,6 +286,7 @@ The UI shows a three-stage progress popup (Container App, Database Connection, A
 - **marked.js CDN**: Using a CDN-hosted markdown renderer for the chat panel to keep the SWA simple (no build step).
 - **Free tier SWA**: Switched from Standard to Free tier for built-in AAD login support without custom provider config.
 - **Identity-based Function App storage**: Azure policy prevents shared key access on storage accounts; using system-assigned identity with RBAC roles instead of connection strings.
+- **Private endpoints for Function App storage**: Storage account `dssdemofuncsa` has public network access disabled. Private endpoints for blob, queue, and table services on `snet-private-endpoints` ensure the Function App (and Kudu deployments) can access storage entirely over the VNet. This eliminates the need to toggle public access for deployments.
 - **Dedicated VNet subnet**: Created `snet-dss-functions` (10.0.3.0/24) since existing `snet-functions` was delegated to Container App environments.
 
 ## Deployed Resource URLs

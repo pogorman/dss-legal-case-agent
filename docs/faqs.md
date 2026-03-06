@@ -31,7 +31,13 @@ A: Public network access is disabled on the SQL server (`philly-stats-sql-01`). 
 A: Security best practice. All application traffic flows through a private endpoint (`pe-sql-philly`) on the VNet. The Function App reaches SQL via VNet integration → private endpoint → private DNS resolution. No SQL traffic goes over the public internet.
 
 **Q: Will disabling public access break anything?**
-A: No — all runtime application traffic (Function App → SQL) uses the private endpoint. The only things that require public access are the Portal Query Editor and running `deploy-sql.js` from a local machine. For those, temporarily enable public access and disable it when done.
+A: No — all runtime application traffic (Function App → SQL, Function App → Storage) uses private endpoints. The only things that require public access are the Portal Query Editor and running `deploy-sql.js` from a local machine. For those, temporarily enable public access on the SQL server and disable it when done. Storage never needs public access — deployments go through Kudu, which runs in the Function App's VNet context.
+
+**Q: Why does the Function App storage account have private endpoints?**
+A: The storage account `dssdemofuncsa` has `publicNetworkAccess: Disabled` (enforced by Azure policy). Without private endpoints, the Function App runtime can't read its deployment package and Kudu can't write new deployments — resulting in 503 errors. The private endpoints (`pe-blob-dss`, `pe-queue-dss`, `pe-table-dss`) on `snet-private-endpoints` let both the Function App and Kudu reach storage over the VNet. This is a permanent fix — no need to toggle public access for deployments.
+
+**Q: Why did the Function App suddenly start returning 503?**
+A: Flex Consumption Function Apps store their deployment package in a blob on the storage account. If the storage account's public access is disabled and there are no private endpoints, the Function App can't read the package and returns 503 even though Azure reports it as "Running". Adding private endpoints for blob, queue, and table services resolved this permanently.
 
 ## Demo
 

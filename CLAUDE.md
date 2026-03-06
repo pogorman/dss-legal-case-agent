@@ -53,6 +53,11 @@ After every session or when O'G asks, update these files in `docs/`:
 - Function App VNet-integrated via `snet-dss-functions` (10.0.3.0/24) with `vnetRouteAllEnabled`
 - All SQL traffic flows: Function App → VNet → private endpoint → SQL (never public internet)
 - Portal Query Editor does NOT work (requires public access)
+- Storage account `dssdemofuncsa` has **public network access disabled**
+- Private endpoints: `pe-blob-dss` (10.0.2.8), `pe-queue-dss` (10.0.2.9), `pe-table-dss` (10.0.2.10) on `snet-private-endpoints`
+- DNS records in `privatelink.blob/queue/table.core.windows.net` zones
+- Function App deployments (`func azure functionapp publish`) work via Kudu → VNet → private endpoint
+- APIM injects function key as `?code=` query param via named value `dss-func-key`
 
 ## SQL Deployment
 To redeploy data: temporarily enable SQL public access in the Azure Portal (SQL Server → Networking), add your client IP to the firewall, run `node database/deploy-sql.js`, then set public access back to **Disabled**. The script drops and recreates all tables, loads schema.sql, then seed-expanded.sql.

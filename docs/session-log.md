@@ -641,3 +641,47 @@ Ground truth: 9:30 PM thump → 2:00 AM discovery → 3:15 AM ER admission. Corr
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
 - Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)
+
+---
+
+## Session 13 — 2026-03-06
+
+### What was done
+
+#### Executive Summary PDF
+- Created `scripts/generate-executive-pdf.py` — Python script using fpdf2 to produce a polished, executive-friendly PDF
+- Output: `docs/executive-summary.pdf` (5 pages)
+  - Cover page with navy banner, title, scope stats (110 test runs, 11 agents, 10 prompts)
+  - Key Findings rewritten in business language (no backtick code refs, no tool names)
+  - Color-coded failure severity table, format comparison table
+  - Results at a Glance — 10-row summary with plain-English takeaways
+  - Agent Scorecard — color-coded Pass/Partial/Fail grid (green/amber/red) + overall rankings
+  - Recommendation page with callout box for bottom line
+- All technical jargon replaced with executive-friendly language
+
+#### Redemption Round (Round 8) — Testing Doc
+- Added **Round 8 — Redemption Round** section to `docs/copilot-studio-testing.md`
+- Identified all 24 Fail scenarios across 10 agents (SP/PDF-Com excluded — zero Fails)
+- For each of 8 prompt groups, wrote:
+  - Original prompt (unchanged, for transience check)
+  - Revised prompt (more specific wording, decomposed questions, explicit cross-referencing guidance)
+  - Explanation of what changed and why
+- Key prompt revision strategies:
+  - P1/P3/P5/P6/P8: Added case numbers for retrieval precision
+  - P2: "In his own words" + explicit Dena/Marcus attribution warning
+  - P4: Changed from yes/no to "compare these two documents" to force cross-referencing
+  - P8: Named Lt. Odom, explicitly excluded hospital/DSS/court audiences
+  - P10: Decomposed into 3 explicit milestones before asking for calculation
+- Empty results table ready for testing
+
+### Decisions made
+- Redemption round tests both original and revised prompts — original for transience, revised for fairness
+- Prompt 4 is the heaviest retest (7 agents) — should be tested first
+- PDF uses fpdf2 (already installed) — no new dependencies needed
+
+### Open items
+- **Run all 24 redemption retests** (original + revised prompts for each)
+- Update executive summary PDF after redemption results
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)

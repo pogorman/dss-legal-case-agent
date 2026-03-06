@@ -2201,3 +2201,201 @@ Correct answers:
 - **SP/PDF-Com and SP/DOCX-Com both distinguished 2:00 AM (departure) from 3:15 AM (admission)** — the kind of nuance attorneys need.
 - **KB/PDF-GCC consistently uses Sheriff Report's 12:47 AM** — same document discrepancy as Prompt 1. Not a hallucination, but an unreliable source.
 - **Arithmetic is a genuine weakness** — even agents that retrieved the right times sometimes rounded (MCP-GCC: "~4h" instead of 4.5h) or answered the wrong interval (KB/DOCX-GCC: thump→discovery instead of thump→hospital).
+
+---
+
+## Round 8 — Redemption Round
+
+Every agent that scored **Fail** on any prompt gets a second chance. For each retest, we run both the **original prompt** (unchanged, to see if the failure was transient) and a **revised prompt** designed to give the agent a fairer shot — more specific wording, explicit guidance, or decomposed sub-questions.
+
+SP/PDF - Com is excluded (zero Fails across all 10 prompts).
+
+### Redemption Matrix
+
+| # | Agent | Prompt | Original Failure |
+|---|-------|--------|-----------------|
+| 1 | SP/PDF - GCC | P2 | Missed hospital statement + 8 PM misattribution |
+| 2 | SP/PDF - GCC | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 3 | SP/PDF - GCC | P5 | ~4/12 events, Case 2 data contaminated Case 1 |
+| 4 | SP/PDF - GCC | P6 | 5/8 people, missing children as entries |
+| 5 | SP/PDF - GCC | P8 | Returned court testimony instead of LE statements |
+| 6 | SP/PDF - GCC | P10 | Fabricated 7:30 AM hospital time, reported 10h gap |
+| 7 | SP/DOCX - GCC | P1 | Found nothing — no ER time, no nurse |
+| 8 | SP/DOCX - GCC | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 9 | SP/DOCX - GCC | P6 | 5/8 people, missing children as entries |
+| 10 | SP/DOCX - GCC | P8 | Returned hospital statement versions instead of LE |
+| 11 | Web SPA | P3 | Hallucinated case number, then missed fentanyl contradiction |
+| 12 | Web SPA | P8 | Tool lacks audience filter — returned all statements |
+| 13 | Web SPA | P10 | Conflated 9:30 PM thump with 2:00 AM discovery, said 1h15m |
+| 14 | SP/DOCX - Com | P2 | 8 PM misattribution (Dena's statement attributed to Marcus) |
+| 15 | SP/DOCX - Com | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 16 | KB/DOCX - Com | P2 | 8 PM misattribution + missed hospital statement entirely |
+| 17 | KB/DOCX - Com | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 18 | KB/PDF - Com | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 19 | KB/PDF - Com | P5 | Collapsed 12 events into 6, lost investigation phase |
+| 20 | KB/DOCX - GCC | P2 | 8 PM misattribution (Dena's statement attributed to Marcus) |
+| 21 | KB/DOCX - GCC | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+| 22 | MCP - Com | P8 | 3 attempts, all failed — tool lacks audience filter |
+| 23 | MCP - GCC | P1 | Hallucinated 2:00 AM ER time (actual: 3:15 AM) |
+| 24 | KB/PDF - GCC | P4 | Repeated Sheriff Report's incorrect "no fractures" |
+
+---
+
+### Prompt 1 — Redemption Prompts
+
+**Agents retesting:** MCP - GCC, SP/DOCX - GCC
+
+**Original prompt:**
+> Tell me about Jaylen Webb's emergency room admission — specifically the time and the admitting nurse.
+
+**Why they failed:** MCP-GCC hallucinated 2:00 AM (actual: 3:15 AM). SP/DOCX-GCC returned nothing at all.
+
+**Revised prompt:**
+> In case 2024-DR-42-0892, what time was Jaylen Webb admitted to the emergency room according to the medical records? Who was the nurse or nursing staff documented in the ER visit?
+
+**What changed:** Added the case number for retrieval precision. Specified "according to the medical records" to steer away from the Sheriff Report's conflicting 12:47 AM. Asked for "nurse or nursing staff" to broaden the match.
+
+---
+
+### Prompt 2 — Redemption Prompts
+
+**Agents retesting:** SP/PDF - GCC, SP/DOCX - Com, KB/DOCX - Com, KB/DOCX - GCC
+
+**Original prompt:**
+> What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement?
+
+**Why they failed:** 4 agents attributed Dena Holloway's "8 PM" statement to Marcus. Marcus actually said "around ten" (hospital) and "after 10 PM" (law enforcement). The 8 PM figure comes from Dena's statement in the Sheriff Report.
+
+**Revised prompt:**
+> In case 2024-DR-42-0892, what did Marcus Webb himself say — in his own words — about what time he put Jaylen to bed? Compare his statement to hospital staff (Medical Records) with his statement to law enforcement (Sheriff Report). Note: Dena Holloway also made a statement about bedtime — do not attribute her words to Marcus.
+
+**What changed:** Added "in his own words" to prevent misattribution. Explicitly named the two source documents. Added a direct warning about the Dena/Marcus attribution trap.
+
+---
+
+### Prompt 3 — Redemption Prompts
+
+**Agents retesting:** Web SPA
+
+**Original prompt:**
+> Crystal Price told the court she was "clean now" at the November 2023 hearing. What do the drug test results show?
+
+**Why they failed:** Web SPA hallucinated a case number for Crystal Price, then returned no results and missed the fentanyl contradiction entirely.
+
+**Revised prompt:**
+> In case 2024-DR-15-0341, Crystal Price told the court she was "clean now" at the November 2023 hearing. What do her actual drug test results and compliance records show? Are there any discrepancies between her claim and the evidence?
+
+**What changed:** Added the case number (Web SPA can't resolve Case 2 from names alone). Explicitly asked for "discrepancies" to nudge the GPT-4.1 model toward calling the discrepancy tool.
+
+---
+
+### Prompt 4 — Redemption Prompts
+
+**Agents retesting:** SP/DOCX - Com, KB/DOCX - Com, KB/PDF - Com, SP/PDF - GCC, SP/DOCX - GCC, KB/PDF - GCC, KB/DOCX - GCC (7 agents)
+
+**Original prompt:**
+> Did the Sheriff's Office investigation find fractures in Jaylen Webb's skeletal survey?
+
+**Why they failed:** 7 of 8 document agents repeated the Sheriff Report's misleading "no fractures detected" without cross-referencing the Medical Records, which document two fractures. Only SP/PDF-Com caught the conflict.
+
+**Revised prompt:**
+> In case 2024-DR-42-0892, what were the findings of Jaylen Webb's skeletal survey? Compare what the Sheriff Report says about the skeletal survey results with what the Medical Records document. Are there any discrepancies between these two sources?
+
+**What changed:** Explicitly asks the agent to compare two named documents instead of asking a yes/no question that can be answered from a single source. Directly asks for discrepancies, which forces cross-referencing.
+
+---
+
+### Prompt 5 — Redemption Prompts
+
+**Agents retesting:** KB/PDF - Com, SP/PDF - GCC
+
+**Original prompt:**
+> What is the complete timeline of events for case 2024-DR-42-0892?
+
+**Why they failed:** KB/PDF-Com collapsed the investigation phase into a single paragraph (6/12). SP/PDF-GCC mixed in Case 2 data and only recovered ~4/12 events.
+
+**Revised prompt:**
+> Build a detailed chronological timeline for case 2024-DR-42-0892 (the Webb/Holloway CPS case). Include every dated event you can find: the initial incident, ER admission, medical findings, law enforcement response, DSS investigation steps, interviews, court actions, and child removal. List each event on its own line with the date, time (if known), and what happened.
+
+**What changed:** Named the case parties to prevent cross-case confusion. Listed the event categories as a checklist to prevent collapsing. Asked for one event per line to force enumeration instead of narrative summary.
+
+---
+
+### Prompt 6 — Redemption Prompts
+
+**Agents retesting:** SP/PDF - GCC, SP/DOCX - GCC
+
+**Original prompt:**
+> List all people involved in the Price TPR case and their roles.
+
+**Why they failed:** Both GCC SharePoint agents returned only 5 of 8 people, missing the children as named participants.
+
+**Revised prompt:**
+> In case 2024-DR-15-0341 (the Crystal Price TPR case), list every person mentioned by name — including the children, parents, caseworkers, attorneys, judges, and any other individuals. For each person, state their role in the case.
+
+**What changed:** Explicitly prompted for children as a category (GCC agents omitted them). Listed role categories as a checklist. Added the case number for retrieval precision.
+
+---
+
+### Prompt 8 — Redemption Prompts
+
+**Agents retesting:** Web SPA, MCP - Com, SP/PDF - GCC, SP/DOCX - GCC
+
+**Original prompt:**
+> What statements were made to law enforcement in case 2024-DR-42-0892?
+
+**Why they failed:** MCP agents lack a "made_to" filter on the statements tool — they retrieved all statements, not just those made to law enforcement. SP/PDF-GCC returned court testimony. SP/DOCX-GCC returned hospital statement versions.
+
+**Revised prompt:**
+> In case 2024-DR-42-0892, which people gave statements specifically to law enforcement officers (such as Lt. Odom or Sheriff's Office investigators)? For each person, summarize what they told law enforcement — not what they told hospital staff, DSS, or the court.
+
+**What changed:** Named a specific law enforcement officer (Lt. Odom) to anchor retrieval. Explicitly excluded hospital, DSS, and court audiences to prevent false positives. For MCP agents, the revised prompt may help the model post-filter results even though the tool itself lacks the filter.
+
+---
+
+### Prompt 10 — Redemption Prompts
+
+**Agents retesting:** Web SPA, SP/PDF - GCC
+
+**Original prompt:**
+> What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?
+
+**Why they failed:** Web SPA conflated the 9:30 PM thump with the 2:00 AM discovery, reporting 1h15m. SP/PDF-GCC fabricated 7:30 AM and reported a 10-hour gap.
+
+**Revised prompt:**
+> In case 2024-DR-42-0892, Dena Holloway reported hearing a thump from Jaylen's room. Later, Jaylen was taken to the hospital. What specific times are documented for: (1) when the thump occurred, (2) when Dena discovered Jaylen was injured, and (3) when Jaylen arrived at the ER? Calculate the time gap between the thump and hospital arrival.
+
+**What changed:** Decomposed into three explicit milestones to prevent conflation. Asks the agent to state each time before calculating, which forces step-by-step reasoning instead of a single leap.
+
+---
+
+### Redemption Results
+
+*To be completed during testing.*
+
+| # | Agent | Prompt | Original | Revised | New Grade | Notes |
+|---|-------|--------|----------|---------|-----------|-------|
+| 1 | SP/PDF - GCC | P2 | | | | |
+| 2 | SP/PDF - GCC | P4 | | | | |
+| 3 | SP/PDF - GCC | P5 | | | | |
+| 4 | SP/PDF - GCC | P6 | | | | |
+| 5 | SP/PDF - GCC | P8 | | | | |
+| 6 | SP/PDF - GCC | P10 | | | | |
+| 7 | SP/DOCX - GCC | P1 | | | | |
+| 8 | SP/DOCX - GCC | P4 | | | | |
+| 9 | SP/DOCX - GCC | P6 | | | | |
+| 10 | SP/DOCX - GCC | P8 | | | | |
+| 11 | Web SPA | P3 | | | | |
+| 12 | Web SPA | P8 | | | | |
+| 13 | Web SPA | P10 | | | | |
+| 14 | SP/DOCX - Com | P2 | | | | |
+| 15 | SP/DOCX - Com | P4 | | | | |
+| 16 | KB/DOCX - Com | P2 | | | | |
+| 17 | KB/DOCX - Com | P4 | | | | |
+| 18 | KB/PDF - Com | P4 | | | | |
+| 19 | KB/PDF - Com | P5 | | | | |
+| 20 | KB/DOCX - GCC | P2 | | | | |
+| 21 | KB/DOCX - GCC | P4 | | | | |
+| 22 | MCP - Com | P8 | | | | |
+| 23 | MCP - GCC | P1 | | | | |
+| 24 | KB/PDF - GCC | P4 | | | | |

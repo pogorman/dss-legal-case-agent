@@ -1,0 +1,343 @@
+List all people involved in the Price TPR case and their roles.
+
+web---
+The following individuals are involved in the Price TPR case (DSS v. Price, Richland County, 2024-DR-15-0341):
+
+Crystal Price
+
+Role: Parent (Mother of Amari and Destiny Price)
+Subject of TPR petition
+Brandon Price
+
+Role: Parent (Father of Amari and Destiny Price)
+Voluntarily relinquished parental rights in November 2023
+Amari Price
+
+Role: Child (age 7)
+Subject of the TPR action
+Destiny Price
+
+Role: Child (age 5)
+Subject of the TPR action
+Monica Vance
+
+Role: DSS Case Manager
+Assigned since August 2023
+Dr. Raymond Ellis
+
+Role: Witness (Substance Abuse Evaluator, Licensed Social Worker)
+Conducted evaluation of Crystal Price
+Sandra Patterson
+
+Role: Foster Parent (pre-adoptive placement)
+Currently caring for the children
+Thomas Reed
+
+Role: Guardian ad Litem (GAL)
+Court-appointed representative for Amari and Destiny Price
+Source: DSS v. Price — Termination of Parental Rights, 2024-DR-15-0341, Case Summary.
+
+list_cases
+get_case_summary
+
+
+gcc mcp ---
+Here are the people involved in the Price TPR case and their roles:
+
+Crystal Price - Parent (Mother of minor children Amari and Destiny Price)
+
+DOB: December 3, 1989
+Notes: Resides at various addresses in Richland County. History of substance abuse (opioids). Two prior DSS investigations in 2021 and 2022, both unsubstantiated.
+Brandon Price - Parent (Father of minor children Amari and Destiny Price)
+
+DOB: June 19, 1987
+Notes: Incarcerated at Kirkland Correctional Institution since March 2023. Voluntarily relinquished parental rights in November 2023.
+Amari Price - Child (Minor child, age 7)
+
+DOB: September 28, 2017
+Notes: Currently placed with licensed foster family, the Pattersons. Enrolled in second grade at Longleaf Elementary.
+Destiny Price - Child (Minor child, age 5)
+
+DOB: May 14, 2019
+Notes: Currently placed with licensed foster family, the Pattersons. Enrolled in pre-K at Longleaf Elementary.
+Monica Vance - Case Manager (DSS Case Manager assigned August 2023)
+
+Notes: Case manager, Richland County DSS. Managed case from initial removal through TPR filing.
+Dr. Raymond Ellis - Witness (Licensed clinical social worker, substance abuse evaluator)
+
+Notes: Conducted substance abuse evaluation of Crystal Price in September 2023. Recommended intensive outpatient treatment.
+Sandra Patterson - Foster Parent (Licensed foster parent, pre-adoptive placement)
+
+Notes: Licensed foster parent since 2019. Children placed August 2023. Family has expressed intent to adopt if TPR is granted.
+Thomas Reed - Guardian ad Litem (Court-appointed GAL for Amari and Destiny Price)
+
+Notes: Appointed September 2023. Recommends TPR and adoption by Patterson family.
+
+
+gcc sp/pdf ---
+Here are the people involved in the Price TPR case and their roles:
+
+Crystal Price: Respondent and biological mother of the minor children, Amari Price and Destiny Price ​1​.
+Brandon Price: Biological father of the minor children, who voluntarily relinquished his parental rights ​1​.
+Patricia Holloway: DSS caseworker involved in the investigation and home visit ​1​.
+Monica Vance: DSS case manager involved in the investigation, home visit, and case management ​1​.
+The Honorable Harold Wynn: Family Court Judge overseeing the case ​1​.
+Dr. Ellis: Conducted the substance abuse evaluation for Crystal Price ​1​.
+Patterson Family: Foster family providing care for the minor children, Amari and Destiny Price ​1​.
+These individuals played various roles in the investigation, legal proceedings, and care of the children involved in the case.
+
+1 reference
+1
+TPR_Petition_and_Affidavit.pdf
+
+
+gcc sp docx ---
+Here are the people involved in the Price TPR case and their roles:
+
+Crystal Price: Respondent and biological mother of the minor children, Amari Price and Destiny Price ​1​.
+Brandon Price: Biological father who voluntarily relinquished his parental rights ​1​​​2​.
+Patricia Holloway: DSS caseworker involved in the investigation ​1​.
+Monica Vance: DSS case manager involved in the investigation ​1​.
+Harold Wynn: Family Court Judge overseeing the case ​1​​​2​​​3​.
+Thomas Reed: Guardian ad Litem for the minor children ​3​.
+Sandra and Michael Patterson: Foster parents of the minor children, Amari Price and Destiny Price ​1​​​2​​​3​.
+These individuals played various roles in the investigation, legal proceedings, and care of the children involved in the case.
+
+3 references
+1
+TPR_Petition_and_Affidavit.docx
+2
+DSS_Investigation_Report.docx
+3
+Court_Orders_and_Filings.do
+
+
+gcc kb pdf ---
+Here are the people involved in the Price TPR case and their roles:
+
+Crystal Price: Respondent and mother of the minor children, Amari Price and Destiny Price. She is undergoing treatment and attempting to comply with the court-ordered treatment plan ​1​​​2​.
+Brandon Price: Father of the minor children, who voluntarily relinquished his parental rights ​2​.
+Monica Vance: Case Manager at Richland County Department of Social Services (DSS), responsible for managing the case and providing testimony and affidavits ​1​​​3​​​2​.
+Thomas Reed: Guardian ad Litem, representing the best interests of the children and recommending termination of parental rights (TPR) ​1​​​2​.
+Sandra and Michael Patterson: Foster parents of Amari and Destiny Price, who have expressed their intent to adopt the children ​3​​​2​.
+Judge Harold Wynn: Presiding judge at the TPR probable cause hearing ​1​.
+Unit Supervisor: Supervisor of Family Preservation and Reunification at Richland County DSS, who reviewed and signed off on the case manager's recommendations ​1​.
+Notary Public: Official who notarized the affidavit submitted by Monica Vance ​3​.
+If you need any further information, feel free to ask!
+
+3 references
+
+1
+DSS_Investigation_Report - 2024-dr-15-0341.pdf
+
+2
+Court_Orders_and_Filings - 2024-dr-15-0341.pdf
+
+3
+TPR_Petition_and_Affidavit - 2024-dr-
+
+
+gcc kb docx ---
+The people involved in the Price TPR case and their roles are as follows:
+
+Crystal Price: Respondent (Mother) ​1​.
+Brandon Price: Father of the children, voluntarily relinquished parental rights ​1​.
+Amari Price: Minor child, DOB September 28, 2017 ​1​.
+Destiny Price: Minor child, DOB May 14, 2019 ​1​.
+Monica Vance: DSS Case Manager ​2​​​1​.
+Thomas Reed, Esq.: Guardian ad Litem ​2​​​1​.
+Judge Harold Wynn: Family Court Judge ​2​​​1​.
+Sandra Patterson: Foster care provider for Amari and Destiny Price ​2​.
+Counsel for DSS: Legal representation for the South Carolina Department of Social Services ​1​.
+Appointed Counsel for Crystal Price: Legal representation for Crystal Price ​1​.
+​1​: ​1​​​2​: ​2​
+
+2 references
+
+1
+Court_Orders_and_Filings - dr-15-0341.docx
+
+2
+DSS_Investigation_Report - dr-15
+
+
+com mcp----
+People Involved in the Price TPR Case and Their Roles
+
+Crystal Price: Parent (Mother of minor children Amari and Destiny Price)
+Brandon Price: Parent (Father of minor children Amari and Destiny Price; voluntarily relinquished parental rights in November 2023)
+Amari Price: Child (Minor child, age 7)
+Destiny Price: Child (Minor child, age 5)
+Monica Vance: Case Manager (DSS Case Manager assigned August 2023)
+Dr. Raymond Ellis: Witness (Licensed clinical social worker, substance abuse evaluator)
+Sandra Patterson: Foster Parent (Licensed foster parent, pre-adoptive placement)
+Thomas Reed: Guardian ad Litem (Court-appointed GAL for Amari and Destiny Price)
+
+com sp pdf ---
+People Involved in the Price TPR Case and Their Roles
+
+1. Crystal Price
+
+Role: Respondent; biological mother of Amari Price and Destiny Price; subject of the Termination of Parental Rights (TPR) petition.
+2. Brandon Price
+
+Role: Biological father of Amari Price and Destiny Price; voluntarily relinquished his parental rights on November 20, 2023; incarcerated at Kirkland Correctional Institution.
+3. Amari Price
+
+Role: Minor child; subject of the TPR proceedings (DOB: September 28, 2017).
+4. Destiny Price
+
+Role: Minor child; subject of the TPR proceedings (DOB: May 14, 2019).
+5. South Carolina Department of Social Services (DSS)
+
+Role: Petitioner; state agency responsible for child protection and filing the TPR petition.
+6. Monica Vance
+
+Role: DSS Case Manager, Richland County; assigned to the case, conducted home visits, managed the case, and provided testimony and affidavits.
+7. Patricia Holloway
+
+Role: DSS Caseworker; accompanied Monica Vance on the initial home visit that led to the emergency removal of the children.
+8. Dr. Raymond Ellis
+
+Role: Licensed Clinical Social Worker and Substance Abuse Evaluator; conducted the court-ordered substance abuse evaluation of Crystal Price.
+9. Sandra and Michael Patterson
+
+Role: Foster parents; provided foster care for Amari and Destiny Price since their removal and expressed intent to adopt both children.
+10. Thomas Reed, Esq.
+
+Role: Court-appointed Guardian ad Litem (GAL) for Amari and Destiny Price; advocated for the best interests of the children and provided reports and recommendations to the court.
+11. Rebecca Torres, Esq.
+
+Role: Staff Attorney, Richland County DSS; legal counsel for DSS in the TPR proceedings.
+12. The Honorable Harold Wynn
+
+Role: Family Court Judge, Fifth Judicial Circuit, Richland County; presided over all hearings and issued orders in the case​1​​​2​​​3​​​4​.
+If you need more details about any individual or their specific actions, please let me know.
+
+4 references
+1
+TPR_Petition_and_Affidavit.pdf
+2
+GAL_Reports.pdf
+3
+Court_Orders_and_Filings.pdf
+4
+DSS_Investigation_Report.
+
+com sp word----
+People Involved in the Price TPR Case and Their Roles
+
+1. Crystal Price
+
+Role: Respondent; biological mother of Amari Price and Destiny Price. Subject of the Termination of Parental Rights (TPR) petition.​1​
+2. Brandon Price
+
+Role: Biological father of Amari Price and Destiny Price. Voluntarily relinquished his parental rights on November 20, 2023; no longer a party to the proceeding.​1​
+3. Amari Price
+
+Role: Minor child; subject of the TPR case.​1​
+4. Destiny Price
+
+Role: Minor child; subject of the TPR case.​1​
+5. South Carolina Department of Social Services (DSS)
+
+Role: Petitioner; state agency responsible for child protection and filing the TPR petition.​1​
+6. Monica Vance
+
+Role: DSS Case Manager, Richland County; assigned to the case, conducted home visits, managed case progress, and submitted affidavits and reports to the court.​1​
+7. Patricia Holloway
+
+Role: DSS Caseworker; participated in the home visit that led to the emergency removal of the children.​1​
+8. Dr. Raymond Ellis
+
+Role: Licensed Clinical Social Worker and Substance Abuse Evaluator; conducted the court-ordered substance abuse evaluation of Crystal Price.​2​
+9. Sandra and Michael Patterson
+
+Role: Foster parents; provided foster care for Amari and Destiny Price since their removal, expressed intent to adopt both children if TPR is granted.​3​
+10. Thomas Reed, Esq.
+
+Role: Court-appointed Guardian ad Litem; advocates for the best interests of the children, filed reports and recommendations with the court.​4​
+11. Rebecca Torres, Esq.
+
+Role: Staff Attorney for DSS; counsel for the petitioner in the TPR proceedings.​1​
+12. The Honorable Harold Wynn
+
+Role: Family Court Judge, Fifth Judicial Circuit, Richland County; presided over all hearings and issued orders in the case.​1​
+Summary Table
+
+Name	Role/Title
+Crystal Price	Respondent, biological mother
+Brandon Price	Biological father (relinquished rights)
+Amari Price	Minor child
+Destiny Price	Minor child
+DSS	Petitioner, state agency
+Monica Vance	DSS Case Manager
+Patricia Holloway	DSS Caseworker
+Dr. Raymond Ellis	Substance Abuse Evaluator
+Sandra & Michael Patterson	Foster parents
+Thomas Reed, Esq.	Guardian ad Litem
+Rebecca Torres, Esq.	DSS Staff Attorney
+Hon. Harold Wynn	Family Court Judge
+All information is directly supported by official court filings, DSS reports, and affidavits from the Price TPR case.​1​​​2​​​3​​​4​
+
+4 references
+1
+TPR_Petition_and_Affidavit.docx
+2
+Substance_Abuse_Evaluation.docx
+3
+DSS_Investigation_Report.docx
+4
+GAL_Reports.docx
+
+com kb pdf ---
+People Involved in the Price TPR Case and Their Roles
+
+Monica Vance: Case Manager, South Carolina Department of Social Services (DSS), Richland County Office. Directly involved in the case, responsible for managing the case, providing affidavits, and coordinating DSS efforts​1​.
+Patricia Holloway: DSS Caseworker. Participated in the investigation and emergency removal of the children​1​.
+Crystal Price: Respondent, biological mother of Amari Price and Destiny Price. Subject of the TPR petition​1​.
+Brandon Price: Biological father of Amari Price and Destiny Price. Voluntarily relinquished parental rights​1​.
+Dr. Ellis: Substance abuse evaluator. Diagnosed Crystal Price with Opioid Use Disorder and recommended treatment​1​.
+Sandra Patterson: Foster parent. Provides care for Amari and Destiny Price, intends to adopt both children​2​.
+Thomas Reed: Court-appointed Guardian ad Litem. Assessed the children’s welfare and submitted reports to the court​2​.
+Notary Public: Witnessed and notarized Monica Vance’s affidavit​1​.
+Children Involved
+
+Amari Price: Minor child, subject of the TPR case​1​.
+Destiny Price: Minor child, subject of the TPR case​1​.
+If you need more details about any individual or their specific actions, let me know!
+
+2 references
+
+1
+TPR_Petition_and_Affidavit - 2024-dr-15-0341.pdf
+
+2
+DSS_Investigation_Report - 2024-dr-15-0341.pdf
+
+
+com kb docx---
+People Involved in the Price TPR Case and Their Roles
+
+Crystal Price: Respondent; biological mother of Amari Price and Destiny Price; subject of the termination of parental rights (TPR) petition.
+Amari Price: Minor child; subject of the TPR case.
+Destiny Price: Minor child; subject of the TPR case.
+Brandon Price: Biological father of both children; voluntarily relinquished his parental rights.
+Sandra Patterson: Foster parent; provides a stable, nurturing home for both children and has expressed intent to adopt them.
+Monica Vance: Case Manager, South Carolina Department of Social Services (DSS), Richland County Office; affiant in support of the TPR petition.
+Patricia Holloway: DSS caseworker; accompanied Monica Vance during the investigation of Crystal Price’s home.
+Dr. Ellis: Conducted substance abuse evaluation for Crystal Price.
+Thomas Reed: Court-appointed Guardian ad Litem; recommended termination of parental rights and adoption by the Patterson family as being in the best interest of both children.
+Rebecca Torres, Esq.: Staff Attorney, Richland County DSS; submitted the TPR petition to the court.
+​1​​​2​​​3​
+
+3 references
+
+1
+TPR_Petition_and_Affidavit - dr-15-0341.docx
+
+2
+DSS_Investigation_Report - dr-15-0341.docx
+
+3
+TPR_Petition_and_Affidavit - dr-15-

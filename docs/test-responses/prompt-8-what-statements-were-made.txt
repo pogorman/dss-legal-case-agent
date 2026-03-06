@@ -1,0 +1,243 @@
+What statements were made to law enforcement in case 2024-DR-42-0892?
+
+web ---
+There are no recorded statements made to law enforcement in case 2024-DR-42-0892, based on the currently available data. If you require statements made to other parties or more specific individuals, please specify.
+
+get_statements_by_person
+gcc mcp ----
+Here are the statements made to law enforcement in case 2024-DR-42-0892:
+
+Date: June 12, 2024 Time: 11:00 AM Description: Lt. Frank Odom responded to the hospital, observed child injuries, interviewed ER nursing staff, and requested DSS coordination. Source Document: Sheriff Report #24-06-4418, p. 1 Parties Involved: Lt. Frank Odom, Jaylen Webb
+
+Date: June 13, 2024 Time: 1:30 PM Description: Lt. Odom interviewed Marcus Webb at the Spartanburg County Sheriff office. Marcus stated he was asleep on the couch and did not hear anything until Dena woke him. He stated he did not witness any fall. Source Document: Sheriff Report #24-06-4418, pp. 3-5 Parties Involved: Lt. Frank Odom, Marcus Webb
+
+Date: June 13, 2024 Time: 4:00 PM Description: Lt. Odom interviewed Dena Holloway at the Spartanburg County Sheriff office. Dena changed her account, now stating Marcus was in the child's room earlier in the evening and she heard a loud thump around 9:30 PM but did not check immediately. Source Document: Sheriff Report #24-06-4418, pp. 6-8 Parties Involved: Lt. Frank Odom, Dena Holloway
+gcc sp pdf ----
+The statements made to law enforcement in case 2024-DR-42-0892 include:
+
+DSS Case Manager Renee Dawson: Based on her assessment, she stated that the child, Jaylen Webb, is at imminent risk of harm if returned to either parent at this time. She noted that the medical evidence indicates non-accidental trauma and both parents have provided inconsistent accounts ​1​.
+Dr. Anita Chowdhury, M.D.: As the attending pediatrician at Spartanburg Medical Center, she examined Jaylen Webb and provided testimony regarding the non-accidental injuries observed on the child ​1​.
+These statements were part of the evidence considered during the court proceedings for the emergency protective custody of Jaylen Webb.
+
+1 reference
+1
+Court_Orders_and_Filings.pdf
+gcc sp docx -----
+Here are the statements made to law enforcement in case 2024-DR-42-0892:
+
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+Marcus Webb's Statement:
+
+Marcus Webb stated that he put Jaylen to bed at approximately 10:00 PM on June 11, 2024.
+He reported that Jaylen had been behaving normally throughout the day.
+Webb claimed that after putting Jaylen to bed, he fell asleep on the couch while watching television.
+He was awakened by Ms. Holloway, who told him something was wrong with Jaylen ​1​.
+Dena Holloway's Statement:
+
+Dena Holloway reported that she heard Jaylen crying loudly from his room at approximately 2:00 AM on June 12, 2024.
+She found Jaylen in his crib, unable to move his left leg, and believed he had fallen from the crib.
+Both parents then drove Jaylen to Spartanburg Medical Center ​1​.
+Additional Information:
+
+There are inconsistencies between the parents' statements and the medical evidence, which indicates that Jaylen's injuries were non-accidental and occurred at different times ​1​.
+1 reference
+1
+DSS_Investigation_Report.docx
+
+
+gcc kb pdf ----
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+Interview with Marcus Webb - Sheriff's Office (June 13, 2024)
+
+Marcus Webb stated he was on the couch all night and did not go into Jaylen's room after putting the child to bed.
+He suggested that Jaylen may have climbed out of the crib and fallen, as the child had been trying to climb out lately.
+Webb denied ever handling Jaylen roughly and stated he did not know how the injuries occurred.
+When confronted with the inconsistency between his statement and Ms. Holloway's statement regarding his presence in or near the child's room at 9:30 PM, Webb stated: "Dena and I have been arguing a lot lately but I would never hurt my son. I don't know why she is saying I was in the room. I was not in his room after 10 PM" ​1​.
+Interview with Dena Holloway - Sheriff's Office (June 13, 2024)
+
+Dena Holloway initially stated that Marcus Webb put Jaylen to bed at approximately 8:00 PM and that both she and Webb spent the remainder of the evening in the living room.
+She later revised her statement, disclosing that at approximately 9:30 PM on the evening of June 11, she heard a loud thump from Jaylen's room and assumed Marcus was in there with the child. She called out, and Marcus responded that everything was fine.
+Holloway further disclosed that Marcus has a temper and that she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying ​1​.
+Additional Information from Sheriff's Report
+
+Marcus Webb stated that he arrived home from work at approximately 5:30 PM on June 11, 2024, and that he and Dena Holloway prepared dinner together and fed Jaylen at approximately 6:00 PM.
+Webb stated that he gave Jaylen a bath and put him to bed in his crib at approximately 8:00 PM, then went to the living room to watch television and fell asleep on the couch.
+Webb reiterated that he did not hear anything prior to being woken up by Holloway and did not witness any fall or incident involving the child.
+When asked to explain the bruising observed on Jaylen's upper left arm, Webb stated he had no explanation and reiterated that the child had been trying to climb out of his crib in recent weeks.
+Webb acknowledged ongoing disagreements with Holloway but denied any physical altercations or using physical discipline on the child ​2​.
+2 references
+
+1
+DSS_Investigation_Report - 2024-dr-42-0892.pdf
+
+2
+Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf
+
+
+gcc kb docx -----
+Here are the statements made to law enforcement in case 2024-DR-42-0892:
+
+Dena Holloway's Statements:
+
+Initially, Dena Holloway stated that the child fell from his crib and that Marcus Webb was the only adult present with the child after bedtime ​1​.
+During a follow-up interview on June 13, 2024, Dena Holloway revised her statement, disclosing that she heard a loud thump from the child's room at approximately 9:30 PM on June 11, 2024, and that Marcus Webb was in or near the child's room at that time. She also mentioned that Marcus Webb has a temper and has grabbed the child roughly by the arm on two to three prior occasions ​1​​​2​.
+Marcus Webb's Statements:
+
+Marcus Webb stated that he was asleep on the couch and did not enter the child's room after putting the child to bed at approximately 10:00 PM on June 11, 2024. He denied knowledge of how the injuries occurred ​1​.
+During a law enforcement interview on June 13, 2024, Marcus Webb reiterated that he was on the couch all night and did not go into Jaylen's room after putting the child down. He suggested that the child may have climbed out of the crib and fallen. He denied ever handling Jaylen roughly and stated that he did not know how the injuries occurred. When confronted with the inconsistency between his statement and Dena Holloway's statement, he mentioned that they had been arguing a lot lately but denied hurting his son ​2​.
+2 references
+
+1
+Court_Orders_and_Filings - dr-42-0892.docx
+
+2
+DSS_Investigation_Report - dr-42-0
+com mcp ----
+
+first try...third try too
+No statements made to law enforcement are recorded in case 2024-DR-42-0892.
+
+second try...
+Please provide the full or partial name of the person whose statements you would like to retrieve.
+
+com sp pdf ----
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+
+1. Initial Parental Accounts (June 12, 2024)
+
+Both Marcus Webb and Dena Holloway initially told medical staff and law enforcement that their child, Jaylen Webb, had "fallen out of his crib." Neither parent claimed to have witnessed the event. Marcus Webb stated he put Jaylen to bed at 10:00 PM and fell asleep on the couch, while Dena Holloway reported hearing Jaylen crying at 2:00 AM and finding him unable to move his leg​1​.
+2. Revised Statement by Dena Holloway (June 13, 2024, Interview with Lt. Frank Odom)
+
+During a follow-up interview at the Spartanburg County Sheriff’s Office, Dena Holloway changed her account. She disclosed that at approximately 9:30 PM on June 11, she heard a loud thump from Jaylen’s room and assumed Marcus Webb was in there with the child. She called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+Holloway further stated to Lt. Odom that Marcus Webb has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child’s crying. She said, “Marcus has a temper. He gets frustrated when Jaylen won’t stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner.”​2​​​3​
+3. Statement by Marcus Webb (June 13, 2024, Interview with Lt. Frank Odom)
+
+Marcus Webb stated he was on the couch all night and did not go into Jaylen’s room after putting him to bed. He denied witnessing any fall and suggested Jaylen may have climbed out of the crib and fallen, noting Jaylen had been trying to climb out lately. He denied ever handling Jaylen roughly and stated he did not know how the injuries occurred.
+When confronted with the inconsistency between his statement and Holloway’s revised account regarding his presence in or near the child’s room at 9:30 PM, Webb said: “Dena and I have been arguing a lot lately but I would never hurt my son. I don’t know why she is saying I was in the room. I was not in his room after 10 PM.”​2​​​3​
+4. Medical and Law Enforcement Observations
+
+Medical staff and law enforcement noted that the injuries (bilateral femur fracture and spiral fracture of the left humerus) were inconsistent with a fall from a crib and suggested non-accidental trauma. The medical evidence indicated two separate injury events, days apart, contradicting both parents’ accounts of a single incident​3​.
+Summary of Law Enforcement Findings
+
+Both parents provided conflicting and evolving accounts.
+Dena Holloway’s revised statement to law enforcement included details about Marcus Webb’s temper and rough handling of Jaylen.
+Marcus Webb denied any rough handling and maintained he was not present in the child’s room after bedtime.
+Law enforcement and medical evidence raised serious concerns about the safety of the child and the plausibility of the parents’ explanations​3​.
+If you need the full text of the law enforcement report or specific interview transcripts, please let me know.
+
+3 references
+1
+Sheriff_Report_24-06-4418.pdf
+2
+DSS_Investigation_Report.pdf
+3
+Court_Orders_and_Filings.pdf
+
+com sp docx -----
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+
+1. Initial Parental Accounts (June 12, 2024)
+
+Both parents, Marcus Webb and Dena Holloway, reported to medical staff and law enforcement that their child, Jaylen Webb, had "fallen out of his crib." Neither parent claimed to have witnessed the event. Marcus Webb stated he put Jaylen to bed at 10:00 PM and was asleep on the couch at the time of the incident. Dena Holloway reported she was in her bedroom with the door closed and only heard Jaylen crying at 2:00 AM​1​.
+2. Hospital Interview with Dena Holloway (June 13, 2024, 9:00 AM)
+
+Dena Holloway stated Marcus Webb was the only adult present with Jaylen after bedtime. She maintained her belief that the child had fallen from his crib and did not hear anything until 2:00 AM when Jaylen started screaming​2​.
+3. Law Enforcement Interview with Dena Holloway (June 13, 2024, Afternoon)
+
+During a follow-up interview at the Spartanburg County Sheriff’s Office with Lt. Frank Odom, Dena Holloway revised her statement:
+She disclosed hearing a loud thump from Jaylen’s room at approximately 9:30 PM on June 11, 2024.
+She stated Marcus Webb was in or near the room at that time and responded "everything was fine" when she called out.
+Holloway further disclosed that Marcus Webb has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child’s crying​2​​​3​.
+4. Law Enforcement Interview with Marcus Webb (June 13, 2024, 1:30 PM)
+
+Marcus Webb stated he was on the couch all night and did not go into Jaylen’s room after putting the child down. He denied witnessing any fall and suggested Jaylen may have climbed out of the crib and fallen, noting Jaylen had been trying to climb out lately. Webb denied ever handling Jaylen roughly and stated he did not know how the injuries occurred​2​​​3​.
+5. Nursing Staff Observations
+
+ER nursing staff, specifically Charge Nurse Patricia Daniels, noted that the pattern of bruising on Jaylen’s upper arm was not consistent with a fall from a crib and appeared more consistent with the child being grabbed or restrained with force. Hospital staff initiated a mandatory report to DSS and law enforcement​4​.
+Summary of Law Enforcement Findings
+
+Both parents provided conflicting and inconsistent accounts regarding the events leading to Jaylen’s injuries.
+Dena Holloway’s revised statement to law enforcement included new allegations about Marcus Webb’s temper and rough handling of the child.
+Medical and law enforcement assessments concluded that the injuries were inconsistent with the reported mechanism (fall from crib) and suggested non-accidental trauma occurring during at least two separate events​3​.
+If you need the full transcripts or additional details from the law enforcement interviews, please specify.
+
+4 references
+1
+Medical_Records.docx
+2
+DSS_Investigation_Report.docx
+3
+Court_Orders_and_Filings.docx
+4
+Sheriff_Report_24-06-4418
+com kb pdf ----
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+
+1. Marcus Webb’s Statement (June 13, 2024, Sheriff’s Office Interview)
+
+Marcus Webb stated he arrived home at approximately 5:30 PM, prepared dinner with Dena Holloway, fed Jaylen at 6:00 PM, gave him a bath, and put him to bed at 8:00 PM.
+He claimed he went to the living room, sat on the couch to watch TV, fell asleep, and was later woken by Dena Holloway, who said something was wrong with Jaylen.
+Webb stated he did not hear anything prior to being woken and did not witness any fall or incident involving the child.
+He asserted: “I was on the couch all night. I did not go into Jaylen’s room after I put him down. I don’t know how he got hurt. Maybe he climbed out of the crib and fell. He’s been trying to climb out lately.”
+Webb denied any physical contact with the child after putting him to bed and denied any explanation for the bruising observed on Jaylen’s upper left arm.
+He acknowledged ongoing disagreements with Dena Holloway but characterized them as “normal couple stuff,” denying any physical altercations.
+Webb denied ever striking the child, stating he had occasionally raised his voice but denied any physical contact beyond normal handling.
+When pressed about the discrepancy between his account and medical findings, Webb became agitated and stated: “Dena and I have been arguing a lot lately but I would never hurt my son. I don’t know why she is saying I was in the room. I was not in his room after 10 PM.”​1​
+2. Dena Holloway’s Statement (Hospital Interview, June 12, 2024)
+
+Dena Holloway and Marcus Webb reported to ER staff that Jaylen had fallen from his crib.
+Charge Nurse Patricia Daniels noted that the pattern of bruising on Jaylen’s upper arm was not consistent with a fall from a crib and was more consistent with being grabbed or restrained with force.​1​
+3. Dena Holloway’s Statement (DSS Investigation Report)
+
+Holloway disclosed that at approximately 9:30 PM on June 11, she heard a loud thump from Jaylen’s room and assumed Marcus was in there with the child. She called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+She further disclosed to Lt. Odom that Marcus has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child’s crying, stating: “Marcus has a temper. He gets frustrated when Jaylen won’t stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner.”
+None of this information was disclosed during her initial interview at the hospital.​2​
+4. Additional DSS Follow-up Statements (June 14, 2024)
+
+Marcus Webb, in a DSS follow-up, stated: “I love my son. I want to cooperate with DSS. I will do whatever the court says. I did not hurt Jaylen and I don’t know what happened to him.”
+Dena Holloway, in a DSS follow-up, stated: “I want Jaylen to be safe. If my mama can take him, that would be best right now. I don’t feel safe with Marcus around Jaylen until we figure out what happened.”​2​
+If you need the full transcripts or additional details from the interviews, please let me know.
+
+2 references
+
+1
+Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf
+
+2
+DSS_Investigation_Report - 2024-dr-42-0892.pdf
+
+
+com kb docx -----
+Statements Made to Law Enforcement in Case 2024-DR-42-0892
+
+Marcus Webb's Statement (June 13, 2024, Spartanburg County Sheriff's Office):
+
+Marcus Webb stated he arrived home at 5:30 PM, prepared dinner with Dena Holloway, and put Jaylen to bed at 8:00 PM.
+He claimed he was on the couch all night, did not go into Jaylen’s room after putting him down, and did not witness any fall or incident.
+Webb suggested Jaylen may have climbed out of the crib and fallen, noting Jaylen had been trying to climb out lately.
+He denied any physical contact with Jaylen after bedtime and denied ever handling him roughly or using physical discipline.
+When asked about bruising on Jaylen’s upper left arm, Webb said he had no explanation and reiterated the child had been trying to climb out of his crib.
+Webb acknowledged ongoing disagreements with Holloway but denied any physical altercations.
+When pressed about discrepancies and the grip-pattern bruising, Webb became agitated and stated: “Dena and I have been arguing a lot lately but I would never hurt my son. I don’t know why she is saying I was in the room. I was not in his room after 10 PM.” He later clarified, “I just assumed that’s what she’s saying because she’s been trying to blame me for things lately.”​1​
+Dena Holloway's Statement (June 13, 2024, Spartanburg County Sheriff's Office):
+
+Holloway initially stated Marcus was the only adult present with Jaylen after bedtime and that she was in her bedroom with the door closed, not hearing anything until 2 AM when Jaylen started screaming.
+She believed Jaylen had fallen from his crib.
+In a follow-up interview, Holloway revised her statement, disclosing that at approximately 9:30 PM she heard a loud thump from Jaylen’s room and assumed Marcus was in there with the child. She called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+Holloway further disclosed that Marcus has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child’s crying, stating: “Marcus has a temper. He gets frustrated when Jaylen won’t stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner.”
+None of this information was disclosed during her initial hospital interview.​2​
+Summary of Law Enforcement Findings:
+
+Both parents denied witnessing the incident that led to Jaylen’s injuries.
+Medical staff reported the injuries were not consistent with a fall from a crib and were more consistent with being grabbed or restrained with force.
+Law enforcement noted discrepancies between the parents’ statements and medical findings, particularly regarding the grip-pattern bruising on Jaylen’s arm.​1​
+2 references
+
+1
+Sheriff_Report_24-06-4418 - dr-42-0892.docx
+
+2
+DSS_Investigation_Report - dr-42-0892.docx
+
+
+

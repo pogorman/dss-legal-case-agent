@@ -1,0 +1,399 @@
+Which cases involve Termination of Parental Rights?
+
+web ---
+The following cases involve Termination of Parental Rights (TPR):
+
+DSS v. Williams — TPR (Case ID: 2023-DR-25-0194, Kershaw County, filed 2024-05-09, Status: Dismissed)
+DSS v. Reed — TPR (Case ID: 2025-DR-09-0443, Dillon County, filed 2023-11-17, Status: Active)
+DSS v. Taylor — TPR (Case ID: 2024-DR-42-0424, Sumter County, filed 2024-07-08, Status: Active)
+DSS v. Young — TPR (Case ID: 2025-DR-24-0382, Kershaw County, filed 2024-10-05, Status: Active)
+DSS v. Price — Termination of Parental Rights (Case ID: 2024-DR-15-0341, Richland County, filed 2024-02-08, Status: Active)
+DSS v. Parker — TPR (Case ID: 2025-DR-21-0289, Richland County, filed 2023-06-04, Status: Active)
+DSS v. Nelson — TPR (Case ID: 2024-DR-22-0165, Chesterfield County, filed 2023-04-08, Status: Closed)
+DSS v. Morris — TPR (Case ID: 2025-DR-45-0184, Richland County, filed 2023-05-14, Status: Dismissed)
+DSS v. Wright — TPR (Case ID: 2024-DR-38-0342, Marlboro County, filed 2023-04-26, Status: Closed)
+If you need the summary or additional details for any particular TPR case, please specify.
+
+list_cases
+gcc mcp ----
+The cases involving Termination of Parental Rights (TPR) are:
+
+DSS v. Young — TPR
+
+Case ID: 2025-DR-24-0382
+Circuit: Fifth Judicial Circuit
+County: Kershaw
+Filed Date: 2024-10-05
+Status: Active
+Summary: Termination of Parental Rights case involving Aiden Young (age 4). Children removed after children left unsupervised for extended period. Nathaniel Young ordered to complete treatment plan including substance abuse evaluation and treatment, domestic violence intervention program, psychological evaluation. Case is ongoing with next hearing scheduled.
+DSS v. Taylor — TPR
+
+Case ID: 2024-DR-42-0424
+Circuit: Third Judicial Circuit
+County: Sumter
+Filed Date: 2024-07-08
+Status: Active
+Summary: Termination of Parental Rights case involving Kayla Taylor (age 9). Children removed after home found to be unsafe with exposed wiring and no working smoke detectors. Nicole Wright ordered to complete treatment plan including parenting skills classes (12 weeks), gainful employment, anger management classes, random drug screening. Case is ongoing with next hearing scheduled.
+DSS v. Williams — TPR
+
+Case ID: 2023-DR-25-0194
+Circuit: Fifth Judicial Circuit
+County: Kershaw
+Filed Date: 2024-05-09
+Status: Dismissed
+Summary: Termination of Parental Rights case involving Chloe Williams (age 4) and Aaliyah Williams (age 12). Investigation found insufficient evidence to substantiate allegations. Case dismissed by Judge Margaret Easley.
+DSS v. Reed — TPR
+
+Case ID: 2025-DR-09-0443
+Circuit: Fourth Judicial Circuit
+County: Dillon
+Filed Date: 2023-11-17
+Status: Active
+Summary: Termination of Parental Rights case involving Micah Reed (age 5). Children removed after home found to be unsafe with exposed wiring and no working smoke detectors. Diane Jackson ordered to complete treatment plan including substance abuse evaluation and treatment, individual counseling, parenting skills classes (12 weeks), random drug screening, anger management classes. Case is ongoing with next hearing scheduled.
+DSS v. Parker — TPR
+
+Case ID: 2025-DR-21-0289
+Circuit: Fifth Judicial Circuit
+County: Richland
+Filed Date: 2023-06-04
+Status: Active
+Summary: Termination of Parental Rights case involving Jaylen Parker (age 6). Children removed after home environment found to be unsanitary with animal waste and spoiled food. Eric Parker ordered to complete treatment plan including domestic violence intervention program, parenting skills classes (12 weeks), family therapy sessions, psychological evaluation. Case is ongoing with next hearing scheduled.
+DSS v. Wright — TPR
+
+Case ID: 2024-DR-38-0342
+Circuit: Fourth Judicial Circuit
+County: Marlboro
+Filed Date: 2023-04-26
+Status: Closed
+Summary: Termination of Parental Rights case involving Elijah Wright (age 12) and Destiny Wright (age 12). Keisha Wright completed court-ordered treatment plan including domestic violence intervention program and individual counseling. Children successfully reunified with Keisha Wright under ongoing DSS monitoring. Case closed.
+DSS v. Nelson — TPR
+
+Case ID: 2024-DR-22-0165
+Circuit: Fourth Judicial Circuit
+County: Chesterfield
+Filed Date: 2023-04-08
+Status: Closed
+Summary: Termination of Parental Rights case involving Faith Nelson (age 8) and Heaven Nelson (age 9). Shonda Nelson completed court-ordered treatment plan including gainful employment and substance abuse evaluation and treatment. Children successfully reunified with Shonda Nelson under ongoing DSS monitoring. Case closed.
+DSS v. Price — Termination of Parental Rights
+
+Case ID: 2024-DR-15-0341
+Circuit: Fifth Judicial Circuit
+County: Richland
+Filed Date: 2024-02-08
+Status: Active
+Summary: Petition for termination of parental rights of Crystal Price regarding minor children Amari Price (age 7) and Destiny Price (age 5). Children were removed in August 2023 following substantiated neglect findings. Ms. Price failed to complete court-ordered treatment plan including substance abuse counseling, parenting classes, and stable housing requirements over a 12-month reunification period. Father Brandon Price's rights were voluntarily relinquished in November 2023. Probable cause hearing completed; merits hearing scheduled. Children currently in licensed foster care with pre-adoptive family.
+DSS v. Morris — TPR
+
+Case ID: 2025-DR-45-0184
+Circuit: Fifth Judicial Circuit
+County: Richland
+Filed Date: 2023-05-14
+Status: Dismissed
+Summary: Termination of Parental Rights case involving Nia Morris (age 4) and Devonte Morris (age 2). Investigation found insufficient evidence to substantiate allegations. Case dismissed by Judge Harold Wynn.
+
+gcc sp pdf----
+Cases involving Termination of Parental Rights typically include:
+
+Neglect: Unsanitary living conditions, presence of drug paraphernalia, lack of food and running water, and the impaired state of the sole custodial parent.
+Failure to Remedy: The respondent failed to remedy the conditions that caused the removal of the children for a period exceeding six months, despite a Court-Ordered Treatment Plan and reasonable efforts by DSS.
+Substance Abuse: The respondent has a diagnosed Opioid Use Disorder and demonstrated an inconsistent pattern of treatment compliance, positive drug screens, and missed screens.
+For example, in the case of DSS v. Price (Case No. 2024-DR-15-0341), the grounds for termination included neglect, failure to remedy, and substance abuse. The procedural history involved an emergency removal order, a treatment plan, review hearings, voluntary relinquishment of parental rights by the children's father, and a petition for termination of parental rights. The current status includes a scheduled merits hearing and the children remaining in foster care ​1​.
+
+1 reference
+1
+Court_Orders_and_Filings.pdf
+
+gcc sp docx -----
+Cases involving the termination of parental rights typically include:
+
+Crystal Price Case:
+
+Grounds for Termination:
+Child Neglect: The children were living in unsanitary conditions with no food, no running water, and drug paraphernalia visible. The respondent appeared impaired while caring for the children ​1​.
+Failure to Remedy: The respondent failed to remedy the conditions that caused the removal of the children for over six months despite a court-ordered treatment plan and assistance from DSS ​1​.
+Substance Abuse: The respondent suffers from Opioid Use Disorder and tested positive for fentanyl on multiple occasions ​1​.
+Best Interests of the Children:
+The children have been in foster care since August 8, 2023, and are thriving in their current placement with the Patterson family, who wish to adopt them ​1​.
+Court Actions:
+The court is requested to terminate the parental rights of Crystal Price with respect to the minor children Amari Price and Destiny Price ​1​.
+Brandon Price Case:
+
+Voluntary Relinquishment:
+Brandon Price voluntarily relinquished his parental rights on November 20, 2023, which was accepted by the court ​1​.
+Court Actions:
+All parental rights, duties, and obligations of Brandon Price with respect to the minor children Amari Price and Destiny Price were permanently terminated ​1​.
+These cases involve the termination of parental rights due to neglect, failure to remedy conditions, and substance abuse, as well as voluntary relinquishment of parental rights ​1​.
+
+1 reference
+1
+Court_Orders_and_Filings.docx
+
+
+gcc kb pdf ----
+Cases involving Termination of Parental Rights (TPR) typically include situations where the welfare of the child is at risk. Here is an example of such a case:
+
+Case Number: 2024-DR-15-0341
+Parties Involved:
+Plaintiff: South Carolina Department of Social Services (DSS)
+Respondent: Crystal Price
+Children: Amari Price (DOB: September 28, 2017) and Destiny Price (DOB: May 14, 2019)
+Key Details:
+The children have been in foster care since August 8, 2023, and are currently placed with Sandra and Michael Patterson, who wish to adopt them if TPR is granted ​1​.
+The respondent, Crystal Price, has been diagnosed with Opioid Use Disorder and has shown inconsistent treatment compliance, positive drug screens, and missed screens ​2​.
+The case involves a probable cause hearing and a scheduled merits hearing to determine the grounds for termination of parental rights ​2​.
+The Guardian ad Litem, Thomas Reed, Esq., supports the termination of parental rights and adoption by the Patterson family ​1​.
+This case is actively being processed in the Fifth Judicial Circuit, Richland County, South Carolina ​1​​​2​​​3​.
+
+If you need more information or have any other questions, feel free to ask!
+
+3 references
+
+1
+Court_Orders_and_Filings - 2024-dr-15-0341.pdf
+
+2
+Court_Orders_and_Filings - 2024-dr-15-0341.pdf
+
+3
+DSS_Investigation_Report - 2024-dr-15-0
+gcc kb docx -----
+Cases involving the termination of parental rights typically include the following:
+
+Case No. 2024-DR-15-0341 DSS v. Price:
+
+Emergency Removal Order: Issued on August 8, 2023, due to unsanitary living conditions, presence of drug paraphernalia, lack of food and running water, and the impaired state of the sole custodial parent ​1​.
+Order Following Probable Cause Hearing: Issued on August 15, 2023 ​1​.
+Order Following Ninety-Day Review Hearing: Issued on November 14, 2023 ​1​.
+Order Accepting Voluntary Relinquishment of Parental Rights: Issued on November 20, 2023 ​1​.
+Petition for Termination of Parental Rights: Filed on February 8, 2024 ​1​.
+Order Following TPR Probable Cause Hearing: Issued on April 22, 2024 ​1​.
+Termination Grounds and Compliance Issues:
+
+Neglect: Substantiated neglect including unsanitary living conditions, presence of drug paraphernalia, lack of food and running water, and the impaired state of the sole custodial parent ​2​.
+Failure to Remedy: Failure to remedy the conditions that caused the removal of the children for a period exceeding six months, despite a Court-Ordered Treatment Plan and reasonable efforts by DSS ​2​.
+Substance Abuse: Diagnosed Opioid Use Disorder with inconsistent treatment compliance, positive drug screens, and missed screens ​2​.
+Guardian ad Litem Recommendation:
+
+The Guardian ad Litem recommended termination of parental rights, citing the children's stability in foster care and the respondent's insufficient compliance with the Treatment Plan ​2​.
+Court Orders:
+
+The Court found probable cause to support the grounds for termination of parental rights and set a merits hearing for July 15, 2024 ​2​​​3​.
+If you need more specific information or details about a particular case, feel free to ask!
+
+3 references
+
+1
+Court_Orders_and_Filings - dr-15-0341.docx
+
+2
+Court_Orders_and_Filings - dr-15-0341.docx
+
+3
+Court_Orders_and_Filings - dr-15-0341.docx
+
+
+com mcp ----
+Cases Involving Termination of Parental Rights
+
+The following cases are classified as "Termination of Parental Rights" (TPR):
+
+DSS v. Young — TPR
+Case ID: 2025-DR-24-0382
+Circuit: Fifth Judicial Circuit (Kershaw County)
+Status: Active
+Summary: Involves Aiden Young (age 4). Children removed after being left unsupervised for extended periods. Nathaniel Young ordered to complete a treatment plan including substance abuse evaluation and treatment, domestic violence intervention program, and psychological evaluation. Case is ongoing with the next hearing scheduled.
+
+DSS v. Taylor — TPR
+Case ID: 2024-DR-42-0424
+Circuit: Third Judicial Circuit (Sumter County)
+Status: Active
+Summary: Involves Kayla Taylor (age 9). Children removed after home found unsafe with exposed wiring and no working smoke detectors. Nicole Wright ordered to complete parenting skills classes, gainful employment, anger management classes, and random drug screening. Case is ongoing.
+
+DSS v. Price — Termination of Parental Rights
+Case ID: 2024-DR-15-0341
+Circuit: Fifth Judicial Circuit (Richland County)
+Status: Active
+Summary: Petition for termination of parental rights of Crystal Price regarding Amari Price (age 7) and Destiny Price (age 5). Children removed following substantiated neglect findings. Ms. Price failed to complete court-ordered treatment plan. Father Brandon Price’s rights voluntarily relinquished. Probable cause hearing completed; merits hearing scheduled.
+
+DSS v. Reed — TPR
+Case ID: 2025-DR-09-0443
+Circuit: Fourth Judicial Circuit (Dillon County)
+Status: Active
+Summary: Involves Micah Reed (age 5). Children removed after home found unsafe. Diane Jackson ordered to complete substance abuse evaluation and treatment, individual counseling, parenting skills classes, random drug screening, and anger management classes. Case is ongoing.
+
+DSS v. Parker — TPR
+Case ID: 2025-DR-21-0289
+Circuit: Fifth Judicial Circuit (Richland County)
+Status: Active
+Summary: Involves Jaylen Parker (age 6). Children removed after home found unsanitary. Eric Parker ordered to complete domestic violence intervention program, parenting skills classes, family therapy sessions, and psychological evaluation. Case is ongoing.
+
+DSS v. Williams — TPR
+Case ID: 2023-DR-25-0194
+Circuit: Fifth Judicial Circuit (Kershaw County)
+Status: Dismissed
+Summary: Involves Chloe Williams (age 4) and Aaliyah Williams (age 12). Investigation found insufficient evidence to substantiate allegations. Case dismissed.
+
+DSS v. Morris — TPR
+Case ID: 2025-DR-45-0184
+Circuit: Fifth Judicial Circuit (Richland County)
+Status: Dismissed
+Summary: Involves Nia Morris (age 4) and Devonte Morris (age 2). Investigation found insufficient evidence to substantiate allegations. Case dismissed.
+
+DSS v. Wright — TPR
+Case ID: 2024-DR-38-0342
+Circuit: Fourth Judicial Circuit (Marlboro County)
+Status: Closed
+Summary: Involves Elijah Wright (age 12) and Destiny Wright (age 12). Keisha Wright completed court-ordered treatment plan. Children successfully reunified with Keisha Wright under ongoing DSS monitoring.
+
+DSS v. Nelson — TPR
+Case ID: 2024-DR-22-0165
+Circuit: Fourth Judicial Circuit (Chesterfield County)
+Status: Closed
+Summary: Involves Faith Nelson (age 8) and Heaven Nelson (age 9). Shonda Nelson completed court-ordered treatment plan. Children successfully reunified with Shonda Nelson under ongoing DSS monitoring.
+
+citeDSS-Case-Intelligence-list_cases
+com sp pdf ----
+Cases Involving Termination of Parental Rights
+
+Below are the cases and key details involving Termination of Parental Rights (TPR):
+
+1. DSS v. Price (Case No. 2024-DR-15-0341, Richland County, SC)
+
+Children Involved: Amari Price (DOB: 9/28/2017) and Destiny Price (DOB: 5/14/2019)
+Grounds for TPR:
+Substantiated child neglect: Children were found in unsanitary conditions, with no food, no running water, and drug paraphernalia accessible in the home. The mother, Crystal Price, appeared impaired during the DSS visit.
+Failure to remedy: Despite a court-ordered treatment plan (substance abuse evaluation/treatment, parenting classes, stable housing, drug screens), the mother failed to make substantial progress over more than six months.
+Substance abuse: Diagnosed Opioid Use Disorder, moderate severity, with ongoing positive drug screens and missed appointments.
+Father’s Status: Brandon Price voluntarily relinquished his parental rights on November 20, 2023.
+Current Status: The children remain in foster care with the Patterson family, who wish to adopt them. The Guardian ad Litem and DSS recommend TPR and adoption as in the children’s best interest.
+Key Orders and Filings:
+Emergency Removal Order (August 8, 2023)
+Order Following Probable Cause Hearing (August 15, 2023)
+Order Following Ninety-Day Review Hearing (November 14, 2023)
+Order Accepting Voluntary Relinquishment of Parental Rights (November 20, 2023)
+Petition for Termination of Parental Rights (February 8, 2024)
+Order Following TPR Probable Cause Hearing (April 22, 2024)
+Merits hearing scheduled for July 15, 2024​1​​​2​​​3​.
+2. DSS v. Webb & Holloway (Case No. 2024-DR-42-0892, Spartanburg County, SC)
+
+Child Involved: Jaylen Webb (DOB: 4/10/2021)
+Grounds for Emergency Removal (potential TPR):
+Non-accidental trauma: The child was admitted to the hospital with a bilateral femur fracture and a spiral fracture of the left humerus, with injuries inconsistent with the parents’ explanation (fall from crib) and at different stages of healing.
+Medical and DSS assessment determined imminent risk of harm and recommended removal.
+Current Status: Child placed in kinship foster care with maternal grandmother, pending further investigation and court review. TPR proceedings may be considered depending on the outcome of the investigation and subsequent hearings​4​.
+Summary of TPR Grounds (as seen in these cases):
+
+Substantiated neglect or abuse
+Failure to remedy conditions after removal and court-ordered treatment plan
+Parental substance abuse rendering the parent unable to provide minimally adequate care
+Voluntary relinquishment of parental rights
+Non-accidental trauma or serious physical harm to the child
+If you need details on a specific case or further documentation, please specify.
+
+4 references
+1
+Court_Orders_and_Filings.pdf
+2
+TPR_Petition_and_Affidavit.pdf
+3
+DSS_Investigation_Report.pdf
+4
+Court_Orders_and_Filings.pdf
+com sp docx -----
+Cases Involving Termination of Parental Rights
+
+Below are the cases and proceedings that specifically involve Termination of Parental Rights (TPR):
+
+1. DSS v. Price (Case No. 2024-DR-15-0341, Fifth Judicial Circuit, Richland County)
+
+Children: Amari Price (DOB: September 28, 2017), Destiny Price (DOB: May 14, 2019)
+
+Key Proceedings:
+
+Emergency Removal Order (August 8, 2023): Children removed due to neglect, unsanitary home, drug paraphernalia, lack of food and water, and impaired parent​1​.
+Probable Cause Hearing (August 15, 2023): Court found probable cause for neglect and ordered a treatment plan​1​.
+Ninety-Day Review Hearing (November 14, 2023): Court found failure to comply with treatment plan; warned of possible TPR petition​1​.
+Order Accepting Voluntary Relinquishment of Parental Rights (November 20, 2023): Father, Brandon Price, voluntarily relinquished parental rights​1​.
+Petition for Termination of Parental Rights (February 8, 2024): DSS filed for TPR against Crystal Price on grounds of neglect, failure to remedy, and substance abuse​2​.
+TPR Probable Cause Hearing (April 22, 2024): Court found probable cause to proceed to merits hearing on TPR​1​.
+Merits Hearing Scheduled (July 15, 2024): To determine final TPR​1​.
+Statutory Grounds for TPR:
+
+Child Neglect (S.C. Code Ann. Section 63-7-2570(1))
+Failure to Remedy Conditions Causing Removal (Section 63-7-2570(2))
+Substance Abuse Rendering Parent Unable to Provide Adequate Care (Section 63-7-2570(4))​2​.
+2. DSS v. Webb & Holloway (Case No. 2024-DR-42-0892, Seventh Judicial Circuit, Spartanburg County)
+
+Child: Jaylen Webb (DOB: April 10, 2021)
+
+Key Proceedings:
+
+Emergency Removal Order (June 14, 2024): Child removed due to injuries consistent with non-accidental trauma; medical evidence indicated abuse/neglect​3​.
+Investigation and Kinship Placement: Child placed with maternal grandmother pending further proceedings​4​.
+Grounds for Removal/TPR Consideration:
+
+Non-accidental trauma, inconsistent parental accounts, imminent risk of harm​5​.
+Summary of TPR Case Elements
+
+TPR cases typically involve substantiated neglect, failure to comply with court-ordered treatment plans, substance abuse, and inability to provide minimally adequate care.
+Proceedings include emergency removal, probable cause hearings, review hearings, voluntary relinquishment, and formal TPR petitions.
+Statutory grounds are cited in court filings and orders, and the best interest of the child is a central consideration​2​.
+If you need details on a specific case or party, please specify.
+
+5 references
+1
+Court_Orders_and_Filings.docx
+2
+TPR_Petition_and_Affidavit.docx
+3
+Court_Orders_and_Filings.docx
+4
+Home_Study_Report.docx
+5
+DSS_Investigation_Report.docx
+
+
+com kb pdf ----
+Cases Involving Termination of Parental Rights
+
+The following case involves the Termination of Parental Rights:
+
+Case No.: 2024-DR-15-0341 (Richland County, South Carolina)
+Parties: South Carolina Department of Social Services (DSS) v. Crystal Price
+Children: Amari Price (DOB: September 28, 2017) and Destiny Price (DOB: May 14, 2019)
+Grounds: DSS petitioned for termination of Crystal Price's parental rights due to child neglect, unsanitary home conditions, lack of running water, and failure to comply with a court-ordered treatment plan. The biological father, Brandon Price, voluntarily relinquished his parental rights to both children.
+Relevant Orders and Filings:
+Emergency Removal Order (August 8, 2023)
+Order Accepting Voluntary Relinquishment of Parental Rights (November 20, 2023)
+Petition for Termination of Parental Rights (February 8, 2024)
+Order Following TPR Probable Cause Hearing (April 22, 2024)​1​​​2​
+If you need details about other cases or specific aspects of this case, please let me know.
+
+2 references
+
+1
+Court_Orders_and_Filings - 2024-dr-15-0341.pdf
+
+2
+TPR_Petition_and_Affidavit - 2024-dr-15-0341.pdf
+
+
+com kb docx -----
+Cases Involving Termination of Parental Rights
+
+Case No. 2024-DR-15-0341 DSS v. Price
+This case was heard in the Fifth Judicial Circuit Family Court, Richland County, South Carolina.
+The South Carolina Department of Social Services (DSS) filed for termination of parental rights regarding two minor children, Amari Price and Destiny Price.
+Grounds for termination included:
+Child neglect: The children were found living in unsanitary conditions, with no food, no running water, and drug paraphernalia present. The sole custodial parent appeared impaired.
+Failure to remedy: The respondent failed to remedy the conditions that led to removal for more than six months, despite a court-ordered treatment plan and reasonable efforts by DSS.
+Substance abuse: The respondent was diagnosed with Opioid Use Disorder and demonstrated inconsistent compliance with treatment, including positive drug screens and missed appointments.
+The biological father, Brandon Price, voluntarily relinquished his parental rights, which was accepted by the court.
+The children have been placed in foster care and are thriving in their current placement. The foster family has expressed intent to adopt if termination is granted.
+The court found probable cause to proceed with a merits hearing on the petition for termination of parental rights​1​.
+If you need details about other cases or specific legal criteria, please let me know.
+
+1 reference
+
+1
+Court_Orders_and_Filings - dr-15-0341

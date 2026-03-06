@@ -1,0 +1,142 @@
+What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?
+
+web ---
+Based on the timeline:
+
+The family event notes that Dena Holloway reported hearing Jaylen crying loudly (associated with the thump) at approximately 2:00 AM on June 12, 2024. At this time, Jaylen was found in his crib unable to move his left leg. Both parents then drove him to the hospital. (Source: Dictation PDF, p. 4)
+
+The medical event records Jaylen's admission to the Spartanburg Medical Center ER at 3:15 AM on June 12, 2024. (Source: Medical Records, pp. 1-4)
+
+Therefore, the time gap between when Dena heard the thump (and Jaylen crying, at approximately 2:00 AM) and when Jaylen was taken to the hospital (admission at 3:15 AM) is about 1 hour and 15 minutes.
+
+get_timeline
+gcc mcp ----
+The exact time gap between the thump Dena heard and when they took Jaylen to the hospital is approximately 4 hours. Dena reported hearing a loud thump around 9:30 PM on June 11, 2024, and they took Jaylen to the Spartanburg Medical Center ER at around 2:00 AM on June 12, 2024 ​1​.
+
+Footnotes
+Sheriff Report #24-06-4418, pp. 6-8; Dictation PDF, p. 4 ​↩​
+
+gcc sp pdf----
+The exact time gap between the thump Dena heard and when they took Jaylen to the hospital is approximately 10 hours. Dena heard a loud thump from Jaylen's room at approximately 9:30 PM, and Jaylen was taken to the hospital on June 12, 2024, at 7:30 AM ​1​​​2​.
+
+2 references
+1
+GAL_Report.pdf
+2
+Medical_Records.pdf
+gcc sp docx -----
+The exact time gap between the thump Dena Holloway heard and when they took Jaylen to the hospital is approximately 4.5 hours. Dena heard the thump at around 9:30 PM on June 11, and Jaylen was taken to the hospital at 2:00 AM on June 12 ​1​​​2​.
+
+2 references
+1
+GAL_Report.docx
+2
+DSS_Investigation_Report.docx
+
+gcc kb pdf ----
+The exact time gap between the thump Dena heard and when they took Jaylen to the hospital is approximately 3 hours and 17 minutes. Dena heard the thump at around 9:30 PM, and Jaylen was brought to the Emergency Department at approximately 12:47 AM on June 12, 2024 ​1​​​2​.
+
+2 references
+
+1
+Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf
+
+2
+Sheriff_Report_24-06-4418 - 2024-dr-42
+gcc kb docx -----
+The exact time gap between the thump Dena heard and when they took Jaylen to the hospital is approximately 2.5 hours. Dena heard the thump at around 9:30 PM and discovered Jaylen's injuries at approximately midnight ​1​.
+
+1 reference
+
+1
+Sheriff_Report_24-06-4418 - dr-42
+com mcp ----
+Exact Time Gap Between Thump and Hospital Arrival
+
+According to Dena Holloway's statement to law enforcement, she heard a loud thump from Jaylen's room around 9:30 PM but did not check on him at that timeciteSheriff Report #24-06-4418, p. 7.
+Dena later reported hearing Jaylen crying loudly at 2:00 AM, at which point she found him unable to move his leg and both parents drove him to the hospitalciteDictation PDF, p. 4.
+Jaylen was admitted to the ER at 3:15 AMciteMedical Records, pp. 1-4.
+Calculated Time Gap:
+
+The time between the thump (9:30 PM) and when Dena found Jaylen injured (2:00 AM) is 4 hours and 30 minutes.
+The time from the thump to hospital admission (3:15 AM) is 5 hours and 45 minutes.
+Summary Table:
+
+Thump heard: 9:30 PM
+Jaylen found injured: 2:00 AM (4 hours 30 minutes after thump)
+Hospital admission: 3:15 AM (5 hours 45 minutes after thump)
+All times and intervals are based on Dena Holloway’s statements and the official case timelineciteSheriff Report #24-06-4418, p. 7; Dictation PDF, p. 4; Medical Records, pp. 1-4.
+com sp pdf ----
+Exact Time Gap Between Thump and Hospital Arrival
+
+Dena Holloway disclosed in her revised statement that she heard a loud thump from Jaylen's room at approximately 9:30 PM on June 11, 2024. She did not check on Jaylen at that time.
+
+The child, Jaylen Webb, was brought to the Emergency Department at approximately 2:00 AM on June 12, 2024, according to initial statements to medical staff. However, hospital admission records show the child was actually presented at 3:15 AM​1​.
+
+Multiple official reports and court findings note that if the thump at 9:30 PM was associated with the injury event, there was an approximately four-and-one-half hour delay before Jaylen was presented for medical treatment​2​​​3​.
+
+Summary of Timeline
+
+Thump heard: 9:30 PM, June 11, 2024
+Hospital arrival: 2:00–3:15 AM, June 12, 2024
+Exact time gap: About 4.5 hours​2​​​3​
+This delay was noted as clinically concerning by medical staff and DSS investigators​2​​​3​.
+
+3 references
+1
+Medical_Records.pdf
+2
+Court_Orders_and_Filings.pdf
+3
+DSS_Investigation_Report.pdf
+com sp docx -----
+Exact Time Gap Between Thump and Hospital Admission
+
+Dena Holloway reported hearing a loud thump from Jaylen's room at approximately 9:30 PM on June 11, 2024.
+Jaylen was taken to Spartanburg Medical Center and admitted at approximately 3:15 AM on June 12, 2024.
+This establishes an exact time gap of about 5 hours and 45 minutes between the thump Dena heard and Jaylen's hospital admission​1​​​2​.
+Supporting Details
+
+Dena did not check on Jaylen immediately after the thump; she later discovered him crying with visible injuries around midnight, and the parents then drove him to the hospital​3​.
+Medical staff noted the delay between the injury event and seeking medical attention as concerning​1​.
+If you need a breakdown of the timeline or further details, let me know.
+
+3 references
+1
+DSS_Investigation_Report.docx
+2
+Medical_Records.docx
+3
+Sheriff_Report_24-06-4418.docx
+
+
+com kb pdf ----
+Exact Time Gap Between Thump and Hospital Visit
+
+Dena Holloway reported hearing a loud thump from Jaylen's room at approximately 9:30 PM on June 11, 2024. She did not check on Jaylen at that time and fell asleep on the couch.
+She awoke at approximately midnight (12:00 AM), went to check on Jaylen, and discovered him crying with visible injuries.
+The reports indicate that Jaylen was taken to the hospital after Dena discovered the injuries at midnight.
+Calculated Time Gap:
+
+The time gap between the thump Dena heard (9:30 PM) and when she discovered Jaylen's injuries (midnight) is 2 hours and 30 minutes.
+The exact time Jaylen was taken to the hospital is not specified, but it is implied to be shortly after midnight, following Dena's discovery of the injuries​1​.
+Summary:
+
+The time gap between the thump and the discovery of injuries is 2 hours and 30 minutes.
+Hospital visit likely occurred soon after midnight, but the precise admission time is not stated in the available reports​1​.
+1 reference
+
+1
+Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf
+
+
+com kb docx -----
+Time Gap Between Thump and Hospital Visit
+
+Dena Holloway heard a loud thump from Jaylen's room at approximately 9:30 PM on June 11, 2024.
+The child was presented for medical treatment at 2:00 AM on June 12, 2024.
+The exact time gap between the thump and the hospital visit is approximately four-and-a-half hours ​1​.
+1 reference
+
+1
+Court_Orders_and_Filings - dr-42-0892

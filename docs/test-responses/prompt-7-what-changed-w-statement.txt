@@ -1,0 +1,335 @@
+Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?
+
+web ---
+
+Comparison of Dena Holloway’s Initial Hospital Statement and Her Later Statement to Lt. Odom:
+
+Initial Hospital Statement — June 12, 2024:
+
+Made to: Medical Staff
+Content: “I heard him crying around 2 AM. I went in and he couldn't move his leg. I think he fell out of his crib. Marcus put him to bed, I was in the bedroom.”
+Source: Medical Records, Nursing Notes, p. 9
+Later Statement to Lt. Odom (Law Enforcement Interview) — June 13, 2024:
+
+Made to: Lieutenant Odom, Law Enforcement
+Content: “Actually, I need to correct something. Around 9:30 PM I heard a loud thump from Jaylen room. I assumed Marcus was in there. I called out and Marcus said everything was fine. I did not check on Jaylen at that time.”
+Further content: “Marcus has a temper. He gets frustrated when Jaylen won't stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner.”
+Source: Sheriff Report #24-06-4418, pp. 7-8
+Summary of Key Changes:
+
+Timing and Sequence: In her initial statement, Dena reports only discovering Jaylen’s injury at 2 AM and attributes it to a possible fall from the crib, with no prior events mentioned. In her later law enforcement statement, she discloses a thump at 9:30 PM—a significant event she omitted in the medical interview.
+Marcus’s Presence: The initial account suggests she was uninvolved and unaware until 2 AM; the later account clarifies Marcus was in or near Jaylen’s room at 9:30 PM.
+Disclosure of Prior Rough Handling: The hospital statement does not mention concerns regarding Marcus’s behavior, whereas her statement to Lt. Odom notes that Marcus has a temper and a pattern of handling Jaylen roughly.
+Discrepancy Reference: Dena’s own statements are internally inconsistent. The initial hospital statement omits critical details, which she later disclosed under law enforcement questioning. (See: Discrepancy 6; Medical Records p. 9; Sheriff Report #24-06-4418 pp. 6-8).
+
+If you require direct quotations or further breakdown between her accounts, please specify.
+
+get_statements_by_person
+get_discrepancies
+
+gcc mcp ----
+
+Dena Holloway's initial hospital statement and her later statement to Lt. Odom show significant changes:
+
+Initial Hospital Statement (June 12):
+
+Dena stated she heard Jaylen crying around 2 AM and found him unable to move his leg, suspecting he fell out of his crib.
+She mentioned Marcus put Jaylen to bed while she was in the bedroom.
+Source: Medical Records, Nursing Notes, p. 9.
+Later Statement to Lt. Odom (June 13 PM):
+
+Dena revised her account, revealing she heard a loud thump from Jaylen's room around 9:30 PM and assumed Marcus was in there. Marcus responded that everything was fine.
+She admitted not checking on Jaylen at that time.
+She also disclosed that Marcus has a temper and she has seen him grab Jaylen roughly by the arm before.
+Source: Sheriff Report #24-06-4418, pp. 6-8.
+Discrepancies Identified:
+
+Cause of Child Injuries: Initially, Dena suggested Jaylen fell from the crib, but later mentioned hearing a thump at 9:30 PM while Marcus was present.
+Marcus Webb's Presence: Dena's revised statement places Marcus in or near Jaylen's room at 9:30 PM, contradicting Marcus's claim of not re-entering the room after 10 PM.
+Timing of Injury Discovery: Dena's account implies a delay of 4.5 hours before seeking medical attention, which medical staff found concerning.
+History of Rough Handling: Dena later revealed Marcus's rough handling of Jaylen, which she did not mention initially.
+Single vs. Multiple Injury Events: Dena's revised account suggests multiple events, while medical evidence indicates injuries occurred at different times.
+Internal Inconsistency: Dena's initial statement omitted critical details that she later disclosed under law enforcement questioning.
+These changes and discrepancies highlight inconsistencies in Dena's accounts and raise concerns about the true cause and timing of Jaylen's injuries.
+
+gcc sp pdf ----
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement (June 13, 2024, 9:00 AM)
+
+Presence in the Room: Dena Holloway stated that Marcus Webb was the only adult present with Jaylen after bedtime. She mentioned she was in their bedroom with the door closed and did not hear anything until 2 AM when Jaylen started screaming.
+Cause of Injury: She believed that Jaylen had fallen from his crib.
+Behavior: During the interview, she appeared nervous, avoided eye contact, and did not ask any questions about the investigation process ​1​.
+Later Statement to Lt. Odom (June 13, 2024, Afternoon)
+
+Presence in the Room: Dena Holloway revised her statement, disclosing that at approximately 9:30 PM on the evening of June 11, she heard a loud thump from Jaylen's room and assumed Marcus was in there with the child. She called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+Concerns about Marcus Webb: She disclosed that Marcus has a temper and that she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying. She admitted that she should have reported this behavior sooner ​1​.
+Key Changes
+
+Timing and Presence: Initially, she did not mention hearing a thump or Marcus being in the room at 9:30 PM. In her later statement, she acknowledged hearing a thump and Marcus's presence in the room at that time.
+Concerns about Marcus's Behavior: In her initial statement, she did not express any concerns about Marcus's interactions with Jaylen. In her later statement, she revealed Marcus's temper and rough handling of Jaylen on previous occasions.
+1 reference
+1
+DSS_Investigation_Report.pdf
+
+gcc sp docx -----
+
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement:
+
+Dena Holloway stated that Marcus Webb was the only adult present with Jaylen after bedtime on the night of June 11.
+She mentioned that she was in their bedroom with the door closed and did not hear anything until 2 AM when Jaylen started screaming.
+She believed that the child had fallen from his crib.
+She did not express any concerns about Mr. Webb's interactions with Jaylen and repeated that she had been in the bedroom all evening ​1​.
+Later Statement to Lt. Odom:
+
+Dena Holloway disclosed that at approximately 9:30 PM on the evening of June 11, she heard a loud thump from Jaylen's room and assumed Marcus was in there with the child.
+She called out, and Marcus responded that everything was fine, but she did not check on Jaylen at that time.
+She revealed that Marcus has a temper and that she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying.
+She admitted that she should have said something sooner about Marcus's behavior ​1​​​2​.
+Changes Noted:
+
+Timing and Events: Initially, she did not mention hearing any noise or checking on Jaylen before 2 AM. Later, she mentioned hearing a loud thump at 9:30 PM and calling out to Marcus.
+Marcus's Behavior: Initially, she did not express any concerns about Marcus's interactions with Jaylen. Later, she disclosed Marcus's temper and rough handling of Jaylen.
+Responsibility and Awareness: Initially, she maintained that she was in the bedroom all evening and did not hear anything. Later, she admitted to hearing a noise and calling out to Marcus, indicating a change in her awareness and involvement in the events ​1​​​2​.
+2 references
+1
+DSS_Investigation_Report.docx
+2
+Court_Orders_and_Filings.docx
+
+gcc kb pdf ----
+
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement:
+
+Dena Holloway stated that Marcus Webb was the only adult present with Jaylen after bedtime on the night of June 11.
+She mentioned that she was in their bedroom with the door closed and did not hear anything until 2 AM when Jaylen started screaming.
+She believed that the child had fallen from his crib.
+During the interview, she appeared nervous, avoided eye contact, and did not ask any questions about the investigation ​1​.
+Later Statement to Lt. Odom:
+
+Dena Holloway revised her account, stating that at approximately 9:30 PM on June 11, she heard a loud thump from Jaylen's room.
+She assumed Marcus was in the room with Jaylen and called out to him, to which Marcus responded that everything was fine.
+She did not check on Jaylen at that time.
+She disclosed that Marcus has a temper and that she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying ​1​​​2​.
+Changes Noted:
+
+The initial statement did not mention hearing a loud thump or Marcus's temper.
+The later statement included specific details about hearing a noise at 9:30 PM and Marcus's previous rough handling of Jaylen.
+The initial statement was more vague and less accusatory, while the later statement provided more context and concern about Marcus's behavior.
+2 references
+
+1
+DSS_Investigation_Report - 2024-dr-42-0892.pdf
+
+2
+Court_Orders_and_Filings - 20
+
+gcc kb docx -----
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement:
+
+Presence: Dena Holloway stated that Marcus Webb was the only adult present with Jaylen after bedtime on the night of June 11.
+Incident: She mentioned that she was in their bedroom with the door closed and did not hear anything until 2 AM when Jaylen started screaming.
+Belief: She believed that the child had fallen from his crib.
+Concerns: When asked about concerns regarding Mr. Webb's interactions with Jaylen, she did not respond directly and repeated that she had been in the bedroom all evening.
+Demeanor: During the interview, she appeared nervous, avoided eye contact, and her responses were brief. She did not ask any questions about the investigation process, which was unusual ​1​.
+Later Statement to Lt. Odom:
+
+Incident Time: Dena Holloway revised her statement, disclosing that at approximately 9:30 PM on June 11, she heard a loud thump from Jaylen's room.
+Assumption: She assumed Marcus was in the room with the child and called out to him. Marcus responded that everything was fine, and she did not check on Jaylen at that time.
+Temper: She disclosed that Marcus has a temper and that she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying.
+Regret: She expressed regret for not saying something sooner about Marcus's behavior ​1​​​2​.
+Key Changes:
+
+Incident Time: The initial statement did not mention the 9:30 PM thump, while the later statement did.
+Marcus's Temper: The initial statement did not mention Marcus's temper or previous rough handling of Jaylen, while the later statement included these details.
+Demeanor: The initial statement showed nervousness and avoidance, while the later statement was more forthcoming and detailed.
+2 references
+
+1
+DSS_Investigation_Report - dr-42-0892.docx
+
+2
+Court_Orders_and_Filings - dr-42-0892.docx
+
+
+
+com mcp ----
+
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement (Medical Staff, 6/12/2024):
+
+Dena reported hearing Jaylen crying around 2 AM.
+She stated she found Jaylen unable to move his leg and believed he had fallen out of his crib.
+Marcus Webb had put Jaylen to bed; Dena was in the bedroom at the timeciteMedical Records, Nursing Notes, p. 9.
+Later Statement to Law Enforcement (Lt. Odom, 6/13/2024):
+
+Dena corrected her earlier account, stating she heard a loud thump from Jaylen's room around 9:30 PM.
+She assumed Marcus was in the room, called out, and Marcus said everything was fine.
+Dena did not check on Jaylen at that timeciteSheriff Report #24-06-4418, p. 7.
+Key Changes:
+
+The initial statement suggested Dena was unaware of any incident until 2 AM and believed the injury was from a crib fall.
+The later statement acknowledged hearing a thump hours earlier, not checking on Jaylen, and relying on Marcus's assurance.
+The later statement also implied possible prior knowledge of an incident before the 2 AM discovery.
+Source Citations:
+
+Initial hospital statement: Medical Records, Nursing Notes, p. 9
+Law enforcement statement: Sheriff Report #24-06-4418, p. 7
+
+com sp pdf ----
+Comparison of Dena Holloway's Initial Hospital Statement and Later Statement to Lt. Odom
+
+1. Initial Hospital Statement (to Medical Staff and DSS Case Manager):
+
+Dena Holloway reported that she heard her son Jaylen crying at approximately 2:00 AM.
+She stated she went into his room and found him in distress, unable to move his leg.
+She believed the child had fallen from his crib.
+She said Marcus Webb was the only adult present with Jaylen after bedtime, and she herself was in the bedroom with the door closed, not hearing anything until 2:00 AM.
+She did not mention any prior concerns about Marcus Webb’s behavior or any history of rough handling.
+Her demeanor was described as nervous, with brief responses and avoidance of eye contact​1​.
+2. Later Statement to Lt. Odom (Sheriff’s Office Interview):
+
+Dena Holloway revised her account, stating she needed to "correct something" from her initial statement.
+She disclosed that at approximately 9:30 PM, she heard a loud thump from Jaylen’s room and assumed Marcus was in there.
+She called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+She admitted she was "scared" and "didn’t want to get anyone in trouble," which is why she withheld this information initially.
+She further disclosed that Marcus Webb has a temper, gets frustrated when Jaylen cries, and that she has witnessed him grab Jaylen roughly by the arm on two or three prior occasions.
+She did not directly witness the incident that caused the injuries but, based on the thump and Marcus’s presence, believed he was responsible​2​.
+Key Changes Between Statements:
+
+The initial statement presented a simple accidental fall scenario, with Dena distancing herself from the events and not implicating Marcus Webb.
+The later statement introduced a specific incident (the 9:30 PM thump), placed Marcus in or near the child’s room at the time, and included admissions about Marcus’s temper and prior rough handling of the child.
+The later statement also revealed Dena’s fear and reluctance to disclose the full truth initially, as well as her increased concern for Jaylen’s safety​1​.
+Summary Table:
+
+Aspect	Initial Hospital Statement	Later Statement to Lt. Odom
+Time of Incident	2:00 AM (heard crying)	9:30 PM (heard thump)
+Cause of Injury	Believed fall from crib	Implied possible abuse by Marcus Webb
+Marcus Webb’s Role	Only adult present after bedtime	In/near child’s room at 9:30 PM
+Prior Concerns About Marcus	None disclosed	Admitted history of rough handling
+Reason for Withholding Info	Not stated	Fear, didn’t want to get anyone in trouble
+Demeanor	Nervous, brief, avoidant	Emotional, more forthcoming
+Conclusion: Dena Holloway’s later statement to Lt. Odom was a significant departure from her initial hospital account. She moved from a narrative of accidental injury to one that implicated Marcus Webb, acknowledged prior concerning behavior, and admitted to withholding information out of fear​1​​​2​.
+
+2 references
+1
+DSS_Investigation_Report.pdf
+2
+Sheriff_Report_24-06-4418.pdf
+
+com sp docx -----
+Comparison of Dena Holloway’s Initial Hospital Statement and Her Later Statement to Lt. Odom
+
+1. Initial Hospital Statement (June 12–13, 2024):
+
+Dena Holloway told medical staff and the DSS case manager that she heard her son Jaylen crying around 2:00 AM.
+She stated she went into his room and found him unable to move his leg, believing he had fallen from his crib.
+She emphasized that Marcus Webb (the child’s father) was the only adult with Jaylen after bedtime, and she was in the bedroom with the door closed, not hearing anything until Jaylen started screaming.
+She did not mention any prior concerns about Marcus Webb’s behavior or any history of rough handling.
+Her demeanor was described as nervous, with brief responses and avoidance of eye contact​1​.
+2. Later Statement to Lt. Odom (June 13, 2024, afternoon):
+
+Dena Holloway revised her account, stating she heard a loud thump from Jaylen’s room at approximately 9:30 PM on June 11, 2024 (before the time Marcus Webb reported putting Jaylen to bed).
+She said she assumed Marcus was in the room with Jaylen, called out, and Marcus responded that everything was fine. She did not check on Jaylen at that time.
+Holloway disclosed for the first time that Marcus Webb has a temper, gets frustrated when Jaylen cries, and that she had witnessed him grab Jaylen roughly by the arm on two or three prior occasions.
+She admitted she was “scared” and “didn’t want to get anyone in trouble” during her initial hospital statement, but after thinking about it, felt she needed to tell the truth​2​.
+Key Changes Between the Statements:
+
+Timeline and Details: The initial statement described discovering the injury at 2:00 AM and attributed it to a fall from the crib, with no mention of any earlier incident. The later statement introduced a significant event at 9:30 PM (the loud thump) and placed Marcus Webb in or near the child’s room at that time.
+Attribution of Responsibility: The initial account did not implicate Marcus Webb or suggest any prior concerns. The later statement directly implicated Marcus by describing his presence near the room at the time of the thump and by disclosing a history of rough handling.
+Disclosure of Prior Behavior: The later statement included new information about Marcus Webb’s temper and prior rough handling of Jaylen, which was not mentioned in the hospital statement.
+Reason for Change: Holloway explained the change by stating she was initially scared and did not want to get anyone in trouble, but later decided to be truthful​2​​​1​.
+Summary Table:
+
+Aspect	Initial Hospital Statement	Later Statement to Lt. Odom
+Time of Incident	2:00 AM, heard crying	9:30 PM, heard loud thump
+Cause of Injury	Believed fall from crib	Implied possible involvement of Marcus Webb
+Marcus Webb’s Role	Only adult with Jaylen after bedtime	In/near child’s room at 9:30 PM
+Prior Concerns	None disclosed	Disclosed history of rough handling
+Reason for Change	Not addressed	Admitted fear, wanted to tell the truth
+These changes were considered material by investigators and the court, as they shifted the focus from an accidental fall to possible non-accidental trauma and implicated Marcus Webb as a potential source of harm​2​​​1​.
+
+2 references
+1
+DSS_Investigation_Report.docx
+2
+Sheriff_Report_24-06-4418.docx
+
+
+com kb pdf ----
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement (June 13, 2024, 9:00 AM):
+
+Dena Holloway reported to medical staff and DSS that Marcus Webb was the only adult present with Jaylen after bedtime.
+She stated she was in her bedroom with the door closed and did not hear anything until 2 AM, when Jaylen started screaming.
+She believed Jaylen had fallen from his crib and did not express any concerns about Marcus Webb’s interactions with Jaylen.
+Her demeanor was nervous, responses were brief, and she avoided eye contact. She did not ask questions about the investigation process​1​.
+Later Statement to Lt. Odom (June 13, 2024, afternoon):
+
+Dena Holloway disclosed that at approximately 9:30 PM, she heard a loud thump from Jaylen’s room and assumed Marcus was in there with the child.
+She called out, and Marcus responded that everything was fine, but she did not check on Jaylen at that time.
+She revealed that Marcus has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child’s crying, stating: “Marcus has a temper. He gets frustrated when Jaylen won’t stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner.”
+She admitted none of this information was disclosed during her initial hospital interview​1​.
+Key Changes:
+
+The later statement included details about a loud thump, Marcus’s temper, and prior rough handling of Jaylen, which were omitted in the initial hospital statement.
+Dena Holloway’s attitude shifted from nervous and non-disclosing to more forthcoming and concerned for Jaylen’s safety.
+She expressed a desire for Jaylen to be placed with her mother for safety, which was not mentioned in the hospital interview​1​.
+Summary of What Changed:
+
+The initial statement was vague and omitted concerns about Marcus Webb’s behavior.
+The later statement to Lt. Odom included specific incidents, concerns about Marcus’s temper, and prior rough handling, marking a significant change in her account and level of disclosure​1​.
+1 reference
+
+1
+DSS_Investigation_Report - 2024-dr-42-0892.pdf
+
+
+
+com kb docx -----
+
+Comparison of Dena Holloway's Statements
+
+Initial Hospital Statement
+
+Dena Holloway stated Marcus Webb was the only adult present with Jaylen after bedtime on June 11.
+She said: "Marcus was the only one with Jaylen after bedtime. I was in our bedroom with the door closed. I didn't hear anything until 2 AM when Jaylen started screaming."
+She maintained that she believed Jaylen had fallen from his crib.
+When asked about concerns regarding Marcus Webb's interactions with Jaylen, she did not respond directly and repeated she had been in the bedroom all evening.
+Her responses were brief, she appeared nervous, avoided eye contact, and did not ask questions about the investigation process​1​.
+In the hospital interview, she was tearful and visibly distressed, stating: "I heard him crying around 2 AM. I went in and he couldn't move his leg. I think he fell out of his crib. Marcus put him to bed, I was in the bedroom." She hesitated when asked about recent injuries or falls, responding, "I don't think so," without further detail​2​.
+Later Statement to Lt. Odom
+
+Dena Holloway revised her account during a follow-up interview at the Spartanburg County Sheriff's Office.
+She disclosed that at approximately 9:30 PM on June 11, she heard a loud thump from Jaylen's room and assumed Marcus was in there with the child.
+She called out, and Marcus responded that everything was fine; she did not check on Jaylen at that time.
+She further disclosed that Marcus Webb has a temper and she has witnessed him grab Jaylen roughly by the arm on two or three occasions when frustrated by the child's crying, stating: "Marcus has a temper. He gets frustrated when Jaylen won't stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner."
+None of this information was disclosed during the initial hospital interview​1​.
+The later statement included her observation of Webb handling the child roughly and was inconsistent with Webb's account regarding his whereabouts and actions during the evening​3​.
+Key Changes
+
+The initial statement omitted any mention of hearing a thump, concerns about Webb's temper, or witnessing rough handling.
+The later statement included specific details about a loud thump, Webb's presence in the room, and prior incidents of rough handling, indicating a shift from a neutral account to one expressing concern and implicating Webb in possible harm to Jaylen​1​​​3​.
+Summary of What Changed
+
+Dena Holloway's later statement to Lt. Odom was more detailed, included new information about possible abuse, and contradicted her initial hospital account, which was vague and omitted any suspicion or direct observation of harm.
+3 references
+
+1
+DSS_Investigation_Report - dr-42-0892.docx
+
+2
+Medical_Records - dr-42-0892.docx
+
+3
+Sheriff_Report_24-06-4418 - dr-42-0892.docx
+
+

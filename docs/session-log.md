@@ -419,3 +419,225 @@ Continued systematic testing across all 11 agent configurations. Full results in
 - Additional test prompts for next session (new prompts beyond demo-notes.md)
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
+
+---
+
+## Session 11 — 2026-03-06
+
+### What was done
+
+#### Copilot Studio Testing — Round 7 (Prompts 5-10, in progress)
+
+Designed 6 new test prompts from `Demo_Comparison_Prompts.md`, one per category:
+
+| # | Demo # | Prompt | Category |
+|---|--------|--------|----------|
+| 5 | 1.1 | Complete timeline (Case 1, 12 events) | Factual Retrieval |
+| 6 | 1.3 | People roster (Case 2, 8 people) | Factual Retrieval |
+| 7 | 2.2 | Dena Holloway statement evolution | Cross-Referencing |
+| 8 | 4.2 | Statements to law enforcement (Case 1, 4 statements) | Filtering |
+| 9 | 5.3 | TPR cases (9 total) | Aggregate |
+| 10 | 6.3 | Time gap: thump → ER (5h45m) | Precision |
+
+**Prompt 5 completed across all 11 agents.** Results:
+
+| Agent | Score | Key Issue |
+|---|---|---|
+| Web | 12/12 | Perfect |
+| MCP - Com | 12/12 | Perfect |
+| MCP - GCC | 12/12 | Perfect + parties listed per event |
+| SP/PDF - Com | 12/12 | 8-10 PM bedtime range, richer medical detail from docs |
+| SP/DOCX - Com | 12/12 | 8 PM flat error, fabricated June 12 2:30 PM DSS visit |
+| KB/DOCX - Com | 9/12 | Strong investigation, no post-removal events |
+| SP/DOCX - GCC | 9/12 | Correct 10 PM, only 1 source doc |
+| KB/PDF - GCC | 10/12 | Best KB agent, GAL visit detail, correct 10 PM |
+| KB/DOCX - GCC | 8/12 | Good interviews, 1 source doc, no post-removal |
+| KB/PDF - Com | 6/12 | Collapsed investigation into 1 summary block |
+| SP/PDF - GCC | ~4/12 | **Case 2 cross-contamination** — merged Crystal Price data into Webb timeline |
+
+Key findings from Prompt 5:
+- **All 3 MCP agents: 12/12** — structured data makes timeline enumeration trivial
+- **SP/PDF - Com matched MCP at 12/12** — continues to be the strongest document agent
+- **SP/PDF - GCC worst performer** — cross-contaminated Case 1 with Case 2 data (dangerous for attorneys)
+- **8 PM bedtime error** persists in Commercial doc agents; GCC agents (GPT-4o) consistently get 10 PM correct
+- **GPT-4o uses "materially changes her account"** — legal phrasing that GPT-4.1 doesn't use
+- **KB agents score lower than SP agents** — flat file structure loses document context that SharePoint preserves
+
+#### Executive Summary (draft)
+- Created initial `docs/executive-summary.md` — one-page comparison of MCP vs document-backed agents
+
+### Decisions made
+- Round 7 testing covers 6 categories (one prompt each) rather than exhaustive testing of all 19 prompts
+- Prompt 5 is a strong demo prompt — the 12/12 vs 4/12 contrast is immediately compelling
+- Executive summary will be a living document updated after each prompt completes
+
+### Open items
+- **Resume testing at Prompt 7** (Statement Evolution: "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?")
+- Prompts 7-10 still pending across all 11 agents
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+
+---
+
+## Session 12 — 2026-03-06
+
+### What was done
+
+#### Copilot Studio Testing — Prompt 6 (People Roster, all 11 agents)
+
+Tested: "List all people involved in the Price TPR case and their roles."
+
+Ground truth: 8 people in SQL. 4 additional people exist only in documents (Patricia Holloway, Judge Harold Wynn, Michael Patterson, Rebecca Torres).
+
+**Results:**
+
+| Agent | Core (of 8) | Doc-Only Extras | Key Issue |
+|---|---|---|---|
+| Web SPA | 8/8 | 0 | Clean, complete |
+| MCP - Com | 8/8 | 0 | Clean |
+| MCP - GCC | 8/8 | 0 | Richest detail (DOBs, notes) |
+| SP/PDF - Com | 8/8 | 4 | Best overall — 12 people, 4 sources |
+| SP/DOCX - Com | 8/8 | 4 | Matches SP/PDF-Com, summary table |
+| KB/PDF - Com | 8/8 | 2 | Solid, mild padding (Notary) |
+| KB/DOCX - Com | 8/8 | 2 | Clean, found Rebecca Torres |
+| KB/PDF - GCC | 8/8 | 3 | Padding (Unit Supervisor, Notary) |
+| SP/PDF - GCC | 5/8 | 2 | Missing children as entries + Thomas Reed |
+| SP/DOCX - GCC | 5/8 | 3 | Missing children as entries + Dr. Ellis |
+| KB/DOCX - GCC | 7/8 | 3 | Missing Dr. Ellis |
+
+**Key findings:**
+- **Zero hallucinated people** across all 11 agents — cleanest prompt so far
+- **Commercial doc agents dominated** — all 4 scored 8/8 core; only 1 of 4 GCC doc agents did (KB/PDF)
+- **Document agents add genuine value** — 4 real people in docs but not SQL
+- **GCC SharePoint agents underperformed again** — both scored 5/8 (same pattern as Prompt 5)
+- **GPT-4.1 more thorough at enumeration** than GPT-4o — widest completeness gap of any prompt
+
+#### Copilot Studio Testing — Prompt 7 (Statement Evolution, all 11 agents)
+
+Tested: "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+Ground truth: 3 key changes (9:30 PM thump, Marcus in/near room, rough handling history). Bonus: intermediate case manager progression.
+
+**Results:**
+
+| Agent | Changes (of 3) | Key Detail |
+|---|---|---|
+| Web SPA | 3/3 | Direct quotes, referenced Discrepancy 6 |
+| MCP - GCC | 3/3 | 6 discrepancies enumerated, 4.5-hour delay |
+| MCP - Com | **2/3** | **Missing rough handling** |
+| SP/PDF - Com | 3/3 | Summary table, fear motive, demeanor shift |
+| SP/DOCX - Com | 3/3 | Summary table, "material" legal framing |
+| KB/PDF - Com | 3/3 | Grandmother placement wish (unique) |
+| KB/DOCX - Com | 3/3 | 3 sources, Medical Records detail |
+| SP/PDF - GCC | 3/3 | Demeanor noted |
+| SP/DOCX - GCC | 3/3 | "Responsibility and awareness" lens |
+| KB/PDF - GCC | 3/3 | 2 sources |
+| KB/DOCX - GCC | 3/3 | Most detailed demeanor analysis |
+
+**Key findings:**
+- **Strongest consensus yet** — 10/11 found all 3 changes
+- **MCP-Com the only miss** — omitted rough handling (comprehension gap, not retrieval)
+- **No agent noted intermediate progression** (hospital → case manager → LE)
+- **Zero hallucinations** across all 11 agents
+- **SP-Com agents surfaced fear motive** ("scared," "didn't want to get anyone in trouble") — unique to sheriff report retrieval
+
+#### Copilot Studio Testing — Prompt 8 (LE Statements Filter, all 11 agents)
+
+Tested: "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+Ground truth: 4 statements with `made_to = 'Law Enforcement'` in SQL (Marcus Webb ×2, Dena Holloway ×2).
+
+**Critical discovery:** MCP tool `get_statements_by_person` has no `made_to`/audience filter parameter — a genuine API design gap, not a model failure. All 3 MCP agents failed or degraded. This is the **first prompt where document agents strictly outperform MCP**.
+
+**Results:**
+
+| Agent | Score | Key Detail |
+|---|---|---|
+| Web SPA | **Fail** | Tool lacks audience filter, returned all statements |
+| MCP - Com | **Fail** | 3 attempts, all failed (couldn't filter by audience) |
+| MCP - GCC | Partial (2/4) | Pivoted to timeline tool, found 2 LE interactions |
+| SP/PDF - Com | **Pass** (4/4) | 3 source documents, complete |
+| SP/DOCX - Com | **Pass** (4/4) | Identified intermediate interview as unique detail |
+| KB/PDF - Com | **Pass** (4/4) | Included DSS follow-up context |
+| KB/DOCX - Com | **Pass** (4/4) | Unique Marcus quote from sheriff report |
+| KB/PDF - GCC | **Pass** (4/4) | Best GCC agent on this prompt |
+| KB/DOCX - GCC | **Pass** (4/4) | No 8 PM error (unlike other GCC agents) |
+| SP/PDF - GCC | **Fail** | Returned court testimony instead of LE statements |
+| SP/DOCX - GCC | **Fail** | Returned hospital versions of statements |
+
+**Key findings:**
+- **First MCP failure mode from tool design** — not model error but missing API capability
+- **KB agents swept**: all 4 KB agents (Com + GCC) scored 4/4 — strongest group on this prompt
+- **GCC SP agents failed again** — SP/PDF-GCC and SP/DOCX-GCC continued their poor performance streak
+- **MCP-GCC showed adaptability** — pivoted to timeline tool when statement tool failed (only MCP agent to partially succeed)
+
+#### Copilot Studio Testing — Prompt 9 (TPR Aggregate Query, all 11 agents)
+
+Tested: "Which cases involve Termination of Parental Rights?"
+
+Ground truth: 9 TPR cases in SQL database. Document agents only have docs for 2 cases (1 CPS, 1 TPR). Fixed ground truth table error — `2024-DR-01-0537` (Union) is Guardianship, not TPR; replaced with `2025-DR-45-0184` (Morris, Richland).
+
+**Results:**
+
+| Agent | TPR Found | Grade | Notes |
+|---|---|---|---|
+| Web SPA | 9/9 | **Pass** | Concise list with case IDs |
+| MCP - Com | 9/9 | **Pass** | Full summaries |
+| MCP - GCC | 9/9 | **Pass** | Richest detail |
+| SP/PDF - Com | 1/9 | Partial | Also flagged CPS case as potential TPR |
+| SP/DOCX - Com | 1/9 | Partial | Statutory citations (§63-7-2570) |
+| KB/PDF - Com | 1/9 | Partial | Good detail |
+| KB/DOCX - Com | 1/9 | Partial | Accurate within scope |
+| SP/PDF - GCC | 1/9 | Partial | Generic framing |
+| SP/DOCX - GCC | 1/9 | Partial | Both parents covered |
+| KB/PDF - GCC | 1/9 | Partial | GAL detail |
+| KB/DOCX - GCC | 1/9 | Partial | Procedural chronology |
+
+**Key findings:**
+- **Clearest architectural advantage for MCP** — aggregate queries across 50 cases are trivial with SQL, impossible with limited doc corpus
+- **All 8 document agents scored Partial** — found the 1 TPR case in their corpus accurately, but missed 8 others
+- **No document agent acknowledged the limitation** — none said "I can only see 2 cases"
+- **Zero hallucinations** — no fabricated cases or misclassified types
+- SP-Com agents showed value-add by flagging Webb/Holloway (CPS) as potential TPR; SP/DOCX-Com cited actual SC statutory grounds
+
+#### Copilot Studio Testing — Prompt 10 (Time Gap Calculation, all 11 agents)
+
+Tested: "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+Ground truth: 9:30 PM thump → 2:00 AM discovery → 3:15 AM ER admission. Correct gaps: 4h30m (thump→discovery), 5h45m (thump→ER), 1h15m (discovery→ER).
+
+**Results:**
+
+| Agent | Thump | Hospital | Gap | Grade |
+|---|---|---|---|---|
+| Web SPA | 2:00 AM ❌ | 3:15 AM | 1h15m (wrong start) | **Fail** |
+| MCP - Com | 9:30 PM ✓ | 2:00+3:15 AM | 4h30m+5h45m ✓ | **Pass** (gold standard) |
+| MCP - GCC | 9:30 PM ✓ | 2:00 AM | ~4h (imprecise) | Partial |
+| SP/PDF - Com | 9:30 PM ✓ | 2:00+3:15 AM | ~4.5h ✓ | **Pass** |
+| SP/DOCX - Com | 9:30 PM ✓ | 3:15 AM | 5h45m ✓ | **Pass** |
+| KB/PDF - Com | 9:30 PM ✓ | "after midnight" | 2.5h (partial) | Partial |
+| KB/DOCX - Com | 9:30 PM ✓ | 2:00 AM | ~4.5h ✓ | **Pass** |
+| SP/PDF - GCC | 9:30 PM ✓ | **7:30 AM** ❌ | 10h (fabricated) | **Fail** |
+| SP/DOCX - GCC | 9:30 PM ✓ | 2:00 AM | ~4.5h ✓ | **Pass** |
+| KB/PDF - GCC | 9:30 PM ✓ | 12:47 AM | ~3h17m | Partial |
+| KB/DOCX - GCC | 9:30 PM ✓ | ~midnight | ~2.5h (wrong event) | Partial |
+
+**Key findings:**
+- **MCP-Com: gold standard** — only agent to identify all 3 milestones and calculate both intervals
+- **Web SPA failed despite having the data** — conflated 9:30 PM thump with 2:00 AM discovery (comprehension error, not retrieval)
+- **SP/PDF-GCC hallucinated 7:30 AM** — fabricated time, continues worst-agent pattern
+- **10/11 agents correctly identified 9:30 PM** — only Web SPA missed it
+- **Arithmetic is a genuine weakness** — even correct retrieval doesn't guarantee correct calculation
+
+#### ALL 10 PROMPTS COMPLETE — Testing finished for all 11 agents
+
+#### Documentation Updates
+- Updated `docs/copilot-studio-testing.md` with all Prompt 6-10 results and analysis
+- Fixed ground truth error in Prompt 9 table (Union/Guardianship → Morris/Richland/TPR)
+- Updated `docs/executive-summary.md` — complete 11×10 scorecard, final Win/Loss rankings
+- Updated `docs/session-log.md`
+
+### Open items
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)

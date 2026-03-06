@@ -35,6 +35,12 @@ Multiple agent configurations are tested against the same prompts to compare acc
 | 3 | "Crystal Price told the court she was 'clean now' at the November 2023 hearing. What do the drug test results show?" | 2024-DR-15-0341 | Contradiction detection + compliance synthesis |
 | 3.2 | "Crystal Price said she couldn't comply with the treatment plan because she lacked transportation. What support did DSS actually provide?" | 2024-DR-15-0341 | Contradiction detection — claim vs. DSS records |
 | 4 | "Did the Sheriff's Office investigation find fractures in Jaylen Webb's skeletal survey?" | 2024-DR-42-0892 | Cross-document conflict — Sheriff Report contradicts Medical Records |
+| 5 | "What is the complete timeline of events for case 2024-DR-42-0892?" | 2024-DR-42-0892 | Full timeline enumeration (12 events) |
+| 6 | "List all people involved in the Price TPR case and their roles." | 2024-DR-15-0341 | People roster completeness (8 people) |
+| 7 | "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?" | 2024-DR-42-0892 | Statement evolution / change detection |
+| 8 | "What statements were made to law enforcement in case 2024-DR-42-0892?" | 2024-DR-42-0892 | Filtering precision (4 LE statements, no false positives) |
+| 9 | "Which cases involve Termination of Parental Rights?" | All cases | Aggregate query (9 TPR cases — doc agents can't answer) |
+| 10 | "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?" | 2024-DR-42-0892 | Arithmetic from structured data (5h45m) |
 
 ---
 
@@ -1174,3 +1180,1024 @@ This prompt reveals a failure mode not seen in previous testing: the document ag
 - Round 4: 2026-03-06 (completed all remaining Prompt 1-3 testing across all agents)
 - Round 5: 2026-03-06 (Prompt 3.2 — MCP agents only)
 - Round 6: 2026-03-06 (Prompt 4 — skeletal survey, all 11 agents)
+- Round 7: 2026-03-06 (Prompts 5-10 — new prompts from Demo_Comparison_Prompts.md)
+
+---
+
+## Round 7 — New Prompts (2026-03-06)
+
+Six prompts selected from `Demo_Comparison_Prompts.md`, one per category. These cover full timeline enumeration, people roster, statement evolution, filtering precision, aggregate queries, and arithmetic reasoning.
+
+### Test Prompts
+
+| # | Demo # | Prompt | Case | Category |
+|---|--------|--------|------|----------|
+| 5 | 1.1 | "What is the complete timeline of events for case 2024-DR-42-0892?" | Case 1 | Factual Retrieval |
+| 6 | 1.3 | "List all people involved in the Price TPR case and their roles." | Case 2 | Factual Retrieval |
+| 7 | 2.2 | "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?" | Case 1 | Cross-Referencing |
+| 8 | 4.2 | "What statements were made to law enforcement in case 2024-DR-42-0892?" | Case 1 | Filtering |
+| 9 | 5.3 | "Which cases involve Termination of Parental Rights?" | All | Aggregate |
+| 10 | 6.3 | "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?" | Case 1 | Precision |
+
+### Ground Truth
+
+#### Prompt 5 — Complete Timeline (Case 1)
+
+12 events in chronological order:
+
+| # | Date | Time | Type | Description |
+|---|------|------|------|-------------|
+| 1 | 2024-06-11 | 10:00 PM | Family | Marcus puts Jaylen to bed |
+| 2 | 2024-06-12 | 2:00 AM | Medical | Dena finds Jaylen crying, unable to move leg; drives to ER |
+| 3 | 2024-06-12 | 3:15 AM | Medical | ER admission — bilateral femur fracture + spiral humerus fracture, different healing stages |
+| 4 | 2024-06-12 | 7:30 AM | Medical | Dr. Chowdhury files mandatory abuse/neglect report |
+| 5 | 2024-06-12 | 11:00 AM | Law Enforcement | Lt. Odom responds to hospital |
+| 6 | 2024-06-13 | 9:00 AM | DSS Action | Renee Dawson interviews Dena at hospital |
+| 7 | 2024-06-13 | 1:30 PM | Law Enforcement | Lt. Odom interviews Marcus at sheriff office |
+| 8 | 2024-06-13 | 4:00 PM | Law Enforcement | Lt. Odom interviews Dena at sheriff office — **account changes** |
+| 9 | 2024-06-14 | 10:00 AM | Court | Emergency protective custody petition, ex parte removal order |
+| 10 | 2024-06-18 | 9:30 AM | Court | Probable cause hearing, GAL appointed |
+| 11 | 2024-06-20 | — | Placement | Jaylen placed with maternal grandmother Theresa Holloway |
+| 12 | 2024-07-18 | 2:00 PM | Court | 30-day review, case plan approved |
+
+**Scoring:** Count how many of the 12 events each agent returns. Note any fabricated events.
+
+#### Prompt 6 — People Roster (Case 2)
+
+8 people:
+
+| # | Name | Role |
+|---|------|------|
+| 1 | Crystal Price | Parent (mother) |
+| 2 | Brandon Price | Parent (father, incarcerated, rights relinquished) |
+| 3 | Amari Price | Child (age 7) |
+| 4 | Destiny Price | Child (age 5) |
+| 5 | Monica Vance | Case Manager |
+| 6 | Dr. Raymond Ellis | Substance abuse evaluator |
+| 7 | Sandra Patterson | Foster parent (pre-adoptive) |
+| 8 | Thomas Reed | Guardian ad Litem |
+
+**Scoring:** Count correct names + roles. Note any hallucinated people or missing entries.
+
+#### Prompt 7 — Dena Holloway Statement Evolution
+
+Three key changes between hospital (June 12) and law enforcement (June 13, 4 PM):
+
+1. **9:30 PM thump** — Not mentioned at hospital. Introduced under LE questioning: "Around 9:30 PM I heard a loud thump from Jaylen's room."
+2. **Marcus placed in/near room** — Hospital statement says she was in the bedroom with the door closed. LE statement says she assumed Marcus was in the room and he said "everything was fine."
+3. **History of rough handling** — Never mentioned at hospital. To LE: "Marcus has a temper... I have seen him grab Jaylen roughly by the arm before, maybe two or three times."
+
+Also note the intermediate case manager statement (June 13, 9 AM) still matched the hospital version — the change only came under LE questioning that afternoon.
+
+**Scoring:** Did the agent identify all 3 changes? Did it note the progression (hospital → case manager → LE)?
+
+#### Prompt 8 — Statements to Law Enforcement (Case 1)
+
+4 statements, all from June 13, 2024:
+
+| # | Person | Summary | Source |
+|---|--------|---------|--------|
+| 1 | Marcus Webb | Was on couch all night, didn't enter room after putting Jaylen down. Suggests crib climbing. | Sheriff Report p. 4 |
+| 2 | Marcus Webb | Denies being in room after 10 PM. Says Dena is wrong. Denies rough handling. | Sheriff Report p. 5 |
+| 3 | Dena Holloway | Revises account — 9:30 PM thump, assumed Marcus was in room, he said "everything was fine." | Sheriff Report p. 7 |
+| 4 | Dena Holloway | Marcus has a temper, grabs Jaylen roughly, 2-3 prior incidents. | Sheriff Report p. 8 |
+
+**Scoring:** Did the agent return exactly 4 statements? Did it include non-LE statements (false positives)? Did it filter correctly?
+
+#### Prompt 9 — TPR Cases (Aggregate)
+
+9 cases with case_type = 'Termination of Parental Rights':
+
+| # | Case Number | County |
+|---|-------------|--------|
+| 1 | 2024-DR-15-0341 | Richland |
+| 2 | 2023-DR-25-0194 | Kershaw |
+| 3 | 2024-DR-22-0165 | Chesterfield |
+| 4 | 2025-DR-21-0289 | Richland |
+| 5 | 2024-DR-38-0342 | Marlboro |
+| 6 | 2025-DR-24-0382 | Kershaw |
+| 7 | 2024-DR-42-0424 | Sumter |
+| 8 | 2025-DR-09-0443 | Dillon |
+| 9 | 2025-DR-45-0184 | Richland |
+
+**Scoring:** Did the agent return a count? Is it correct (9)? Did it list case numbers? Document agents should fail here — they only have docs for Cases 1-2.
+
+#### Prompt 10 — Time Gap (Thump → ER)
+
+Key timestamps:
+- **9:30 PM (June 11):** Dena hears "loud thump" from Jaylen's room
+- **2:00 AM (June 12):** Dena finds Jaylen crying, unable to move leg
+- **3:15 AM (June 12):** ER admission at Spartanburg Medical Center
+
+Correct answers:
+- Thump → discovery: **4 hours 30 minutes**
+- Thump → ER admission: **5 hours 45 minutes**
+- Discovery → ER: **1 hour 15 minutes**
+
+**Scoring:** Did the agent identify the 9:30 PM thump as the starting point? Did it calculate correctly? Did it distinguish between discovery (2 AM) and ER admission (3:15 AM)?
+
+---
+
+### Results — Prompt 5 (Complete Timeline)
+
+#### DSS Legal (Web)
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Tools called:** `get_timeline`
+
+**Response:** Returned all 12 events in chronological order (June 11 – July 18, 2024) with exact dates, times, event type labels in parentheses, descriptions, and source citations. All details match ground truth — 9:30 PM thump revision, Judge Easley, Karen Milford GAL, Theresa Holloway kinship placement, September 12 merits hearing.
+
+**Score:** 12/12 events | Fabricated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Response:** Returned all 12 events in chronological order (June 11 – July 18, 2024) with dates, times, event type labels as subheadings, descriptions, and source citations. Grouped events by date. All facts match ground truth — Karen Milford, Theresa Holloway, September 12 merits hearing all present.
+
+**Score:** 12/12 events | Fabricated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Response:** Returned all 12 events in chronological order with dates, times, event type labels, descriptions, source citations, **and** "Parties Involved" for each event — the most detailed output of the three MCP agents. All facts match ground truth.
+
+**Score:** 12/12 events | Fabricated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff_Report_24-06-4418.pdf, Medical_Records.pdf, DSS_Investigation_Report.pdf, Court_Orders_and_Filings.pdf
+
+**Response:** Returned all 12 events in chronological order, organized by narrative section (Incident, Reporting, Interviews, Court, Placement, Review). Added a "Summary of Key Findings" and "Current Status" section — value-added narrative MCP agents didn't provide. Key details:
+
+- **"8:00–10:00 PM" range** for bedtime — ground truth is 10:00 PM. The 8 PM likely comes from documents (known error pattern from prior rounds). Presented as a range rather than a flat misattribution, so less wrong.
+- **Fracture detail richer than MCP:** "transverse fracture of right femur (estimated age: 3–5 days)" and "spiral fracture of left humerus (estimated age: 24–48 hours)" — pulled from Medical_Records.pdf, more specific healing timeline than SQL stores.
+- **9:30 PM thump** correctly merged into the initial narrative (embedded in Dena's account, not a separate SQL event).
+- **Rough handling disclosure** included in Dena's revised statement.
+- June 13 interview times are vague ("June 13, 2024" and "Afternoon") vs ground truth exact times (9:00 AM, 1:30 PM, 4:00 PM).
+- Theresa Holloway address (88 Creekside Ln, Greenville) included — detail MCP agents didn't surface.
+- Karen Milford, September 12 merits hearing both present.
+
+**Score:** 12/12 events | Fabricated: 0 | Missing: 0 | Minor imprecisions: bedtime range (8-10 PM vs 10 PM), vague June 13 times
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff Report, Medical Records, DSS Investigation Report, Court Orders, (references numbered 1-6)
+
+**Response:** Returned all 12 ground truth events plus several extra events pulled from documents. The richest timeline of any agent so far — but also the most embellished. Key observations:
+
+- **8:00 PM bedtime (flat error):** Says Marcus put Jaylen to bed "around 8:00 PM." Ground truth is 10:00 PM. Worse than SP/PDF-Com's "8:00–10:00 PM" range — this is the known 8 PM misattribution error recurring.
+- **Extra detail from documents:** Evening routine (5:30 PM arrival, 6:00 PM dinner, bath) — not in SQL, possibly from documents or hallucinated.
+- **4:07 AM skeletal survey** — very specific time not in SQL timeline. Could be real from Medical_Records.docx or fabricated. Fracture aging detail matches SP/PDF-Com (3-5 days femur, 24-48 hours humerus).
+- **June 12, 2:30 PM "DSS investigator"** — **likely fabricated.** Ground truth: Renee Dawson was assigned June 13, not June 12. No June 12 DSS action in SQL.
+- **June 14 extras:** "DSS initiates kinship home study" and "Sheriff's Office files report" — not separate ground truth events, but plausible from documents.
+- **June 28 & July 10 GAL home visits** — not in SQL, likely from GAL_Report.docx. Real document content, not hallucinated.
+- All 3 changes in Dena's revised statement captured (thump, Marcus in room, rough handling).
+- Karen Milford, Theresa Holloway, September 12 merits hearing all present.
+
+**Score:** 12/12 events | Fabricated: 1-2 (2:30 PM DSS investigator on June 12; evening routine details uncertain) | Extra from docs: 3-4 (4:07 AM skeletal survey, GAL visits, June 14 extras) | Error: 8 PM bedtime (should be 10 PM)
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** DSS_Investigation_Report - 2024-dr-42-0892.pdf, GAL_Report - 2024-dr-42-0892.pdf, Court_Orders_and_Filings - 2024-dr-42-.pdf (3 references — notably missing Medical_Records and Sheriff_Report)
+
+**Response:** Returned a condensed 7-item timeline that collapses multiple events into summary blocks. Key observations:
+
+- **Missing entirely:** June 11 bedtime (event #1), June 12 2:00 AM discovery (event #2), June 12 11:00 AM Lt. Odom response (event #5). No bedtime time at all — neither 8 PM nor 10 PM.
+- **Collapsed June 12-13 into one block:** "Both parents provide inconsistent accounts" — merges the hospital statements, Dawson interview, and LE interviews into a single paragraph dated "June 12, 2024 (Evening)." Loses the progression from hospital → case manager → law enforcement.
+- **9:30 PM thump** mentioned ✅ but without context that it emerged only during LE interview.
+- **Rough handling** mentioned ✅.
+- **GAL visits (June 28, July 10)** included — from GAL_Report.pdf, not in SQL.
+- **Theresa Holloway address** included (88 Creekside Ln, Greenville).
+- **July 18 thirty-day review** present ✅ but missing key details: no mention of psychological evaluations, supervised visitation, or September 12 merits hearing date. Only mentions "parenting education."
+- **Only 3 source docs referenced** — Medical_Records.pdf and Sheriff_Report.pdf not cited. This explains the missing LE and medical detail.
+
+**Score:** 6/12 events as discrete entries (3:15 AM ER, 7:30 AM report, June 14 removal, June 18 hearing, June 20 placement, July 18 review) | Missing as discrete: 6 (bedtime, 2 AM discovery, 11 AM Lt. Odom, Dawson interview, Marcus interview, Dena revised interview) | Fabricated: 0 | Collapsed: 3 interview events merged into one "Evening" summary block
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff_Report_24-06-4418 - dr-42-0892.docx, Court_Orders_and_Filings - dr-42-0892.docx, DSS_Investigation_Report - dr-42-.docx (3 references — missing Medical_Records.docx and GAL_Report.docx)
+
+**Response:** Returned 10 events (June 11 – June 14) with good chronological detail through the investigation phase, then stopped at the emergency removal order. Key observations:
+
+- **Bedtime "8:00–10:00 PM" range** — same hedge as SP/PDF-Com (better than SP/DOCX-Com's flat 8 PM error).
+- **9:30 PM thump** as a separate entry ✅ — correctly attributed to Dena's later disclosure.
+- **2:00 AM discovery** present ✅ — KB/PDF-Com missed this entirely.
+- **All 3 June 13 interviews** present as discrete entries with exact times ✅ (9:00 AM Dawson, 1:30 PM Marcus, 4:00 PM Dena).
+- **Dena's revised account** includes all 3 changes: thump, Marcus near room, rough handling ✅.
+- **Timeline stops at June 14** — missing June 18 probable cause hearing (#10), June 20 placement (#11), and July 18 thirty-day review (#12). The response appears complete (not truncated), so these events were simply not returned.
+- **No Medical_Records.docx cited** — yet still got ER details (likely cross-referenced from DSS Investigation Report and Court Orders which reference medical findings).
+
+**Score:** 9/12 events | Fabricated: 0 | Missing: 3 (June 18 hearing, June 20 placement, July 18 review — entire post-removal phase absent)
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Response:** Starts with Case 1 events (June 11–18) but then **cross-contaminates with Case 2 (Crystal Price/TPR)** starting at "November 14, 2023." The agent merged two completely different cases into one timeline. Truncated mid-sentence. Key observations:
+
+- **Case 1 events present:** June 11 incident (vague), June 12 ER admission + Dr. Chowdhury, June 14 removal + Dawson recommendation, June 18 probable cause hearing. That's roughly 4 discrete events.
+- **Missing from Case 1:** June 11 bedtime time, 2:00 AM discovery, 7:30 AM mandatory report as separate event, 11:00 AM Lt. Odom, all 3 June 13 interviews, June 20 placement, July 18 review.
+- **Cross-contamination:** November 14, 2023 ninety-day review (Judge Harold Wynn, Crystal Price, fentanyl screens) — this is entirely Case 2 data injected into Case 1's timeline. Continued through February–March 2024 with Price's IOP and drug screen details.
+- **No 9:30 PM thump** mentioned in Case 1 section.
+- **No Dena statement evolution** captured.
+
+- After the Case 2 digression, **loops back and duplicates** June 14 and June 18 events from Case 1 — same events it already listed.
+- **Only 2 unique source docs:** DSS_Investigation_Report.pdf (cited twice as refs 1 and 3) and Court_Orders_and_Filings.pdf. Missing Medical_Records.pdf, Sheriff_Report.pdf, GAL_Report.pdf.
+- The duplicate DSS_Investigation_Report reference likely pulled Case 2 content from a file that covers both cases or from a similarly named file.
+
+**Score:** ~4/12 Case 1 events | Fabricated: 0 | Missing: 8 | Duplicated: 2 (June 14, June 18 listed twice) | **Critical error: Case 2 data merged into Case 1 timeline**
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** Court_Orders_and_Filings.docx (1 reference — only a single document retrieved)
+
+**Response:** Strong chronological coverage from a single document. Key observations:
+
+- **10:00 PM bedtime** ✅ — only doc agent to get the exact correct time (no 8 PM error).
+- **9:30 PM thump** ✅ — correctly noted as Dena's later disclosure to Lt. Odom.
+- **All 3 June 13 interviews** present (Dawson, Marcus, Dena) — no exact times but described as separate events.
+- **"Materially changed her account"** — strong legal phrasing for Dena's revision.
+- **Missing:** June 11 bedtime as standalone event (#1), June 12 2:00 AM discovery (#2), June 20 placement (#11).
+- **September 12 merits hearing** listed as a future event ✅ — only agent to break this out as its own timeline entry.
+- **Only 1 source doc** (Court_Orders_and_Filings.docx) — yet still captured LE and medical detail, likely because the court orders reference/summarize those events.
+- **No cross-contamination** with Case 2 (unlike SP/PDF - GCC).
+- June 13 interview times not specified (Dawson, Marcus, Dena all listed under "June 13" without exact times).
+
+**Score:** 9/12 events + 1 future event (Sept 12) | Fabricated: 0 | Missing: 3 (bedtime standalone, 2 AM discovery, June 20 placement) | No Case 2 contamination
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** GAL_Report (ref 1), Court_Orders_and_Filings / DSS_Investigation_Report (ref 2) — 2 references
+
+**Response:** The most complete document-agent response on Prompt 5. Truncated at July 18 mid-sentence but all key events present. Key observations:
+
+- **9:30 PM thump as first event** — starts the timeline here rather than bedtime. No bedtime time given (avoids the 8 PM error entirely).
+- **10:00 PM bedtime** ✅ — correctly attributed to Marcus's statement during LE interview.
+- **2:00 AM discovery missing** — jumps from 9:30 PM thump to 3:15 AM ER admission.
+- **All 3 June 13 interviews** present as discrete events (Dawson, Marcus, Dena) — no exact times but clearly separated.
+- **"Materially changes her account"** — same strong legal phrasing as SP/DOCX-GCC (GPT-4o pattern).
+- **Dena's temper disclosure** ✅ — "Mr. Webb has a temper and becomes frustrated when the child cries" (close but not exact: ground truth adds "grab Jaylen roughly by the arm").
+- **June 20 placement** ✅, **June 18 hearing + Karen Milford** ✅, **Judge Easley** ✅.
+- **GAL visits as separate entries** (June 28, July 10) — from GAL_Report, richer detail than other agents.
+- **July 18 review** present but truncated — mentions supervision restrictions but likely missing case plan details and September 12 date.
+- **No cross-contamination** with Case 2.
+
+- **Full response completed:** July 18 review includes supervision restrictions. September 12 merits hearing broken out as its own entry ✅ (same pattern as SP/DOCX-GCC).
+- **3 references:** GAL_Report - 2024-dr-42-0892.pdf, Court_Orders_and_Filings - 2024-dr-42-0892.pdf (×2).
+
+**Score:** 10/12 events + 1 future event (Sept 12) + 2 GAL visits from docs | Fabricated: 0 | Missing: 2 (bedtime standalone, 2 AM discovery)
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "What is the complete timeline of events for case 2024-DR-42-0892?"
+
+**Sources cited:** Court_Orders_and_Filings - dr-42-0892.docx (2 references, same document — only 1 unique source)
+
+**Response:** Very similar structure to KB/PDF-GCC but with fewer post-removal events. Key observations:
+
+- **9:30 PM thump as first event** — same pattern as KB/PDF-GCC.
+- **10:00 PM bedtime** ✅ — correctly attributed to Marcus's LE interview.
+- **2:00 AM discovery missing** — same gap as KB/PDF-GCC.
+- **All 3 June 13 interviews** present as discrete events ✅ (Dawson, Marcus, Dena).
+- **"Materially changes her account"** — same GPT-4o legal phrasing.
+- **Rough handling fully quoted** ✅ — "grab the child roughly by the arm on approximately two to three prior occasions" (most complete version of any doc agent).
+- **Missing:** June 18 probable cause hearing, June 20 placement, Karen Milford appointment, Theresa Holloway placement — entire post-removal phase compressed to just "emergency protective custody shall remain in effect."
+- **July 18 review** present but minimal — no case plan details (parenting classes, psych evals, supervised visitation).
+- **September 12 merits hearing** ✅ as its own entry.
+- **Only 1 unique source doc** — Court_Orders_and_Filings.docx. No GAL_Report, no Medical_Records, no Sheriff_Report, no DSS_Investigation_Report.
+
+**Score:** 8/12 events + 1 future event (Sept 12) | Fabricated: 0 | Missing: 4 (bedtime standalone, 2 AM discovery, June 18 hearing, June 20 placement)
+
+---
+
+### Results — Prompt 6 (People Roster)
+
+> **Ground truth:** 8 people in SQL. 4 additional people exist in documents only: Patricia Holloway (DSS Caseworker), Judge Harold Wynn, Michael Patterson (Sandra's husband), Rebecca Torres, Esq. (DSS Staff Attorney).
+
+#### Summary Table
+
+| Agent | Core (of 8) | Doc-Only Extras | Hallucinated | Key Issue |
+|---|---|---|---|---|
+| Web SPA | 8/8 | 0 | 0 | Clean, complete |
+| MCP - Com | 8/8 | 0 | 0 | Clean, matches Web |
+| MCP - GCC | 8/8 | 0 | 0 | Richest detail (DOBs, notes, addresses) |
+| SP/PDF - Com | 8/8 | 4 | 0 | Best overall — 12 people, 4 sources |
+| SP/DOCX - Com | 8/8 | 4 | 0 | Matches SP/PDF-Com, summary table |
+| KB/PDF - Com | 8/8 | 2 | 0 | Solid, mild padding (Notary) |
+| KB/DOCX - Com | 8/8 | 2 | 0 | Clean, found Rebecca Torres |
+| KB/PDF - GCC | 8/8 | 3 | 0 | Padding (Unit Supervisor, Notary) |
+| SP/PDF - GCC | 5/8 | 2 | 0 | Missing children as entries + Thomas Reed |
+| SP/DOCX - GCC | 5/8 | 3 | 0 | Missing children as entries + Dr. Ellis |
+| KB/DOCX - GCC | 7/8 | 3 | 0 | Missing Dr. Ellis |
+
+#### DSS Legal (Web)
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Tools called:** `list_cases`, `get_case_summary`
+
+**Response:** Listed all 8 people with names, roles, and brief descriptions. Accurate role labels (Parent, Child, Case Manager, Witness, Foster Parent, GAL). Noted Brandon Price's voluntary relinquishment and Sandra Patterson's pre-adoptive status.
+
+**Score:** 8/8 people | Hallucinated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Response:** Listed all 8 people with names, roles, and descriptions. Identical content coverage to Web SPA — clean enumeration from SQL data.
+
+**Score:** 8/8 people | Hallucinated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Response:** Listed all 8 people with the richest detail of any MCP agent — DOBs, full notes (Kirkland Correctional, Longleaf Elementary, foster parent since 2019), addresses. Every field from the SQL `people` table surfaced.
+
+**Score:** 8/8 people | Hallucinated: 0 | Missing: 0
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit.pdf, GAL_Reports.pdf, Court_Orders_and_Filings.pdf, DSS_Investigation_Report.pdf (4 references)
+
+**Response:** Listed 12 people — all 8 core plus Patricia Holloway (DSS Caseworker), Michael Patterson (foster co-parent), Rebecca Torres, Esq. (DSS Staff Attorney), and Judge Harold Wynn. Each person has a detailed role description. DSS listed as an organizational entity (Petitioner). Children listed as separate entries with DOBs.
+
+**Score:** 8/8 people | Hallucinated: 0 | Doc-only extras: 4 (Patricia Holloway, Michael Patterson, Rebecca Torres, Judge Wynn) | **Best document agent — most complete roster from any agent**
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit.docx, Substance_Abuse_Evaluation.docx, DSS_Investigation_Report.docx, GAL_Reports.docx (4 references)
+
+**Response:** Listed same 12 people as SP/PDF-Com with identical accuracy. Added a summary table at the end mapping each person to their role/title. Same 4 doc-only extras. Children as separate entries with DOBs.
+
+**Score:** 8/8 people | Hallucinated: 0 | Doc-only extras: 4 | Matches SP/PDF-Com quality
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit - 2024-dr-15-0341.pdf, DSS_Investigation_Report - 2024-dr-15-0341.pdf (2 references)
+
+**Response:** Listed 10 people — all 8 core plus Patricia Holloway and a generic "Notary Public." Children listed as separate entries. Dr. Ellis identified but first name omitted. Sandra Patterson listed without Michael. Judge Wynn and Rebecca Torres not found (fewer source docs than SP agents).
+
+**Score:** 8/8 people | Hallucinated: 0 | Doc-only extras: 2 (Patricia Holloway, Notary — Notary is padding)
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit - dr-15-0341.docx, DSS_Investigation_Report - dr-15-0341.docx, TPR_Petition_and_Affidavit - dr-15-0341.docx (3 references, 2 unique)
+
+**Response:** Listed 10 people — all 8 core plus Patricia Holloway and Rebecca Torres, Esq. Children as separate entries. Dr. Ellis identified without first name. Clean response with accurate role descriptions. No Judge Wynn or Michael Patterson.
+
+**Score:** 8/8 people | Hallucinated: 0 | Doc-only extras: 2 (Patricia Holloway, Rebecca Torres)
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit.pdf (1 reference)
+
+**Response:** Listed 7 entries — Crystal Price, Brandon Price, Patricia Holloway, Monica Vance, Judge Wynn, Dr. Ellis, "Patterson Family." Children mentioned in Crystal/Brandon descriptions ("biological mother of Amari Price and Destiny Price") but **not listed as separate entries.** Thomas Reed completely absent. "Patterson Family" is vague — no first names.
+
+**Score:** 5/8 people | Hallucinated: 0 | Missing as entries: 3 (Amari, Destiny, Thomas Reed) | Doc-only extras: 2 (Patricia Holloway, Judge Wynn) | Only 1 source doc
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** TPR_Petition_and_Affidavit.docx, DSS_Investigation_Report.docx, Court_Orders_and_Filings.docx (3 references)
+
+**Response:** Listed 7 entries — Crystal Price, Brandon Price, Patricia Holloway, Monica Vance, Harold Wynn, Thomas Reed, Sandra and Michael Patterson. Children mentioned in Crystal's description but **not listed as separate entries.** Dr. Raymond Ellis completely absent. Better source coverage than SP/PDF-GCC (3 docs vs 1) but same child-listing gap.
+
+**Score:** 5/8 people | Hallucinated: 0 | Missing as entries: 3 (Amari, Destiny, Dr. Ellis) | Doc-only extras: 3 (Patricia Holloway, Judge Wynn, Michael Patterson)
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** DSS_Investigation_Report - 2024-dr-15-0341.pdf, Court_Orders_and_Filings - 2024-dr-15-0341.pdf, TPR_Petition_and_Affidavit - 2024-dr- (3 references)
+
+**Response:** Listed all 8 core people plus Judge Harold Wynn, a generic "Unit Supervisor," and a generic "Notary Public." Children listed as separate entries under "Children Involved" subheading. Dr. Ellis identified without first name. Sandra and Michael Patterson listed together.
+
+**Score:** 8/8 people | Hallucinated: 0 | Doc-only extras: 3 (Judge Wynn, Unit Supervisor, Notary — last two are unnamed padding)
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "List all people involved in the Price TPR case and their roles."
+
+**Sources cited:** Court_Orders_and_Filings - dr-15-0341.docx, DSS_Investigation_Report - dr-15 (2 references)
+
+**Response:** Listed 10 entries — Crystal Price, Brandon Price, Amari Price, Destiny Price, Monica Vance, Thomas Reed, Judge Harold Wynn, Sandra Patterson, "Counsel for DSS" (unnamed), "Appointed Counsel for Crystal Price" (unnamed). **Dr. Raymond Ellis completely absent.** Children listed with DOBs. Two unnamed counsel entries are accurate roles but not specific people.
+
+**Score:** 7/8 people | Hallucinated: 0 | Missing: 1 (Dr. Raymond Ellis) | Doc-only extras: 3 (Judge Wynn, 2 unnamed counsels)
+
+---
+
+#### Prompt 6 Key Findings
+
+1. **Zero hallucinated people across all 11 agents** — cleanest prompt so far. No fabricated names or roles.
+2. **All MCP agents: 8/8** — deterministic from SQL. GCC MCP surfaced the richest detail (every field from the people table).
+3. **Commercial doc agents dominated** — all 4 Commercial doc agents scored 8/8 core; only 1 of 4 GCC doc agents did (KB/PDF-GCC).
+4. **SP/PDF-Com and SP/DOCX-Com best overall** — 8/8 core plus 4 document-only extras (Patricia Holloway, Michael Patterson, Rebecca Torres, Judge Wynn). Four source docs each.
+5. **GCC SharePoint agents underperformed again** — both SP/PDF-GCC and SP/DOCX-GCC scored 5/8, missing children as separate entries. Same pattern as Prompt 5 where GCC SP agents struggled with completeness.
+6. **Document agents add genuine value on this prompt** — 4 real people exist in the documents but not in SQL. An attorney using only MCP would miss the caseworker, staff attorney, judge, and foster co-parent.
+7. **GPT-4.1 (Commercial) more thorough at enumeration** — the completeness gap between Com and GCC doc agents is the widest of any prompt tested so far.
+8. **Padding problem in GCC KB agents** — KB/PDF-GCC and KB/PDF-Com listed "Notary Public" and "Unit Supervisor" as involved people. Technically present in documents but noise for an attorney.
+
+---
+
+### Results — Prompt 7 (Statement Evolution)
+
+#### Summary Table
+
+| Agent | Changes (of 3) | Progression | Key Strength |
+|---|---|---|---|
+| Web SPA | 3/3 | No | Direct quotes, referenced Discrepancy 6, page citations |
+| MCP - GCC | 3/3 | No | 6 discrepancies enumerated, 4.5-hour delay noted |
+| MCP - Com | **2/3** | No | **Missing rough handling** |
+| SP/PDF - Com | 3/3 | No | Summary table, fear motive, Dena's inference, demeanor shift |
+| SP/DOCX - Com | 3/3 | No | Summary table, "material" legal framing, 2 sources |
+| KB/PDF - Com | 3/3 | No | Direct quote, grandmother placement wish (unique detail) |
+| KB/DOCX - Com | 3/3 | No | 3 sources, direct quotes, Medical Records detail |
+| SP/PDF - GCC | 3/3 | No | Demeanor noted, 1 source |
+| SP/DOCX - GCC | 3/3 | No | "Responsibility and awareness" analytical lens, 2 sources |
+| KB/PDF - GCC | 3/3 | No | Demeanor noted, 2 sources |
+| KB/DOCX - GCC | 3/3 | No | Most detailed demeanor analysis, category labels |
+
+#### DSS Legal (Web)
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Tools called:** `get_statements_by_person`, `get_discrepancies`
+
+**Response:** Direct quotes from both statements with page-level citations (Nursing Notes p. 9, Sheriff Report pp. 7-8). Identified all 3 changes: 9:30 PM thump, Marcus's presence near room, and rough handling history. Explicitly referenced "Discrepancy 6" from the database — the only agent to tie findings to a numbered discrepancy record. Cross-referenced Medical Records p. 9 and Sheriff Report pp. 6-8.
+
+**Score:** 3/3 changes | Progression noted: No
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Response:** Found both statements with source citations (Medical Records Nursing Notes p. 9, Sheriff Report p. 7). Identified 9:30 PM thump and Marcus's assurance. Key changes list notes timing shift and "implied possible prior knowledge." **Did not mention rough handling or temper** — the only agent to miss this change. Likely called `get_statements_by_person` but either didn't retrieve statement 4 (rough handling) or the orchestrator omitted it from the summary.
+
+**Score:** 2/3 changes | Progression noted: No | Missing: rough handling / temper history
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Response:** Found both statements. Identified all 3 changes plus enumerated 6 discrepancies: (1) cause of injuries, (2) Marcus's presence, (3) 4.5-hour delay before seeking medical attention, (4) rough handling history, (5) single vs. multiple injury events, (6) internal inconsistency. The 4.5-hour delay calculation (9:30 PM → 2:00 AM) is a value-add no other agent provided. Source citations: Medical Records Nursing Notes p. 9, Sheriff Report pp. 6-8.
+
+**Score:** 3/3 changes | Progression noted: No | Extra: 6 discrepancies, timing delay analysis
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report.pdf, Sheriff_Report_24-06-4418.pdf (2 references)
+
+**Response:** Most comprehensive document agent response. Found all 3 changes with detailed narrative. Unique details not surfaced by other agents: (1) Dena admitted being "scared" and not wanting to "get anyone in trouble" — the motive for initial omission, (2) Dena's inference that Marcus "was responsible," (3) demeanor shift from "nervous, brief, avoidant" to "emotional, more forthcoming." Included a summary comparison table (Aspect / Initial / Later) covering 6 dimensions. Two-source cross-reference.
+
+**Score:** 3/3 changes | Progression noted: No | Best document agent — richest analysis, fear motive, summary table
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report.docx, Sheriff_Report_24-06-4418.docx (2 references)
+
+**Response:** Closely matches SP/PDF-Com quality. All 3 changes found. Same fear motive details ("scared," "didn't want to get anyone in trouble"). Summary comparison table with 5 dimensions. Added legal framing: "These changes were considered material by investigators and the court." Two-source cross-reference. Only minor gap vs. SP/PDF-Com: no explicit "Dena believed Marcus was responsible" inference.
+
+**Score:** 3/3 changes | Progression noted: No | "Material" legal framing, summary table
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report - 2024-dr-42-0892.pdf (1 reference)
+
+**Response:** Found all 3 changes. Included direct quote of rough handling statement ("Marcus has a temper. He gets frustrated when Jaylen won't stop crying..."). Unique detail: Dena "expressed a desire for Jaylen to be placed with her mother for safety" — a grandmother placement wish not surfaced by any other agent. Noted demeanor shift from non-disclosing to forthcoming. Single source only.
+
+**Score:** 3/3 changes | Progression noted: No | Unique: grandmother placement wish
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report - dr-42-0892.docx, Medical_Records - dr-42-0892.docx, Sheriff_Report_24-06-4418 - dr-42-0892.docx (3 references)
+
+**Response:** Strongest KB agent on this prompt. All 3 changes found with direct quotes from both statements. **Only document agent to cite 3 source docs** — DSS Investigation Report, Medical Records, and Sheriff Report. Unique Medical Records detail: Dena "hesitated when asked about recent injuries or falls, responding 'I don't think so' without further detail." This hospital-side detail adds nuance to the statement evolution that single-source agents missed. Also noted the later statement was "inconsistent with Webb's account" — cross-referencing Marcus's version.
+
+**Score:** 3/3 changes | Progression noted: No | Best KB agent — 3 sources, direct quotes, Medical Records detail
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report.pdf (1 reference)
+
+**Response:** Found all 3 changes. Noted demeanor details (nervous, avoided eye contact). Minor date confusion: labeled initial statement as "June 13, 2024, 9:00 AM" which is actually the Dawson case manager interview, not the hospital statement (June 12). Content is correct — this is the interview where Dena still gave the hospital version. Single source doc.
+
+**Score:** 3/3 changes | Progression noted: No | Minor: conflated hospital and case manager interview dates
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report.docx, Court_Orders_and_Filings.docx (2 references)
+
+**Response:** Found all 3 changes. Added an analytical category ("Responsibility and Awareness") noting the shift from "in the bedroom all evening" to acknowledging hearing a noise and calling out — framing the change as increased admission of awareness. Two-source cross-reference.
+
+**Score:** 3/3 changes | Progression noted: No
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report - 2024-dr-42-0892.pdf, Court_Orders_and_Filings - 2024-dr-42-0892.pdf (2 references)
+
+**Response:** Found all 3 changes. Noted demeanor shift ("initial statement was more vague and less accusatory, later statement provided more context and concern"). Compact analysis. Two references.
+
+**Score:** 3/3 changes | Progression noted: No
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?"
+
+**Sources cited:** DSS_Investigation_Report - dr-42-0892.docx, Court_Orders_and_Filings - dr-42-0892.docx (2 references)
+
+**Response:** Most detailed demeanor analysis of any agent. Organized initial statement with category labels (Presence, Incident, Belief, Concerns, Demeanor) — useful for attorney review. Found all 3 changes. Noted "did not ask any questions about the investigation process, which was unusual" — a behavioral observation unique to this agent. Two references.
+
+**Score:** 3/3 changes | Progression noted: No | Most structured format for initial statement
+
+---
+
+#### Prompt 7 Key Findings
+
+1. **10 of 11 agents found all 3 changes** — the strongest consensus across any prompt tested. Statement comparison is a relative strength for all architectures.
+2. **MCP - Com the only miss** — omitted rough handling / temper history. Likely a comprehension gap rather than retrieval failure, since the statement data should have been returned by `get_statements_by_person`. This is the first time MCP - Com underperformed the Web SPA on the same structured data.
+3. **No agent noted the intermediate case manager progression** (hospital → Dawson interview → LE interview). All treated it as a two-stage comparison. The Dawson interview (June 13, 9 AM) still matched the hospital version — the change only came under LE questioning that afternoon. This three-stage evolution is a nuance that would matter to an attorney.
+4. **SP/PDF - Com and SP/DOCX - Com strongest document agents** — summary tables, fear motive ("scared," "didn't want to get anyone in trouble"), demeanor shifts. SP/PDF-Com also surfaced Dena's inference that Marcus "was responsible."
+5. **KB/DOCX - Com was the strongest KB agent** — the only document agent to cite 3 source docs (DSS + Medical + Sheriff). Surfaced unique Medical Records detail about Dena hesitating when asked about prior injuries.
+6. **Web SPA was the strongest MCP agent** — direct quotes, page citations, and the only agent to reference a numbered discrepancy record (Discrepancy 6) from the database.
+7. **MCP - GCC added the most analytical value** — enumerated 6 discrepancies and calculated the 4.5-hour delay (9:30 PM → 2:00 AM). No other agent quantified the timing gap.
+8. **Zero hallucinations across all agents** — every cited fact was accurate. This prompt had the highest fidelity of any tested.
+9. **Several doc agents conflated hospital and case manager interviews** — dating the "initial" statement as June 13, 9:00 AM (Dawson) rather than June 12 (hospital). Minor confusion but not factually wrong since the content matched.
+
+---
+
+### Results — Prompt 8 (LE Statements Filter)
+
+> **Critical context:** The MCP tool `get_statements_by_person` requires a `person_name` parameter — there is no audience/`made_to` filter. To answer "what statements were made to law enforcement," an MCP agent would need to (1) identify each person involved, (2) call `get_statements_by_person` for each, (3) filter results by `made_to = 'Law Enforcement'`. Document agents have a structural advantage: the Sheriff Report IS the law enforcement interview record — no filtering needed.
+
+#### Summary Table
+
+| Agent | LE Content (of 4) | False Positives | 8 PM Error | Key Issue |
+|---|---|---|---|---|
+| Web SPA | **0/4** | 0 | — | FAIL — tool can't filter by audience |
+| MCP - Com | **0/4** | 0 | — | FAIL — 3 tries, all failed |
+| MCP - GCC | 2/4 | 1 | No | Pivoted to timeline events (workaround) |
+| SP/PDF - Com | 4/4 | Low | No | Best — 3 sources, direct quotes, structured |
+| SP/DOCX - Com | 4/4 | Moderate | No | **Only agent ever to note intermediate interview**, 4 sources |
+| KB/PDF - Com | 4/4 | Moderate | Yes | Unique DSS follow-up quotes from both parents |
+| KB/DOCX - Com | 4/4 | Low | Yes | Most detailed Marcus interview, unique clarification quote |
+| SP/PDF - GCC | **0/4** | 2 | — | FAIL — returned court testimony instead of LE |
+| SP/DOCX - GCC | 0.5/4 | 2 | No | Filtering failure — returned hospital versions |
+| KB/PDF - GCC | 4/4 | 1 | Yes | Best GCC agent — direct quotes |
+| KB/DOCX - GCC | 4/4 | 1 | No | Strong, no 8 PM error |
+
+#### DSS Legal (Web)
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Tools called:** `get_statements_by_person`
+
+**Response:** "There are no recorded statements made to law enforcement in case 2024-DR-42-0892."
+
+**Analysis:** Total failure. The tool requires a person name, not an audience filter. The Web SPA likely tried to query for "law enforcement" as a person or couldn't determine which people to query. The SQL `statements` table has 4 records with `made_to = 'Law Enforcement'`, but the tool doesn't expose that filter.
+
+**Score:** 0/4 statements | False positives: 0 | Missing: 4 | **Tool design limitation**
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Response:** Failed on all 3 attempts. First and third: "No statements made to law enforcement are recorded." Second: "Please provide the full or partial name of the person whose statements you would like to retrieve." The orchestrator couldn't figure out how to decompose the question into per-person tool calls.
+
+**Score:** 0/4 statements | False positives: 0 | Missing: 4 | **Orchestrator failure — couldn't decompose the query**
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Response:** Pivoted to timeline events instead of statements — a smart workaround. Returned 3 LE-related timeline entries: (1) Lt. Odom responds to hospital (June 12, 11 AM), (2) Marcus Webb interview (June 13, 1:30 PM), (3) Dena Holloway interview (June 13, 4:00 PM). Marcus's interview content covers Statement A (couch, didn't hear, crib climbing). Dena's covers Statement C (9:30 PM thump, account change). Missing: Marcus's confrontation quote (Statement B) and Dena's rough handling disclosure (Statement D). Lt. Odom at hospital is a false positive (LE action, not a statement TO LE).
+
+**Score:** 2/4 statements | False positives: 1 (LE action at hospital) | Missing: 2 (confrontation, rough handling) | **Adaptive but incomplete**
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff_Report_24-06-4418.pdf, DSS_Investigation_Report.pdf, Court_Orders_and_Filings.pdf (3 references)
+
+**Response:** Structured response with 4 numbered sections: (1) Initial parental accounts as context, (2) Dena's revised statement to Lt. Odom with full direct quote of rough handling, (3) Marcus's statement with confrontation quote, (4) Medical/LE observations. All 4 LE statement contents present. Includes summary of LE findings. 10 PM bedtime correctly attributed to Marcus. Three-source cross-reference.
+
+**Score:** 4/4 statements | False positives: ~2 (initial accounts + medical observations, but well-contextualized) | 8 PM error: No | **Best structured response**
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Medical_Records.docx, DSS_Investigation_Report.docx, Court_Orders_and_Filings.docx, Sheriff_Report_24-06-4418.docx (4 references)
+
+**Response:** 5 numbered sections including: (1) Initial parental accounts, (2) **Hospital interview with Dena (June 13, 9:00 AM)** — the intermediate Dawson case manager interview that NO other agent across ALL prompts has ever identified as a separate step, (3) Dena's revised LE statement, (4) Marcus's LE statement at 1:30 PM, (5) Nursing staff observations (Patricia Daniels, grip-pattern bruising). All 4 LE statement contents present. Most source documents (4) of any agent on this prompt.
+
+**Score:** 4/4 statements | False positives: ~3 (initial, hospital interview, nursing — but intermediate interview is a genuine insight) | 8 PM error: No | **Only agent to identify three-stage statement progression**
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf, DSS_Investigation_Report - 2024-dr-42-0892.pdf (2 references)
+
+**Response:** Most detailed Marcus interview of any Com agent — evening routine (5:30 PM arrival, dinner, bath), denial of striking, "normal couple stuff," bruising question, confrontation quote. Dena's hospital statement labeled correctly, then revised statement with full direct quote. **Unique detail:** June 14 DSS follow-up statements from BOTH parents (Marcus: "I love my son. I want to cooperate." Dena: "I want Jaylen to be safe. If my mama can take him, that would be best right now.") — only agent to surface these. However, DSS follow-ups are NOT statements to law enforcement (made_to = 'Case Manager'), so these are false positives. **8 PM bedtime** attributed to Marcus's own account.
+
+**Score:** 4/4 statements | False positives: ~2 (hospital + DSS follow-ups) | 8 PM error: Yes | **Most narrative detail, unique DSS follow-ups**
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Sheriff_Report_24-06-4418 - dr-42-0892.docx, DSS_Investigation_Report - dr-42-0892.docx (2 references)
+
+**Response:** Most detailed Marcus interview across ALL agents — includes everything KB/PDF-Com found plus a unique additional quote: "I just assumed that's what she's saying because she's been trying to blame me for things lately." This clarification after the confrontation quote was not surfaced by any other agent. Dena's initial labeled correctly, revised statement with full direct quote. LE findings summary with grip-pattern bruising. **8 PM bedtime** attributed to Marcus.
+
+**Score:** 4/4 statements | False positives: ~1.5 (initial + LE findings section) | 8 PM error: Yes | **Most detailed single interview of any agent, unique Marcus clarification**
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Court_Orders_and_Filings.pdf (1 reference)
+
+**Response:** Returned Renee Dawson's court testimony ("child is at imminent risk") and Dr. Chowdhury's medical testimony. **Neither is a statement made to law enforcement** — both are court/medical testimony misidentified as LE statements. Zero actual LE content.
+
+**Score:** 0/4 statements | False positives: 2 (court testimony confused as LE) | **FAIL — misunderstood the question**
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** DSS_Investigation_Report.docx (1 reference)
+
+**Response:** Returned Marcus's and Dena's **initial hospital/general statements**, not their law enforcement interview statements. Marcus: "put Jaylen to bed at approximately 10:00 PM, fell asleep on couch" (hospital version). Dena: "heard crying at 2 AM, believed crib fall" (hospital version). Missing: 9:30 PM thump revision, crib climbing detail, confrontation, rough handling. Notes "inconsistencies" but doesn't provide LE-specific content.
+
+**Score:** 0.5/4 statements | False positives: 2 (hospital versions presented as LE) | **Filtering failure — correct people, wrong audience**
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** DSS_Investigation_Report - 2024-dr-42-0892.pdf, Sheriff_Report_24-06-4418 - 2024-dr-42-0892.pdf (2 references)
+
+**Response:** Best GCC agent on this prompt. Marcus interview detailed: couch all night, crib climbing, denied rough handling, confrontation quote ("not in his room after 10 PM"), bruising question, denial of striking, "normal couple stuff." Also includes Sheriff Report's evening routine detail (5:30 PM, dinner, bath, **8 PM bedtime**). Dena: hospital statement labeled, then revised statement with full direct quote including "should have said something sooner." Two-source cross-reference.
+
+**Score:** 4/4 statements | False positives: 1 (hospital statement, labeled) | 8 PM error: Yes (in evening routine section) | **Best GCC agent**
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "What statements were made to law enforcement in case 2024-DR-42-0892?"
+
+**Sources cited:** Court_Orders_and_Filings - dr-42-0892.docx, DSS_Investigation_Report - dr-42-0892.docx (2 references)
+
+**Response:** Strong coverage. Marcus: couch all night, crib climbing, denied rough handling, confrontation quote, 10 PM bedtime (**no 8 PM error**). Dena: initial labeled, revised with 9:30 PM thump, rough handling, and direct quote. Notes discrepancies between parents' statements and medical findings. Two references.
+
+**Score:** 4/4 statements | False positives: 1 (initial statement, labeled) | 8 PM error: No | **Strong and clean**
+
+---
+
+#### Prompt 8 Key Findings
+
+1. **MCP tools have a critical design gap** — `get_statements_by_person` requires a person name and has no `made_to` filter. Both GPT-4.1 MCP agents (Web SPA + MCP-Com) returned NOTHING — the first prompt where MCP agents completely fail on a question the SQL data can answer. MCP-GCC showed adaptive behavior by pivoting to timeline events, but got only 2/4 statement contents.
+
+2. **This prompt inverts the usual MCP advantage.** Document agents with access to the Sheriff Report have a structural advantage — the document IS the law enforcement interview record, so the "filtering" is implicit in the source. The SQL data has a `made_to` field that could answer this perfectly, but the tool API doesn't expose it.
+
+3. **All 4 Commercial doc agents found all 4 LE statement contents.** SP/PDF-Com best structured (3 sources); SP/DOCX-Com most sources (4) and the only agent across all 8 prompts to identify the intermediate Dawson interview; KB agents most detailed individual interview accounts.
+
+4. **GCC doc agents split again.** KB agents (both 4/4) succeeded; SP agents failed (0/4 and 0.5/4). This confirms the persistent GCC SharePoint retrieval weakness.
+
+5. **SP/DOCX-Com's intermediate interview identification is a first.** The Dawson case manager interview (June 13, 9 AM) has been in the ground truth since Prompt 7 as a bonus element. SP/DOCX-Com is the first and only agent to ever surface it.
+
+6. **8 PM error recurred** in KB/PDF-Com, KB/DOCX-Com, and KB/PDF-GCC — all from the Sheriff Report's account of the evening routine. The error correlates with agents that retrieve the full Sheriff Report detail.
+
+7. **Tool design recommendation:** Adding a `get_statements` tool with optional `made_to` filter (or making `person_name` optional in `get_statements_by_person`) would fix the MCP gap. This is a schema/API issue, not a model issue.
+
+---
+
+### Results — Prompt 9 (TPR Aggregate)
+
+#### DSS Legal (Web)
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Listed all 9 TPR cases with case IDs, case titles, counties, filed dates, and statuses. Concise tabular format. Used `list_cases` tool.
+
+**Score:** 9/9 cases | Correct count: Yes | **Pass**
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Listed all 9 TPR cases with full summaries including children's names/ages, removal reasons, treatment plan requirements, and current status. Clean organization by case.
+
+**Score:** 9/9 cases | Correct count: Yes | **Pass**
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Listed all 9 TPR cases with detailed summaries. Richest detail of the three MCP agents — includes circuit information, full treatment plan items, and case outcomes for closed/dismissed cases.
+
+**Score:** 9/9 cases | Correct count: Yes | **Pass**
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case (Case 2) with detailed TPR grounds (neglect, failure to remedy, substance abuse), full procedural history (7 orders listed chronologically), father's voluntary relinquishment, and current foster care status. **Also identified Webb/Holloway (Case 1)** as potential TPR — "TPR proceedings may be considered depending on the outcome of the investigation and subsequent hearings." Summary of TPR grounds. 4 references across both cases.
+
+**Score:** 1/9 actual TPR cases | Flagged 1 CPS case as potential TPR (reasonable inference) | **Partial** — best document agent, but aggregate queries require structured data
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case with detailed procedural history and **cited actual statutory grounds** (S.C. Code Ann. §63-7-2570(1), (2), (4)). Also identified Webb/Holloway case as removal/TPR consideration with "non-accidental trauma, inconsistent parental accounts, imminent risk of harm." 5 references across multiple documents.
+
+**Score:** 1/9 actual TPR cases | Flagged 1 CPS case as potential TPR | **Partial** — statutory citations are a genuine value-add
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case only. Good detail — children's DOBs, grounds, procedural history (4 orders), GAL recommendation. 2 references (Court_Orders, TPR_Petition).
+
+**Score:** 1/9 cases | **Partial** — accurate within scope, no acknowledgment of limitation
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case only. Detailed grounds (neglect, failure to remedy, substance abuse), voluntary relinquishment, foster care status, merits hearing. 1 reference.
+
+**Score:** 1/9 cases | **Partial** — accurate within scope
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Generic framing — "Cases involving Termination of Parental Rights typically include..." Lists TPR grounds (neglect, failure to remedy, substance abuse) and gives Price case as example. 1 reference.
+
+**Score:** 1/9 cases | **Partial** — treats aggregate question as generic legal question
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case with detail on both Crystal Price and Brandon Price's proceedings. 1 reference.
+
+**Score:** 1/9 cases | **Partial** — accurate within scope
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case with good detail — children, DOBs, grounds, GAL recommendation (Thomas Reed, Esq.), active processing status. 3 references.
+
+**Score:** 1/9 cases | **Partial** — best GCC document agent detail
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "Which cases involve Termination of Parental Rights?"
+
+**Response:** Found Price case with detailed procedural history — all 6 orders listed chronologically. Termination grounds, GAL recommendation, court orders. 3 references.
+
+**Score:** 1/9 cases | **Partial** — strongest procedural detail of any document agent
+
+---
+
+#### Prompt 9 — Summary
+
+| Agent | TPR Cases Found | Grade | Notes |
+|---|---|---|---|
+| Web SPA | 9/9 | **Pass** | Concise list, all case IDs |
+| MCP - Com | 9/9 | **Pass** | Full summaries per case |
+| MCP - GCC | 9/9 | **Pass** | Richest detail |
+| SP/PDF - Com | 1/9 + 1 flagged | Partial | Also flagged CPS case as potential TPR |
+| SP/DOCX - Com | 1/9 + 1 flagged | Partial | Statutory citations (§63-7-2570) |
+| KB/PDF - Com | 1/9 | Partial | Good detail |
+| KB/DOCX - Com | 1/9 | Partial | Grounds + voluntary relinquishment |
+| SP/PDF - GCC | 1/9 | Partial | Generic framing |
+| SP/DOCX - GCC | 1/9 | Partial | Both parents covered |
+| KB/PDF - GCC | 1/9 | Partial | GAL recommendation detail |
+| KB/DOCX - GCC | 1/9 | Partial | Best procedural chronology |
+
+**Key findings:**
+- **MCP agents sweep** — all 3 found all 9 TPR cases. This is the clearest architectural advantage: aggregate queries across the full case database are trivial with SQL, impossible with limited document corpora.
+- **All 8 document agents scored Partial** — they correctly found the 1 TPR case in their corpus (Price) with accurate detail, but missed 8 others. No hallucinated cases, no misclassifications.
+- **SP-Com agents showed value-add** by flagging Webb/Holloway (CPS) as potential TPR based on the facts (non-accidental trauma, imminent risk). SP/DOCX-Com cited actual SC statutory grounds — useful for attorneys.
+- **No document agent acknowledged the limitation** — none said "I can only see documents for 2 cases." This is a silent coverage gap that could mislead an attorney into thinking there's only 1 TPR case.
+- **Zero hallucinations** across all 11 agents — no fabricated cases, no misclassified case types.
+
+---
+
+### Results — Prompt 10 (Time Gap)
+
+#### DSS Legal (Web)
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Conflated the 9:30 PM thump with the 2:00 AM discovery: "Dena Holloway reported hearing Jaylen crying loudly (associated with the thump) at approximately 2:00 AM." Calculated gap as 1 hour 15 minutes (2:00 AM → 3:15 AM). The SQL timeline has both events separately — the model merged them. Missed the clinically significant 4.5-hour delay entirely.
+
+**Score:** 9:30 PM identified: **No** (said 2:00 AM) | 3:15 AM identified: Yes | Gap: **1h15m (wrong — discovery→ER, not thump→ER)** | Distinguished discovery vs ER: No | **Fail** — missed the entire 4.5-hour delay
+
+---
+
+#### DSS Legal (MCP) - Com
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Gold standard. Identified all three milestones (9:30 PM thump, 2:00 AM discovery, 3:15 AM ER admission). Calculated both intervals: thump→discovery = 4h30m, thump→ER = 5h45m. Summary table with all three time points. Cited Sheriff Report, Dictation PDF, and Medical Records.
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: Yes | Gap: **4h30m + 5h45m (both correct)** | Distinguished discovery vs ER: **Yes** | **Pass**
+
+---
+
+#### DSS Legal (MCP) - GCC
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Correctly identified 9:30 PM thump and 2:00 AM hospital departure. But reported gap as "approximately 4 hours" — should be 4h30m. Did not mention 3:15 AM admission. For a question asking for the "exact" gap, being 30 minutes off is notable.
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No | Gap: **~4h (should be 4.5h)** | Distinguished discovery vs ER: No | **Partial** — correct start, imprecise arithmetic
+
+---
+
+#### DSS Legal (SP/PDF) - Com
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Excellent. Identified 9:30 PM thump. Distinguished between "2:00 AM" (initial statements to medical staff) and "3:15 AM" (actual admission records). Reported "approximately four-and-one-half hour delay." Noted the delay was "clinically concerning by medical staff and DSS investigators." 3 references (Medical Records, Court Orders, DSS Investigation).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: Yes | Gap: **4.5h (correct for thump→departure)** | Distinguished 2:00 AM vs 3:15 AM: **Yes** | **Pass**
+
+---
+
+#### DSS Legal (SP/DOCX) - Com
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Most precise answer. Identified 9:30 PM thump and 3:15 AM admission. Calculated "about 5 hours and 45 minutes" (thump→admission). Also noted midnight discovery as intermediate event. "Medical staff noted the delay… as concerning." 3 references.
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: Yes | Gap: **5h45m (correct for thump→admission)** | Distinguished discovery vs ER: Yes (midnight discovery noted) | **Pass**
+
+---
+
+#### DSS Legal (KB/PDF) - Com
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM thump and midnight discovery. Calculated thump→discovery = 2h30m. However, admitted "the precise admission time is not stated in the available reports" and noted hospital visit was "shortly after midnight." Honest about limitation. 1 reference (Sheriff Report only).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No (honest absence) | Gap: **2h30m (thump→discovery only)** | Distinguished discovery vs ER: No — couldn't find ER time | **Partial** — honest about missing data, but only answered half the question
+
+---
+
+#### DSS Legal (KB/DOCX) - Com
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM thump and 2:00 AM hospital presentation. Calculated "approximately four-and-a-half hours." 1 reference (Court_Orders_and_Filings).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No | Gap: **4.5h (correct for thump→hospital departure)** | Distinguished discovery vs ER: No | **Pass**
+
+---
+
+#### DSS Legal (SP/PDF) - GCC
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM correctly but **hallucinated 7:30 AM** as hospital time. Calculated gap as "approximately 10 hours." No source in any document says 7:30 AM. 2 references (GAL_Report.pdf, Medical_Records.pdf).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No | Gap: **10 hours (WRONG — 7:30 AM is fabricated)** | Distinguished discovery vs ER: No | **Fail** — hallucinated hospital time
+
+---
+
+#### DSS Legal (SP/DOCX) - GCC
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM thump and 2:00 AM hospital arrival. Calculated "approximately 4.5 hours." 2 references (GAL_Report.docx, DSS_Investigation_Report.docx).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No | Gap: **4.5h (correct for thump→hospital)** | Distinguished discovery vs ER: No | **Pass**
+
+---
+
+#### DSS Legal (KB/PDF) - GCC
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM thump but used 12:47 AM from Sheriff Report as hospital time (same discrepancy seen in Prompt 1 — Sheriff Report records different time than Medical Records). Calculated "approximately 3 hours and 17 minutes." Math is correct for the stated times, but the ER time is wrong.
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No (used 12:47 AM from Sheriff Report) | Gap: **3h17m (correct math, wrong source time)** | Distinguished discovery vs ER: No | **Partial** — consistent with Prompt 1 doc discrepancy
+
+---
+
+#### DSS Legal (KB/DOCX) - GCC
+> **Prompt:** "What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital?"
+
+**Response:** Identified 9:30 PM thump and "approximately midnight" as discovery time. Calculated "approximately 2.5 hours." But the question asked about hospital, not discovery. Did not find or report the actual ER time. 1 reference (Sheriff Report only).
+
+**Score:** 9:30 PM identified: Yes | 3:15 AM identified: No | Gap: **2.5h (thump→discovery, not thump→hospital)** | Distinguished discovery vs ER: No — answered wrong event | **Partial** — correct start time, answered discovery not hospital
+
+---
+
+#### Prompt 10 — Summary
+
+| Agent | Thump Time | Hospital Time | Gap Reported | Grade |
+|---|---|---|---|---|
+| Web SPA | 2:00 AM ❌ | 3:15 AM | 1h15m (wrong start) | **Fail** |
+| MCP - Com | 9:30 PM ✓ | 2:00 AM + 3:15 AM | 4h30m + 5h45m ✓ | **Pass** |
+| MCP - GCC | 9:30 PM ✓ | 2:00 AM | ~4h (imprecise) | Partial |
+| SP/PDF - Com | 9:30 PM ✓ | 2:00 AM + 3:15 AM | ~4.5h ✓ | **Pass** |
+| SP/DOCX - Com | 9:30 PM ✓ | 3:15 AM | 5h45m ✓ | **Pass** |
+| KB/PDF - Com | 9:30 PM ✓ | "shortly after midnight" | 2h30m (thump→discovery) | Partial |
+| KB/DOCX - Com | 9:30 PM ✓ | 2:00 AM | ~4.5h ✓ | **Pass** |
+| SP/PDF - GCC | 9:30 PM ✓ | **7:30 AM** ❌ | **10h (fabricated)** | **Fail** |
+| SP/DOCX - GCC | 9:30 PM ✓ | 2:00 AM | ~4.5h ✓ | **Pass** |
+| KB/PDF - GCC | 9:30 PM ✓ | 12:47 AM (Sheriff Rpt) | ~3h17m | Partial |
+| KB/DOCX - GCC | 9:30 PM ✓ | ~midnight (discovery) | ~2.5h (wrong event) | Partial |
+
+**Key findings:**
+- **MCP-Com produced the gold standard** — the only agent to identify all three milestones (9:30 PM, 2:00 AM, 3:15 AM) and calculate both intervals. GPT-4.1 excelled at arithmetic reasoning here.
+- **Web SPA failed despite having the data** — conflated the 9:30 PM thump with the 2:00 AM discovery, reporting 1h15m instead of 4.5–5.75h. The SQL timeline has both events as separate rows. This is a comprehension error, not a retrieval error.
+- **SP/PDF-GCC hallucinated 7:30 AM** — no document contains this time. Continues its pattern as the weakest agent.
+- **10/11 agents correctly identified 9:30 PM** as the thump time — only the Web SPA missed it.
+- **SP/PDF-Com and SP/DOCX-Com both distinguished 2:00 AM (departure) from 3:15 AM (admission)** — the kind of nuance attorneys need.
+- **KB/PDF-GCC consistently uses Sheriff Report's 12:47 AM** — same document discrepancy as Prompt 1. Not a hallucination, but an unreliable source.
+- **Arithmetic is a genuine weakness** — even agents that retrieved the right times sometimes rounded (MCP-GCC: "~4h" instead of 4.5h) or answered the wrong interval (KB/DOCX-GCC: thump→discovery instead of thump→hospital).

@@ -368,3 +368,54 @@
 - Retest GCC MCP agent to determine if hallucination is consistent or intermittent
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still created via CLI, not in IaC)
+
+---
+
+## Session 10 — 2026-03-06
+
+### What was done
+
+#### Copilot Studio Testing — Rounds 5-6 (Prompts 3.2 and 4)
+
+Continued systematic testing across all 11 agent configurations. Full results in `docs/copilot-studio-testing.md`.
+
+**Prompt 3.2: Crystal Price transportation barrier** (MCP agents only)
+- Tested: "Crystal Price said she couldn't comply with the treatment plan because she lacked transportation. What support did DSS actually provide?"
+- **MCP - GCC: Perfect answer** — found bus passes (monthly), 3 housing referrals, IOP transport offered and declined, compliance numbers (5/12 IOP, 2/8 parenting). Called `get_discrepancies`.
+- **Web SPA and MCP - Com: False negatives** — both concluded "no evidence of support" / "no record of support." Neither called `get_discrepancies`. Same GPT-4.1 tool selection failure as Prompt 3.
+- Confirmed pattern: GPT-4.1 never calls `get_discrepancies` on contradiction questions; GPT-4o (GCC) consistently does.
+
+**Prompt 4: Skeletal survey fractures** (all 11 agents)
+- Tested: "Did the Sheriff's Office investigation find fractures in Jaylen Webb's skeletal survey?"
+- This is a cross-document conflict: Sheriff Report says "no fractures detected on skeletal survey" (misleading — refers to no *additional* fractures); Medical Records show bilateral femur fracture + spiral humerus fracture on skeletal survey.
+- "Skeletal survey" is NOT in the SQL schema — MCP agents cannot surface the conflict.
+- **SP/PDF - Com: GOLD STANDARD** — only agent (1 of 11) to catch the cross-document conflict. Found fractures from Court Orders, quoted Sheriff Report's "no fractures" claim, explained it refers to no additional fractures. Two-source cross-reference.
+- **7 of 8 document agents repeated the Sheriff Report's incorrect "no fractures" claim** — single source, no cross-reference. An attorney would conclude no fractures existed.
+- **Web SPA (MCP): Best MCP response** — found fractures from SQL timeline, correctly distinguished medical vs. law enforcement sources. Could not surface the Sheriff Report conflict (not in SQL).
+- **MCP - Com and MCP - GCC (with case #): Honest absence** — correctly said the info isn't in the data.
+- **MCP - GCC (without case #): Fabricated a self-contradictory answer** — fixed when case # added.
+- New danger category identified: "misleading source faithfully reproduced" — document agents retrieve an inaccurate source document and present it as the definitive answer. Harder to catch than hallucination because the citation checks out.
+
+#### Testing Documentation
+- Updated `docs/copilot-studio-testing.md` with full Round 5 (Prompt 3.2) and Round 6 (Prompt 4) results
+- Added ground truth sections for Prompts 3.2 and 4
+- Updated "no single agent wins" summary table with Prompt 4 column
+- Added new danger level to the failure taxonomy: "misleading source faithfully reproduced"
+
+### Key findings (cumulative through 4 prompts)
+
+1. **SP/PDF - Com is the strongest document agent** — gold standard on Prompts 3, 4; no 8 PM error on Prompt 2; strong on Prompt 1
+2. **GPT-4.1 never calls `get_discrepancies`** — confirmed across Prompts 3, 3.2, and 4. GPT-4o (GCC) consistently does.
+3. **Every agent has a failure mode** — no unconditional winner across all prompts
+4. **MCP agents fail responsibly when data is absent** — honest "not in data" vs. document agents repeating incorrect sources
+5. **Cross-document conflict detection is extremely rare** — only 1 of 8 document agents caught the skeletal survey conflict
+
+### Decisions made
+- Prompt 4 (skeletal survey) is the strongest "you need both structured + unstructured" demo prompt
+- Testing methodology: always test with and without case number in prompt for MCP agents
+- SP/PDF - GCC status changed from "Pending GCC config" to "Active" (tested successfully)
+
+### Open items
+- Additional test prompts for next session (new prompts beyond demo-notes.md)
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)

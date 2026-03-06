@@ -1,7 +1,7 @@
 # DSS Legal Case Agent — Project Instructions
 
 ## Project Overview
-Sales demo for SC DSS General Counsel. Shows MCP-backed agent vs SharePoint-backed agent. Four-tier: SWA → Container App (MCP/Chat) → APIM → Functions → Azure SQL.
+Sales demo for DSS Office of Legal Services (generic, state-agnostic branding). Shows MCP-backed agent vs SharePoint-backed agent. Four-tier: SWA → Container App (MCP/Chat) → APIM → Functions → Azure SQL. Web UI includes a warm-up button that primes the full cold-start chain (Container App → APIM → Functions → SQL → OpenAI) before demos.
 
 ## Documentation Requirements
 After every session or when O'G asks, update these files in `docs/`:

@@ -50,7 +50,10 @@ A: 11 realistic legal documents (Markdown format) in `sharepoint-docs/` for Case
 A: Markdown is easy to create, version-control, and upload. Copilot Studio indexes Markdown from SharePoint the same way it indexes PDFs or Word docs. For the demo, the format doesn't matter — the comparison is about structured (SQL) vs. unstructured (documents) retrieval.
 
 **Q: Do the documents match the SQL data exactly?**
-A: Yes. All key statements are embedded verbatim, page references match the `page_reference` values in the seed data, dates and names are consistent, and the same facts appear in both sources. Some information is intentionally spread across multiple documents to test cross-document synthesis.
+A: Mostly yes — key statements are embedded verbatim and page references match the seed data. However, the SharePoint documents contain deliberate cross-document inconsistencies (e.g., the Sheriff Report lists different ER arrival times, nurse names, and fracture findings than the Medical Records). These inconsistencies are realistic — in real cases, different agencies often record conflicting details. They also strengthen the demo by showing that document search can surface contradictory information without flagging it, while the MCP agent returns one authoritative answer from structured data.
+
+**Q: How did the data get from Word documents into the SQL database?**
+A: It didn't — the data flow went the other direction. The SQL schema and seed data were designed first as the structured source of truth. The SharePoint documents were then written from that data as realistic narrative prose. This mirrors what "digitization" looks like: taking information that exists in unstructured documents and modeling it as structured, queryable data.
 
 **Q: Where are the comparison prompts?**
 A: `sharepoint-docs/Demo_Comparison_Prompts.md` has 19 prompts across 6 categories, each with expected MCP vs. SharePoint responses and a "why MCP wins" explanation.
@@ -59,6 +62,22 @@ A: `sharepoint-docs/Demo_Comparison_Prompts.md` has 19 prompts across 6 categori
 
 **Q: What does the web app look like?**
 A: A full internal government portal with: gold classification banner ("FOR OFFICIAL USE ONLY"), navy header with scales of justice branding, global navigation with dropdown menus (Legal Resources, Forms & Templates, Training & CLE), left sidebar with quick links/alerts/deadlines/circuit contacts, Case Browser as the main content area, and a multi-column dark footer. The AI Case Agent is a floating chat widget in the bottom-right corner, accessible via a FAB button with open/close animation and a "New Chat" reset button. Designed to look like a production internal tool, not a demo prototype.
+
+## Branding
+
+**Q: Why was South Carolina branding removed?**
+A: The site was genericized to "Department of Social Services" / "Office of Legal Services" so the demo is reusable for any state DSS audience. County names, sidebar links (SC Code of Laws, SCCIS, etc.), footer address, and legal citations were all replaced with generic equivalents. The underlying data and demo flow are unchanged.
+
+## Warm-Up
+
+**Q: How does the warm-up button work?**
+A: Clicking "Warm Up" in the header fires two real requests behind the scenes: (1) a GET to `/healthz` which wakes the Container App from cold start, then (2) a POST to `/chat` with a lightweight prompt that traverses the full pipeline — Container App, APIM, Functions, SQL, and OpenAI. A popup shows three stages (Container App, Database Connection, AI Model) with spinners, checkmarks, and per-stage timing. It auto-closes after 4 seconds.
+
+**Q: When should I use the warm-up button?**
+A: Before every demo, ideally 30-60 seconds before the audience arrives. If the Container App has been idle, cold start can take 10-20 seconds. Warming up ensures the first real query in front of the audience responds quickly.
+
+**Q: Does the warm-up button send real data?**
+A: Yes — it sends a real (minimal) chat request so the entire chain is primed, including the SQL connection pool and OpenAI model context. The warm-up prompt is lightweight and the response is discarded.
 
 ---
 

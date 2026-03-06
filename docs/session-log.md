@@ -218,32 +218,16 @@
 - **CLAUDE.md**: Added Networking section, updated SQL Deployment instructions with explicit steps
 
 #### Data Provenance Documentation
-- O'G moved source Word docs and Outlook message to `docs/` folder — 3 `.docx` legal pleadings from an active Spartanburg case (Erickson, 2023SPA00144) + 1 `.msg` email thread with attorney feedback (Kathryn Walsh screenshots, Laurel's detailed prompt/output from Thompson/Legette case)
 - Analyzed all source documents to understand how real data was used to create synthetic data
 - Confirmed: real case structure and attorney prompt patterns were used as templates; all PII was replaced with synthetic data; no real data was ever loaded into Azure SQL
 - Added `.docx`, `.msg`, `.pdf` to `.gitignore` to prevent source documents from being committed
-- Verified source files are not tracked in git
-- Added comprehensive "Data Provenance" section to `architecture.md` documenting: source material, what was synthesized vs kept, how Laurel's prompt shaped the MCP tools, and source document handling
-- Updated `CLAUDE.md` with data provenance summary
-- Updated `faqs.md` with data origin FAQ
-- Updated memory file for cross-session context
-
-### Decisions made
-- Bicep now manages the private endpoint and DNS zone resources (previously created outside of Bicep)
-- Documented that Portal Query Editor won't work as a known limitation, not a bug
-- Kept `deploy-sql.js` workflow as-is (temporarily enable public access) since it's an infrequent operation
-- Source documents with real case data excluded from git via `.gitignore` — kept locally for reference only
-- Data provenance fully documented so the synthetic-vs-real boundary is clear for anyone reviewing the project
+- Added comprehensive "Data Provenance" section to `architecture.md`
+- Updated `CLAUDE.md` with data provenance summary, `faqs.md` with data origin FAQ
 
 #### Sanitized Source Word Documents
 - Created `docs/sanitize-docs.py` — Python script using python-docx to find/replace all real PII with synthetic data
-- Replacement mapping: Erickson→Webb/Holloway, Lydia→Jaylen, Walela McDaniel→Renee Dawson, Kathryn Walsh→Jennifer Torres, Tim Edwards→David Chen, Shawn Campbell→Rachel Simmons, Jamia Foster→Karen Milford, plus case numbers and dates
 - Ran script on all 6 Word documents — 163 paragraphs updated across all files
-- Renamed files from `2023SPA00144-*` to `2024SPA00892-*`
 - Verification: zero real names found in any document, all synthetic names present
-- Updated architecture.md with full sanitization mapping table and handling notes
-- Updated CLAUDE.md data provenance section with sanitization status
-- The `.msg` email still contains real names/screenshots — cannot be sanitized with python-docx, kept local only
 
 ### Decisions made
 - Bicep now manages the private endpoint and DNS zone resources (previously created outside of Bicep)
@@ -252,7 +236,42 @@
 - Source documents with real case data excluded from git via `.gitignore` — kept locally for reference only
 - Data provenance fully documented so the synthetic-vs-real boundary is clear for anyone reviewing the project
 - Word docs sanitized in-place rather than creating copies — originals no longer needed since all data is now synthetic
-- Sanitize script kept in repo (`docs/sanitize-docs.py`) in case documents need to be re-processed
+
+---
+
+## Session 7 — 2026-03-05
+
+### What was done
+
+#### Demo Preparation
+- Created `docs/demo-notes.md` with:
+  - Data design decision explanation: structured SQL data was created first, SharePoint documents were written from that data (not extracted from docs)
+  - Audience framing script: "This is what digitization looks like"
+  - Key demo sections summary table with best "wow" prompts
+  - Recommended demo flow (factual retrieval → discrepancies → scalability → precision)
+  - 5 discrepancy questions grounded in actual seed data and SharePoint documents
+  - Recommended question order for maximum demo impact
+
+#### Removed All State-Specific Branding
+- Site is now generic "Department of Social Services" — no South Carolina references
+- "Office of General Counsel" changed to "Office of Legal Services"
+- SC county names replaced with generic region names throughout the UI
+- SC-specific links in sidebar genericized, footer address/phone genericized
+- System prompt in `mcp-server/src/chat/completions.ts` updated
+- All 50 plaintiff entries in `web/js/cases.js` changed to "Department of Social Services"
+
+#### Warm-Up Button and Popup
+- Added "Warm Up" button in the header bar
+- Opens a status popup with three animated stages: Container App, Database Connection, AI Model
+- Fires a real `/healthz` request then a real `/chat` request to prime the full pipeline
+- Shows spinners that transition to checkmarks with per-stage timing
+- Auto-closes after 4 seconds on success — one-click pipeline primer for demos
+
+### Decisions made
+- Genericized branding to make the demo reusable across any state DSS — not tied to SC
+- Warm-up uses real requests (not synthetic pings) so the entire cold-start chain is primed
+- Auto-close on the warm-up popup keeps the flow moving without requiring a dismiss click
+- Demo flow should start with easy contradictions and build to cross-document bombshells
 
 ### Open items
 - Upload documents to SharePoint and create Copilot Studio agent grounded in them

@@ -16,7 +16,7 @@ import type {
 const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT || "";
 const AZURE_OPENAI_DEPLOYMENT = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4.1";
 
-const SYSTEM_PROMPT = `You are a legal case analysis assistant for the South Carolina Department of Social Services (DSS) General Counsel team. You have access to structured case data through specialized tools.
+const SYSTEM_PROMPT = `You are a legal case analysis assistant for the Department of Social Services (DSS) Office of Legal Services. You have access to structured case data through specialized tools.
 
 When answering questions:
 - Always cite source documents and page references when available

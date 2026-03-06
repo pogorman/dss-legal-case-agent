@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SC DSS | Legal Case Intelligence</title>
+  <title>DSS | Legal Case Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -12,7 +12,7 @@
 <body>
   <!-- Security Classification Banner -->
   <div class="classification-banner">
-    FOR OFFICIAL USE ONLY &mdash; SC DSS INTERNAL SYSTEM &mdash; AUTHORIZED USERS ONLY
+    FOR OFFICIAL USE ONLY &mdash; DSS INTERNAL SYSTEM &mdash; AUTHORIZED USERS ONLY
   </div>
 
   <!-- Header -->
@@ -36,12 +36,17 @@
         </svg>
       </div>
       <div class="header-text">
-        <div class="header-title">Office of General Counsel</div>
-        <div class="header-subtitle">South Carolina Department of Social Services</div>
+        <div class="header-title">Office of Legal Services</div>
+        <div class="header-subtitle">Department of Social Services</div>
       </div>
     </div>
     <div class="header-right">
       <div class="header-user" id="userEmail"></div>
+      <button class="warmup-btn" id="warmupBtn" title="Wake up backend services">
+        <svg viewBox="0 0 20 20" fill="currentColor" class="warmup-icon"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+        <span class="warmup-label">Warm Up</span>
+        <span class="warmup-status" id="warmupStatus"></span>
+      </button>
       <div class="header-env">PRODUCTION</div>
     </div>
   </header>
@@ -65,14 +70,14 @@
             <svg viewBox="0 0 20 20" fill="currentColor" class="nav-chevron"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
           </a>
           <div class="dropdown-menu">
-            <a href="#" onclick="return false;">SC Code of Laws &mdash; Title 63 (Children)</a>
-            <a href="#" onclick="return false;">SC Family Court Rules</a>
+            <a href="#" onclick="return false;">State Code &mdash; Title 63 (Children)</a>
+            <a href="#" onclick="return false;">Family Court Rules</a>
             <a href="#" onclick="return false;">DSS Policy &amp; Procedure Manual</a>
             <a href="#" onclick="return false;">Federal CAPTA Guidelines</a>
             <div class="dropdown-divider"></div>
-            <a href="#" onclick="return false;">Westlaw (SC DSS License)</a>
+            <a href="#" onclick="return false;">Westlaw (DSS License)</a>
             <a href="#" onclick="return false;">LexisNexis</a>
-            <a href="#" onclick="return false;">SC Judicial Department</a>
+            <a href="#" onclick="return false;">State Judicial Department</a>
           </div>
         </div>
         <div class="nav-dropdown">
@@ -100,7 +105,7 @@
           </a>
           <div class="dropdown-menu">
             <a href="#" onclick="return false;">CLE Credit Tracker</a>
-            <a href="#" onclick="return false;">SC Bar CLE Requirements</a>
+            <a href="#" onclick="return false;">State Bar CLE Requirements</a>
             <a href="#" onclick="return false;">New Attorney Orientation</a>
             <div class="dropdown-divider"></div>
             <a href="#" onclick="return false;">Child Welfare Law Updates (2026)</a>
@@ -128,11 +133,11 @@
       <div class="sidebar-section">
         <h3 class="sidebar-heading">Quick Links</h3>
         <ul class="sidebar-links">
-          <li><a href="#" onclick="return false;">SCCIS Case Management</a></li>
-          <li><a href="#" onclick="return false;">SC Judicial Odyssey</a></li>
+          <li><a href="#" onclick="return false;">Case Management System</a></li>
+          <li><a href="#" onclick="return false;">Judicial Portal</a></li>
           <li><a href="#" onclick="return false;">LegalServer Portal</a></li>
           <li><a href="#" onclick="return false;">CAPSS Reporting</a></li>
-          <li><a href="#" onclick="return false;">SC Courts eFiling</a></li>
+          <li><a href="#" onclick="return false;">Courts eFiling</a></li>
           <li><a href="#" onclick="return false;">DSS Policy Manual</a></li>
         </ul>
       </div>
@@ -146,7 +151,7 @@
         </div>
         <div class="sidebar-alert alert-info">
           <div class="alert-date">Feb 10, 2026</div>
-          <div class="alert-text">SC Supreme Court Order 2026-02: Updated Family Court bench book available on Judicial Dept. site.</div>
+          <div class="alert-text">Supreme Court Order 2026-02: Updated Family Court bench book available on Judicial Dept. site.</div>
         </div>
         <div class="sidebar-alert alert-info">
           <div class="alert-date">Jan 28, 2026</div>
@@ -168,7 +173,7 @@
           </li>
           <li>
             <span class="deadline-date">Mar 15</span>
-            <span class="deadline-text">TPR best practices memo due to GC</span>
+            <span class="deadline-text">TPR best practices memo due to OLS</span>
           </li>
           <li>
             <span class="deadline-date">Apr 1</span>
@@ -181,12 +186,12 @@
       <div class="sidebar-section">
         <h3 class="sidebar-heading">Circuit Contacts</h3>
         <ul class="sidebar-contacts">
-          <li><strong>1st Circuit</strong> <span>Orangeburg, Dorchester, Calhoun</span></li>
-          <li><strong>2nd Circuit</strong> <span>Aiken, Bamberg, Barnwell</span></li>
-          <li><strong>5th Circuit</strong> <span>Richland, Kershaw</span></li>
-          <li><strong>7th Circuit</strong> <span>Spartanburg, Cherokee</span></li>
-          <li><strong>9th Circuit</strong> <span>Charleston, Berkeley</span></li>
-          <li><strong>13th Circuit</strong> <span>Greenville, Pickens</span></li>
+          <li><strong>1st Circuit</strong> <span>Central Region</span></li>
+          <li><strong>2nd Circuit</strong> <span>Southern Region</span></li>
+          <li><strong>5th Circuit</strong> <span>Capital Region</span></li>
+          <li><strong>7th Circuit</strong> <span>Upstate Region</span></li>
+          <li><strong>9th Circuit</strong> <span>Coastal Region</span></li>
+          <li><strong>13th Circuit</strong> <span>Piedmont Region</span></li>
         </ul>
         <a href="#" class="sidebar-more" onclick="return false;">View all 16 circuits &rarr;</a>
       </div>
@@ -217,17 +222,17 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-col">
-        <h4>Office of General Counsel</h4>
-        <p>SC Department of Social Services</p>
-        <p>1535 Confederate Avenue</p>
-        <p>Columbia, SC 29201</p>
-        <p class="footer-phone">(803) 898-7601</p>
+        <h4>Office of Legal Services</h4>
+        <p>Department of Social Services</p>
+        <p>1535 Government Center Drive</p>
+        <p>State Capital, 00000</p>
+        <p class="footer-phone">(555) 898-7601</p>
       </div>
       <div class="footer-col">
         <h4>Internal Systems</h4>
         <ul>
-          <li><a href="#" onclick="return false;">SCCIS Case Management</a></li>
-          <li><a href="#" onclick="return false;">SC Courts eFiling</a></li>
+          <li><a href="#" onclick="return false;">Case Management System</a></li>
+          <li><a href="#" onclick="return false;">Courts eFiling</a></li>
           <li><a href="#" onclick="return false;">DSS Employee Portal</a></li>
           <li><a href="#" onclick="return false;">IT Service Desk</a></li>
         </ul>
@@ -235,7 +240,7 @@
       <div class="footer-col">
         <h4>Legal References</h4>
         <ul>
-          <li><a href="#" onclick="return false;">SC Code Title 63</a></li>
+          <li><a href="#" onclick="return false;">State Code Title 63</a></li>
           <li><a href="#" onclick="return false;">Family Court Rules</a></li>
           <li><a href="#" onclick="return false;">DSS Policy Manual</a></li>
           <li><a href="#" onclick="return false;">Federal CAPTA</a></li>
@@ -244,7 +249,7 @@
       <div class="footer-col">
         <h4>Administration</h4>
         <ul>
-          <li><a href="#" onclick="return false;">Contact OGC</a></li>
+          <li><a href="#" onclick="return false;">Contact OLS</a></li>
           <li><a href="#" onclick="return false;">Report a Security Issue</a></li>
           <li><a href="#" onclick="return false;">Accessibility</a></li>
           <li><a href="#" onclick="return false;">Privacy Policy</a></li>
@@ -253,11 +258,43 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-inner">
-        <span>&copy; 2026 South Carolina Department of Social Services. All rights reserved.</span>
-        <span>Internal Use Only &bull; Contains Confidential Case Information &bull; S.C. Code Ann. &sect; 63-7-1990</span>
+        <span>&copy; 2026 Department of Social Services. All rights reserved.</span>
+        <span>Internal Use Only &bull; Contains Confidential Case Information &bull; State Code &sect; 63-7-1990</span>
       </div>
     </div>
   </footer>
+
+  <!-- Warm-Up Status Popup -->
+  <div class="warmup-popup" id="warmupPopup">
+    <div class="warmup-popup-header">
+      <svg viewBox="0 0 20 20" fill="currentColor" class="warmup-popup-icon"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+      <span>Warming Up Services</span>
+    </div>
+    <div class="warmup-steps">
+      <div class="warmup-step" id="stepContainer">
+        <div class="step-indicator" id="stepContainerInd"></div>
+        <div class="step-content">
+          <div class="step-label">Container App</div>
+          <div class="step-detail" id="stepContainerDetail">Waiting...</div>
+        </div>
+      </div>
+      <div class="warmup-step" id="stepDatabase">
+        <div class="step-indicator" id="stepDatabaseInd"></div>
+        <div class="step-content">
+          <div class="step-label">Database Connection</div>
+          <div class="step-detail" id="stepDatabaseDetail">Waiting...</div>
+        </div>
+      </div>
+      <div class="warmup-step" id="stepAI">
+        <div class="step-indicator" id="stepAIInd"></div>
+        <div class="step-content">
+          <div class="step-label">AI Model (GPT-4.1)</div>
+          <div class="step-detail" id="stepAIDetail">Waiting...</div>
+        </div>
+      </div>
+    </div>
+    <div class="warmup-footer" id="warmupFooter"></div>
+  </div>
 
   <!-- Floating Chat Widget -->
   <button class="chat-fab" id="chatFab" title="Open AI Case Agent">

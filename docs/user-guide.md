@@ -6,6 +6,23 @@
 2. Sign in with your Azure AD credentials
 3. You'll land on the **Case Browser** — the main portal page
 
+## Warm-Up (Before Demos)
+
+Before starting a demo, click the **Warm Up** button in the header bar. This primes the entire backend pipeline so the first real query responds quickly.
+
+A popup appears showing three stages:
+1. **Container App** — Wakes the Container App from cold start
+2. **Database Connection** — Establishes the SQL connection pool
+3. **AI Model** — Loads the OpenAI model context
+
+Each stage shows a spinner that transitions to a checkmark with timing. The popup auto-closes after 4 seconds. No typing required — one click and wait.
+
+**Tip:** Run this 30-60 seconds before your audience arrives. If the Container App has been idle, the full warm-up takes 10-20 seconds.
+
+## State-Generic Branding
+
+The site uses generic "Department of Social Services" and "Office of Legal Services" branding with no state-specific references. County names, links, addresses, and legal citations are all genericized. This makes the demo reusable for any state DSS audience.
+
 ## Agent Chat
 
 The AI Case Agent is accessed via the floating chat button in the bottom-right corner of the screen. Click the navy circle with the chat icon to open the agent widget.
@@ -61,12 +78,13 @@ The Case Browser is the main content area, always visible behind the chat widget
 
 ## Tips for Presenters
 
-1. **Start with Case Browser** (it's the default view) to establish that structured data exists
-2. **Click the chat button** in the bottom-right corner to open the agent
-3. **Run the demo prompt** and point out tool badges showing which queries ran
-4. **Run a follow-up** — prove consistency by asking for the same data in a different way
-5. **Click "New Chat"** to reset between demo scenarios
-6. **Compare with SharePoint results** (shown separately) — the contrast sells itself
+1. **Click "Warm Up"** in the header to prime the backend (do this before the audience arrives)
+2. **Start with Case Browser** (it's the default view) to establish that structured data exists
+3. **Click the chat button** in the bottom-right corner to open the agent
+4. **Run the demo prompt** and point out tool badges showing which queries ran
+5. **Run a follow-up** — prove consistency by asking for the same data in a different way
+6. **Click "New Chat"** to reset between demo scenarios
+7. **Compare with SharePoint results** (shown separately) — the contrast sells itself
 
 ## SharePoint Comparison Demo
 
@@ -140,7 +158,7 @@ The `deploy-sql.js` script runs from your local machine, so it requires temporar
 
 ## Available Cases
 
-The system contains **50 synthetic cases** across all 16 SC judicial circuits.
+The system contains **50 synthetic cases** across multiple judicial circuits.
 
 ### Primary Demo Cases (rich detail)
 
@@ -159,7 +177,7 @@ Browse all 50 cases in the **Case Browser** tab. Case types include:
 - Guardianship
 - Kinship Placement
 
-Counties span the entire state, from Abbeville to York.
+Cases span multiple regions and counties.
 
 ---
 

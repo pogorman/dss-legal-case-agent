@@ -193,9 +193,9 @@ All data in this system is **synthetic**. No real PII or case data was ever load
 
 ### Source Material
 
-SC DSS Office of General Counsel provided reference materials through Arya Hekmat (Director, Network Operations & Data Center Services, SC DSS) in January–February 2026:
+DSS Office of Legal Services provided reference materials in January–February 2026:
 
-1. **6 legal pleading templates** from an active Spartanburg County case — complaint for ex parte removal, summons/notice documents, permanency planning orders (reunification and TPR paths), TPR summons/complaint, and order of dismissal. These are heavily templated documents with `[CHOOSE ONE]` placeholders and boilerplate statutory language. They established the **case lifecycle structure** (complaint → removal → permanency planning → TPR → dismissal).
+1. **6 legal pleading templates** from an active case — complaint for ex parte removal, summons/notice documents, permanency planning orders (reunification and TPR paths), TPR summons/complaint, and order of dismissal. These are heavily templated documents with `[CHOOSE ONE]` placeholders and boilerplate statutory language. They established the **case lifecycle structure** (complaint → removal → permanency planning → TPR → dismissal).
 
 2. **Attorney feedback** from two DSS attorneys:
    - **Kathryn Walsh** (plaintiff attorney): Screenshots of her initial Copilot test experience
@@ -214,10 +214,9 @@ SC DSS Office of General Counsel provided reference materials through Arya Hekma
 
 ### What Was Kept (public, non-PII)
 
-- Spartanburg County / 7th Judicial Circuit geography (Case 1)
-- SC Code statutory references (public law)
 - General case type structure (CPS, TPR, etc.)
 - Court procedural flow (hearings, orders, filings)
+- Statutory references (public law)
 
 ### The "Money Prompt"
 
@@ -231,7 +230,7 @@ This directly shaped the 5 MCP tools (list_cases, get_case_summary, get_timeline
 
 ### Source Document Sanitization
 
-The original Word documents contained real case data (Erickson family, case 2023SPA00144). These were sanitized using `docs/sanitize-docs.py`, which replaced all real PII with synthetic data:
+The original Word documents contained real case data. These were sanitized using `docs/sanitize-docs.py`, which replaced all real PII with synthetic data:
 
 | Real | Synthetic |
 |---|---|
@@ -246,7 +245,7 @@ The original Word documents contained real case data (Erickson family, case 2023
 | 2023SPA00144 | 2024SPA00892 |
 | 2025-DR-42-1286 | 2024-DR-42-0892 |
 
-Files were renamed from `2023SPA00144-*` to `2024SPA00892-*`. Sanitization verified: zero real names remain in any document.
+Sanitization verified: zero real names remain in any document.
 
 ### Source Document Handling
 
@@ -255,6 +254,15 @@ Files were renamed from `2023SPA00144-*` to `2024SPA00892-*`. Sanitization verif
 - `docs/sanitize-docs.py` can be re-run if documents are re-obtained from DSS
 - No real PII was ever loaded into Azure SQL — only synthetic data from `seed.sql` / `seed-expanded.sql`
 - The `sharepoint-docs/` folder contains entirely synthetic documents written from scratch
+
+## Warm-Up Feature
+
+The web UI includes a "Warm Up" button in the header that primes the entire cold-start chain before a demo. It runs two sequential requests:
+
+1. **GET /healthz** — Wakes the Container App (which may be scaled to zero)
+2. **POST /chat** — Sends a lightweight chat request that traverses the full pipeline: Container App → APIM → Functions → Azure SQL (warms DB connection pool) → Azure OpenAI (loads model context)
+
+The UI shows a three-stage progress popup (Container App, Database Connection, AI Model) with spinners, checkmarks, and per-stage timing. Auto-closes after 4 seconds on success.
 
 ## Design Decisions
 

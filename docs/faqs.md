@@ -85,6 +85,17 @@ A: Before every demo, ideally 30-60 seconds before the audience arrives. If the 
 **Q: Does the warm-up button send real data?**
 A: Yes — it sends a real (minimal) chat request so the entire chain is primed, including the SQL connection pool and OpenAI model context. The warm-up prompt is lightweight and the response is discarded.
 
+## Executive Summary PDF
+
+**Q: Why is the PDF called "Copilot Studio Evaluation" and not "AI Agent Evaluation"?**
+A: The evaluation is specifically testing Copilot Studio agent configurations — MCP-backed, SharePoint-backed, and knowledge-base-backed. The PDF is framed as a Copilot Studio evaluation across multiple government use cases, not a generic AI comparison.
+
+**Q: What are the two use cases in the PDF?**
+A: Use Case 1 is Legal Case Analysis (DSS Office of Legal Services, 50 synthetic cases, 11 agents, 10 prompts — complete). Use Case 2 is Investigative Analytics (Philly Poverty Profiteering, 34M rows of public records, same agent configurations — testing planned).
+
+**Q: Why one PDF instead of separate reports per use case?**
+A: A single authoritative document makes it easier to compare findings across use cases. As Use Case 2 results come in, they'll be added to the same PDF, strengthening (or challenging) Use Case 1's conclusions.
+
 ---
 
 *This file is updated when clarification questions arise during development sessions.*

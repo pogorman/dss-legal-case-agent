@@ -37,7 +37,7 @@ class ExecutivePDF(FPDF):
             return  # cover page — no header
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, "DSS Office of Legal Services  |  AI Agent Evaluation", align="L")
+        self.cell(0, 6, "DSS Office of Legal Services  |  Copilot Studio Evaluation", align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -175,12 +175,12 @@ def build_pdf():
     pdf.set_y(35)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "AI Agent Evaluation", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Copilot Studio Evaluation", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(180, 200, 220)
     pdf.cell(0, 10, "Structured Data vs. Document-Backed Agents", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 8, "for Legal Case Analysis", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 8, "Across Government Use Cases", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # Divider line
     pdf.set_y(82)
@@ -200,24 +200,23 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
     pdf.multi_cell(0, 6.5,
-        "This report presents the findings from a structured evaluation of 11 AI agent "
-        "configurations tested across 10 attorney-style prompts. The goal: determine whether "
-        "agents backed by structured databases or unstructured legal documents deliver more "
-        "reliable answers for child welfare case analysis.",
+        "This report presents findings from a structured evaluation of Copilot Studio agents "
+        "across multiple government use cases. Each use case tests the same core question: do agents "
+        "backed by structured databases or unstructured documents deliver more reliable answers? "
+        "Use Case 1 (Legal Case Analysis) is complete. Use Case 2 (Investigative Analytics) is planned.",
         align="C"
     )
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "110 total test runs  |  11 agents  |  10 prompt categories", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "110 total test runs  |  11 Copilot Studio agents  |  10 prompt categories", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("Helvetica", "B", 9)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5.5,
-        "Test data: 50 synthetic cases, 275 people, 325 timeline events, 338 witness statements, "
-        "and 150 documented discrepancies. All data is fictional; no real case information was used.",
+        "Use Case 1: Legal Case Analysis  |  Use Case 2: Investigative Analytics (planned)",
         align="C"
     )
 
@@ -228,7 +227,8 @@ def build_pdf():
     pdf.section_title("The Question")
 
     pdf.body_text(
-        "When attorneys need answers from case files, which approach delivers more reliable results?"
+        "When government workers need answers from case data, which Copilot Studio approach "
+        "delivers more reliable results?"
     )
     pdf.bullet(
         "A structured-data agent that queries a normalized database through purpose-built tools "
@@ -237,19 +237,45 @@ def build_pdf():
     )
     pdf.bullet(
         "A document-backed agent that retrieves answers from PDFs and Word files stored in "
-        "SharePoint or uploaded as a knowledge base (Copilot Studio approach)",
+        "SharePoint or uploaded as a knowledge base",
         bold_lead="Unstructured Documents:"
     )
     pdf.ln(2)
     pdf.body_text(
-        "We tested both approaches side-by-side using the same underlying case information, "
-        "the same attorney-style questions, and scored every response on accuracy, completeness, "
-        "and safety."
+        "We are testing both approaches side-by-side across two government use cases, scoring "
+        "every response on accuracy, completeness, and safety."
+    )
+
+    pdf.subsection_title("Use Cases")
+    pdf.bullet(
+        "11 Copilot Studio agents tested across 10 attorney-style prompts (110 test runs). "
+        "50 synthetic child welfare cases, 275 people, 325 timeline events, 338 witness statements, "
+        "150 discrepancies. All data is fictional.",
+        bold_lead="Use Case 1 - Legal Case Analysis (complete):"
+    )
+    pdf.bullet(
+        "Investigative analytics over 34 million rows of Philadelphia public records -- property "
+        "ownership, code violations, demolitions, tax assessments, and real estate transfers. "
+        "Same MCP/SQL architecture, same Copilot Studio agent configurations. Testing planned.",
+        bold_lead="Use Case 2 - Investigative Analytics (planned):"
     )
 
     # ══════════════════════════════════════════════════════════════════
-    # KEY FINDINGS
+    # USE CASE 1: LEGAL CASE ANALYSIS
     # ══════════════════════════════════════════════════════════════════
+    pdf.ln(4)
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 11, "Use Case 1: Legal Case Analysis", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_draw_color(*NAVY)
+    pdf.set_line_width(0.8)
+    pdf.line(pdf.l_margin, pdf.get_y(), pdf.w - pdf.r_margin, pdf.get_y())
+    pdf.set_line_width(0.2)
+    pdf.ln(3)
+    pdf.set_font("Helvetica", "I", 9.5)
+    pdf.set_text_color(*MED)
+    pdf.cell(0, 6, "DSS Office of Legal Services  |  11 agents  |  10 prompts  |  110 test runs", new_x="LMARGIN", new_y="NEXT")
+
     pdf.section_title("Key Findings")
 
     # Finding 1
@@ -265,7 +291,7 @@ def build_pdf():
     # Finding 2
     pdf.subsection_title("2. Every agent has a failure mode")
     pdf.body_text(
-        "No single agent configuration was correct on every question. Each approach has blind "
+        "No single Copilot Studio configuration was correct on every question. Each approach has blind "
         "spots that could mislead an attorney if used without review:"
     )
 
@@ -316,7 +342,7 @@ def build_pdf():
     # Finding 3
     pdf.subsection_title("3. The AI model matters as much as the architecture")
     pdf.body_text(
-        "The evaluation revealed a significant split between the two underlying AI models. "
+        "The evaluation revealed a significant split between the two underlying models used by Copilot Studio. "
         "Government Cloud (GCC) environments use GPT-4o, while Commercial environments use GPT-4.1. "
         "Neither can be changed by the agency."
     )
@@ -384,8 +410,8 @@ def build_pdf():
 
     pdf.body_text(
         "Each of the 10 prompts tests a different type of question attorneys commonly ask. "
-        "The table below summarizes how the two architecture groups performed and the practical "
-        "takeaway for each question type."
+        "The table below summarizes how Copilot Studio's two architecture groups performed and "
+        "the practical takeaway for each question type."
     )
 
     glance_headers = ["#", "Question Type", "Structured\nAgents", "Best Doc\nAgent", "Worst Doc\nAgent", "Key Takeaway"]
@@ -433,7 +459,7 @@ def build_pdf():
     pdf.section_title("Agent Scorecard")
 
     pdf.body_text(
-        "Each agent was graded on every prompt: Pass (accurate and useful), "
+        "Each Copilot Studio agent was graded on every prompt: Pass (accurate and useful), "
         "Partial (correct core facts but incomplete or minor errors), "
         "Fail (wrong answer, dangerous error, or critical omission), or "
         "N/A (data not available and agent was transparent about it)."
@@ -529,14 +555,60 @@ def build_pdf():
     )
 
     # ══════════════════════════════════════════════════════════════════
+    # USE CASE 2: INVESTIGATIVE ANALYTICS
+    # ══════════════════════════════════════════════════════════════════
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 11, "Use Case 2: Investigative Analytics", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_draw_color(*NAVY)
+    pdf.set_line_width(0.8)
+    pdf.line(pdf.l_margin, pdf.get_y(), pdf.w - pdf.r_margin, pdf.get_y())
+    pdf.set_line_width(0.2)
+    pdf.ln(3)
+    pdf.set_font("Helvetica", "I", 9.5)
+    pdf.set_text_color(*MED)
+    pdf.cell(0, 6, "Philly Poverty Profiteering  |  Testing Planned", new_x="LMARGIN", new_y="NEXT")
+
+    pdf.ln(6)
+    pdf.body_text(
+        "The second use case evaluates the same Copilot Studio agent configurations against a "
+        "large-scale investigative analytics workload: 34 million rows of Philadelphia public "
+        "records spanning property ownership, code violations, demolitions, business licenses, "
+        "tax assessments, and real estate transfers."
+    )
+    pdf.body_text(
+        "The underlying system uses the same architecture pattern -- MCP server backed by Azure "
+        "Functions and Azure SQL -- with 14 investigative tools. Copilot Studio agents will be "
+        "tested using the same methodology: structured data (MCP/SQL) vs. document-backed "
+        "(SharePoint and knowledge base), scored on accuracy, completeness, and safety."
+    )
+    pdf.body_text(
+        "This use case will stress-test Copilot Studio's ability to handle aggregate queries "
+        "across millions of records, cross-dataset pattern detection, and complex multi-step "
+        "investigative reasoning -- capabilities that go well beyond single-case retrieval."
+    )
+
+    pdf.ln(4)
+    pdf.set_fill_color(*GRAY_BG)
+    pdf.set_draw_color(*ACCENT)
+    box_y = pdf.get_y()
+    pdf.rect(pdf.l_margin, box_y, pdf.w - pdf.l_margin - pdf.r_margin, 18, "FD")
+    pdf.set_xy(pdf.l_margin + 6, box_y + 5)
+    pdf.set_font("Helvetica", "I", 10)
+    pdf.set_text_color(*ACCENT)
+    pdf.cell(0, 7, "Results will be added to this report after testing is complete.")
+    pdf.set_y(box_y + 24)
+
+    # ══════════════════════════════════════════════════════════════════
     # RECOMMENDATION
     # ══════════════════════════════════════════════════════════════════
     pdf.add_page()
     pdf.section_title("Recommendation")
 
     pdf.body_text(
-        "Neither approach alone is sufficient for attorney-grade reliability. "
-        "The strongest architecture layers both:"
+        "Based on Use Case 1 results, neither Copilot Studio approach alone is sufficient for "
+        "production-grade reliability. The strongest configuration layers both:"
     )
 
     pdf.bullet(
@@ -554,9 +626,9 @@ def build_pdf():
     )
     pdf.ln(1)
     pdf.bullet(
-        "No agent configuration was correct on every prompt. The value of AI is speed and "
-        "coverage, not infallibility. The right question is not \"can I trust the agent?\" but "
-        "\"does the agent surface enough for me to make a better decision, faster?\"",
+        "No Copilot Studio configuration was correct on every prompt. The value of Copilot Studio "
+        "is speed and coverage, not infallibility. The right question is not \"can I trust the agent?\" "
+        "but \"does it surface enough for me to make a better decision, faster?\"",
         bold_lead="Human review remains essential."
     )
 
@@ -575,9 +647,10 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*DARK)
     pdf.multi_cell(pdf.w - pdf.l_margin - pdf.r_margin - 12, 6,
-        "Structured data delivers the precision attorneys need for day-to-day case work. "
-        "Document grounding adds the narrative richness required for legal filings. "
-        "Together, they cover each other's blind spots. Neither alone is safe enough."
+        "Structured data delivers precision for day-to-day queries. "
+        "Document grounding adds narrative richness for complex analysis. "
+        "Together, they cover each other's blind spots. Neither alone is safe enough. "
+        "Use Case 2 will test whether this finding holds at scale."
     )
 
     # ══════════════════════════════════════════════════════════════════

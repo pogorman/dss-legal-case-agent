@@ -685,3 +685,32 @@ Ground truth: 9:30 PM thump → 2:00 AM discovery → 3:15 AM ER admission. Corr
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
 - Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)
+
+---
+
+## Session 14 — 2026-03-06
+
+### What was done
+
+#### Executive Summary PDF — Copilot Studio Reframing
+- Rebranded PDF from "AI Agent Evaluation" to "Copilot Studio Evaluation" throughout (title, header, cover, body text)
+- Broadened scope from legal-only to multi-use-case framework:
+  - Cover subtitle: "Across Government Use Cases"
+  - New "Use Cases" subsection on The Question page listing both use cases
+  - New "Use Case 1: Legal Case Analysis" section header before existing findings
+  - New "Use Case 2: Investigative Analytics" page describing Philly Poverty Profiteering workload (34M rows, 14 tools), marked as "testing planned"
+  - Recommendation now anchored to "Based on Use Case 1 results" with forward-looking close: "Use Case 2 will test whether this finding holds at scale"
+- Fixed em dash encoding errors (Helvetica doesn't support Unicode em dashes)
+
+### Decisions made
+- Single authoritative PDF that grows with each use case (not separate PDFs per use case)
+- Philly Poverty Profiteering is "Use Case 2: Investigative Analytics" — same MCP/SQL architecture, same Copilot Studio agent configs, much larger dataset
+- PDF structure supports adding Use Case 2 results later without restructuring
+
+### Open items
+- **Run all 24 redemption retests** (original + revised prompts for each)
+- **Run Use Case 2 testing** (Philly Poverty Profiteering across same Copilot Studio agent configs)
+- Update executive summary PDF after both sets of results
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)

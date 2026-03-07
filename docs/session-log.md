@@ -714,3 +714,42 @@ Ground truth: 9:30 PM thump → 2:00 AM discovery → 3:15 AM ER admission. Corr
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
 - Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)
+
+---
+
+## Session 15 — 2026-03-06
+
+### What was done
+
+#### PII Scrub — Real Names Removed from Git
+- Discovered real names from the original SC DSS case (parties, attorneys, caseworker, GAL, child with DOB) committed in 5 files
+- Scrubbed all real names from: `docs/architecture.md`, `scripts/sanitize-docs.py`, `CLAUDE.md`, `docs/demo-guide.md`, `docs/faqs.md`
+- `sanitize-docs.py` REPLACEMENTS dict emptied — mapping is now local-only (not version controlled)
+- Architecture doc mapping table replaced with generic descriptions
+- Verified zero real names remain in any committed file via grep
+- Real names still exist in git history — BFG Repo Cleaner not yet run (repo is private)
+
+#### Executive Summary PDF — Abbreviation Removal
+- Full rewrite of `scripts/generate-executive-pdf.py` to eliminate all abbreviations for C-suite readability
+- Key renames: MCP → Structured Data, GCC → Government Cloud, KB → Uploaded, SP → SharePoint, Com → Commercial, Pa → Partial, ER → Emergency Room, DB → database, DOCX → Word
+- Dropped Model column from scorecard (redundant with environment label + footnote)
+- Added Gov Cloud footnote explaining GPT-4o vs GPT-4.1 mapping
+
+#### Executive Summary PDF — Prompts Tested Page
+- Added full "Prompts Tested" table (new page) between scorecard and overall rankings
+- Shows all 10 verbatim questions asked + "What It Tests" column
+- PDF now 10 pages (was 9)
+
+### Decisions made
+- Real→synthetic name mapping is local-only from now on — sanitize script requires manual population
+- "Knowledge Base" → "Uploaded" in executive PDF (plainer English for non-technical audience)
+- Model column dropped from scorecard — environment label + footnote is sufficient
+
+### Open items
+- **Run all 24 redemption retests** (original + revised prompts for each)
+- **Run Use Case 2 testing** (Philly Poverty Profiteering across same Copilot Studio agent configs)
+- **Consider BFG Repo Cleaner** to purge real names from git history
+- Update executive summary PDF after redemption results
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)

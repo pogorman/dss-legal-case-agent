@@ -85,6 +85,14 @@ A: Before every demo, ideally 30-60 seconds before the audience arrives. If the 
 **Q: Does the warm-up button send real data?**
 A: Yes — it sends a real (minimal) chat request so the entire chain is primed, including the SQL connection pool and OpenAI model context. The warm-up prompt is lightweight and the response is discarded.
 
+## PII and Data Provenance
+
+**Q: Are there any real names in the codebase?**
+A: No. All real names from the original case were scrubbed in Session 15. The sanitize script (`scripts/sanitize-docs.py`) no longer contains the real→synthetic mapping — it must be populated from a local-only reference file before running. The architecture doc describes the mapping generically without revealing real names.
+
+**Q: Are real names in the git history?**
+A: Yes — commits prior to the scrub still contain the mapping table. The repo is private. A full purge would require BFG Repo Cleaner or `git filter-branch` with a force push.
+
 ## Executive Summary PDF
 
 **Q: Why is the PDF called "Copilot Studio Evaluation" and not "AI Agent Evaluation"?**
@@ -95,6 +103,9 @@ A: Use Case 1 is Legal Case Analysis (DSS Office of Legal Services, 50 synthetic
 
 **Q: Why one PDF instead of separate reports per use case?**
 A: A single authoritative document makes it easier to compare findings across use cases. As Use Case 2 results come in, they'll be added to the same PDF, strengthening (or challenging) Use Case 1's conclusions.
+
+**Q: Why does the PDF say "Uploaded PDF" instead of "Knowledge Base PDF"?**
+A: "Knowledge base" is a technical term. "Uploaded files" is plain English that any executive understands. The PDF avoids all abbreviations (no MCP, GCC, SP, KB, Com, Pa, ER, DB, DOCX) for C-suite readability.
 
 ---
 

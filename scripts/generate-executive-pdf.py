@@ -514,25 +514,109 @@ def build_pdf():
     pdf.write(5, " = Data unavailable (honest)")
     pdf.ln(8)
 
-    # Prompt legend
-    pdf.set_font("Helvetica", "I", 7.5)
-    pdf.set_text_color(*MED)
-    prompts = [
-        "1: Emergency room arrival", "2: Witness statements", "3: Contradiction detection",
-        "4: Cross-document conflict", "5: Full timeline", "6: People roster",
-        "7: Statement evolution", "8: Audience filter", "9: Aggregate count",
-        "10: Time gap calculation"
-    ]
-    pdf.multi_cell(0, 4.5, "   |   ".join(prompts), align="C")
-    pdf.ln(2)
+    # Gov Cloud footnote
     pdf.set_font("Helvetica", "I", 7)
     pdf.set_text_color(*LIGHT)
     pdf.cell(0, 4, "Gov Cloud = Government Community Cloud (uses GPT-4o)  |  Commercial environment uses GPT-4.1", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ══════════════════════════════════════════════════════════════════
+    # PROMPTS TESTED
+    # ══════════════════════════════════════════════════════════════════
+    pdf.add_page()
+    pdf.section_title("Prompts Tested")
+
+    pdf.body_text(
+        "Each agent was asked the same 10 questions, shown below exactly as they were entered. "
+        "The column numbers in the scorecard above correspond to these prompts."
+    )
+
+    prompt_headers = ["#", "Question Asked", "What It Tests"]
+    prompt_widths = [8, 108, 54]
+    prompt_rows = [
+        ["1",
+         "Tell me about Jaylen Webb's emergency room admission\n"
+         "-- specifically the time and the admitting nurse.",
+         "Simple fact extraction;\n"
+         "nurse name only exists\nin documents"],
+        ["2",
+         "What did Marcus Webb tell hospital staff about when he\n"
+         "put Jaylen to bed, and did he give the same answer to\n"
+         "law enforcement?",
+         "Cross-document reasoning;\n"
+         "consistency analysis"],
+        ["3",
+         "Crystal Price told the court she was 'clean now' at the\n"
+         "November 2023 hearing. What do the drug test results show?",
+         "Contradiction detection;\n"
+         "compliance synthesis"],
+        ["4",
+         "Did the Sheriff's Office investigation find fractures in\n"
+         "Jaylen Webb's skeletal survey?",
+         "Cross-document conflict;\n"
+         "Sheriff Report contradicts\nMedical Records"],
+        ["5",
+         "What is the complete timeline of events for case\n"
+         "2024-DR-42-0892?",
+         "Full timeline enumeration\n"
+         "(12 events expected)"],
+        ["6",
+         "List all people involved in the Price Termination of\n"
+         "Parental Rights case and their roles.",
+         "People roster completeness\n"
+         "(8 people expected)"],
+        ["7",
+         "Compare Dena Holloway's initial hospital statement\n"
+         "with her later statement to Lt. Odom. What changed?",
+         "Statement evolution;\n"
+         "change detection"],
+        ["8",
+         "What statements were made to law enforcement in case\n"
+         "2024-DR-42-0892?",
+         "Filtering precision;\n"
+         "4 law enforcement\nstatements expected"],
+        ["9",
+         "Which cases involve Termination of Parental Rights?",
+         "Aggregate query;\n"
+         "9 cases in database;\n"
+         "document agents limited\nto their corpus"],
+        ["10",
+         "What was the exact time gap between the thump Dena\n"
+         "heard and when they took Jaylen to the hospital?",
+         "Arithmetic reasoning;\n"
+         "requires extracting and\ncalculating from data"],
+    ]
+
+    # Render prompts table with multi-line cells
+    pdf.set_font("Helvetica", "B", 7)
+    pdf.set_fill_color(*TABLE_HEADER_BG)
+    pdf.set_text_color(*TABLE_HEADER_FG)
+    for i, h in enumerate(prompt_headers):
+        pdf.cell(prompt_widths[i], 7, h, border=0, align="C", fill=True)
+    pdf.ln()
+
+    pdf.set_font("Helvetica", "", 7)
+    for r_idx, row in enumerate(prompt_rows):
+        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
+        pdf.set_fill_color(*bg)
+        pdf.set_text_color(*DARK)
+        y_start = pdf.get_y()
+        x_start = pdf.get_x()
+        # Measure height needed for the question text
+        line_count = row[1].count("\n") + 1
+        row_h = max(line_count * 4 + 2, 14)
+        for i, val in enumerate(row):
+            pdf.set_xy(x_start + sum(prompt_widths[:i]), y_start)
+            pdf.set_font("Helvetica", "B" if i == 0 else ("I" if i == 1 else ""), 7)
+            pdf.set_text_color(*DARK if i != 2 else MED)
+            pdf.multi_cell(prompt_widths[i], 4, val, border=0,
+                           align="C" if i == 0 else "L", fill=True)
+        pdf.set_y(y_start + row_h)
+    pdf.ln(3)
+
+    # ══════════════════════════════════════════════════════════════════
     # WIN/LOSS SUMMARY
     # ══════════════════════════════════════════════════════════════════
-    pdf.ln(4)
+    pdf.add_page()
     pdf.section_title("Overall Rankings")
 
     rank_headers = ["Rank", "Agent", "Pass", "Partial", "Fail", "N/A"]

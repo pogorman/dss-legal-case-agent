@@ -14,3 +14,4 @@ __azurite*
 docs/*.docx
 docs/*.msg
 docs/*.pdf
+!docs/executive-summary.pdf

@@ -16,27 +16,36 @@ async function getStatements(
   }
 
   const personName = request.query.get("person");
-  if (!personName) {
+  const madeTo = request.query.get("made_to");
+
+  if (!personName && !madeTo) {
     return {
       status: 400,
-      jsonBody: { error: "person query parameter is required" },
+      jsonBody: { error: "person and/or made_to query parameter is required" },
     };
   }
 
   try {
     const pool = await getPool();
-    const result = await pool
-      .request()
-      .input("caseId", sql.VarChar(20), caseId)
-      .input("personName", sql.VarChar(100), `%${personName}%`)
-      .query(`
+    const req = pool.request().input("caseId", sql.VarChar(20), caseId);
+
+    let whereClause = "WHERE s.case_id = @caseId";
+    if (personName) {
+      req.input("personName", sql.VarChar(100), `%${personName}%`);
+      whereClause += " AND p.full_name LIKE @personName";
+    }
+    if (madeTo) {
+      req.input("madeTo", sql.VarChar(100), `%${madeTo}%`);
+      whereClause += " AND s.made_to LIKE @madeTo";
+    }
+
+    const result = await req.query(`
         SELECT s.statement_id, s.case_id, s.statement_date, s.made_to,
                s.statement_text, s.source_document, s.page_reference,
                p.full_name, p.role
         FROM statements s
         JOIN people p ON s.person_id = p.person_id
-        WHERE s.case_id = @caseId
-          AND p.full_name LIKE @personName
+        ${whereClause}
         ORDER BY s.statement_date
       `);
 

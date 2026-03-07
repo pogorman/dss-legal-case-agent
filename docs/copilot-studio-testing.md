@@ -50,12 +50,13 @@ Multiple agent configurations are tested against the same prompts to compare acc
 
 The answer spans two data sources:
 
-- **From SQL** (`timeline_events`): Jaylen Webb admitted at **3:15 AM** on June 12, 2024. Dr. Anita Chowdhury is the physician. Source: `Medical Records, pp. 1-4`. No nurse is stored.
-- **From documents** — two different nurses appear across the case files:
-  - **Rebecca Torres, RN, BSN** — in `Medical_Records`, authored multiple nursing notes in the Emergency Department
-  - **Patricia Daniels, RN** (Charge Nurse, Employee ID: SMC-4492) — in `Sheriff_Report_24-06-4418`, the ER nurse interviewed by law enforcement
+- **From SQL** (`timeline_events`): Jaylen Webb admitted at **3:15 AM** on June 12, 2024. Dr. Anita Chowdhury is the physician. Source: `Medical Records, pp. 1-4`.
+- **From SQL** (`people`, added in Round 1): Two nurses now in the people table:
+  - **Rebecca Torres, RN, BSN** — Emergency Department RN who performed initial triage at 03:15 AM and authored nursing notes (Medical Records, pp. 8-9)
+  - **Patricia Daniels, RN** — Charge Nurse (Employee ID: SMC-4492), interviewed by Lt. Odom during investigation (Sheriff Report, p. 1)
+- **From documents** — same two nurses appear in the source files (nurses were added to SQL in Improvements Round 1)
 - **Time discrepancy in source documents**: The Sheriff Report states the child arrived at **0047 hours** (12:47 AM), while the Medical Records timeline says **3:15 AM**. This is an inconsistency in the synthetic data itself.
-- Neither nurse was modeled into the SQL schema.
+- **Post-improvement note:** Nurses are now in SQL but accessed via `get_case_summary` (people roster), not `get_timeline`. No MCP agent calls `get_case_summary` when asked about the nurse — they check timeline and statements instead. The gap has shifted from missing data to model tool selection.
 
 Neither source alone has the complete answer.
 
@@ -72,7 +73,7 @@ The accounts are **substantially consistent** on the bedtime (~10 PM) and couch 
 
 ### Prompt 3: Crystal Price "Clean Now" (Drug Tests)
 
-- **From SQL** (`timeline_events`): "Two positive drug screens (fentanyl) in October" + "3 of 12 IOP sessions" — no specific test dates, no missed screen dates
+- **From SQL** (`timeline_events`): Six individual drug test events added in Improvements Round 1: Oct 8 positive (fentanyl), Oct 22 positive (fentanyl), Dec 5 missed, Jan 15 missed, Mar 3 missed, Apr 10 negative. Also the narrative court event mentioning "two positive drug screens (fentanyl) in October."
 - **From SQL** (`statements`):
   - Crystal Price (person_id 9): "I have been trying to get to the IOP sessions but I don't have reliable transportation. I missed some appointments. I am looking for housing but it is hard without income. I am clean now." (Court Transcript, 90-Day Review, p. 12)
   - Monica Vance (person_id 13): "Ms. Price has attended only 3 of 12 required IOP sessions. She has not enrolled in parenting classes as ordered. She has had two positive drug screens for fentanyl in October. She does not have stable housing — she reports staying with various friends. I have attempted six home visits and reached her twice." (Court Transcript, 90-Day Review, p. 8)
@@ -93,7 +94,7 @@ The answer requires cross-referencing two documents that directly contradict eac
 - **Sheriff Report (p. 2):** "Radiology report indicated no fractures detected on skeletal survey" — this is misleading
 - **Medical Records (pp. 3-4):** Skeletal survey found a transverse right femur fracture (3-5 days old) and spiral left humerus fracture (24-48 hours old). The **remainder** of the skeletal survey found no additional fractures beyond those two.
 - The Sheriff's "no fractures detected" likely refers to the remainder (no additional fractures), but the wording implies a clean skeletal survey.
-- **"Skeletal survey" is NOT in the SQL schema.** MCP agents cannot surface this conflict — it exists only in the source documents.
+- **Post-improvement (Round 1):** Skeletal survey is now in the SQL schema — a timeline event (4:07 AM skeletal survey with full findings) and a discrepancy (Sheriff Report "no fractures" vs Medical Records documenting two fractures) were added. All 3 MCP agents now return the correct fracture findings.
 
 ---
 

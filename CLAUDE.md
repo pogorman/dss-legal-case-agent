@@ -26,7 +26,7 @@ After every session or when O'G asks, update these files in `docs/`:
 - Azure managed identity for all service-to-service auth (SQL, OpenAI)
 - APIM subscription key for Container App → APIM auth
 - Seed data person_id values are IDENTITY-generated — references in statements/discrepancies assume insertion order
-- Cases 1-2 are hand-crafted with rich detail (12+ timeline events, 15+ statements, 6+ discrepancies) for the primary demo prompts
+- Cases 1-2 are hand-crafted with rich detail (14+ timeline events, 15+ statements, 7+ discrepancies) for the primary demo prompts
 - Cases 3-50 are procedurally generated with moderate detail (5-8 events, 5-8 statements, 2-4 discrepancies) for volume
 
 ## Synthetic Cases (50 total)
@@ -35,7 +35,7 @@ After every session or when O'G asks, update these files in `docs/`:
 - Cases 3-50: Generated across all 16 SC judicial circuits, 46 counties, 6 case types
 
 ## Data Counts
-- 50 cases, 275 people, 325 timeline events, 338 statements, 150 discrepancies
+- 50 cases, 277 people, 333 timeline events, 338 statements, 151 discrepancies
 
 ## Data Provenance
 - Source material: real SC DSS legal pleadings (Spartanburg case) + attorney feedback, provided by SC DSS

@@ -164,8 +164,8 @@ The system contains **50 synthetic cases** across multiple judicial circuits.
 
 | Case ID | Description |
 |---------|-------------|
-| 2024-DR-42-0892 | CPS emergency removal — Webb/Holloway (Spartanburg) — 12 timeline events, 15 statements, 6 discrepancies |
-| 2024-DR-15-0341 | Termination of Parental Rights — Price (Richland) — 10 timeline events, 12 statements, 4 discrepancies |
+| 2024-DR-42-0892 | CPS emergency removal — Webb/Holloway (Spartanburg) — 14 timeline events, 15 statements, 7 discrepancies |
+| 2024-DR-15-0341 | Termination of Parental Rights — Price (Richland) — 16 timeline events, 12 statements, 4 discrepancies |
 
 ### Additional Cases (48 generated)
 
@@ -217,7 +217,7 @@ Once connected, the agent auto-discovers 5 tools:
 | `list_cases` | Returns all available cases |
 | `get_case_summary` | Case overview + parties for a specific case |
 | `get_timeline` | Chronological events with optional type filter |
-| `get_statements_by_person` | Statements by a named person with citations |
+| `get_statements_by_person` | Statements filtered by person name and/or audience (e.g., 'Law Enforcement') |
 | `get_discrepancies` | Conflicting accounts between parties |
 
 Test with: **"List available cases"** — the agent should call `list_cases` and return all 50 cases.

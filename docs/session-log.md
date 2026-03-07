@@ -753,3 +753,136 @@ Ground truth: 9:30 PM thump → 2:00 AM discovery → 3:15 AM ER admission. Corr
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
 - Consider adding `made_to` filter to `get_statements_by_person` tool (design gap found in P8)
+
+---
+
+## Session 16 — 2026-03-07
+
+### What was done
+
+#### Improvements Round 1 — Data and Tool Gap Analysis
+- Reviewed all 110 test results across 11 agents and 10 prompts to identify where data or tool additions would improve MCP agent responses
+- Cross-referenced every proposed data addition against the source PDF documents to verify nothing was fabricated — all data traces back to specific pages
+- Created `docs/improvements/` subfolder with two documents:
+  - `improvements-round-1.md` — 5 improvements + data integrity analysis, with SQL/code snippets and document source citations
+  - `document-to-database-mapping.md` — guide showing how PDF content maps to each SQL table, illustrating the extraction pipeline from documents to structured data
+
+#### Improvement 1: `made_to` Filter on Statements Tool
+- **Problem:** P8 ("What statements were made to law enforcement?") failed for all 3 MCP agents because the tool only filters by `person_name`, not by audience
+- **Changes:**
+  - `mcp-server/src/mcp/tools.ts` — added optional `made_to` parameter to tool definition; made `person_name` optional; updated `callTool` to pass both params as query string
+  - `functions/src/functions/getStatements.ts` — added `made_to` query parameter with LIKE filter; made `person_name` optional (at least one of `person_name` or `made_to` required)
+- No schema change needed — `statements.made_to` column already exists
+
+#### Improvement 2: Skeletal Survey Discrepancy + Timeline Event
+- **Problem:** P4 ("Did the Sheriff's Office investigation find fractures?") — MCP agents can't answer at all; skeletal survey not in SQL
+- **Document sources:** Medical Records pp. 3-4 (radiology report with fractures), Sheriff Report p. 2 ("no fractures detected")
+- **Added to `seed.sql` and `seed-expanded.sql`:**
+  - 1 timeline event: skeletal survey at 4:07 AM on June 12 with full findings from Dr. David Petrakis
+  - 1 discrepancy: Sheriff Report "no fractures detected" vs Medical Records documenting two fractures
+
+#### Improvement 3: 9:30 PM Thump as Standalone Timeline Event
+- **Problem:** P10 (time gap calculation) — Web SPA conflated thump with discovery, reported 1h15m instead of 5h45m
+- **Document source:** Sheriff Report pp. 6-7 (Dena Holloway's revised statement)
+- **Added to both seed files:** 1 timeline event for June 11, 9:30 PM — the thump from Jaylen's room
+
+#### Improvement 4: Individual Drug Test Timeline Events
+- **Problem:** P3 ("Crystal Price clean now") — Web SPA received drug test data but failed to recognize narrative text as test results
+- **Document sources:** DSS Investigation Report pp. 6-7, TPR Petition p. 4, Court Transcript p. 10
+- **Added to both seed files:** 6 timeline events — Oct 8 positive, Oct 22 positive, Dec 5 missed, Jan 15 missed, Mar 3 missed, Apr 10 negative
+
+#### Improvement 5: Nurses in People Table
+- **Problem:** P1 (ER admission nurse) — all 3 MCP agents correctly reported "no nurse identified" but the data was in the documents
+- **Document sources:** Medical Records p. 8 (Rebecca Torres, RN, BSN), Sheriff Report p. 1 (Patricia Daniels, RN, Charge Nurse)
+- **Added to both seed files:** 2 people rows for Case 1
+- **Noted:** Rebecca Torres name collision with Case 2's TPR Petition (Rebecca Torres, Esq., DSS Staff Attorney) — different characters, same name
+
+#### Data Integrity Findings
+- Marcus Webb bedtime: Sheriff Report p. 3 says 8:00 PM (investigator's paraphrase of LE interview); Medical Records say "around ten" / 22:00. The "8 PM misattribution" from testing isn't purely Dena's statement — Marcus's own LE interview narrative also says 8 PM.
+- Dena discovery time: Sheriff Report p. 6 says "approximately midnight" (initial LE statement); Medical Records say 2:00 AM. SQL uses 2:00 AM.
+- ER arrival time: Sheriff Report says 0047 (12:47 AM); Medical Records say 3:15 AM. Known intentional discrepancy — working as designed.
+
+### Data counts (updated)
+- Case 1: 10 people (+2), 14 timeline events (+2), 15 statements, 7 discrepancies (+1)
+- Case 2: 8 people, 16 timeline events (+6), 12 statements, 4 discrepancies
+- Total across 50 cases: 277 people, 333 timeline events, 338 statements, 151 discrepancies
+
+### Decisions made
+- All data additions validated against source PDFs before implementation — no fabricated data
+- Source documents (sharepoint-docs/) are not modified — they are the documents of truth
+- Drug test events added as separate INSERT block (not interleaved) for readability
+- `person_name` made optional on statements tool — enables audience-only queries ("all statements to law enforcement")
+- Skeletal survey discrepancy uses NULL person_a_id/person_b_id (document-vs-document conflict, not person-vs-person)
+
+### Open items
+- **Deploy updated seed data** to Azure SQL (enable public access → `node database/deploy-sql.js` → disable)
+- **Rebuild and deploy Functions** (`cd functions && npm run build && func azure functionapp publish dss-demo-func --typescript`)
+- **Rebuild and deploy Container App** (`docker build` → `docker push` → `az containerapp update`)
+- ~~Retest Prompts 1, 3, 4, 8, 10 with MCP agents to verify improvements~~ — DONE (Session 17)
+- **Run all 24 redemption retests** (original + revised prompts)
+- ~~Update executive summary PDF after retesting~~ — DONE (Session 17)
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+
+---
+
+## Session 17 — 2026-03-07
+
+### What was done
+
+#### Deployed All Round 1 Improvements
+- **Azure SQL**: Enabled public access via CLI → deployed `seed-expanded.sql` via `node database/deploy-sql.js` → verified counts (277 people, 333 events, 151 discrepancies) → removed firewall rule → disabled public access. All automated via `az sql server update` and `az sql server firewall-rule`.
+- **Azure Functions**: Built TypeScript (`npm run build`) → published via `func azure functionapp publish dss-demo-func --typescript`. All 5 functions deployed with updated `getStatements` supporting `made_to` filter.
+- **Container App**: Built image in ACR via `az acr build --registry phillymcpacr --image dss-case-agent:latest --file mcp-server/Dockerfile mcp-server/` → updated Container App via `az containerapp update`. No local Docker needed.
+- **Health check**: Confirmed healthy at `/healthz`.
+
+#### Post-Improvement Retest — All 3 MCP Agents × 5 Prompts
+
+Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP agents (15 test runs).
+
+**Results summary: 12 Pass / 2 Partial / 1 Fail** (up from 2 Pass / 5 Partial / 8 Fail)
+
+| Prompt | Before | After | What Fixed It |
+|--------|--------|-------|---------------|
+| P8 (LE statements) | 0P/0Pa/3F | 3P/0Pa/0F | `made_to` filter on statements tool |
+| P4 (skeletal survey) | 0P/0Pa/3F | 3P/0Pa/0F | Skeletal survey timeline event + discrepancy |
+| P10 (time gap) | 1P/1Pa/1F | 3P/0Pa/0F | 9:30 PM thump as standalone event |
+| P3 (drug tests) | 1P/1Pa/1F | 3P/0Pa/0F | Individual drug test events |
+| P1 (ER + nurse) | 0P/3Pa/0F | 0P/2Pa/1F | Nurses in people table (but agents don't call `get_case_summary`) |
+
+**Detailed results per agent:**
+
+| Agent | P1 | P3 | P4 | P8 | P10 |
+|-------|----|----|----|----|-----|
+| Web SPA | Partial (time ✓, nurse ✗) | Pass (6/6 tests, case ID required) | Pass (both fractures) | Pass (4/4 LE statements) | Pass (4h30m correct) |
+| MCP-Com | Partial (time ✓, nurse ✗) | Pass (6/6, original prompt) | Pass (both fractures) | Pass (4/4) | Pass (4h30m correct) |
+| MCP-GCC | Fail (2:00 AM hallucination) | Pass (6/6, original prompt) | Pass (both fractures) | Pass (4/4) | Pass (4h30m, case ID required) |
+
+**Key observations:**
+1. **Web SPA still can't resolve Case 2 from names** — needs case ID in prompt (P3). Known model reasoning issue.
+2. **MCP-GCC still asks for case ID on some prompts** (P1, P10) but not others (P3, P4, P8). Inconsistent orchestrator behavior.
+3. **MCP-GCC still hallucinates 2:00 AM ER time** (P1) — GPT-4o faithfulness issue, not a data gap.
+4. **P1 nurse gap shifted from data → tool selection** — nurse data is in `people` table via `get_case_summary` but no agent thinks to call that tool for a "who was the nurse" question.
+5. **MCP-Com resolved Case 2 from "Crystal Price" alone** (P3) — previously needed case ID. Improvement in orchestrator behavior.
+6. **MCP-GCC also resolved Case 2 from name** (P3) — same improvement.
+
+#### Documentation Updates
+- Updated `docs/improvements/improvements-round-1.md` with full post-improvement retest results section
+- Updated `docs/session-log.md` (this entry)
+- Updated executive summary PDF script with Round 1 improvements page
+- Updated `MEMORY.md` with deployment status and retest results
+- Updated `docs/copilot-studio-testing.md` ground truth sections for affected prompts
+
+### Decisions made
+- All 3 deployments (SQL, Functions, Container App) done via CLI — no Portal interaction needed
+- SQL public access toggling automated via `az sql server update` + `az sql server firewall-rule create/delete`
+- Container App image built in ACR (`az acr build`) — no local Docker dependency
+- P1 nurse improvement declared "data gap resolved, tool selection gap remains" — possible next step is enriching `get_case_summary` description
+
+### Open items
+- **Run all 24 redemption retests** (original + revised prompts for document agents)
+- **Run Use Case 2 testing** (Philly Poverty Profiteering)
+- **Consider BFG Repo Cleaner** to purge real names from git history
+- Consider enriching `get_case_summary` tool description to mention medical staff/witnesses (P1 nurse gap)
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)

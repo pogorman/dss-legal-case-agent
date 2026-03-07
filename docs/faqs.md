@@ -85,6 +85,20 @@ A: Before every demo, ideally 30-60 seconds before the audience arrives. If the 
 **Q: Does the warm-up button send real data?**
 A: Yes — it sends a real (minimal) chat request so the entire chain is primed, including the SQL connection pool and OpenAI model context. The warm-up prompt is lightweight and the response is discarded.
 
+## Data Improvements
+
+**Q: How were data gaps identified?**
+A: After 110 test runs across 11 agent configurations and 10 prompts, specific failures were traced to missing data or tool limitations. Each proposed fix was validated against the source PDF documents — no data was fabricated. Details in `docs/improvements/improvements-round-1.md`.
+
+**Q: What was added in Improvements Round 1?**
+A: Five changes: (1) `made_to` filter on the statements tool (fixes P8 failures), (2) skeletal survey findings + discrepancy in SQL (fixes P4), (3) 9:30 PM thump as standalone timeline event (fixes P10), (4) individual drug test events as discrete timeline rows (fixes P3), (5) nurses added to people table (fixes P1). Total: 11 new SQL rows + 1 tool/function change.
+
+**Q: How does data get from PDFs into the database?**
+A: See `docs/improvements/document-to-database-mapping.md` for a detailed walkthrough. In production, tools like Azure Document Intelligence or Power Automate AI Builder extract entities from PDFs. The mapping guide shows the exact PDF text and the SQL row it produces for each table.
+
+**Q: Why weren't these data points in the original load?**
+A: The original data load focused on the attorney's 4-part prompt pattern (timeline, discrepancies, statements by each parent). Details like individual drug test dates, skeletal survey findings, and nursing staff were in the source documents but weren't prioritized for extraction. This is a realistic scenario — initial data modeling always misses details that surface during testing.
+
 ## PII and Data Provenance
 
 **Q: Are there any real names in the codebase?**

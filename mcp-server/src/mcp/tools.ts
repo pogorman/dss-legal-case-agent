@@ -64,7 +64,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "get_statements_by_person",
     description:
-      "Returns all recorded statements made by a specific person to case managers or law enforcement, with source citations and page references.",
+      "Returns all recorded statements for a case, with source citations and page references. Can filter by who made the statement, who it was made to, or both.",
     inputSchema: {
       type: "object",
       properties: {
@@ -77,8 +77,13 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
           description:
             "Full or partial name of the person whose statements to retrieve",
         },
+        made_to: {
+          type: "string",
+          description:
+            "Optional filter: who the statement was made to, e.g. 'Law Enforcement', 'Medical Staff', 'Court', 'Case Manager'",
+        },
       },
-      required: ["case_id", "person_name"],
+      required: ["case_id"],
     },
   },
   {
@@ -135,10 +140,14 @@ export async function callTool(
       );
     }
 
-    case "get_statements_by_person":
+    case "get_statements_by_person": {
+      const stmtParams = new URLSearchParams();
+      if (args.person_name) stmtParams.set("person", args.person_name);
+      if (args.made_to) stmtParams.set("made_to", args.made_to);
       return apimFetch(
-        `/cases/${encodeURIComponent(args.case_id)}/statements?person=${encodeURIComponent(args.person_name)}`
+        `/cases/${encodeURIComponent(args.case_id)}/statements?${stmtParams.toString()}`
       );
+    }
 
     case "get_discrepancies":
       return apimFetch(

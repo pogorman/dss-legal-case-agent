@@ -60,7 +60,7 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 - Hosted on existing SQL Server (shared with philly-profiteering)
 - 5 tables: `cases`, `people`, `timeline_events`, `statements`, `discrepancies`
 - 50 synthetic cases: 2 hand-crafted (rich detail) + 48 procedurally generated
-- Total: 275 people, 325 timeline events, 338 statements, 150 discrepancies
+- Total: 277 people, 333 timeline events, 338 statements, 151 discrepancies
 - Basic tier (5 DTU) — sufficient for demo
 - Accessed via managed identity only (no passwords)
 - **Public network access: Disabled** — all SQL traffic flows over private endpoint
@@ -71,7 +71,7 @@ Four-tier architecture following the same pattern as the philly-profiteering pro
 ### Azure Functions (`dss-demo-func`)
 
 - Node 20, TypeScript, Azure Functions v4
-- 5 HTTP-triggered functions with `function` auth level
+- 5 HTTP-triggered functions with `function` auth level (getStatements supports optional `made_to` filter)
 - System-assigned managed identity with `db_datareader` on dss-demo
 - Flex Consumption plan
 - **VNet integrated** via `snet-dss-functions` (10.0.3.0/24) — all outbound traffic routes through the VNet

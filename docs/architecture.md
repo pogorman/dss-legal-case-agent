@@ -210,16 +210,14 @@ DSS Office of Legal Services provided reference materials in January–February 
 
 1. **6 legal pleading templates** from an active case — complaint for ex parte removal, summons/notice documents, permanency planning orders (reunification and TPR paths), TPR summons/complaint, and order of dismissal. These are heavily templated documents with `[CHOOSE ONE]` placeholders and boilerplate statutory language. They established the **case lifecycle structure** (complaint → removal → permanency planning → TPR → dismissal).
 
-2. **Attorney feedback** from two DSS attorneys:
-   - **Kathryn Walsh** (plaintiff attorney): Screenshots of her initial Copilot test experience
-   - **Laurel** (DSS attorney): A detailed example prompt and expected output from a different case, requesting: (1) timeline of pertinent facts with citations, (2) chart of discrepancies between parents' accounts, (3) statements by each parent to case managers/law enforcement. She noted the AI output "was not as detailed as I imagined" and had some incorrect timeline items — this set the accuracy bar for the demo.
+2. **Attorney feedback** from two DSS attorneys who tested an early Copilot prototype. One provided screenshots; the other provided a detailed example prompt requesting: (1) timeline of pertinent facts with citations, (2) chart of discrepancies between parents' accounts, (3) statements by each parent to case managers/law enforcement. The feedback noted the AI output "was not as detailed as I imagined" and had some incorrect timeline items — this set the accuracy bar for the demo.
 
 ### What Was Synthesized
 
 | Real Data Element | Synthetic Replacement |
 |---|---|
-| Case number (2023SPA00144) | 2024-DR-42-0892 |
-| Defendant names (Erickson) | Webb / Holloway (Case 1), Price (Case 2) |
+| Real case numbers | 2024-DR-42-0892 |
+| Real defendant names | Webb / Holloway (Case 1), Price (Case 2) |
 | Child names | Synthetic children |
 | Attorney / caseworker names | Synthetic names |
 | Specific dates and facts | Invented timeline events, statements, discrepancies |
@@ -233,7 +231,7 @@ DSS Office of Legal Services provided reference materials in January–February 
 
 ### The "Money Prompt"
 
-Laurel's 4-part prompt structure became the primary demo prompt:
+The attorney's 4-part prompt structure became the primary demo prompt:
 1. Timeline of pertinent facts with source citations
 2. Chart of discrepancies between parents' accounts
 3. Statements by Parent A to case managers/law enforcement
@@ -243,22 +241,7 @@ This directly shaped the 5 MCP tools (list_cases, get_case_summary, get_timeline
 
 ### Source Document Sanitization
 
-The original Word documents contained real case data. These were sanitized using `scripts/sanitize-docs.py`, which replaced all real PII with synthetic data:
-
-| Real | Synthetic |
-|---|---|
-| Kelle L. Erickson | Dena Holloway |
-| Adam Erickson | Marcus Webb |
-| Lydia Erickson (DOB 5/3/2019) | Jaylen Webb (DOB 4/10/2021) |
-| Walela McDaniel (caseworker) | Renee Dawson |
-| Kathryn J Walsh (plaintiff attorney) | Jennifer M. Torres |
-| Tim Edwards (defense attorney) | David Chen |
-| Shawn Campbell (defense attorney) | Rachel Simmons |
-| Jamia Foster (GAL) | Karen Milford |
-| 2023SPA00144 | 2024SPA00892 |
-| 2025-DR-42-1286 | 2024-DR-42-0892 |
-
-Sanitization verified: zero real names remain in any document.
+The original Word documents contained real case data. These were sanitized using `scripts/sanitize-docs.py`, which replaced all real names, case numbers, dates, and addresses with synthetic equivalents. The mapping is stored locally only (not in the committed version of the script). Sanitization verified: zero real names remain in any document.
 
 ### Source Document Handling
 

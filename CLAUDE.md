@@ -38,9 +38,9 @@ After every session or when O'G asks, update these files in `docs/`:
 - 50 cases, 275 people, 325 timeline events, 338 statements, 150 discrepancies
 
 ## Data Provenance
-- Source material: real SC DSS legal pleadings (Spartanburg case) + attorney feedback (Laurel's prompt), provided by Arya Hekmat (SC DSS)
+- Source material: real SC DSS legal pleadings (Spartanburg case) + attorney feedback, provided by SC DSS
 - **All data in the system is synthetic** — real case structure was used as a template, all PII replaced with fictional names/dates/facts
-- Laurel's 4-part prompt (timeline, discrepancies, statements by each parent) shaped the MCP tools and SQL schema
+- Attorney's 4-part prompt (timeline, discrepancies, statements by each parent) shaped the MCP tools and SQL schema
 - Source Word docs have been **sanitized** via `scripts/sanitize-docs.py` — all real PII replaced with synthetic data, verified clean
 - Source documents (`.docx`, `.msg`) are in `docs/` locally but **excluded from git** via `.gitignore`
 - The `.msg` email still contains real names/screenshots — local only, not sanitizable

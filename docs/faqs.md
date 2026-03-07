@@ -42,7 +42,7 @@ A: Flex Consumption Function Apps store their deployment package in a blob on th
 ## Demo
 
 **Q: What's the "money prompt" for the demo?**
-A: See the User Guide. It's a 4-part legal analysis request matching what a DSS attorney (Laurel) actually tested. The agent should call all four relevant tools and return structured, citable results.
+A: See the User Guide. It's a 4-part legal analysis request matching what a DSS attorney actually tested. The agent should call all four relevant tools and return structured, citable results.
 
 **Q: How does this prove the MCP approach is better than SharePoint?**
 A: Two key proof points: (1) **Completeness** — every statement, timeline event, and discrepancy is returned because the data is structured, not extracted from PDFs. (2) **Consistency** — running the same prompt twice returns identical results because the agent queries SQL, not chunks from a document index.

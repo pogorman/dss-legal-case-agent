@@ -1,8 +1,11 @@
 """
 Sanitize source Word documents by replacing real case data with synthetic data.
-Maps the real Erickson/Spartanburg case to the synthetic Webb/Holloway Case 1.
 
 Usage: python scripts/sanitize-docs.py
+
+IMPORTANT: The REPLACEMENTS dict below must be populated with the real-to-synthetic
+mapping before running. The mapping is not stored in version control to protect PII.
+Copy the mapping from the local-only reference file before use.
 """
 
 from docx import Document
@@ -12,58 +15,13 @@ import glob
 
 # =============================================================
 # Replacement mapping: Real data → Synthetic data
+# NOT stored in version control — populate from local reference
 # =============================================================
 REPLACEMENTS = {
-    # Case numbers
-    "2025-DR-42-1286": "2024-DR-42-0892",
-    "2023-DR-42-2003": "2024-DR-42-0893",
-    "2023SPA00144": "2024SPA00892",
-
-    # Parents
-    "Kelle L. Erickson": "Dena Holloway",
-    "Kelle Erickson": "Dena Holloway",
-    "KELLE L. ERICKSON": "DENA HOLLOWAY",
-    "KELLE ERICKSON": "DENA HOLLOWAY",
-    "Adam Erickson": "Marcus Webb",
-    "ADAM ERICKSON": "MARCUS WEBB",
-    "Erickson": "Webb",
-    "ERICKSON": "WEBB",
-
-    # Child
-    "Lydia Erickson": "Jaylen Webb",
-    "LYDIA ERICKSON": "JAYLEN WEBB",
-    "Lydia": "Jaylen",
-    "LYDIA": "JAYLEN",
-    "5/3/2019": "4/10/2021",
-    "May 3, 2019": "April 10, 2021",
-
-    # DSS Caseworker
-    "Walela McDaniel": "Renee Dawson",
-    "WALELA MCDANIEL": "RENEE DAWSON",
-    "McDaniel": "Dawson",
-
-    # Plaintiff attorney
-    "Kathryn J Walsh": "Jennifer M. Torres",
-    "Kathryn Walsh": "Jennifer Torres",
-    "KATHRYN J WALSH": "JENNIFER M. TORRES",
-    "KATHRYN WALSH": "JENNIFER TORRES",
-    "454 South Anderson Road": "180 Magnolia Street",
-    "York, SC 29745": "Spartanburg, SC 29306",
-
-    # Defense attorneys
-    "Tim Edwards, Esq.": "David Chen, Esq.",
-    "Tim Edwards": "David Chen",
-    "Shawn Campbell, Esq.": "Rachel Simmons, Esq.",
-    "Shawn Campbell": "Rachel Simmons",
-
-    # GAL
-    "Jamia Foster, Esq.": "Karen Milford, Esq.",
-    "Jamia Foster": "Karen Milford",
-    "JAMIA FOSTER": "KAREN MILFORD",
-
-    # Dates from real case (Feb 2026 filing dates → June 2024 synthetic dates)
-    "February 17, 2026": "June 14, 2024",
-    "2/17/2026": "6/14/2024",
+    # Populate this dict with real → synthetic mappings before running.
+    # Example:
+    # "Real Name": "Synthetic Name",
+    # "Real Case Number": "Synthetic Case Number",
 }
 
 
@@ -133,6 +91,11 @@ def sanitize_docx(filepath, replacements):
 
 
 def main():
+    if not REPLACEMENTS:
+        print("ERROR: REPLACEMENTS dict is empty.")
+        print("Populate it with the real-to-synthetic mapping from the local reference file.")
+        return
+
     docs_dir = os.path.dirname(os.path.abspath(__file__))
     docx_files = glob.glob(os.path.join(docs_dir, "*.docx"))
 
@@ -151,16 +114,6 @@ def main():
         filename = os.path.basename(filepath)
         count = sanitize_docx(filepath, sorted_replacements)
         print(f"  {filename}: {count} paragraph(s) updated")
-
-    # Rename files to use synthetic case number
-    print("\nRenaming files to use synthetic case number...")
-    for filepath in docx_files:
-        filename = os.path.basename(filepath)
-        new_filename = filename.replace("2023SPA00144", "2024SPA00892")
-        if new_filename != filename:
-            new_path = os.path.join(docs_dir, new_filename)
-            os.rename(filepath, new_path)
-            print(f"  {filename} -> {new_filename}")
 
     print("\nDone. All documents sanitized with synthetic data.")
 

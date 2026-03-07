@@ -10,7 +10,7 @@
 
 ## The Story (Know This Cold)
 
-A DSS attorney named Laurel tested an AI agent backed by unstructured case documents in SharePoint. She asked it for a timeline, discrepancies, and statements from both parties. Her feedback: **"It was not as detailed as I imagined — missing statements, incorrect on some timeline items."**
+A DSS attorney tested an AI agent backed by unstructured case documents in SharePoint. She asked it for a timeline, discrepancies, and statements from both parties. Her feedback: **"It was not as detailed as I imagined — missing statements, incorrect on some timeline items."**
 
 This demo shows WHY that happened and HOW to fix it. Same Copilot Studio agent, same prompt, two backends:
 - **Version A** (SharePoint): Chunked PDFs, inconsistent retrieval, missing data
@@ -76,7 +76,7 @@ I represent DSS in case 2024-DR-42-0892. After reviewing the case, can you provi
 4. All statements made by Dena Holloway to case managers or law enforcement
 ```
 
-> "This is the exact structure of the prompt Laurel used in her original test. Four distinct analytical tasks in one request."
+> "This is the exact structure of the prompt the attorney used in her original test. Four distinct analytical tasks in one request."
 
 *Wait for response. It will take 10-15 seconds as the agent calls 4 tools.*
 

@@ -146,9 +146,9 @@ class ExecutivePDF(FPDF):
             bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
             self.set_fill_color(*bg)
             for i, val in enumerate(row):
-                if i <= 1:
+                if i == 0:
                     self.set_text_color(*DARK)
-                    self.set_font("Helvetica", "B" if i == 0 else "", font_size)
+                    self.set_font("Helvetica", "B", font_size)
                 else:
                     color = self.grade_color(val)
                     self.set_text_color(*color)
@@ -232,7 +232,7 @@ def build_pdf():
     )
     pdf.bullet(
         "A structured-data agent that queries a normalized database through purpose-built tools "
-        "(MCP/SQL approach)",
+        "(the structured database approach)",
         bold_lead="Structured Data:"
     )
     pdf.bullet(
@@ -256,7 +256,7 @@ def build_pdf():
     pdf.bullet(
         "Investigative analytics over 34 million rows of Philadelphia public records -- property "
         "ownership, code violations, demolitions, tax assessments, and real estate transfers. "
-        "Same MCP/SQL architecture, same Copilot Studio agent configurations. Testing planned.",
+        "Same structured database architecture, same Copilot Studio agent configurations. Testing planned.",
         bold_lead="Use Case 2 - Investigative Analytics (planned):"
     )
 
@@ -298,11 +298,11 @@ def build_pdf():
     failure_headers = ["Risk", "Severity", "What Happened", "Affected Agents"]
     failure_widths = [32, 18, 72, 48]
     failure_rows = [
-        ["Cross-case\ncontamination", "Critical", "Case 2 data injected into\nCase 1 timeline", "1 document agent\n(SharePoint PDF, GCC)"],
-        ["Misleading source\nreproduced", "Critical", "7 of 8 document agents repeated\nan incorrect 'no fractures' claim", "All document agents\nexcept SP/PDF Commercial"],
+        ["Cross-case\ncontamination", "Critical", "Case 2 data injected into\nCase 1 timeline", "1 document agent\n(SharePoint PDF,\nGovernment Cloud)"],
+        ["Misleading source\nreproduced", "Critical", "7 of 8 document agents repeated\nan incorrect 'no fractures' claim", "All document agents\nexcept SharePoint PDF\n(Commercial)"],
         ["Missed contradiction", "Critical", "Agent concluded 'no evidence'\nwhen contradiction data existed", "2 structured agents\n(GPT-4.1 based)"],
         ["Misattribution", "High", "4 of 8 document agents attributed\none person's statement to another", "4 document agents\n(mixed platforms)"],
-        ["Fabricated fact", "High", "Agent confidently stated\n'2:00 AM' (actual: 3:15 AM)", "1 structured agent\n(MCP, GCC)"],
+        ["Fabricated fact", "High", "Agent confidently stated\n'2:00 AM' (actual: 3:15 AM)", "1 structured agent\n(Government Cloud)"],
         ["Silent failure", "Medium", "Hallucinated a case number,\nreturned no results, no warning", "1 structured agent\n(Web application)"],
     ]
 
@@ -320,7 +320,7 @@ def build_pdf():
         pdf.set_text_color(*DARK)
         y_start = pdf.get_y()
         x_start = pdf.get_x()
-        row_h = 10
+        row_h = 12
         for i, val in enumerate(row):
             pdf.set_xy(x_start + sum(failure_widths[:i]), y_start)
             if i == 1:
@@ -335,7 +335,7 @@ def build_pdf():
             else:
                 pdf.set_text_color(*DARK)
                 pdf.set_font("Helvetica", "", 7)
-            pdf.multi_cell(failure_widths[i], 5, val, border=0, align="C" if i == 1 else "L", fill=True)
+            pdf.multi_cell(failure_widths[i], 4, val, border=0, align="C" if i == 1 else "L", fill=True)
         pdf.set_y(y_start + row_h)
     pdf.ln(3)
 
@@ -343,14 +343,14 @@ def build_pdf():
     pdf.subsection_title("3. The AI model matters as much as the architecture")
     pdf.body_text(
         "The evaluation revealed a significant split between the two underlying models used by Copilot Studio. "
-        "Government Cloud (GCC) environments use GPT-4o, while Commercial environments use GPT-4.1. "
+        "Government Cloud environments use GPT-4o, while Commercial environments use GPT-4.1. "
         "Neither can be changed by the agency."
     )
     pdf.bullet(
         "Better at selecting the right tools (always checks for contradictions), uses precise "
         "legal phrasing, gets specific facts like bedtime correct. However, more likely to "
         "fabricate details when uncertain.",
-        bold_lead="GPT-4o (GCC):"
+        bold_lead="GPT-4o (Government Cloud):"
     )
     pdf.bullet(
         "More factually faithful with fewer fabricated details. However, consistently fails to "
@@ -362,23 +362,23 @@ def build_pdf():
     pdf.subsection_title("4. Document format affects results more than expected")
     pdf.body_text(
         "PDF files indexed via SharePoint in a Commercial environment produced the strongest "
-        "document-backed results. The same documents in Word format, or accessed through GCC, "
-        "scored measurably lower. Knowledge-base uploads (flat file uploads) performed unevenly, "
+        "document-backed results. The same documents in Word format, or accessed through Government Cloud, "
+        "scored measurably lower. Uploaded file collections (flat file uploads) performed unevenly, "
         "with PDF generally outperforming Word."
     )
 
     fmt_headers = ["Source & Format", "Avg Accuracy", "Notes"]
-    fmt_widths = [55, 28, 87]
+    fmt_widths = [62, 24, 84]
     fmt_rows = [
-        ["Structured Database (MCP/SQL)", "12 / 12", "Deterministic and complete"],
+        ["Structured Database", "12 / 12", "Deterministic and complete"],
         ["SharePoint PDF (Commercial)", "12 / 12", "Strongest document agent overall"],
         ["SharePoint Word (Commercial)", "12 / 12", "Minor time errors and one fabricated event"],
-        ["Knowledge Base PDF (GCC)", "10 / 12", "Best knowledge-base agent"],
-        ["SharePoint Word (GCC)", "9 / 12", "Correct facts but limited source coverage"],
-        ["Knowledge Base Word (Commercial)", "9 / 12", "Good detail but gaps in later events"],
-        ["Knowledge Base Word (GCC)", "8 / 12", "Relied on single source document"],
-        ["Knowledge Base PDF (Commercial)", "6 / 12", "Collapsed multiple events into one"],
-        ["SharePoint PDF (GCC)", "~4 / 12", "Mixed in data from a different case"],
+        ["Uploaded PDF (Government Cloud)", "10 / 12", "Best uploaded-file agent"],
+        ["SharePoint Word (Government Cloud)", "9 / 12", "Correct facts but limited source coverage"],
+        ["Uploaded Word (Commercial)", "9 / 12", "Good detail but gaps in later events"],
+        ["Uploaded Word (Government Cloud)", "8 / 12", "Relied on single source document"],
+        ["Uploaded PDF (Commercial)", "6 / 12", "Collapsed multiple events into one"],
+        ["SharePoint PDF (Government Cloud)", "~4 / 12", "Mixed in data from a different case"],
     ]
     pdf.styled_table(fmt_headers, fmt_rows, fmt_widths, font_size=7.5)
     pdf.ln(2)
@@ -414,17 +414,17 @@ def build_pdf():
         "the practical takeaway for each question type."
     )
 
-    glance_headers = ["#", "Question Type", "Structured\nAgents", "Best Doc\nAgent", "Worst Doc\nAgent", "Key Takeaway"]
+    glance_headers = ["#", "Question Type", "Structured\nAgents", "Best Document\nAgent", "Worst Document\nAgent", "Key Takeaway"]
     glance_widths = [7, 26, 22, 22, 22, 71]
     glance_rows = [
-        ["1", "ER arrival time\n& nurse name", "Time correct;\nnurse not in DB", "Time + nurse\n+ employee ID", "Found\nnothing", "Nurse name only exists in\ndocuments -- need both layers"],
-        ["2", "Witness\nstatements", "Full quotes,\ncross-doc analysis", "Correct time,\nrich detail", "Missed key\nstatement", "4 of 8 doc agents attributed\none person's words to another"],
-        ["3", "Contradiction\ndetection", "GCC: found it;\nGPT-4.1: missed", "3-document\nsynthesis", "Hallucinated\ncase number", "GPT-4.1 agents consistently\nmiss contradictions in data"],
+        ["1", "Emergency room\narrival time\n& nurse name", "Time correct;\nnurse not in\ndatabase", "Time + nurse\n+ employee ID", "Found\nnothing", "Nurse name only exists in\ndocuments -- need both layers"],
+        ["2", "Witness\nstatements", "Full quotes,\ncross-document\nanalysis", "Correct time,\nrich detail", "Missed key\nstatement", "4 of 8 document agents\nattributed one person's\nwords to another"],
+        ["3", "Contradiction\ndetection", "Government Cloud:\nfound it;\nGPT-4.1: missed", "3-document\nsynthesis", "Hallucinated\ncase number", "GPT-4.1 agents consistently\nmiss contradictions in data"],
         ["4", "Cross-document\nconflict", "Honest: 'not\nin our data'", "Only agent to\ncatch conflict", "Repeated\nincorrect claim", "Most dangerous prompt --\nmisleading source reproduced"],
         ["5", "Full timeline\n(12 events)", "All 3:\n12 / 12", "12 / 12 with\nricher detail", "4 / 12 with\nwrong-case data", "Structured data makes\nenumeration trivial"],
-        ["6", "People roster\n(8 people)", "All 3:\n8 / 8", "8 / 8 plus\n4 extras", "5 / 8\nincomplete", "Doc agents found 4 people\nnot in the database"],
+        ["6", "People roster\n(8 people)", "All 3:\n8 / 8", "8 / 8 plus\n4 extras", "5 / 8\nincomplete", "Document agents found 4\npeople not in the database"],
         ["7", "Statement\nevolution", "10 of 11 agents\nfound all changes", "All changes +\nmotive analysis", "Missed 1 of 3\nchanges", "Strongest consensus across\nall agent types"],
-        ["8", "Filter by\naudience", "All 3 agents\nfailed", "4 / 4 with\nsource detail", "Returned wrong\nstatement type", "Only prompt where doc agents\nstrictly outperform structured"],
+        ["8", "Filter by\naudience", "All 3 agents\nfailed", "4 / 4 with\nsource detail", "Returned wrong\nstatement type", "Only prompt where document\nagents strictly outperform\nstructured"],
         ["9", "Aggregate\ncount (9 cases)", "All 3:\n9 / 9", "1 / 9\n(expected)", "1 / 9\n(expected)", "Cross-case queries are\nstructured data's top strength"],
         ["10", "Time gap\ncalculation", "Gold standard:\nall milestones", "Correct gap\ncalculation", "Fabricated time,\nsaid 10 hours", "Arithmetic reasoning exposes\nweaknesses in every agent"],
     ]
@@ -465,20 +465,20 @@ def build_pdf():
         "N/A (data not available and agent was transparent about it)."
     )
 
-    sc_headers = ["Agent", "Model", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]
-    sc_widths = [36, 16] + [11.8] * 10
+    sc_headers = ["Agent", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    sc_widths = [52] + [11.8] * 10
     sc_rows = [
-        ["Web Application", "4.1", "Pass", "Pass", "Fail", "Pa", "Pass", "Pass", "Pass", "Fail", "Pass", "Fail"],
-        ["MCP - Commercial", "4.1", "Pass", "Pa", "Pa", "N/A", "Pass", "Pass", "Pa", "Fail", "Pass", "Pass"],
-        ["MCP - GCC", "4o", "Fail", "Pass", "Pass", "N/A", "Pass", "Pass", "Pass", "Pa", "Pass", "Pa"],
-        ["SP/PDF - Com", "4.1", "Pass", "Pa", "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Pa", "Pass"],
-        ["SP/DOCX - Com", "4.1", "Pass", "Fail", "Pa", "Fail", "Pa", "Pass", "Pass", "Pass", "Pa", "Pass"],
-        ["KB/DOCX - Com", "4.1", "Pass", "Fail", "Pass", "Fail", "Pa", "Pass", "Pass", "Pass", "Pa", "Pass"],
-        ["KB/PDF - Com", "4.1", "Pass", "Pass", "Pass", "Fail", "Fail", "Pass", "Pass", "Pass", "Pa", "Pa"],
-        ["SP/PDF - GCC", "4o", "Pass", "Fail", "Pa", "Fail", "Fail", "Fail", "Pass", "Fail", "Pa", "Fail"],
-        ["SP/DOCX - GCC", "4o", "Fail", "Pa", "Pa", "Fail", "Pa", "Fail", "Pass", "Fail", "Pa", "Pass"],
-        ["KB/PDF - GCC", "4o", "Pa", "Pa", "Pass", "Fail", "Pass", "Pass", "Pass", "Pass", "Pa", "Pa"],
-        ["KB/DOCX - GCC", "4o", "Pa", "Fail", "Pass", "Fail", "Pa", "Pa", "Pass", "Pass", "Pa", "Pa"],
+        ["Web Application", "Pass", "Pass", "Fail", "Partial", "Pass", "Pass", "Pass", "Fail", "Pass", "Fail"],
+        ["Structured Data (Commercial)", "Pass", "Partial", "Partial", "N/A", "Pass", "Pass", "Partial", "Fail", "Pass", "Pass"],
+        ["Structured Data (Gov Cloud)", "Fail", "Pass", "Pass", "N/A", "Pass", "Pass", "Pass", "Partial", "Pass", "Partial"],
+        ["SharePoint PDF (Commercial)", "Pass", "Partial", "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Partial", "Pass"],
+        ["SharePoint Word (Commercial)", "Pass", "Fail", "Partial", "Fail", "Partial", "Pass", "Pass", "Pass", "Partial", "Pass"],
+        ["Uploaded Word (Commercial)", "Pass", "Fail", "Pass", "Fail", "Partial", "Pass", "Pass", "Pass", "Partial", "Pass"],
+        ["Uploaded PDF (Commercial)", "Pass", "Pass", "Pass", "Fail", "Fail", "Pass", "Pass", "Pass", "Partial", "Partial"],
+        ["SharePoint PDF (Gov Cloud)", "Pass", "Fail", "Partial", "Fail", "Fail", "Fail", "Pass", "Fail", "Partial", "Fail"],
+        ["SharePoint Word (Gov Cloud)", "Fail", "Partial", "Partial", "Fail", "Partial", "Fail", "Pass", "Fail", "Partial", "Pass"],
+        ["Uploaded PDF (Gov Cloud)", "Partial", "Partial", "Pass", "Fail", "Pass", "Pass", "Pass", "Pass", "Partial", "Partial"],
+        ["Uploaded Word (Gov Cloud)", "Partial", "Fail", "Pass", "Fail", "Partial", "Partial", "Pass", "Pass", "Partial", "Partial"],
     ]
     pdf.colored_score_table(sc_headers, sc_rows, sc_widths)
 
@@ -496,10 +496,10 @@ def build_pdf():
     pdf.write(5, " = Accurate & useful    ")
     pdf.set_font("Helvetica", "B", 8)
     pdf.set_text_color(*AMBER)
-    pdf.write(5, "Pa")
+    pdf.write(5, "Partial")
     pdf.set_text_color(*MED)
     pdf.set_font("Helvetica", "", 8)
-    pdf.write(5, " = Partial (minor gaps)    ")
+    pdf.write(5, " = Minor gaps    ")
     pdf.set_font("Helvetica", "B", 8)
     pdf.set_text_color(*RED)
     pdf.write(5, "Fail")
@@ -518,33 +518,37 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 7.5)
     pdf.set_text_color(*MED)
     prompts = [
-        "P1: ER arrival time", "P2: Witness statements", "P3: Contradiction detection",
-        "P4: Cross-document conflict", "P5: Full timeline", "P6: People roster",
-        "P7: Statement evolution", "P8: Audience filter", "P9: Aggregate count",
-        "P10: Time gap calculation"
+        "1: Emergency room arrival", "2: Witness statements", "3: Contradiction detection",
+        "4: Cross-document conflict", "5: Full timeline", "6: People roster",
+        "7: Statement evolution", "8: Audience filter", "9: Aggregate count",
+        "10: Time gap calculation"
     ]
     pdf.multi_cell(0, 4.5, "   |   ".join(prompts), align="C")
+    pdf.ln(2)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*LIGHT)
+    pdf.cell(0, 4, "Gov Cloud = Government Community Cloud (uses GPT-4o)  |  Commercial environment uses GPT-4.1", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ══════════════════════════════════════════════════════════════════
     # WIN/LOSS SUMMARY
     # ══════════════════════════════════════════════════════════════════
-    pdf.ln(6)
+    pdf.ln(4)
     pdf.section_title("Overall Rankings")
 
     rank_headers = ["Rank", "Agent", "Pass", "Partial", "Fail", "N/A"]
-    rank_widths = [12, 50, 24, 24, 24, 24]
+    rank_widths = [10, 66, 20, 20, 20, 20]
     rank_rows = [
-        ["1", "SP/PDF - Commercial", "8", "2", "0", "0"],
-        ["2", "MCP - GCC", "6", "2", "1", "1"],
-        ["3", "KB/DOCX - Commercial", "6", "2", "2", "0"],
-        ["4", "KB/PDF - Commercial", "6", "2", "2", "0"],
+        ["1", "SharePoint PDF (Commercial)", "8", "2", "0", "0"],
+        ["2", "Structured Data (Gov Cloud)", "6", "2", "1", "1"],
+        ["3", "Uploaded Word (Commercial)", "6", "2", "2", "0"],
+        ["4", "Uploaded PDF (Commercial)", "6", "2", "2", "0"],
         ["5", "Web Application", "6", "1", "3", "0"],
-        ["6", "SP/DOCX - Commercial", "5", "3", "2", "0"],
-        ["7", "MCP - Commercial", "5", "3", "1", "1"],
-        ["8", "KB/PDF - GCC", "5", "4", "1", "0"],
-        ["9", "KB/DOCX - GCC", "3", "5", "2", "0"],
-        ["10", "SP/DOCX - GCC", "2", "4", "4", "0"],
-        ["11", "SP/PDF - GCC", "2", "2", "6", "0"],
+        ["6", "SharePoint Word (Commercial)", "5", "3", "2", "0"],
+        ["7", "Structured Data (Commercial)", "5", "3", "1", "1"],
+        ["8", "Uploaded PDF (Gov Cloud)", "5", "4", "1", "0"],
+        ["9", "Uploaded Word (Gov Cloud)", "3", "5", "2", "0"],
+        ["10", "SharePoint Word (Gov Cloud)", "2", "4", "4", "0"],
+        ["11", "SharePoint PDF (Gov Cloud)", "2", "2", "6", "0"],
     ]
     pdf.styled_table(rank_headers, rank_rows, rank_widths, font_size=8)
     pdf.ln(4)
@@ -578,10 +582,10 @@ def build_pdf():
         "tax assessments, and real estate transfers."
     )
     pdf.body_text(
-        "The underlying system uses the same architecture pattern -- MCP server backed by Azure "
-        "Functions and Azure SQL -- with 14 investigative tools. Copilot Studio agents will be "
-        "tested using the same methodology: structured data (MCP/SQL) vs. document-backed "
-        "(SharePoint and knowledge base), scored on accuracy, completeness, and safety."
+        "The underlying system uses the same architecture pattern -- a structured data server backed "
+        "by Azure Functions and Azure SQL -- with 14 investigative tools. Copilot Studio agents will be "
+        "tested using the same methodology: structured data vs. document-backed "
+        "(SharePoint and uploaded files), scored on accuracy, completeness, and safety."
     )
     pdf.body_text(
         "This use case will stress-test Copilot Studio's ability to handle aggregate queries "
@@ -622,7 +626,7 @@ def build_pdf():
         "For narrative detail the database does not capture: nursing notes, "
         "page-level citations, clinical observations, home visit narratives. These enrich "
         "structured answers with the context attorneys need for legal filings.",
-        bold_lead="Document grounding (SharePoint/knowledge base):"
+        bold_lead="Document grounding (SharePoint/uploaded files):"
     )
     pdf.ln(1)
     pdf.bullet(

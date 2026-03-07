@@ -15,3 +15,4 @@ docs/*.docx
 docs/*.msg
 docs/*.pdf
 !docs/executive-summary.pdf
+!docs/ogs-presenter-guide.pdf

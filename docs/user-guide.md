@@ -88,6 +88,8 @@ The Case Browser is the main content area, always visible behind the chat widget
 
 ## SharePoint Comparison Demo
 
+### Use Case 1: DSS Legal Case Analysis
+
 The `sharepoint-docs/` folder contains 11 realistic legal documents for Cases 1 and 2, ready to upload to SharePoint. These contain the same facts as the SQL database but in unstructured narrative prose.
 
 ### Setting Up the SharePoint Agent
@@ -128,6 +130,21 @@ Each prompt includes expected MCP vs. SharePoint responses and why MCP wins.
 | `Court_Orders_and_Filings.md` | All 6 court events including voluntary relinquishment |
 | `TPR_Petition_and_Affidavit.md` | Formal petition with statutory grounds + sworn affidavit |
 | `GAL_Reports.md` | Thomas Reed's initial and updated reports |
+
+### Use Case 2: Philly Poverty Profiteering
+
+A second document set in `sharepoint-docs/Philly-GEENA-LLC/`, `sharepoint-docs/Philly-2400-Bryn-Mawr/`, and `sharepoint-docs/` covers the Philly use case. These are investigator-style PDF reports about GEENA LLC and two of its properties, containing data that also lives in the Philly MCP server's 34M-row SQL database.
+
+**Documents (5 PDFs):**
+- Entity Investigation Report (GEENA LLC portfolio overview)
+- Property Enforcement File: 4763 Griscom Street (violations, demolition)
+- Transfer Chain Analysis: 4763 Griscom Street (6-owner chain, two sheriff sales)
+- Property Case File: 2400 Bryn Mawr Avenue (stone colonial, condition decline)
+- Ownership & Financial History: 2400 Bryn Mawr Avenue (mortgage crisis, foreclosure)
+
+**Comparison Prompts:** `Philly_Comparison_Prompts.pdf` has 10 prompts with ground truth. Prompts 6 and 9 are designed to be impossible for document agents (require city-wide aggregation). Prompt 7 favors document agents (narrative about institutional failures).
+
+Upload the 5 investigation PDFs to SharePoint for the document-backed agent. Use the same prompts against both the MCP agent and the SharePoint agent.
 
 ## Database Access
 

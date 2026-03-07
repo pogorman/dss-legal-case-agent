@@ -886,3 +886,46 @@ Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP age
 - Consider enriching `get_case_summary` tool description to mention medical staff/witnesses (P1 nurse gap)
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
+
+---
+
+## Session 18 — 2026-03-07
+
+### What was done
+- **Presenter Guide PDF**: Created `scripts/generate-presenter-guide.py` (fpdf2) generating `docs/ogs-presenter-guide.pdf` — single-page two-column printed guide for demos. Iterated through 4 versions fixing column overflow, margin management, and orphaned word wrapping. Key pattern: `set_col_margins(cx, cw)` dynamically sets `l_margin`/`r_margin` to constrain fpdf2 text wrapping to the active column.
+
+- **Use Case 2: Philly Investigation Documents**: Created 5 investigator-style markdown reports for GEENA LLC and two properties, using live data from the Philly MCP server's 34M-row SQL database:
+  - `Entity_Investigation_Report.md` — GEENA LLC portfolio: 194 properties, 178 vacant, $8.6M value, 1,411 violations
+  - `Property_Enforcement_File_4763_Griscom.md` — 64 violations, 45 failed, city demolition, assessment decline
+  - `Transfer_Chain_Analysis_4763_Griscom.md` — 6-owner chain, two sheriff sales, $146K at 275% FMV
+  - `Property_Case_File_2400_Bryn_Mawr.md` — 4,141 sq ft stone colonial, condition 7, 34 violations
+  - `Ownership_Financial_History_2400_Bryn_Mawr.md` — Anderson family, WaMu/IndyMac collapse, reverse mortgage foreclosure
+
+- **Comparison Prompts**: Created `Philly_Comparison_Prompts.md` — 10 test prompts with ground truth, expected winners, and design rationale. Prompts 6 and 9 designed to be impossible for document agents (require city-wide aggregation). Prompt 7 designed to favor document agents (institutional failure narrative).
+
+- **PDF Conversion**: Created `scripts/convert-philly-docs.py` — markdown-to-PDF converter using fpdf2. Handles H1-H3, tables, bullets, numbered lists, code blocks, bold metadata, and paragraphs. Added `sanitize_text()` to replace Unicode characters (em dashes, arrows, smart quotes) unsupported by Helvetica. Generated 6 PDFs (5 investigation reports + comparison prompts).
+
+- **Documentation**: Updated architecture.md (Use Case 2 documents section), user-guide.md (Philly comparison setup), faqs.md (Use Case 2 Q&A), session-log.md, MEMORY.md.
+
+### Files created
+- `scripts/generate-presenter-guide.py` → `docs/ogs-presenter-guide.pdf`
+- `scripts/convert-philly-docs.py`
+- `sharepoint-docs/Philly-GEENA-LLC/Entity_Investigation_Report.md` + `.pdf`
+- `sharepoint-docs/Philly-GEENA-LLC/Property_Enforcement_File_4763_Griscom.md` + `.pdf`
+- `sharepoint-docs/Philly-GEENA-LLC/Transfer_Chain_Analysis_4763_Griscom.md` + `.pdf`
+- `sharepoint-docs/Philly-2400-Bryn-Mawr/Property_Case_File_2400_Bryn_Mawr.md` + `.pdf`
+- `sharepoint-docs/Philly-2400-Bryn-Mawr/Ownership_Financial_History_2400_Bryn_Mawr.md` + `.pdf`
+- `sharepoint-docs/Philly_Comparison_Prompts.md` + `.pdf`
+
+### Decisions made
+- Documents written as investigator reports (source-first framing) — looks like data was extracted FROM documents, not the reverse
+- Only PDFs for customer-facing demo; markdown kept as source for iteration
+- fpdf2 with Helvetica (no Unicode fonts) — requires `sanitize_text()` for special characters
+- Two-column PDF layout uses dynamic margin switching pattern for fpdf2
+
+### Open items
+- **Run Use Case 2 testing** — 10 Philly prompts across MCP and document-backed agents
+- Upload 5 Philly PDFs to SharePoint for document agent testing
+- Run all 24 redemption retests (document agents, Use Case 1)
+- Consider BFG Repo Cleaner to purge real names from git history
+- Demo dry run with side-by-side comparison

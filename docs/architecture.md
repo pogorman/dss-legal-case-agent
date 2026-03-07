@@ -182,13 +182,31 @@ In addition to the MCP-backed agent, the demo includes unstructured legal docume
 └──────────────────────────────────┘    └──────────────────────────────────┘
 ```
 
-### SharePoint Documents (11 files)
+### Use Case 1: SharePoint Documents (11 files)
 
 **Case 2024-DR-42-0892 (CPS):** DSS Investigation Report, Medical Records, Sheriff Report #24-06-4418, Court Orders and Filings (3 orders), Home Study Report, GAL Report
 
 **Case 2024-DR-15-0341 (TPR):** DSS Investigation Report, Substance Abuse Evaluation, Court Orders and Filings (6 orders), TPR Petition and Affidavit, GAL Reports (initial + updated)
 
 All documents use page markers matching the `page_reference` values in the SQL seed data. Key statements are embedded verbatim in narrative prose. Some information is intentionally spread across multiple documents to test cross-document synthesis.
+
+### Use Case 2: Philly Investigation Documents (5 files + comparison prompts)
+
+A second set of documents covering the Philly Poverty Profiteering use case. These are written as investigator reports from the "Office of Property & Code Enforcement Analytics" and contain the same data available via the Philly MCP server's 34M-row SQL database. Documents are authored to look like the source from which structured data was extracted (not the reverse).
+
+**GEENA LLC / 4763 Griscom Street (3 files):**
+- `Entity_Investigation_Report.pdf` — GEENA LLC portfolio overview: 194 properties, 178 vacant (91.8%), $8.6M assessed value, acquisition patterns, 1,411 violations, related entities
+- `Property_Enforcement_File_4763_Griscom.pdf` — 64 violations, 45 failed (70.3%), assessment decline $56,900→$24,800, city demolition June 2019
+- `Transfer_Chain_Analysis_4763_Griscom.pdf` — 6-owner chain (1999-2019), two sheriff sales, $146K purchase at 275% of fair market value, 26-day flip
+
+**2400 Bryn Mawr Avenue (2 files):**
+- `Property_Case_File_2400_Bryn_Mawr.pdf` — 4,141 sq ft stone colonial, quality grade B, condition 7 (poor), 34 violations, assessment decline $357,100→$265,600
+- `Ownership_Financial_History_2400_Bryn_Mawr.pdf` — Anderson family 14+ year ownership, WaMu/IndyMac/Financial Freedom collapse, reverse mortgage foreclosure, GEENA LLC acquisition at 36.2% below FMV
+
+**Comparison Prompts:**
+- `Philly_Comparison_Prompts.pdf` — 10 test prompts with ground truth, expected winners, and design rationale
+
+Source markdown files are in `sharepoint-docs/Philly-GEENA-LLC/`, `sharepoint-docs/Philly-2400-Bryn-Mawr/`, and `sharepoint-docs/`. PDFs generated via `scripts/convert-philly-docs.py` using fpdf2.
 
 ## Web Front End
 

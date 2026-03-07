@@ -121,6 +121,26 @@ A: A single authoritative document makes it easier to compare findings across us
 **Q: Why does the PDF say "Uploaded PDF" instead of "Knowledge Base PDF"?**
 A: "Knowledge base" is a technical term. "Uploaded files" is plain English that any executive understands. The PDF avoids all abbreviations (no MCP, GCC, SP, KB, Com, Pa, ER, DB, DOCX) for C-suite readability.
 
+## Use Case 2: Philly Poverty Profiteering
+
+**Q: What is Use Case 2?**
+A: An investigative analytics use case using real Philadelphia public records (34M rows across 11 tables). Five PDF investigation reports about GEENA LLC and two properties are compared against the Philly MCP server backed by live SQL data. Same agent comparison methodology as Use Case 1.
+
+**Q: What documents are in the Philly corpus?**
+A: Five investigator-style PDF reports: Entity Investigation Report (GEENA LLC portfolio), Property Enforcement File (4763 Griscom violations/demolition), Transfer Chain Analysis (4763 Griscom ownership history), Property Case File (2400 Bryn Mawr profile), and Ownership & Financial History (2400 Bryn Mawr mortgage crisis/foreclosure). Plus a comparison prompts document with 10 test prompts.
+
+**Q: Is the Philly data real or synthetic?**
+A: Unlike Use Case 1 (entirely synthetic), Use Case 2 uses real public data from the City of Philadelphia — property assessments, code violations, real estate transfers, demolition permits. Every number is verifiable against official city records.
+
+**Q: How were the Philly documents created?**
+A: The documents were written as investigator reports from the "Office of Property & Code Enforcement Analytics." They are authored to read as if the structured database was extracted FROM them (source-first framing), even though the data already existed in SQL. This mirrors a realistic digitization workflow.
+
+**Q: Which prompts are impossible for document agents?**
+A: Prompts 6 (top 5 private violators citywide) and 9 (zip code vacancy comparison) require aggregation across 584K properties. The documents only cover 2 properties and 1 entity, so document agents can only partially answer or must acknowledge the limitation.
+
+**Q: How do I convert the markdown documents to PDF?**
+A: Run `python scripts/convert-philly-docs.py`. This uses fpdf2 to parse markdown structure and render styled PDFs with navy headers, alternating-row tables, and professional footers. The script handles Unicode character replacement for Helvetica font compatibility.
+
 ---
 
 *This file is updated when clarification questions arise during development sessions.*

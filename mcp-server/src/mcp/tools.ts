@@ -29,7 +29,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "get_case_summary",
     description:
-      "Returns the case overview including parties, filing date, status, and summary for a specific case.",
+      "Returns the case overview including ALL people involved (parents, children, nurses, doctors, case workers, attorneys, law enforcement, judges) with their roles and source citations, plus filing date, status, county, and case summary. Use this when asked about who is involved in a case or when looking for a specific person's role.",
     inputSchema: {
       type: "object",
       properties: {
@@ -44,7 +44,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "get_timeline",
     description:
-      "Returns a chronological list of events for a case, optionally filtered by event type. Includes source document references.",
+      "Returns a chronological list of events for a case with dates, descriptions, and source document references. Can filter by event type. Use for questions about what happened and when.",
     inputSchema: {
       type: "object",
       properties: {
@@ -64,7 +64,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "get_statements_by_person",
     description:
-      "Returns all recorded statements for a case, with source citations and page references. Can filter by who made the statement, who it was made to, or both.",
+      "Returns recorded statements for a case with source citations, page references, dates, and who the statement was made to. Use when asked about what someone said, or to compare what someone told different audiences (hospital vs law enforcement).",
     inputSchema: {
       type: "object",
       properties: {
@@ -89,7 +89,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "get_discrepancies",
     description:
-      "Returns a comparison of conflicting accounts between parties on key topics in the case, showing what each party said and what contradicted them.",
+      "Returns side-by-side comparison of conflicting accounts between parties on key topics, showing what each party claimed and what evidence contradicted them. Use when asked to compare or find contradictions.",
     inputSchema: {
       type: "object",
       properties: {

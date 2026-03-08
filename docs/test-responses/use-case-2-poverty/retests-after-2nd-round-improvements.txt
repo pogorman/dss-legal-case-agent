@@ -1,0 +1,842 @@
+ === USE CASE 2: PHILLY MCP — 4 AGENTS x 10 PROMPTS (40 runs) ===
+
+  Agents: GCC MCP, COM MCP, Investigative Agent, Foundry Agent
+  (Skip Triage Agent — 0/10 in Round 1, not demo-ready)
+  (Skip SP/PDF agents — unaffected by MCP tool changes)
+
+  P1: "How many properties does GEENA LLC own, and what percentage are vacant?"
+      Watch for: GCC MCP should no longer crash (summary mode)
+
+gcc mcp response --------------------------
+Error Message: The request is resulting in too much data to handle, please evaluate the amount of data being returned by your actions.[Learn more]​https://learn.microsoft.com/en-us/microsoft-copilot-studio/error-codes?tabs=webApp#toomuchdatatohandle​Error Code: OpenAIModelTokenLimit Conversation Id: 4b2cefc3-6326-4f17-b1d3-6a55cf2284db Time (UTC): 2026-03-08T02:54:12.041Z
+
+com mcp response --------------------------
+GEENA LLC owns 330 Philadelphia parcels. Of those, 286 are flagged as vacant, which is approximately 86.7% vacant.
+
+IA response --------------------------
+GEENA LLC owns 330 properties in Philadelphia.
+
+Vacancy details:
+
+286 properties are classified as vacant.
+This means 86.7% of their portfolio is vacant (286/330).
+Additional facts:
+
+GEENA LLC’s parcels are highly concentrated in neighborhoods such as 19133 (160 vacant out of 174), 19104 (99 vacant out of 124), and 19132 (78 vacant out of 90).
+Their portfolio shows significant property neglect: 1,951 code violations and 64 demolitions.
+This vacancy rate is exceptionally high, indicating GEENA LLC is one of the city’s major “hold-and-neglect” entities.
+
+search_entities
+get_entity_network
+FA response --------------------------
+GEENA LLC owns a portfolio of 330 properties across Philadelphia. Of these, 286 are listed as vacant, which means approximately 86.7% of their portfolio is vacant:
+
+Total parcels owned: 330
+Parcels identified as vacant: 286
+Vacancy rate: 286 / 330 ≈ 86.7%
+This high vacancy rate signals possible neglect, speculative holding, or large-scale property warehousing. With nearly 2,000 code violations and 64 demolitions across their portfolio, GEENA LLC is a major player in urban distress and blight, especially concentrated in neighborhoods like 19133, 19104, and 19132.
+
+
+  P2: "What has happened to the property at 4763 Griscom Street since it was purchased?"
+      Watch for: Should call search_properties first, get parcel 232452100
+gcc mcp response --------------------------
+The property at 4763 Griscom Street has experienced several significant events since its purchase:
+
+Ownership Transfers:
+
+The property was transferred to GEENA LLC from Ricky H. Martinez via a Sheriff's Deed on December 24, 2019, for $6,500.
+Prior to that, it was transferred from Hao Kim Luong to Ricky H. Martinez on August 5, 2014, for $21,500.
+It was transferred from Henry M. DeJesus to Hao Kim Luong on July 10, 2014, for $20,000.
+It was transferred from Hillard J. Habeeb to Henry M. DeJesus via a Sheriff's Deed on January 8, 2013, for $13,200.
+The property has had multiple other transfers dating back to 1999.
+Violations:
+
+The property has had numerous code violations, primarily related to being a vacant lot. There have been 64 violations recorded, with many investigations resulting in a "FAILED" status. The most recent violations were in 2024, with several notices of violation issued and some investigations marked as "PASSED".
+Demolitions:
+
+The property underwent a city-initiated demolition, completed by Pedro Palmer Construction Inc., starting on April 9, 2019, and completed on June 7, 2019. This demolition was funded by the City of Philadelphia.
+Assessments:
+
+The market value of the property has fluctuated over the years. It was assessed at $56,900 from 2015 to 2018, dropped to $37,200 in 2019, further decreased to $17,500 from 2020 to 2024, and then increased to $24,800 in 2025.
+Licenses:
+
+There are no business or commercial activity licenses associated with the property.
+These events indicate a history of ownership changes, code violations, a city-funded demolition, and fluctuating property assessments. The property is currently owned by GEENA LLC and is categorized as vacant land.
+
+
+
+com mcp response --------------------------
+Here’s what happened at 4763 Griscom St (parcel 232452100) after it was purchased:
+
+Purchase: GEENA LLC acquired the property via Sheriff’s Deed on 2019-12-24 for $6,500; deed recorded 2020-01-16. The grantor on the deed was Ricky H. Martinez.
+Immediately prior: The City had already demolished the structure as a taxpayer-funded, city-initiated demo completed 2019-06-07 by Pedro Palmer Construction Inc. So GEENA LLC bought it as a cleared lot.
+Current status and assessment: Classified as VACANT LAND (zoning CMX2). OPA market value shifted to land-only starting in 2020 at $17,500 and rose to $24,800 for 2025. No building value since 2020.
+Code enforcement since purchase: The lot has cycled through repeated CLIP “Notice of Violation” inspections for vacant-lot conditions, with mixed results but numerous failures under GEENA LLC. Examples:
+CF-2024-065589: Failed 2024-06-21, later Passed 2024-07-23.
+CF-2024-048352: Failed 2024-05-20, Failed 2024-07-22 (13:42), then Passed 2024-07-22 (13:46).
+CF-2023-057245: Failed 2023-06-16, then Passed 2023-08-22.
+CF-2023-016937: Failed 2023-03-02 and 2023-03-16, then Passed 2023-03-21. Overall totals on the parcel show 64 investigations with 45 failures (cumulative, including pre-purchase history).
+Licenses, appeals, transfers: No active business/commercial activity licenses, no L&I appeals, and no subsequent transfers since GEENA LLC’s acquisition.
+Owner contact on file: GEENA LLC, mailing address 2457 N 54th St, Philadelphia, PA 19131.
+Bottom line: After a city-funded demolition in mid-2019, the property was bought by GEENA LLC at sheriff sale in December 2019 and has remained a vacant CMX2 lot. Since then, it has drawn recurring maintenance violations but no redevelopment, permits, or new licenses.
+
+
+
+IA response --------------------------
+Here is a detailed summary of what has happened to the property at 4763 Griscom Street (parcel number 232452100) since it was purchased:
+
+Ownership and Transfers:
+
+In December 2019, the property was purchased at sheriff’s sale by GEENA LLC for $6,500 (SHERIFF'S DEED, prior owner: Ricky H Martinez).
+The chain of prior owners includes Ricky H Martinez (acquired 2014 for $21,500), Luong Hao Kim (acquired 2014 for $20,000), Henry M DeJesus (acquired via sheriff deed in 2013 for $13,200), and earlier owners (see full chain above).
+GEENA LLC has held ownership since the 2020 recording date.
+Demolition:
+
+The property underwent a city-initiated demolition (taxpayer funded) in Spring 2019. Contractor Pedro Palmer Construction completed the demolition between April and June 2019, when the owner was Ricky H Martinez. This indicates a structure formerly existed, now classified as "Vacant Land."
+Code Violations:
+
+The property has 64 code violation records, with 45 marked as "FAILED" investigations. Most violations relate to neglect of a vacant lot, managed by CLIP (Community Life Improvement Program).
+Violations have persisted both prior to and after GEENA LLC’s acquisition, indicating ongoing neglect. Recent violations (2024) have been both "FAILED" and subsequently "PASSED," suggesting some cleanup efforts but continued monitoring.
+Assessments:
+
+Assessment history reveals a dramatic drop in value post-demolition:
+2015–2018: Market value was $56,900, with taxable portions for both building and land.
+2019: Value dropped to $37,200, reflecting building removal.
+2020–2024: Value stabilized at $17,500 as vacant land.
+2025: Value increased to $24,800, still classified as vacant land.
+No active business, rental, or commercial activity licenses.
+Appeals:
+
+No L&I appeals have been filed.
+Summary and Pattern:
+
+4763 Griscom St. was acquired by GEENA LLC at sheriff’s sale after city demolition. It is now vacant land, but GEENA LLC has accumulated ongoing violations typical of absentee or neglectful vacant lot owners.
+The history shows poverty profiteering: property purchased cheaply after city-funded demolition and a persistent pattern of neglect, evidenced by nearly continuous CLIP code enforcement.
+If you want more detail (e.g., violation types or GEENA LLC’s broader portfolio), let me know.
+
+search_properties
+get_property_transfers
+get_property_profile
+get_property_violations
+get_property_demolitions
+get_property_assessments
+get_property_licenses
+get_property_appeals
+FA response --------------------------
+Here's a detailed summary of what has happened to the property at 4763 Griscom Street (parcel number 232452100) since its last purchase:
+
+Ownership and Sale History:
+
+GEENA LLC purchased the property via Sheriff's Deed for $6,500 on 12/24/2019 (recorded 1/16/2020).
+Before GEENA LLC, Martinez Ricky H acquired it in 2014 for $21,500 (regular deed).
+There is a history of multiple sales, transfers, and assignments stretching back to 1999, including sheriff sales and mortgage assignments.
+Current Status: 
+
+The property is categorized as VACANT LAND.
+As of 2025, market value is $24,800, and there are no buildings—only taxable land.
+Code Violations:
+
+Since GEENA LLC's purchase, the site has racked up a staggering 45 failed code enforcement investigations (primarily “NOTICE OF VIOLATION” cases handled by CLIP - Vacant Lot Investigators).
+Violations were ongoing and frequent, as recently as June and July 2024, mostly regarding neglect typical for vacant lots (maintenance, rubbish, weeds).
+Demolition Record:
+
+The City of Philadelphia initiated and completed a taxpayer-funded demolition on this parcel between 4/9/2019 and 6/7/2019, when Martinez Ricky H still owned it. Contractor: Pedro Palmer Construction Inc.
+Licensing:
+
+No current active business, rental, or vacant property licenses associated with this address.
+Implications and Pattern:
+
+This parcel is a classic example of post-demolition "zombie lot" neglect. After city demolition, the vacant land was acquired cheap at sheriff sale by GEENA LLC, who has not maintained the site; repeated violations, no active licenses, and continual city intervention.
+GEENA LLC is not keeping up with basic lot maintenance, leaving the city repeatedly to cite and abate the property.
+Summary Table:
+
+Parcel	Owner	Latest Purchase	Violation Count	Demolition	Licenses
+232452100	GEENA LLC	$6,500 (2019)	64 total; 45 failed	City-funded, 2019	0
+Key Takeaway: Since its demolition and subsequent acquisition by GEENA LLC, 4763 Griscom Street has become a chronic site of neglect, with frequent failed code inspections and no effort at legal occupancy or redevelopment. This fits poverty profiteering and absentee owner patterns prevalent in low-cost sheriff sale acquisitions in Philadelphia.
+
+  P3: "What was the assessed value of 4763 Griscom Street in 2017 vs today, and why did it change?"
+      Watch for: Should call search_properties → parcel 232452100 → assessments
+gcc mcp response --------------------------
+The assessed value of 4763 Griscom Street in 2017 was $56,900. As of the latest assessment in 2025, the value is $24,800.
+
+The significant decrease in assessed value can be attributed to the following factors:
+
+Market Value Decline: The market value of the property has decreased over the years, reflecting a possible decline in the local real estate market or specific issues with the property itself.
+Property Condition: The property is categorized as "VACANT LAND," which may have contributed to the decrease in value. Vacant properties often have lower market values compared to developed properties.
+Ownership and Usage: The property is owned by GEENA LLC, and the lack of development or improvement on the land could have led to a lower assessment.
+If you need more detailed information or further analysis, please let me know!
+
+
+
+com mcp response --------------------------
+Assessed value
+
+2017: $56,900 total (building $42,390; land $14,510) for parcel 232452100 at 4763 Griscom St.
+Today: $24,800 total (land-only; building $0) in the 2025 OPA assessment.
+Why it changed
+
+The structure was demolished by the City (L&I) in 2019 under case 571777; work ran 2019-04-09 to 2019-06-07 and was completed by contractor Pedro Palmer Construction Inc. After the demolition, OPA removed the building value and reclassified the property as vacant land.
+You can see this reflected in the assessment history: it drops from $56,900 (2017–2018) to $37,200 in 2019, then to land-only $17,500 for 2020–2024, and to $24,800 in 2025 with the latest reassessment.
+The lot was then acquired via sheriff’s deed by GEENA LLC for $6,500 on 2019-12-24; at that time the assessed value on record was $37,200. Continuous CLIP “vacant lot” violations since then are consistent with a land-only parcel.
+
+
+IA response --------------------------
+Assessed Value (Parcel: 232452100, Owner: GEENA LLC):
+
+In 2017: $56,900 (Taxable building: $42,390; Taxable land: $14,510)
+Today (2025 assessment): $24,800 (Taxable land only; vacant land category)
+Why did it change?
+
+Between 2017 and 2019, the assessed value dropped from $56,900 to $37,200, then further declined to $17,500 from 2020 through 2024.
+This dramatic reduction coincides with the property being classified as "VACANT LAND." In 2017, both building and land were taxed. From 2020 onward, only land value was assessed (building value = $0), indicating the building was demolished or reclassified as vacant. The 2025 assessment increased land value to $24,800, reflecting updated land market rates.
+The change was driven by property status: a demolition or official vacancy led to removal of the building from tax calculations, hence lower assessed value.
+If you want verification of a demolition record or code violations that triggered vacancy reclassification, I can check further.
+
+search_properties
+get_property_assessments
+FA response --------------------------
+Assessed Value Change: 4763 Griscom Street (Parcel: 232452100)
+
+2017 Assessed Value: $56,900
+Taxable Building: $42,390
+Taxable Land: $14,510
+2024/2025 Assessed Value: $24,800
+Taxable Building: $0 (classified as vacant land)
+Taxable Land: $24,800
+Reason for Change:
+
+Between 2018 and 2019, the market value dropped sharply from $56,900 to $37,200, then plunged again in 2020 to just $17,500, remaining at this level through 2024, before rising to $24,800 in 2025.
+The key change: The property is now classified as "VACANT LAND" (Building Code: SC – Vacant Land Commer < Acre), with no taxable building value. This suggests the structure was demolished or removed, leaving only the land value.
+There is 1 demolition record on file for this parcel, confirming a building was removed.
+Summary:
+
+The assessed value dropped because the property transitioned from having a building (valued at ~$42,000) to only vacant land, cutting the total taxable value by over half.
+The City re-assessed it as vacant land, matching its current condition. This is typical for parcels where blight, neglect, or city-initiated demolition removes prior improvements.
+Owner: GEENA LLC (mailing address: 2457 N 54th St, Philadelphia, PA 19131). Violation History: 64 total code violations (45 failed cases), signaling chronic neglect and likely triggering city intervention and demolition.
+
+If you want details on the demolition record or violation history, let me know.
+
+
+  P4: "Who has owned 4763 Griscom Street, and in what order?"
+      Watch for: Should call search_properties → parcel 232452100 → transfers
+gcc mcp response --------------------------
+The ownership history of 4763 Griscom Street is as follows:
+
+GEENA LLC acquired the property on December 24, 2019, from Ricky H. Martinez via a Sheriff's Deed for $6,500.
+Ricky H. Martinez acquired the property on August 5, 2014, from Hao Kim Luong via a Deed for $21,500.
+Hao Kim Luong acquired the property on July 10, 2014, from Henry M. DeJesus via a Deed for $20,000.
+Henry M. DeJesus acquired the property on January 8, 2013, from Hillard J. Habeeb via a Sheriff's Deed for $13,200.
+Hillard J. Habeeb acquired the property on March 23, 2004, from Michael L. Bryan via a Deed for $146,000.
+Michael L. Bryan acquired the property on November 10, 1999, from George Ofides, Vasiliky Ofides, and Russell Shehinsky via a Deed for $10,650.
+If you need further details or additional information, feel free to ask!
+com mcp response --------------------------
+Here’s the ownership history for 4763 Griscom Street (Parcel #232452100) based on recorded transfers:
+
+Current Owner
+GEENA LLC
+Acquired via Sheriff’s Deed on Dec 24, 2019
+Sale price: $6,500
+Grantor: Ricky H. Martinez
+Recorded: Jan 16, 2020
+Previous Owners
+Ricky H. Martinez
+
+Acquired via Deed on Aug 5, 2014
+Sale price: $21,500
+Grantor: Hao Kim Luong
+Hao Kim Luong
+
+Acquired via Deed on Jul 10, 2014
+Sale price: $20,000
+Grantor: Henry M. DeJesus
+Henry M. DeJesus
+
+Acquired via Sheriff’s Deed on Jan 8, 2013
+Sale price: $13,200
+Grantor: Hillard J. Habeeb
+Hillard J. Habeeb
+
+Acquired via Deed on Mar 23, 2004
+Sale price: $146,000
+Grantor: Bryan Michael L
+Bryan Michael L
+
+Acquired via Deed on Nov 10, 1999
+Sale price: $10,650
+Grantors: George Ofides, Vasiliky Ofides, Russell Shehinsky
+Notable Observations
+Two Sheriff’s Deeds in the chain (2013 and 2019) indicate foreclosure or tax sale events.
+The property is currently classified as Vacant Land with a market value of $24,800.
+The price dropped dramatically from $146,000 in 2004 to $6,500 in 2019, suggesting severe depreciation and possible abandonment.
+Would you like me to dig into GEENA LLC’s full property portfolio to see if they own other distressed properties?
+IA response --------------------------
+Here is the chain of ownership for 4763 Griscom Street (Parcel Number: 232452100), listed in order from most recent to earliest:
+
+GEENA LLC — Acquired via Sheriff's Deed from Ricky H Martinez on December 24, 2019 (Sale Price: $6,500).
+Ricky H Martinez — Acquired via Deed from Hao Kim Luong on August 5, 2014 (Sale Price: $21,500).
+Hao Kim Luong — Acquired via Deed from Henry M DeJesus on July 10, 2014 (Sale Price: $20,000).
+Henry M DeJesus — Acquired via Sheriff's Deed from Hillard J Habeeb on January 8, 2013 (Sale Price: $13,200).
+Hillard J Habeeb — Acquired via Deed from Bryan Michael L on March 23, 2004 (Sale Price: $146,000).
+Bryan Michael L — Acquired via Deed from George Ofides, Vasiliky Ofides, and Russell Shehinsky on November 10, 1999 (Sale Price: $10,650).
+There are also multiple mortgage assignments and satisfactions in the property record, but the above list shows the actual transfer of ownership by deed or sheriff’s deed. If you need more detail (such as mortgage holders or legal remarks), let me know!
+
+search_properties
+get_property_transfers
+FA response --------------------------
+Here is the complete chain of ownership for 4763 Griscom Street (parcel number: 232452100), documented through official deed and sheriff sale records:
+
+OFIDES GEORGE, OFIDES VASILIKY, SHEHINSKY RUSSELL  
+Sold to: BRYAN MICHAEL L  
+Date: 1999-11-10  
+Sale Price: $10,650 ($5,000 cash, $5,650 other consideration)  
+Document Type: DEED
+BRYAN MICHAEL L  
+Sold to: HABEEB HILLARD J  
+Date: 2004-03-23  
+Sale Price: $146,000  
+Document Type: DEED
+HABEEB HILLARD J  
+Sold to: DEJESUS HENRY M  
+Date: 2013-01-08  
+Sale Price: $13,200  
+Document Type: SHERIFF'S DEED (auction — likely property tax foreclosure sale)
+DEJESUS HENRY M  
+Sold to: LUONG HAO KIM  
+Date: 2014-07-10  
+Sale Price: $20,000  
+Document Type: DEED
+LUONG HAO KIM  
+Sold to: MARTINEZ RICKY H  
+Date: 2014-08-05  
+Sale Price: $21,500  
+Document Type: DEED
+MARTINEZ RICKY H  
+Sold to: GEENA LLC  
+Date: 2019-12-24  
+Sale Price: $6,500  
+Document Type: SHERIFF'S DEED (auction/foreclosure sale)
+Current Owner:  
+
+GEENA LLC
+Observations:
+
+The property changed hands frequently, including two sheriff’s sales (foreclosure): 2013 (HABEEB → DEJESUS), and 2019 (MARTINEZ → GEENA LLC).
+The most recent sale was at $6,500 — much lower than previous values, indicating distress or further deterioration.
+GEENA LLC is the current owner. Frequent transfers, relatively low prices, and repeat foreclosure sales suggest a high-risk, speculative or neglect-prone ownership history.
+If you want the owner network of GEENA LLC or violation history for this parcel, let me know.
+
+
+  P5: "The deed says 4763 Griscom was purchased for $146,000 but the fair market value was only $53,155. Where does the $53,155 come
+  from?"
+      Watch for: Should resolve address first, then check transfers/assessments
+gcc mcp response --------------------------
+The fair market value of $53,155 for the property at 4763 Griscom St comes from the historical assessments of the property. Here is a summary of the assessment history:
+
+2015-2018: The market value was consistently assessed at $56,900.
+2019: The market value dropped to $37,200.
+2020-2024: The market value further decreased to $17,500.
+2025: The market value increased to $24,800.
+The value of $53,155 likely represents an average or a specific assessment year that was used in the deed documentation. The significant drop in market value over the years indicates changes in the property's condition or market conditions in the area.
+
+
+
+com mcp response --------------------------
+Short answer: It’s the transfer‑tax “computed fair market value,” not an appraisal. Pennsylvania applies a Common Level Ratio (CLR) factor to the property’s assessed value to derive a fair market value for recording/transfer tax purposes, and tax is charged on the higher of price or this computed value.
+
+For 4763 Griscom St (parcel 232452100), the 2004 deed shows a sale price of $146,000 and a “fair market value” of $53,155.20. That $53,155.20 comes from multiplying the then‑assessed value by Philadelphia’s CLR in effect at the time. The math that matches the record is:
+
+Assessed value ≈ $15,680
+CLR (2004) ≈ 3.39
+$15,680 × 3.39 = $53,155.20
+You can see how this field is computed in other transfers on the same parcel:
+
+2013 sheriff’s deed: assessed $15,680; “fair market value” $62,249.60 = $15,680 × 3.97 (the CLR then) citephilly-poverty-profiteering-get_property_transfers
+2019 sheriff’s deed: assessed $37,200; “fair market value” $37,572 ≈ $37,200 × 1.01 (post‑AVI, assessed values approximate market) citephilly-poverty-profiteering-get_property_transfers
+Bottom line: the $53,155 figure is a state formula output used for transfer‑tax calculations. Because the actual price ($146,000) was higher, tax would have been based on $146,000 for that deed.
+
+
+
+IA response --------------------------
+The $53,155 "fair market value" figure you see referenced in the deed is not the actual market price or what someone paid for the property. It comes from the City of Philadelphia's annual property tax assessment system.
+
+Here's how it works:
+
+The Office of Property Assessment (OPA) assigns every property an official "market value" each year for tax purposes. This assessed value is often different from the real sale price.
+For 4763 Griscom Street (parcel 232452100), the city's assessed market value was $56,900 for each year from 2015-2018. It then dropped, and as of 2023-2024, the assessed value is only $17,500-$24,800.
+The $53,155 figure likely represents the assessed value at the time of the deed transfer (rounded or slightly adjusted for reporting), not the sale price.
+This assessment is used to calculate property taxes, but it doesn't reflect what the property is actually worth on the open market or what buyers pay in a deed transfer. In this case:
+
+Actual sale price (per deed): $146,000
+City's assessed value at the time (around 2015-2018): $56,900 (which is very close to $53,155)
+Assessed values fluctuate yearly, and they are sometimes out of sync with the real estate market, especially for vacant, distressed, or speculative properties.
+The city uses these values to levy property taxes, but buyers and sellers can ignore them when negotiating price. The deed records both the sale price (what was paid) and the most recent official fair market value (for tax reference).
+
+Summary:
+
+The $53,155 came from the city's tax assessment, not the transaction price.
+Parcel: 232452100 (4763 GRISCOM ST)
+Official, recent city-assessed values: $56,900 (2015-2018), declining to $24,800 (2025).
+Sale price: $146,000 (far above assessed value, typical for speculative or high-demand areas).
+If you'd like the exact year and OPA market value for the deed event, let me know!
+
+search_properties
+get_property_assessments
+FA response --------------------------
+The "$53,155" figure is the Fair Market Value (FMV) that was previously set by the City of Philadelphia's Office of Property Assessment (OPA) for 4763 Griscom St (parcel 232452100). This number doesn't come from the sales market; rather, it’s an administrative figure assigned for property tax purposes, which is periodically updated by the city.
+
+Specifically, in the years 2015-2018, the property’s official FMV was set at $56,900.
+This value dropped to $37,200 in 2019, and has since been reduced even further (to $17,500 in 2020–2024; $24,800 in 2025).
+So, the “$53,155” is simply a rounded or administrative version of the city’s most recent official assessment around the time of the last valuation. OPA assessment values are often lower than real sale prices, especially in neighborhoods with rapidly changing real estate activity, reflecting the city’s sometimes-outdated or conservative assessment practices.
+
+In summary:
+
+The $53,155 figure traces back to the city’s OPA tax assessment, not market price.
+It reflects what the City last determined the property was worth for tax purposes, not the “real” value in a sale.
+As seen in the data above, the city’s FMV for this property has fluctuated but dropped significantly after 2019.
+If you need more documentation (such as the specific assessment year matching "$53,155" or details on how these values are set), let me know!
+
+
+  P6: "Who are the top 5 private owners with the most code violations citywide?"
+      Watch for: No address resolution needed — should work as before
+gcc mcp response --------------------------
+The top 5 private owners with the most code violations citywide are:
+
+PHILADELPHIA HOUSING AUTHORITY
+
+Property Count: 5,360
+Total Market Value: $1,246,505,200
+Vacant Count: 1,424
+Total Violations: 14,630
+Total Failed: 8,679
+Total Demolitions: 442
+Total Appeals: 159
+PHILADELPHIA LAND BANK
+
+Property Count: 2,495
+Total Market Value: $142,692,700
+Vacant Count: 2,421
+Total Violations: 13,512
+Total Failed: 8,403
+Total Demolitions: 341
+Total Appeals: 28
+CITY OF PHILADELPHIA
+
+Property Count: 983
+Total Market Value: $422,038,715
+Vacant Count: 842
+Total Violations: 4,647
+Total Failed: 2,610
+Total Demolitions: 165
+Total Appeals: 23
+CITY OF PHILA
+
+Property Count: 3,992
+Total Market Value: $6,580,436,075
+Vacant Count: 3,341
+Total Violations: 3,887
+Total Failed: 2,315
+Total Demolitions: 93
+Total Appeals: 50
+SCHOOL DISTRICT OF PHILA
+
+Property Count: 304
+Total Market Value: $2,489,766,500
+Vacant Count: 45
+Total Violations: 3,809
+Total Failed: 2,408
+Total Demolitions: 20
+Total Appeals: 53
+
+
+com mcp response --------------------------
+Here are the top 5 private owners by total code violations citywide (excluding government authorities and agencies):
+
+GEENA LLC — 1,411 violations across 194 properties; 178 vacant; 40 demolitions
+S3 ENTERPRISES LLC — 1,009 violations across 77 properties; 45 vacant; 2 demolitions
+CORESTATES GROUP LLC — 773 violations across 99 properties; 3 vacant; 1 demolition
+CHOICE RENTALS LLC — 763 violations across 56 properties; 0 vacant; 0 demolitions
+GILLER REALTY LLC — 702 violations across 134 properties; 6 vacant; 4 demolitions
+Note: Public entities like the Philadelphia Housing Authority and the Land Bank top the overall list but are not included here as you asked for private owners.
+IA response --------------------------
+The five owners with the most code violations citywide are:
+
+Philadelphia Housing Authority (PHA)
+Philadelphia Land Bank
+City of Philadelphia
+City of Phila (variation; city government properties)
+School District of Philadelphia
+These are all public/government entities. You requested private (non-government) owners; the default ranking includes public agencies due to their outsized holding and code violation counts.
+
+To properly answer your question for private owners (LLCs, individuals, corporations), specify "llc" for corporate entities only. If you want only non-government/private owners, please clarify: Do you want LLCs, all corporations, or also individual names?
+
+get_top_violators
+FA response --------------------------
+The data you requested is dominated by public entities (Housing Authority, Land Bank, City of Philadelphia, School District). However, you asked specifically for private owners (individuals, not government or institutional). The top 5 in this list are public owners, which points to a need to filter for truly private individuals.
+
+Shall I re-run this query to exclude all government, institutional, and public entities to show the top "private" (non-government) owners with the most code violations citywide? These would be actual people or privately-owned companies/LLCs.
+
+Please confirm if you want individuals only (not LLCs or corporations), or both individuals and private LLCs/corporations.
+
+
+  P7: "What financial institutions were involved with 2400 Bryn Mawr Ave, and what happened to them?"
+      Watch for: Should call search_properties → parcel 521273000
+gcc mcp response --------------------------
+The property at 2400 Bryn Mawr Ave has been involved with several financial institutions over the years. Here are the key transactions and institutions involved:
+
+GEENA LLC: Currently owns the property.
+Financial Freedom Acquisition LLC: Involved in an assignment of mortgage on January 29, 2015.
+OneWest Bank NA: Received an assignment of mortgage from Financial Freedom Acquisition LLC and Mortgage Electronic Registration Systems Inc on January 29, 2015.
+Financial Freedom Senior Funding Corporation: Involved in an assignment of mortgage on October 19, 2009.
+Mortgage Electronic Registration Systems Inc: Involved in an assignment of mortgage on October 19, 2009.
+Walter P Lomax Jr: Involved in a mortgage on September 23, 2009.
+Washington Mutual Bank FA: Released a mortgage on August 1, 2006.
+IndyMac Bank FSB: Involved in a mortgage on July 17, 2006.
+Secretary of Housing and Urban Development: Involved in a mortgage on July 17, 2006.
+Umoja International Corporation: Involved in a satisfaction of mortgage on January 9, 2003.
+Unity Broadcasting Network Inc: Involved in a satisfaction of mortgage on January 9, 2003.
+The property has seen multiple transactions, including assignments of mortgages, releases of mortgages, and satisfactions of mortgages. The most recent significant transaction was the sheriff's deed transfer to GEENA LLC on June 6, 2016, for a consideration of $230,000.
+
+If you need more detailed information about any specific transaction or institution, please let me know!
+com mcp response --------------------------
+Here’s what the records reveal about 2400 Bryn Mawr Ave (Parcel #521273000) and the financial institutions involved:
+
+Ownership and Transfer History
+The property is currently owned by GEENA LLC, acquired via a Sheriff’s Deed on June 6, 2016, for $230,000 after foreclosure proceedings. The grantors were Anderson Kernie L, Mizell Shama M, and the United States of America.
+Financial Institutions and Mortgage Activity
+Washington Mutual Bank F.A.
+
+Issued a mortgage to Anderson Althmeana C and Anderson Kernie L on April 18, 2002.
+This mortgage was released on August 1, 2006, indicating payoff or refinance.
+Washington Mutual collapsed during the 2008 financial crisis and was absorbed by JPMorgan Chase.
+Financial Freedom Senior Funding Corporation (Reverse Mortgage Lender)
+
+Provided a mortgage on July 17, 2006, alongside IndyMac Bank F.S.B. and the Secretary of Housing and Urban Development (HUD).
+This suggests a reverse mortgage structure backed by HUD.
+Financial Freedom was later acquired by OneWest Bank after IndyMac’s failure in 2008.
+IndyMac Bank F.S.B.
+
+Co-lender on the 2006 reverse mortgage.
+IndyMac failed in July 2008 and was taken over by the FDIC, then sold to OneWest Bank (founded by Steven Mnuchin and investors).
+OneWest Bank N.A.
+
+Appears in a 2015 Assignment of Mortgage, receiving the loan from Financial Freedom Acquisition LLC and MERS (Mortgage Electronic Registration Systems).
+OneWest was later acquired by CIT Group in 2015, and CIT itself merged with First Citizens Bank in 2022.
+Financial Freedom Acquisition LLC
+
+Took over the mortgage from Financial Freedom Senior Funding Corp in 2009, then assigned it to OneWest in 2015.
+This entity was part of the OneWest structure.
+MERS (Mortgage Electronic Registration Systems)
+
+Involved in the 2009 and 2015 assignments, acting as a nominee for lenders.
+What Happened to Them
+Washington Mutual: Failed in 2008 → absorbed by JPMorgan Chase.
+IndyMac Bank: Failed in 2008 → became OneWest Bank.
+Financial Freedom: Folded into OneWest Bank, later discontinued after regulatory scrutiny.
+OneWest Bank: Acquired by CIT Group in 2015 → CIT merged into First Citizens Bank in 2022.
+MERS: Still operational as a registry system.
+Key Takeaways
+This property’s history reflects the 2000s mortgage boom and bust:
+
+Started with a traditional mortgage (Washington Mutual).
+Shifted to a reverse mortgage (Financial Freedom/IndyMac/HUD).
+Passed through failed banks and distressed asset buyers (OneWest).
+Ended in Sheriff’s Sale in 2016, purchased by GEENA LLC for $230,000.
+Would you like me to map out GEENA LLC’s full property network to see if they are a major player in distressed property acquisitions? Or should I dig into code violations and licenses for this property?
+
+
+
+IA response --------------------------
+Several financial institutions were involved with 2400 Bryn Mawr Ave (parcel: 521273000) over the years. Here’s a summary of their involvement and what happened to them:
+
+Major Financial Institutions Involved:
+
+Washington Mutual Bank F.A.
+Issued a mortgage to Anderson Althmeana C & Kernie L Anderson in 2002.
+Released the mortgage in 2006 (indicating payoff or satisfaction). Washington Mutual failed during the 2008 financial crisis and was taken over by JPMorgan Chase.
+Financial Freedom Senior Funding Corporation & IndyMac Bank F.S.B.
+Issued mortgages in 2006 to Kernie L Anderson. IndyMac failed in 2008 and became IndyMac Federal Bank, then sold to OneWest Bank.
+Mortgage Electronic Registration Systems Inc (MERS)
+Associated with mortgage assignments to facilitate transfers.
+Financial Freedom Acquisition LLC
+Acquired mortgages in 2009. Subsidiary related to OneWest Bank.
+OneWest Bank N.A.
+Received an assignment of mortgage in 2015. OneWest was founded after the IndyMac collapse, later acquired by CIT Group in 2015.
+Other Entities:
+
+Secretary of Housing and Urban Development (HUD)
+Listed as mortgagee in 2006, likely as part of a government-backed loan.
+What Happened to Them:
+
+Washington Mutual and IndyMac Bank failed during the financial crisis and ownership/servicing of their mortgages shifted to successors (JPMorgan Chase and OneWest/CIT Group).
+Financial Freedom was IndyMac’s reverse mortgage unit, which moved with OneWest following IndyMac’s failure.
+MERS remains active as a mortgage registry, often involved in assignments.
+HUD is still active as a federal agency.
+Ownership Chain Impact:
+
+Mortgages were frequently issued, assigned, and released, reflecting the instability and consolidation of financial institutions after the 2008 crisis.
+The property ended up in a sheriff sale in 2016, purchased by GEENA LLC for $230,000, indicating prior owner distress or foreclosure.
+Summary:
+
+Multiple financial institutions (Washington Mutual, IndyMac Bank/OneWest/Financial Freedom, MERS, HUD) were involved.
+Most private banks named either failed or were acquired amid the 2008 crisis and its aftermath, and their assets passed on to successors.
+The property experienced multiple mortgage assignments and ultimately a sheriff sale.
+If you want chain-of-title visuals or further specifics on each mortgage, let me know!
+
+search_properties
+get_property_transfers
+FA response --------------------------
+Here is a timeline of financial institutions involved with 2400 Bryn Mawr Ave (parcel 521273000) based on Philadelphia's transfer and mortgage records:
+
+Washington Mutual Bank F.A.
+Issued a mortgage to Anderson Althmeana C and Anderson Kernie L in 2002
+Released the mortgage in August 2006, indicating the loan was paid off or otherwise settled
+Washington Mutual failed during the 2008 financial crisis and was taken over by JP Morgan Chase
+Financial Freedom Senior Funding Corporation & IndyMac Bank, F.S.B.
+New mortgage issued in July 2006 to Anderson Kernie L
+Financial Freedom specialized in reverse mortgages for seniors
+IndyMac Bank failed during the 2008 crisis and was subsequently taken over by the FDIC and then sold
+Financial Freedom Senior Funding was acquired by OneWest Bank after IndyMac's collapse
+Secretary of Housing and Urban Development (HUD)
+A distinct mortgage was executed in July 2006 with HUD, likely connected to a reverse mortgage or other federal program
+Financial Freedom Acquisition LLC & Mortgage Electronic Registration Systems, Inc (MERS)
+In October 2009, the mortgage from Financial Freedom Senior Funding Corporation was assigned to Financial Freedom Acquisition LLC and MERS—typical in the post-IndyMac era for mortgage servicing transfers
+OneWest Bank NA
+In January 2015, OneWest Bank NA received assignment of the mortgage from Financial Freedom Acquisition LLC and MERS
+OneWest Bank was formed out of IndyMac’s assets and itself was acquired by CIT Group in 2015
+Sheriff Sale & GEENA LLC
+In June 2016, the property was sold at sheriff sale by Anderson Kernie L, Mizell Shama M, and the United States of America (grantors) to GEENA LLC for $230,000
+This indicates foreclosure, likely due to non-payment or default, and ultimately loss of property by Anderson Kernie L
+Summary of what happened:
+
+The property saw a succession of mortgages, mostly reverse mortgage-related, handled by several financial institutions impacted by the 2008 financial crisis.
+Washington Mutual and IndyMac both failed and were taken over; their assets, including mortgages, were transferred to successors like OneWest Bank.
+OneWest Bank itself was subsequently acquired.
+The mortgage trail ended in foreclosure and sheriff sale, with GEENA LLC acquiring the property from the prior owners and the United States (probably due to HUD involvement).
+The chain reflects instability among financial institutions, frequent servicing transfers, and ultimately foreclosure—common patterns for vulnerable homeowners and senior mortgage products.
+If you need specifics about current licenses, code violations, or more details on GEENA LLC's ownership, let me know.
+
+
+  P8: "How many code violations at 4763 Griscom Street resulted in FAILED inspections, and what type of investigator handles them?"
+      Watch for: Should call search_properties → 232452100 → violations. Answer: 45 failed.
+gcc mcp response --------------------------
+There have been 45 code violations at 4763 Griscom Street that resulted in FAILED inspections. The type of investigator handling these cases is primarily the CLIP - Vacant Lot Investigator.
+
+com mcp response --------------------------
+Count: 45 code-enforcement investigations at 4763 Griscom St (OPA 232452100) resulted in FAILED inspections.
+Who handles them: Primarily CLIP – Vacant Lot Investigator. Breakdown:
+CLIP – Vacant Lot Investigator: 14 cases (e.g., CF-2024-048352 failed on 2024-07-22; CF-2023-057245 failed on 2023-06-16)
+CLIP (generic): 3 cases (e.g., CF-2024-065589 failed on 2024-06-21)
+CSU Investigator: 1 case (CF-2022-010497, marked UNSAFE, failed on 2022-02-09)
+Older records list no investigator: 27 cases
+If you want, I can pull the full list of case numbers and dates.
+IA response --------------------------
+4763 Griscom Street (parcel 232452100) has had a total of 45 FAILED code enforcement inspections.
+
+In recent years, most of these failed inspections list the investigator as either:
+
+"CLIP - VACANT LOT INVESTIGATOR" (Community Life Improvement Program, for vacant lots)
+"CLIP" (general CLIP investigators)
+"CSU INVESTIGATOR" (one instance, categorized as "UNSAFE")
+Summary:
+
+The majority of failed inspections at this property are handled by CLIP Vacant Lot Investigators, with a small subset by general CLIP or, occasionally, the Code Services Unit (CSU) for unsafe conditions.
+If you need statistics by year or case details, let me know.
+FA response --------------------------
+4763 Griscom Street (parcel: 232452100) has a total of 45 code violations where inspections resulted in FAILED status.
+
+Investigator types for these violations are:
+
+Most violations (recent years, when owned by GEENA LLC) were handled by "CLIP - VACANT LOT INVESTIGATOR" and "CLIP" (Community Life Improvement Program - specializing in vacant land/lots).
+One violation (CF-2022-010497) was handled by "CSU INVESTIGATOR" (Code Services Unit), which is typically for unsafe conditions.
+Summary breakdown:
+
+CLIP/CLIP - VACANT LOT INVESTIGATOR: Handles the vast majority, especially for standard notices at vacant land (matching the current property category).
+CSU INVESTIGATOR: Handles safety/structural issues (rare on this parcel).
+This pattern indicates persistent neglect at the site, primarily linked to vacant land maintenance and code compliance.
+
+
+  P9: "Compare zip codes 19104 and 19132 — which has more vacant properties and more code violations?"
+      Watch for: No address resolution needed — should work as before
+gcc mcp response --------------------------
+Here is the comparison between zip codes 19104 and 19132:
+
+Zip Code 19104:
+Total Properties: 11,947
+Vacant Properties: 2,516
+Total Code Violations: 45,818
+Failed Investigations: 27,412
+Passed Investigations: 11,925
+Zip Code 19132:
+Total Properties: 20,650
+Vacant Properties: 4,549
+Total Code Violations: 83,284
+Failed Investigations: 51,698
+Passed Investigations: 17,804
+Summary:
+Vacant Properties: Zip code 19132 has more vacant properties (4,549) compared to zip code 19104 (2,516).
+Code Violations: Zip code 19132 also has more code violations (83,284) compared to zip code 19104 (45,818).
+If you need further details or analysis, feel free to ask!
+
+
+
+com mcp response --------------------------
+hort answer: 19132 has more of both.
+
+Vacant properties: 19132 has 4,549 vs 19104’s 2,516.
+Code violations (failed investigations): 19132 has 51,698 vs 19104’s 27,412.
+If helpful: both have similar vacancy rates by share, but 19132’s totals are higher due to a larger property base.
+
+
+
+IA response --------------------------
+Here is a detailed comparison of vacancy and code violation rates for Philadelphia zip codes 19104 and 19132:
+
+Vacant Properties:
+
+19104: 2,516 vacant properties out of 11,947 total (about 21%)
+19132: 4,549 vacant properties out of 20,650 total (about 22%)
+Code Violations (Case Investigations):
+
+19104: 45,818 total investigations; 27,412 failed (violations)
+19132: 83,284 total investigations; 51,698 failed (violations)
+Summary:
+
+19132 has significantly more vacant properties and almost double the failed code investigations compared to 19104.
+19132 is the clear leader in both vacancy (4,549 vs. 2,516) and code violations (51,698 failed vs. 27,412).
+If you need breakdowns by property type, owner, or trends over time, let me know!
+
+get_area_stats
+get_area_stats
+FA response --------------------------
+Here’s a comparison of Philadelphia zip codes 19104 and 19132 for vacant properties and code violations:
+
+Zip code 19104:
+
+Total Properties: 11,947
+Vacant Properties: 2,516
+Code Violation Investigations: 45,818
+Failed Investigations: 27,412
+Zip code 19132:
+
+Total Properties: 20,650
+Vacant Properties: 4,549
+Code Violation Investigations: 83,284
+Failed Investigations: 51,698
+Conclusion:  
+
+19132 has significantly more vacant properties (4,549 vs. 2,516) and more code violations (83,284 vs. 45,818) than 19104.
+Both vacancy and code enforcement intensity are much higher in 19132, indicating greater challenges with property neglect, abandonment, and code compliance.
+If you want to see the breakdown of top violators or more detailed stats for these zip codes, let me know!
+
+
+
+
+  P10: "The deed for 4763 Griscom shows a purchase price of $146,000 and an assessment of $53,155. What percentage discount or premium
+  was the purchase price vs the assessed value?"
+      Watch for: Should resolve address, find deed price, calculate ~35.6% premium
+gcc mcp response --------------------------
+tried 3 times... same response each time... 
+No information was found that could help answer this.
+
+Edit knowledge sources
+Sent at March 7 at 9:14 PM
+Just now
+Bot said: Not Executed Message is interactive. Click to interact.
+Bot said:
+I'm sorry, I'm not sure how to help with that. Can you try rephrasing?
+
+
+
+com mcp response --------------------------
+To calculate the percentage difference between the purchase price and the assessed value:
+
+Purchase Price: $146,000
+Assessed Value: $53,155
+Step 1: Difference
+
+146,000
+−
+53,155
+=
+92,845
+Step 2: Percentage Difference (relative to assessed value)
+
+92,845
+53,155
+×
+100
+≈
+174.7
+%
+Result
+The purchase price of $146,000 is about 175% higher than the assessed value, meaning it sold at a 174.7% premium over assessment.
+
+Would you like me to pull the full transfer history and assessment trend for 4763 Griscom to see if this is part of a pattern (e.g., flips, $1 transfers, or rapid appreciation)?
+IA response --------------------------
+Here are the facts for parcel number 232452100 (4763 Griscom St):
+
+On March 23, 2004, a deed transfer shows a purchase price (consideration) of $146,000.
+The assessed value on the deed record at that time is listed as $53,155.
+Calculation:
+
+Percentage premium = ((Purchase Price – Assessed Value) / Assessed Value) x 100
+((146,000 – 53,155) / 53,155) x 100 = (92,845 / 53,155) x 100 ≈ 174.7%
+  → The purchase price was approximately 175% higher than the assessed value.
+
+This transaction represents a substantial premium compared to the city’s assessed value. If you need comparison with other sales on this parcel or want a similar calculation for another year’s assessment, just ask!
+
+search_properties
+get_pr
+FA response --------------------------
+
+To calculate the percentage difference between the purchase price ($146,000) and the assessed value ($53,155) for 4763 Griscom St, use this formula:
+
+\[ \text{Percentage Difference} = \frac{\text{Purchase Price} - \text{Assessed Value}}{\text{Assessed Value}} \times 100\% \]
+
+Plugging in the values: \[ \frac{146,000 - 53,155}{53,155} \times 100\% = \frac{92,845}{53,155} \times 100\% \approx 174.7\% \]
+
+This means the purchase price represented a 174.7% premium over the assessed value (almost 2.75 times higher than assessment).
+
+If you need additional details or want to investigate assessment trends or other sales, let me know!
+
+
+  === USE CASE 1: DSS LEGAL — 3 AGENTS x 1 PROMPT (3 runs) ===
+
+  Agents: Web SPA, MCP-Com, MCP-GCC
+
+  P1: "Tell me about Jaylen Webb's emergency room admission — specifically the time and the admitting nurse."
+      Watch for: Should now call get_case_summary (people roster) and find
+      Rebecca Torres (ER nurse) and/or Patricia Daniels (charge nurse).
+      ER time should be 3:15 AM.
+
+web spa -----------------------------
+Jaylen Webb was admitted to the Spartanburg Medical Center Emergency Room on June 12, 2024, at 3:15 AM. The admitting nurse who performed the initial triage assessment was Rebecca Torres, RN, BSN. Nurse Torres also conducted intake interviews with both parents (Marcus Webb and Dena Holloway) and documented her findings in the nursing notes (Medical Records, pp. 8-9).
+
+Source:
+
+Medical timeline, June 12, 2024, 3:15 AM (Medical Records, pp. 1-4)
+Case summary, Rebecca Torres, RN, BSN (Nursing notes, Medical Records, pp. 8-9)
+list_cases
+get_timeline
+get_case_summary
+mcp com -----------------------------
+Jaylen Webb's Emergency Room Admission
+
+Admission Time: Jaylen Webb was admitted to Spartanburg Medical Center ER at 3:15 AM on June 12, 2024. X-rays at admission revealed a bilateral femur fracture (right) and a spiral fracture of the left humerus. The injuries were assessed as inconsistent with the reported mechanism (fall from crib), and Dr. Anita Chowdhury noted the injuries were at different stages of healing citeMedical Records, pp. 1-4.
+
+Admitting Nurse: The available medical timeline and records do not specify the name of the admitting nurse. The medical assessment and reporting were conducted by Dr. Anita Chowdhury, and the skeletal survey was completed by Dr. David Petrakis citeMedical Records, pp. 1-4.
+
+If you need further details or want to review the admitting nurse's identity, please specify or request additional medical staff records.
+mcp-gcc -----------------------------
+Jaylen Webb was admitted to the emergency room at Spartanburg Medical Center on June 12, 2024, at approximately 12:47 AM. The admitting nurse was Rebecca Torres, RN, BSN, who performed the initial triage assessment at 3:15 AM and conducted separate parent interviews during intake. The charge nurse, Patricia Daniels, RN, also assessed Jaylen Webb and reported the child’s arrival time and the inconsistency of the bruising pattern with a crib fall.
+
+Source: Nursing notes, pages 8-9 of Medical Records.
+
+
+
+
+  === TOTAL: 43 test runs ===
+
+  Scoring: Pass / Partial / Fail (same rubric as Round 1)
+  Record: Which tools did the agent call? Did it call search_properties first?
+  Compare: Side-by-side with Round 1 results for each prompt.

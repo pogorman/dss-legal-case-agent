@@ -93,6 +93,12 @@ A: After 110 test runs across 11 agent configurations and 10 prompts, specific f
 **Q: What was added in Improvements Round 1?**
 A: Five changes: (1) `made_to` filter on the statements tool (fixes P8 failures), (2) skeletal survey findings + discrepancy in SQL (fixes P4), (3) 9:30 PM thump as standalone timeline event (fixes P10), (4) individual drug test events as discrete timeline rows (fixes P3), (5) nurses added to people table (fixes P1). Total: 11 new SQL rows + 1 tool/function change.
 
+**Q: What was changed in Improvements Round 2?**
+A: Four changes, zero data modifications: (1) new `search_properties` fuzzy address lookup tool (fixes 87% address resolution failure rate), (2) entity network summary mode with `?summary=true` (fixes GCC token overflow), (3) improved tool descriptions emphasizing people roster and address workflow, (4) system prompt additions with explicit tool selection guidance. Result: COM MCP went to 10/10 perfect, IA went from 1/10 to 8/10, FA from 4/10 to 8/10. Total: 53 retests. Details in `docs/improvements/improvements-round-2.md`.
+
+**Q: Why did the Triage Agent barely improve (0/10 → 1/10) when other agents jumped dramatically?**
+A: The Triage Agent's team-of-agents architecture (triage router → specialized sub-agents) prevented it from using the new `search_properties` tool. The sub-agents (OwnerAnalyst, ViolationAnalyst, AreaAnalyst) have their own system prompts that don't include the address resolution workflow. They continued resolving addresses to wrong parcels while simpler agents using the same tools scored 8/10. Architectural complexity is not a proxy for quality.
+
 **Q: How does data get from PDFs into the database?**
 A: See `docs/improvements/document-to-database-mapping.md` for a detailed walkthrough. In production, tools like Azure Document Intelligence or Power Automate AI Builder extract entities from PDFs. The mapping guide shows the exact PDF text and the SQL row it produces for each table.
 

@@ -1013,3 +1013,65 @@ Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP age
 - Demo dry run with side-by-side comparison
 - Update Bicep to include storage private endpoints (still CLI-only)
 - Consider summary/count mode for Philly MCP entity network tool (fixes GCC token limit)
+
+## Session 21 — 2026-03-08
+
+### What was done
+
+#### Improvements Round 2 — Tool Architecture and Prompt Engineering
+- **New `search_properties` Azure Function** — fuzzy address-to-parcel lookup with USPS normalization (STREET→ST, AVENUE→AVE, directional abbreviations). Prefix match first, then contains fallback. Both test addresses resolve correctly (4763 Griscom → 232452100, 2400 Bryn Mawr → 521273000)
+- **Entity network summary mode** — `?summary=true` on GET /entities/{entityId}/network returns counts + top 10 + zip distribution instead of all 631 rows. Fixes GCC MCP token overflow on P1
+- **Improved tool descriptions** — DSS `get_case_summary` now emphasizes "ALL people involved (nurses, doctors, case workers...)" to fix nurse lookup gap. Philly `get_property_profile` references `search_properties`. `run_query` deprioritized vs dedicated tools
+- **System prompt workflow guidance** — Philly MCP: "ALWAYS call search_properties FIRST when given a street address." DSS: Tool Selection Guide directing people questions to `get_case_summary`
+- **APIM + Bicep updates** — 3 new operations (searchProperties, searchTransfers, getPropertyTransfers), 12→15 total
+- **Both Container Apps redeployed** (Philly MCP + DSS MCP)
+- Deployment used staging directory pattern for npm workspaces (documented in MEMORY.md)
+
+#### Round 2 Retesting — 53 test runs
+- **Use Case 2**: 50 runs (5 agents x 10 prompts — GCC MCP, COM MCP, IA, FA, Triage Agent)
+- **Use Case 1**: 3 runs (3 agents x P1 only)
+
+#### Round 2 Results
+
+| Agent | Round 1 | Round 2 | Change |
+|---|---|---|---|
+| COM MCP (GPT-4.1) | 8P/0Pa/2F | **10P/0Pa/0F** | **PERFECT SCORE** |
+| Investigative Agent | 1P/0Pa/9F | **8P/1Pa/1F** | +7 Pass (biggest improvement) |
+| Foundry Agent | 4P/0Pa/6F | **8P/1Pa/1F** | +4 Pass |
+| GCC MCP (GPT-4o) | 2P/0Pa/8F | **4P/3Pa/3F** | +2 Pass |
+| Triage Agent (SK) | 0P/0Pa/10F | **1P/1Pa/8F** | +1 Pass (still last) |
+| Web SPA (UC1 P1) | Partial | **Pass** | Found nurse via get_case_summary |
+| MCP-Com (UC1 P1) | Partial | Partial | Still doesn't find nurse |
+| MCP-GCC (UC1 P1) | Fail | **Partial** | Found both nurses, wrong time |
+
+#### Documentation Updates
+- Created `docs/improvements/improvements-round-2.md` — full improvement details + retest results
+- Updated `docs/executive-summary-combined.md`:
+  - New "Iterative Improvement Process" section (Rounds 0-2 with pattern for organizations)
+  - New "Five Findings That Surprised Us" section
+  - Updated UC2 standings table with Round 2 results
+  - Updated UC2 results narrative, pro-code section, footer
+- Updated `MEMORY.md` with Round 2 results and open items
+- Updated `docs/faqs.md` with Round 2 FAQ entry
+
+### Key findings
+1. **Address resolution tool was the highest-impact single change** — zero lookup failures for agents that used `search_properties`, vs 87% failure in Round 1
+2. **Triage Agent is the control group** — only agent that did NOT call `search_properties`, continued to fail on all address-based prompts, confirming the tool was the fix
+3. **COM MCP achieved perfect 10/10** — same data, same model, only tool changes
+4. **IA went from 1/10 to 8/10** — most dramatic improvement of any agent in either use case
+5. **P6 (top private violators) is systemic** — 4 of 5 agents return government entities. Need `exclude_government` filter
+6. **GCC MCP P1 still token overflow** — summary mode built but Copilot Studio may not be passing the parameter
+
+### Decisions made
+- Triage Agent retested despite 0/10 Round 1 — results confirm architecture is the bottleneck, not tools
+- Total evaluation now at 248 test runs across 2 improvement rounds
+- "Five Findings That Surprised Us" positioned as executive-friendly highlight section
+
+### Open items
+- **Round 3 candidates:** GCC MCP P1 (verify summary param), P6 (exclude_government filter), MCP-Com nurse (role="Witness" vs "Nurse")
+- **Triage Agent architecture fix:** sub-agents need system prompt with address resolution workflow
+- Upload 5 Philly PDFs to SharePoint for document agent testing
+- Run all 24 redemption retests (document agents, Use Case 1)
+- Consider BFG Repo Cleaner to purge real names from git history
+- Demo dry run with side-by-side comparison
+- Regenerate executive summary PDF with Round 2 results

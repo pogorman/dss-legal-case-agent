@@ -1181,3 +1181,44 @@ Tested P5 (FMV) and P6 (excludeGovernment) on agents that had prior failures/par
 - Upload Philly PDFs to SharePoint — carry-forward
 - Demo dry run with updated materials
 - Consider BFG Repo Cleaner for git history
+
+## Session 24 — 2026-03-08
+
+### What was done
+
+#### Five-Level Accuracy Framework
+Developed and documented a five-level accuracy spectrum for government AI use cases:
+- **Level 1: Discovery** — find documents (low stakes, zero engineering)
+- **Level 2: Summarization** — condense reports (document agents score 8/10 with zero customization)
+- **Level 3: Operational** — aggregate queries (MCP starts outperforming documents)
+- **Level 4: Investigative** — cross-referencing, timelines, discrepancies (inflection point: model gap + tool gap)
+- **Level 5: Adjudicative** — legal case preparation (trust but verify, non-negotiable human review)
+
+#### Three Demo Deliverables Created
+1. **Executive summary** (`docs/sources/executive-summary.md`) — rewritten around 5-level framework with cross-use-case evidence table, GCC-specific recommendations, and code investment spectrum
+2. **Presenter guide** (`docs/demo-guide.md`) — rewritten with 5-level narrative arc, 50-60 minute timing, expanded to include both use cases, side-by-side comparison, and Philly property demo
+3. **Slide outline** (`docs/slide-outline.md`) — 20 slides covering framework, evidence, gaps, iteration process, findings, and recommendations
+
+#### PDF Regenerated
+- `scripts/generate-executive-pdf.py` — completely rewritten with 5-level framework content, level color badges, danger taxonomy table, iterative improvement results
+- `docs/executive-summary.pdf` — regenerated (10 pages)
+
+#### Docs Reorganization
+- Created `docs/archive/` — moved testing docs, improvements, and test-responses
+- Created `docs/sources/` — moved executive-summary.md (source for PDF) and erd.mmd (source for PNG)
+- Updated `docs/README.md` — new structure with Deliverables, Reference, Sources, Archive sections
+- Only deliverable PDFs and actionable docs remain in the top-level docs/ folder
+
+### Decisions made
+- 5-level framework replaces the old "MCP vs SharePoint" framing for demos
+- Demo target: 50-60 minutes with both use cases and side-by-side comparison
+- The framework narrative is: "match your investment to your accuracy requirement"
+- Labels: Discovery, Summarization, Operational, Investigative, Adjudicative
+
+### Open items
+- Build PowerPoint deck from slide-outline.md
+- Demo dry run with 5-level narrative (50-60 min)
+- Update ogs-presenter-guide.pdf with new framework (currently outdated)
+- Triage P3 (assessment history) — carry-forward
+- Upload Philly PDFs to SharePoint — carry-forward
+- Consider BFG Repo Cleaner for git history

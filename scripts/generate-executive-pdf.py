@@ -1,6 +1,6 @@
 """
-Generate an elegant executive-summary PDF from the testing results.
-Uses fpdf2 — no external dependencies beyond what's already installed.
+Generate an executive-summary PDF using the five-level accuracy framework.
+Uses fpdf2 -- no external dependencies beyond what's already installed.
 
 Usage: python scripts/generate-executive-pdf.py
 Output: docs/executive-summary.pdf
@@ -9,7 +9,25 @@ Output: docs/executive-summary.pdf
 from fpdf import FPDF
 import os
 
-# ── Color palette ──────────────────────────────────────────────────
+
+def sanitize_text(text):
+    """Replace Unicode characters that Helvetica cannot render."""
+    return (
+        text
+        .replace("\u2014", "--")    # em dash
+        .replace("\u2013", "-")     # en dash
+        .replace("\u2018", "'")     # left single quote
+        .replace("\u2019", "'")     # right single quote
+        .replace("\u201c", '"')     # left double quote
+        .replace("\u201d", '"')     # right double quote
+        .replace("\u2026", "...")   # ellipsis
+        .replace("\u2192", "->")   # right arrow
+        .replace("\u2022", "-")    # bullet
+        .replace("\u2003", " ")    # em space
+    )
+
+
+# -- Color palette -----------------------------------------------------------
 NAVY    = (22, 48, 82)
 ACCENT  = (41, 98, 163)
 DARK    = (40, 40, 40)
@@ -26,6 +44,13 @@ AMBER   = (180, 130, 20)
 RED     = (185, 45, 45)
 GRAY_BG = (248, 249, 250)
 
+# Level colors
+LVL1_COLOR = (76, 175, 80)    # green
+LVL2_COLOR = (139, 195, 74)   # light green
+LVL3_COLOR = (255, 193, 7)    # amber
+LVL4_COLOR = (255, 87, 34)    # deep orange
+LVL5_COLOR = (211, 47, 47)    # red
+
 
 class ExecutivePDF(FPDF):
     def __init__(self):
@@ -34,10 +59,10 @@ class ExecutivePDF(FPDF):
 
     def header(self):
         if self.page_no() == 1:
-            return  # cover page — no header
+            return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, "DSS Office of Legal Services  |  Copilot Studio Evaluation", align="L")
+        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum  |  Executive Summary"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -52,14 +77,14 @@ class ExecutivePDF(FPDF):
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, "Confidential  |  March 2026  |  Testing conducted March 5-8, 2026", align="C")
+        self.cell(0, 4, sanitize_text("Confidential  |  March 2026  |  304 test runs across 19 agent configurations"), align="C")
 
-    # ── Helpers ─────────────────────────────────────────────────────
+    # -- Helpers --------------------------------------------------------------
     def section_title(self, text):
         self.ln(4)
         self.set_font("Helvetica", "B", 15)
         self.set_text_color(*NAVY)
-        self.cell(0, 9, text, new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 9, sanitize_text(text), new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*ACCENT)
         self.set_line_width(0.6)
         self.line(self.l_margin, self.get_y(), self.l_margin + 50, self.get_y())
@@ -70,20 +95,22 @@ class ExecutivePDF(FPDF):
         self.ln(2)
         self.set_font("Helvetica", "B", 11)
         self.set_text_color(*ACCENT)
-        self.cell(0, 7, text, new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 7, sanitize_text(text), new_x="LMARGIN", new_y="NEXT")
         self.ln(1)
 
     def body_text(self, text, bold_lead=None):
+        text = sanitize_text(text)
         if bold_lead:
             self.set_font("Helvetica", "B", 9.5)
             self.set_text_color(*DARK)
-            self.write(5.5, bold_lead + " ")
+            self.write(5.5, sanitize_text(bold_lead) + " ")
         self.set_font("Helvetica", "", 9.5)
         self.set_text_color(*DARK)
         self.multi_cell(0, 5.5, text)
         self.ln(2)
 
     def bullet(self, text, bold_lead=None, indent=8):
+        text = sanitize_text(text)
         x = self.get_x()
         self.set_x(x + indent)
         self.set_font("Helvetica", "", 9.5)
@@ -92,238 +119,302 @@ class ExecutivePDF(FPDF):
         if bold_lead:
             self.set_font("Helvetica", "B", 9.5)
             self.set_text_color(*DARK)
-            self.write(5.5, bold_lead + "  ")
+            self.write(5.5, sanitize_text(bold_lead) + "  ")
         self.set_font("Helvetica", "", 9.5)
         self.set_text_color(*DARK)
         self.multi_cell(self.w - self.r_margin - self.get_x(), 5.5, text)
         self.ln(1)
 
-    def grade_color(self, grade):
-        g = grade.strip().upper()
-        if g.startswith("PASS") or g.startswith("P ") or g == "P":
-            return GREEN
-        elif g.startswith("PARTIAL") or g.startswith("PA") or g == "PA":
-            return AMBER
-        elif g.startswith("FAIL") or g.startswith("F ") or g == "F":
-            return RED
-        elif g.startswith("N/A"):
-            return LIGHT
-        return DARK
-
     def styled_table(self, headers, rows, col_widths, row_height=6, font_size=7.5):
-        """Draw a professional table with header row and alternating stripes."""
-        # Header
         self.set_font("Helvetica", "B", font_size)
         self.set_fill_color(*TABLE_HEADER_BG)
         self.set_text_color(*TABLE_HEADER_FG)
         for i, h in enumerate(headers):
-            self.cell(col_widths[i], row_height + 1, h, border=0, align="C", fill=True)
+            self.cell(col_widths[i], row_height + 1, sanitize_text(h), border=0, align="C", fill=True)
         self.ln()
-
-        # Rows
         self.set_font("Helvetica", "", font_size)
         for r_idx, row in enumerate(rows):
             bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
             self.set_fill_color(*bg)
-            max_h = row_height
             for i, val in enumerate(row):
                 self.set_text_color(*DARK)
-                self.cell(col_widths[i], max_h, val, border=0, align="C" if i > 0 else "L", fill=True)
+                self.cell(col_widths[i], row_height, sanitize_text(val), border=0,
+                          align="C" if i > 0 else "L", fill=True)
             self.ln()
 
-    def colored_score_table(self, headers, rows, col_widths, row_height=5.5, font_size=7):
-        """Table where cells are color-coded by Pass/Partial/Fail."""
-        # Header
-        self.set_font("Helvetica", "B", font_size)
-        self.set_fill_color(*TABLE_HEADER_BG)
-        self.set_text_color(*TABLE_HEADER_FG)
-        for i, h in enumerate(headers):
-            self.cell(col_widths[i], row_height + 2, h, border=0, align="C", fill=True)
-        self.ln()
+    def level_badge(self, level_num, color, name, y_offset=0):
+        """Draw a colored level badge."""
+        x = self.get_x()
+        y = self.get_y() + y_offset
+        self.set_fill_color(*color)
+        self.set_draw_color(*color)
+        badge_w = 8
+        badge_h = 6
+        self.rect(x, y, badge_w, badge_h, "F")
+        self.set_xy(x, y)
+        self.set_font("Helvetica", "B", 8)
+        self.set_text_color(*WHITE)
+        self.cell(badge_w, badge_h, str(level_num), align="C")
+        self.set_xy(x + badge_w + 2, y)
+        self.set_font("Helvetica", "B", 10)
+        self.set_text_color(*DARK)
+        self.cell(0, badge_h, sanitize_text(name))
+        self.set_xy(x, y + badge_h + 2)
 
-        # Rows
-        for r_idx, row in enumerate(rows):
-            bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
-            self.set_fill_color(*bg)
-            for i, val in enumerate(row):
-                if i == 0:
-                    self.set_text_color(*DARK)
-                    self.set_font("Helvetica", "B", font_size)
-                else:
-                    color = self.grade_color(val)
-                    self.set_text_color(*color)
-                    self.set_font("Helvetica", "B", font_size)
-                align = "L" if i == 0 else "C"
-                self.cell(col_widths[i], row_height, val, border=0, align=align, fill=True)
-            self.ln()
+    def callout_box(self, title, text, height=32):
+        self.set_fill_color(*GRAY_BG)
+        self.set_draw_color(*ACCENT)
+        box_y = self.get_y()
+        self.rect(self.l_margin, box_y, self.w - self.l_margin - self.r_margin, height, "FD")
+        self.set_xy(self.l_margin + 6, box_y + 5)
+        self.set_font("Helvetica", "B", 11)
+        self.set_text_color(*NAVY)
+        self.cell(0, 7, sanitize_text(title))
+        self.set_xy(self.l_margin + 6, box_y + 14)
+        self.set_font("Helvetica", "", 10)
+        self.set_text_color(*DARK)
+        self.multi_cell(self.w - self.l_margin - self.r_margin - 12, 6, sanitize_text(text))
+        self.set_y(box_y + height + 4)
 
 
 def build_pdf():
     pdf = ExecutivePDF()
     pdf.set_margins(20, 20, 20)
 
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
     # COVER PAGE
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
     pdf.add_page()
-
-    # Background band
     pdf.set_fill_color(*NAVY)
     pdf.rect(0, 0, pdf.w, 120, "F")
 
-    # Title
-    pdf.set_y(35)
+    pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "Copilot Studio Evaluation", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "AI Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(180, 200, 220)
-    pdf.cell(0, 10, "Structured Data vs. Document-Backed Agents", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 8, "Across Government Use Cases", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 10, "A Five-Level Framework for Government", align="C", new_x="LMARGIN", new_y="NEXT")
 
-    # Divider line
-    pdf.set_y(82)
+    pdf.set_y(65)
     pdf.set_draw_color(80, 140, 200)
     pdf.set_line_width(0.4)
     pdf.line(pdf.w * 0.3, pdf.get_y(), pdf.w * 0.7, pdf.get_y())
     pdf.set_line_width(0.2)
 
-    pdf.set_y(90)
+    pdf.set_y(75)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "DSS Office of Legal Services", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Executive Summary", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
 
-    # Below the band
-    pdf.set_y(140)
+    # Five colored level indicators on cover
+    pdf.set_y(130)
+    levels = [
+        (LVL1_COLOR, "Discovery"),
+        (LVL2_COLOR, "Summarization"),
+        (LVL3_COLOR, "Operational"),
+        (LVL4_COLOR, "Investigative"),
+        (LVL5_COLOR, "Adjudicative"),
+    ]
+    bar_w = (pdf.w - 40) / 5
+    for i, (color, name) in enumerate(levels):
+        x = 20 + i * bar_w
+        pdf.set_fill_color(*color)
+        pdf.rect(x, pdf.get_y(), bar_w - 2, 8, "F")
+        pdf.set_xy(x, pdf.get_y())
+        pdf.set_font("Helvetica", "B", 7)
+        pdf.set_text_color(*WHITE)
+        pdf.cell(bar_w - 2, 8, sanitize_text(f"L{i+1}: {name}"), align="C")
+    pdf.set_y(pdf.get_y() + 14)
+
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
-    pdf.multi_cell(0, 6.5,
-        "This report presents findings from a structured evaluation of AI agents "
-        "across two government use cases. Each use case tests the same core question: do agents "
-        "backed by structured databases or unstructured documents deliver more reliable answers? "
-        "Both use cases are complete. Two agents achieved a perfect 10/10.",
-        align="C"
-    )
+    pdf.multi_cell(0, 6.5, sanitize_text(
+        "Not all AI use cases require the same level of accuracy, and not all agent "
+        "architectures deliver it. This report presents a five-level framework based on "
+        "304 empirical test runs across 19 agent configurations and two government use cases."
+    ), align="C")
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "274 test runs  |  18 agents  |  20 prompts  |  2 use cases  |  4 improvement rounds", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, sanitize_text("304 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  6 testing rounds"),
+             align="C", new_x="LMARGIN", new_y="NEXT")
 
-    pdf.ln(6)
-    pdf.set_font("Helvetica", "B", 9)
-    pdf.set_text_color(*LIGHT)
-    pdf.multi_cell(0, 5.5,
-        "Use Case 1: Legal Case Analysis (complete)  |  Use Case 2: Investigative Analytics (complete)",
-        align="C"
-    )
-
-    # ══════════════════════════════════════════════════════════════════
-    # THE QUESTION
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
+    # THE FIVE LEVELS
+    # ====================================================================
     pdf.add_page()
-    pdf.section_title("The Question")
+    pdf.section_title("The Five Levels")
 
     pdf.body_text(
-        "When government workers need answers from case data, which Copilot Studio approach "
-        "delivers more reliable results?"
+        "Government agencies deploy AI agents across a spectrum of use cases. "
+        "Each level has different accuracy requirements, different failure consequences, "
+        "and different engineering investments. This framework helps leaders match their "
+        "investment to their risk."
     )
-    pdf.bullet(
-        "A structured-data agent that queries a normalized database through purpose-built tools "
-        "(the structured database approach)",
-        bold_lead="Structured Data:"
-    )
-    pdf.bullet(
-        "A document-backed agent that retrieves answers from PDFs and Word files stored in "
-        "SharePoint or uploaded as a knowledge base",
-        bold_lead="Unstructured Documents:"
-    )
+
+    # Level overview table
+    lvl_headers = ["Level", "Name", "Stakes", "Example"]
+    lvl_widths = [14, 34, 48, 74]
+    lvl_rows = [
+        ["1", "Discovery", "Minor inconvenience", "Find our leave policy"],
+        ["2", "Summarization", "Wasted time", "Summarize this audit report"],
+        ["3", "Operational", "Misallocated resources", "How many open cases by type?"],
+        ["4", "Investigative", "Missed evidence", "Build a timeline from these records"],
+        ["5", "Adjudicative", "Wrong legal outcome", "Prepare facts for this hearing"],
+    ]
+    pdf.styled_table(lvl_headers, lvl_rows, lvl_widths, font_size=8)
+
+    # ── Level 1-2 ──
+    pdf.ln(6)
+    pdf.level_badge(1, LVL1_COLOR, "Discovery")
+    pdf.level_badge(2, LVL2_COLOR, "Summarization and Synthesis")
     pdf.ln(2)
     pdf.body_text(
-        "We are testing both approaches side-by-side across two government use cases, scoring "
-        "every response on accuracy, completeness, and safety."
+        "The simplest AI use cases: finding documents, summarizing reports, condensing "
+        "meeting transcripts. Wrong answers are inconvenient but not dangerous. Users can "
+        "easily verify results against the original source."
+    )
+    pdf.body_text(
+        "Document-based agents (Copilot Studio with SharePoint grounding) scored 8 out of "
+        "10 on both use cases with zero customization. GPT-4o and GPT-4.1 performed "
+        "identically at this level. Model choice does not matter here.",
+        bold_lead="What we found:"
+    )
+    pdf.body_text(
+        "Deploy Copilot with SharePoint. Invest in document hygiene (consistent "
+        "formatting, meaningful filenames, metadata tags) rather than custom engineering. "
+        "This is where most agencies should start.",
+        bold_lead="Recommendation:"
     )
 
-    pdf.subsection_title("Use Cases")
-    pdf.bullet(
-        "11 Copilot Studio agents tested across 10 attorney-style prompts (110 test runs). "
-        "50 synthetic child welfare cases, 277 people, 333 timeline events, 338 witness statements, "
-        "151 discrepancies. All data is fictional.",
-        bold_lead="Use Case 1 - Legal Case Analysis (complete):"
+    # ── Level 3 ──
+    pdf.ln(2)
+    pdf.level_badge(3, LVL3_COLOR, "Operational Decision Support")
+    pdf.ln(2)
+    pdf.body_text(
+        "Multi-source data aggregation, dashboards-via-conversation, workload triage. "
+        "Wrong answers misallocate resources but are verifiable against existing reports."
     )
-    pdf.bullet(
-        "Investigative analytics over 34 million rows of Philadelphia public records -- property "
-        "ownership, code violations, demolitions, tax assessments, and real estate transfers. "
-        "Same structured database architecture, same Copilot Studio agent configurations. Testing planned.",
-        bold_lead="Use Case 2 - Investigative Analytics (planned):"
+    pdf.body_text(
+        "Aggregate queries (portfolio summaries, citywide statistics, workload counts) "
+        "worked reliably across all agent types, including the weakest performers. This is "
+        "where Model Context Protocol agents begin to outperform document agents -- live "
+        "structured data delivers answers that static documents cannot.",
+        bold_lead="What we found:"
+    )
+    pdf.body_text(
+        "Connect agents to structured data sources via Model Context Protocol. "
+        "Write clear tool descriptions. Add summary modes for large result sets.",
+        bold_lead="Recommendation:"
     )
 
-    # ══════════════════════════════════════════════════════════════════
-    # USE CASE 1: LEGAL CASE ANALYSIS
-    # ══════════════════════════════════════════════════════════════════
+    # ── Level 4 ──
+    pdf.add_page()
+    pdf.level_badge(4, LVL4_COLOR, "Investigative and Analytical")
+    pdf.ln(2)
+    pdf.body_text(
+        "Timeline reconstruction, discrepancy detection, entity resolution across multiple "
+        "data sources. Wrong answers mean missed evidence, false leads, and misdirected "
+        "investigations. This is where accuracy diverges dramatically."
+    )
+
+    pdf.subsection_title("The Model Gap")
+    pdf.body_text(
+        "GPT-4.1 agents averaged 9.5 out of 10. The GPT-4o agent scored 4 out of 10. "
+        "Same tools, same data, same backend. Government Cloud Copilot Studio is locked "
+        "to GPT-4o. No amount of tool or prompt engineering closed this gap."
+    )
+
+    model_headers = ["Model", "Average Score", "Platform"]
+    model_widths = [50, 40, 80]
+    model_rows = [
+        ["GPT-4.1", "9.5 / 10", "Commercial Copilot Studio, Azure OpenAI"],
+        ["GPT-5 Auto", "10 / 10", "Commercial Copilot Studio (identical to 4.1)"],
+        ["GPT-4o", "4 / 10", "Government Cloud Copilot Studio"],
+        ["Platform-assigned", "2 / 10", "M365 Copilot (no user control)"],
+    ]
+    pdf.styled_table(model_headers, model_rows, model_widths, font_size=7.5)
+
     pdf.ln(4)
-    pdf.set_font("Helvetica", "B", 18)
-    pdf.set_text_color(*NAVY)
-    pdf.cell(0, 11, "Use Case 1: Legal Case Analysis", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_draw_color(*NAVY)
-    pdf.set_line_width(0.8)
-    pdf.line(pdf.l_margin, pdf.get_y(), pdf.w - pdf.r_margin, pdf.get_y())
-    pdf.set_line_width(0.2)
-    pdf.ln(3)
-    pdf.set_font("Helvetica", "I", 9.5)
-    pdf.set_text_color(*MED)
-    pdf.cell(0, 6, "DSS Office of Legal Services  |  11 agents  |  10 prompts  |  110 test runs", new_x="LMARGIN", new_y="NEXT")
-
-    pdf.section_title("Key Findings")
-
-    # Finding 1
-    pdf.subsection_title("1. Structured data agents are consistently precise")
+    pdf.subsection_title("The Tool Gap")
     pdf.body_text(
-        "Agents backed by structured data returned complete, accurate answers on every prompt "
-        "where the information existed in the database. For timeline enumeration, all three "
-        "structured agents scored 12 out of 12 events with zero fabrication. Document-backed "
-        "agents ranged from 12 out of 12 (best case) down to 4 out of 12 with data from the "
-        "wrong case mixed in."
+        "Address resolution (converting '4763 Griscom Street' to a database identifier) "
+        "failed 87 percent of the time before we added a dedicated fuzzy-search tool. "
+        "After adding that one tool, address failures dropped to zero. The Investigative "
+        "Agent went from 1 out of 10 to a perfect 10 out of 10."
+    )
+    pdf.body_text(
+        "Purpose-built tools with fuzzy matching and entity resolution. GPT-4.1 minimum. "
+        "Explicit workflow guidance in system prompts. Ground truth test suites with known "
+        "answers. Budget for iterative testing.",
+        bold_lead="Recommendation:"
     )
 
-    # Finding 2
-    pdf.subsection_title("2. Every agent has a failure mode")
+    # ── Level 5 ──
+    pdf.ln(2)
+    pdf.level_badge(5, LVL5_COLOR, "Legal and Adjudicative")
+    pdf.ln(2)
     pdf.body_text(
-        "No single Copilot Studio configuration was correct on every question. Each approach has blind "
-        "spots that could mislead an attorney if used without review:"
+        "Case preparation, evidence compilation, hearing summaries, regulatory "
+        "determinations. Wrong answers can produce incorrect legal outcomes, due process "
+        "violations, or direct harm to vulnerable populations."
+    )
+    pdf.body_text(
+        "Even our highest-scoring agent (10 out of 10 on factual accuracy) produced a "
+        "dangerous result: it faithfully reproduced a sheriff's report statement that "
+        "'no fractures detected on skeletal survey' while the medical records documented "
+        "bilateral long bone fractures in a child abuse investigation. The citation was "
+        "real. The confidence was justified. The conclusion was dangerous.",
+        bold_lead="What we found:"
     )
 
-    failure_headers = ["Risk", "Severity", "What Happened", "Affected Agents"]
-    failure_widths = [32, 18, 72, 48]
-    failure_rows = [
-        ["Cross-case\ncontamination", "Critical", "Case 2 data injected into\nCase 1 timeline", "1 document agent\n(SharePoint PDF,\nGovernment Cloud)"],
-        ["Misleading source\nreproduced", "Critical", "7 of 8 document agents repeated\nan incorrect 'no fractures' claim", "All document agents\nexcept SharePoint PDF\n(Commercial)"],
-        ["Missed contradiction", "Critical", "Agent concluded 'no evidence'\nwhen contradiction data existed", "2 structured agents\n(GPT-4.1 based)"],
-        ["Misattribution", "High", "4 of 8 document agents attributed\none person's statement to another", "4 document agents\n(mixed platforms)"],
-        ["Fabricated fact", "High", "Agent confidently stated\n'2:00 AM' (actual: 3:15 AM)", "1 structured agent\n(Government Cloud)"],
-        ["Silent failure", "Medium", "Hallucinated a case number,\nreturned no results, no warning", "1 structured agent\n(Web application)"],
+    # ====================================================================
+    # DANGER TAXONOMY
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("The Danger Taxonomy")
+
+    pdf.body_text(
+        "Testing revealed five categories of AI failure, ranked by severity. These are "
+        "not hypothetical -- each was documented across 304 test runs."
+    )
+
+    danger_headers = ["Severity", "Failure Mode", "Description"]
+    danger_widths = [22, 48, 100]
+    danger_rows = [
+        ["Critical", "False negative",
+         "Data retrieved but not recognized as the answer"],
+        ["Critical", "Faithfully reproduced\nmisinformation",
+         "Agent accurately quoted a source document\nthat itself contained an error"],
+        ["High", "Misattribution",
+         "Correct fact assigned to the wrong person\n(e.g., mother's statement attributed to father)"],
+        ["High", "Hallucinated fact\nwith confidence",
+         "Invented specific detail with no source\n(dates, case numbers, statistics)"],
+        ["Medium", "Silent failure",
+         "No results returned without indicating\nanything went wrong"],
     ]
 
-    pdf.set_font("Helvetica", "B", 7)
+    pdf.set_font("Helvetica", "B", 7.5)
     pdf.set_fill_color(*TABLE_HEADER_BG)
     pdf.set_text_color(*TABLE_HEADER_FG)
-    for i, h in enumerate(failure_headers):
-        pdf.cell(failure_widths[i], 7, h, border=0, align="C", fill=True)
+    for i, h in enumerate(danger_headers):
+        pdf.cell(danger_widths[i], 7, sanitize_text(h), border=0, align="C", fill=True)
     pdf.ln()
 
-    pdf.set_font("Helvetica", "", 7)
-    for r_idx, row in enumerate(failure_rows):
+    pdf.set_font("Helvetica", "", 7.5)
+    for r_idx, row in enumerate(danger_rows):
         bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
         pdf.set_fill_color(*bg)
-        pdf.set_text_color(*DARK)
         y_start = pdf.get_y()
         x_start = pdf.get_x()
         row_h = 12
         for i, val in enumerate(row):
-            pdf.set_xy(x_start + sum(failure_widths[:i]), y_start)
-            if i == 1:
+            pdf.set_xy(x_start + sum(danger_widths[:i]), y_start)
+            if i == 0:
                 sev = val.strip()
                 if sev == "Critical":
                     pdf.set_text_color(*RED)
@@ -331,513 +422,259 @@ def build_pdf():
                     pdf.set_text_color(200, 120, 20)
                 else:
                     pdf.set_text_color(*AMBER)
-                pdf.set_font("Helvetica", "B", 7)
+                pdf.set_font("Helvetica", "B", 7.5)
             else:
                 pdf.set_text_color(*DARK)
-                pdf.set_font("Helvetica", "", 7)
-            pdf.multi_cell(failure_widths[i], 4, val, border=0, align="C" if i == 1 else "L", fill=True)
-        pdf.set_y(y_start + row_h)
-    pdf.ln(3)
-
-    # Finding 3
-    pdf.subsection_title("3. The AI model matters as much as the architecture")
-    pdf.body_text(
-        "The evaluation revealed a significant split between the two underlying models used by Copilot Studio. "
-        "Government Cloud environments use GPT-4o, while Commercial environments use GPT-4.1. "
-        "Neither can be changed by the agency."
-    )
-    pdf.bullet(
-        "Better at selecting the right tools (always checks for contradictions), uses precise "
-        "legal phrasing, gets specific facts like bedtime correct. However, more likely to "
-        "fabricate details when uncertain.",
-        bold_lead="GPT-4o (Government Cloud):"
-    )
-    pdf.bullet(
-        "More factually faithful with fewer fabricated details. However, consistently fails to "
-        "check for contradictions, leading to missed issues that exist in the data.",
-        bold_lead="GPT-4.1 (Commercial):"
-    )
-
-    # Finding 4
-    pdf.subsection_title("4. Document format affects results more than expected")
-    pdf.body_text(
-        "PDF files indexed via SharePoint in a Commercial environment produced the strongest "
-        "document-backed results. The same documents in Word format, or accessed through Government Cloud, "
-        "scored measurably lower. Uploaded file collections (flat file uploads) performed unevenly, "
-        "with PDF generally outperforming Word."
-    )
-
-    fmt_headers = ["Source & Format", "Avg Accuracy", "Notes"]
-    fmt_widths = [62, 24, 84]
-    fmt_rows = [
-        ["Structured Database", "12 / 12", "Deterministic and complete"],
-        ["SharePoint PDF (Commercial)", "12 / 12", "Strongest document agent overall"],
-        ["SharePoint Word (Commercial)", "12 / 12", "Minor time errors and one fabricated event"],
-        ["Uploaded PDF (Government Cloud)", "10 / 12", "Best uploaded-file agent"],
-        ["SharePoint Word (Government Cloud)", "9 / 12", "Correct facts but limited source coverage"],
-        ["Uploaded Word (Commercial)", "9 / 12", "Good detail but gaps in later events"],
-        ["Uploaded Word (Government Cloud)", "8 / 12", "Relied on single source document"],
-        ["Uploaded PDF (Commercial)", "6 / 12", "Collapsed multiple events into one"],
-        ["SharePoint PDF (Government Cloud)", "~4 / 12", "Mixed in data from a different case"],
-    ]
-    pdf.styled_table(fmt_headers, fmt_rows, fmt_widths, font_size=7.5)
-    pdf.ln(2)
-    pdf.set_font("Helvetica", "I", 8)
-    pdf.set_text_color(*LIGHT)
-    pdf.cell(0, 5, "Accuracy scores shown for the timeline enumeration prompt (12 events expected).", new_x="LMARGIN", new_y="NEXT")
-
-    # Finding 5
-    pdf.ln(2)
-    pdf.subsection_title("5. Structured data fails safely; documents fail dangerously")
-    pdf.body_text(
-        "When structured-data agents lack information, they say so explicitly: \"This information "
-        "is not in the available data.\" This is an honest absence that signals the attorney to "
-        "look elsewhere."
-    )
-    pdf.body_text(
-        "When document-backed agents encounter a misleading source, they reproduce it faithfully "
-        "with a citation. The citation makes the wrong answer appear authoritative. For example, "
-        "an attorney reading \"no fractures detected [Sheriff Report, p. 3]\" has no reason to "
-        "doubt it, but the medical records show two fractures that the summary omitted. Seven of "
-        "eight document agents made this error."
-    )
-
-    # ══════════════════════════════════════════════════════════════════
-    # RESULTS AT A GLANCE
-    # ══════════════════════════════════════════════════════════════════
-    pdf.add_page()
-    pdf.section_title("Results at a Glance")
-
-    pdf.body_text(
-        "Each of the 10 prompts tests a different type of question attorneys commonly ask. "
-        "The table below summarizes how Copilot Studio's two architecture groups performed and "
-        "the practical takeaway for each question type."
-    )
-
-    glance_headers = ["#", "Question Type", "Structured\nAgents", "Best Document\nAgent", "Worst Document\nAgent", "Key Takeaway"]
-    glance_widths = [7, 26, 22, 22, 22, 71]
-    glance_rows = [
-        ["1", "Emergency room\narrival time\n& nurse name", "Time correct;\nnurse not in\ndatabase", "Time + nurse\n+ employee ID", "Found\nnothing", "Nurse name only exists in\ndocuments -- need both layers"],
-        ["2", "Witness\nstatements", "Full quotes,\ncross-document\nanalysis", "Correct time,\nrich detail", "Missed key\nstatement", "4 of 8 document agents\nattributed one person's\nwords to another"],
-        ["3", "Contradiction\ndetection", "After Round 1:\nall 3 Pass\n(6/6 drug tests)", "3-document\nsynthesis", "Hallucinated\ncase number", "Individual drug test events\nmade data unambiguous"],
-        ["4", "Cross-document\nconflict", "After Round 1:\nall 3 Pass\n(both fractures)", "Only agent to\ncatch conflict", "Repeated\nincorrect claim", "Skeletal survey data added;\nMCP now surfaces conflict"],
-        ["5", "Full timeline\n(12 events)", "All 3:\n12 / 12", "12 / 12 with\nricher detail", "4 / 12 with\nwrong-case data", "Structured data makes\nenumeration trivial"],
-        ["6", "People roster\n(8 people)", "All 3:\n8 / 8", "8 / 8 plus\n4 extras", "5 / 8\nincomplete", "Document agents found 4\npeople not in the database"],
-        ["7", "Statement\nevolution", "10 of 11 agents\nfound all changes", "All changes +\nmotive analysis", "Missed 1 of 3\nchanges", "Strongest consensus across\nall agent types"],
-        ["8", "Filter by\naudience", "After Round 1:\nall 3 Pass\n(made_to filter)", "4 / 4 with\nsource detail", "Returned wrong\nstatement type", "Tool API gap fixed;\nstructured agents now\nmatch document agents"],
-        ["9", "Aggregate\ncount (9 cases)", "All 3:\n9 / 9", "1 / 9\n(expected)", "1 / 9\n(expected)", "Cross-case queries are\nstructured data's top strength"],
-        ["10", "Time gap\ncalculation", "After Round 1:\nall 3 Pass\n(4h30m correct)", "Correct gap\ncalculation", "Fabricated time,\nsaid 10 hours", "Standalone thump event\neliminated parsing errors"],
-    ]
-
-    pdf.set_font("Helvetica", "B", 6.5)
-    pdf.set_fill_color(*TABLE_HEADER_BG)
-    pdf.set_text_color(*TABLE_HEADER_FG)
-    for i, h in enumerate(glance_headers):
-        pdf.cell(glance_widths[i], 10, h, border=0, align="C", fill=True)
-    pdf.ln()
-
-    pdf.set_font("Helvetica", "", 6.5)
-    for r_idx, row in enumerate(glance_rows):
-        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
-        pdf.set_fill_color(*bg)
-        pdf.set_text_color(*DARK)
-        y_start = pdf.get_y()
-        x_start = pdf.get_x()
-        cell_h = 13
-        for i, val in enumerate(row):
-            pdf.set_xy(x_start + sum(glance_widths[:i]), y_start)
-            pdf.set_text_color(*DARK)
-            pdf.set_font("Helvetica", "B" if i == 0 else "", 6.5)
-            pdf.multi_cell(glance_widths[i], 4.3, val, border=0, align="C" if i <= 0 else "L", fill=True)
-        pdf.set_y(y_start + cell_h)
-    pdf.ln(3)
-
-    # ══════════════════════════════════════════════════════════════════
-    # AGENT SCORECARD
-    # ══════════════════════════════════════════════════════════════════
-    pdf.add_page()
-    pdf.section_title("Agent Scorecard")
-
-    pdf.body_text(
-        "Each Copilot Studio agent was graded on every prompt: Pass (accurate and useful), "
-        "Partial (correct core facts but incomplete or minor errors), "
-        "Fail (wrong answer, dangerous error, or critical omission), or "
-        "N/A (data not available and agent was transparent about it)."
-    )
-
-    sc_headers = ["Agent", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    sc_widths = [52] + [11.8] * 10
-    sc_rows = [
-        ["Web Application", "Pass", "Pass", "Pass +", "Pass +", "Pass", "Pass", "Pass", "Pass +", "Pass", "Pass +"],
-        ["Structured Data (Commercial)", "Pass", "Partial", "Pass +", "Pass +", "Pass", "Pass", "Partial", "Pass +", "Pass", "Pass"],
-        ["Structured Data (Gov Cloud)", "Fail", "Pass", "Pass +", "Pass +", "Pass", "Pass", "Pass", "Pass +", "Pass", "Pass +"],
-        ["SharePoint PDF (Commercial)", "Pass", "Partial", "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Partial", "Pass"],
-        ["SharePoint Word (Commercial)", "Pass", "Fail", "Partial", "Fail", "Partial", "Pass", "Pass", "Pass", "Partial", "Pass"],
-        ["Uploaded Word (Commercial)", "Pass", "Fail", "Pass", "Fail", "Partial", "Pass", "Pass", "Pass", "Partial", "Pass"],
-        ["Uploaded PDF (Commercial)", "Pass", "Pass", "Pass", "Fail", "Fail", "Pass", "Pass", "Pass", "Partial", "Partial"],
-        ["SharePoint PDF (Gov Cloud)", "Pass", "Fail", "Partial", "Fail", "Fail", "Fail", "Pass", "Fail", "Partial", "Fail"],
-        ["SharePoint Word (Gov Cloud)", "Fail", "Partial", "Partial", "Fail", "Partial", "Fail", "Pass", "Fail", "Partial", "Pass"],
-        ["Uploaded PDF (Gov Cloud)", "Partial", "Partial", "Pass", "Fail", "Pass", "Pass", "Pass", "Pass", "Partial", "Partial"],
-        ["Uploaded Word (Gov Cloud)", "Partial", "Fail", "Pass", "Fail", "Partial", "Partial", "Pass", "Pass", "Partial", "Partial"],
-    ]
-    pdf.colored_score_table(sc_headers, sc_rows, sc_widths)
-
-    pdf.ln(4)
-    # Legend
-    pdf.set_font("Helvetica", "", 8)
-    pdf.set_text_color(*MED)
-    legend_x = pdf.get_x()
-    pdf.set_x(legend_x)
-    pdf.set_font("Helvetica", "B", 8)
-    pdf.set_text_color(*GREEN)
-    pdf.write(5, "Pass")
-    pdf.set_text_color(*MED)
-    pdf.set_font("Helvetica", "", 8)
-    pdf.write(5, " = Accurate & useful    ")
-    pdf.set_font("Helvetica", "B", 8)
-    pdf.set_text_color(*AMBER)
-    pdf.write(5, "Partial")
-    pdf.set_text_color(*MED)
-    pdf.set_font("Helvetica", "", 8)
-    pdf.write(5, " = Minor gaps    ")
-    pdf.set_font("Helvetica", "B", 8)
-    pdf.set_text_color(*RED)
-    pdf.write(5, "Fail")
-    pdf.set_text_color(*MED)
-    pdf.set_font("Helvetica", "", 8)
-    pdf.write(5, " = Wrong or dangerous    ")
-    pdf.set_font("Helvetica", "B", 8)
-    pdf.set_text_color(*LIGHT)
-    pdf.write(5, "N/A")
-    pdf.set_text_color(*MED)
-    pdf.set_font("Helvetica", "", 8)
-    pdf.write(5, " = Data unavailable (honest)")
-    pdf.ln(8)
-
-    # Gov Cloud footnote
-    pdf.set_font("Helvetica", "I", 7)
-    pdf.set_text_color(*LIGHT)
-    pdf.cell(0, 4, "Gov Cloud = Government Community Cloud (uses GPT-4o)  |  Commercial environment uses GPT-4.1", align="C", new_x="LMARGIN", new_y="NEXT")
-
-    # ══════════════════════════════════════════════════════════════════
-    # PROMPTS TESTED
-    # ══════════════════════════════════════════════════════════════════
-    pdf.add_page()
-    pdf.section_title("Prompts Tested")
-
-    pdf.body_text(
-        "Each agent was asked the same 10 questions, shown below exactly as they were entered. "
-        "The column numbers in the scorecard above correspond to these prompts."
-    )
-
-    prompt_headers = ["#", "Question Asked", "What It Tests"]
-    prompt_widths = [8, 108, 54]
-    prompt_rows = [
-        ["1",
-         "Tell me about Jaylen Webb's emergency room admission\n"
-         "-- specifically the time and the admitting nurse.",
-         "Simple fact extraction;\n"
-         "nurse name only exists\nin documents"],
-        ["2",
-         "What did Marcus Webb tell hospital staff about when he\n"
-         "put Jaylen to bed, and did he give the same answer to\n"
-         "law enforcement?",
-         "Cross-document reasoning;\n"
-         "consistency analysis"],
-        ["3",
-         "Crystal Price told the court she was 'clean now' at the\n"
-         "November 2023 hearing. What do the drug test results show?",
-         "Contradiction detection;\n"
-         "compliance synthesis"],
-        ["4",
-         "Did the Sheriff's Office investigation find fractures in\n"
-         "Jaylen Webb's skeletal survey?",
-         "Cross-document conflict;\n"
-         "Sheriff Report contradicts\nMedical Records"],
-        ["5",
-         "What is the complete timeline of events for case\n"
-         "2024-DR-42-0892?",
-         "Full timeline enumeration\n"
-         "(12 events expected)"],
-        ["6",
-         "List all people involved in the Price Termination of\n"
-         "Parental Rights case and their roles.",
-         "People roster completeness\n"
-         "(8 people expected)"],
-        ["7",
-         "Compare Dena Holloway's initial hospital statement\n"
-         "with her later statement to Lt. Odom. What changed?",
-         "Statement evolution;\n"
-         "change detection"],
-        ["8",
-         "What statements were made to law enforcement in case\n"
-         "2024-DR-42-0892?",
-         "Filtering precision;\n"
-         "4 law enforcement\nstatements expected"],
-        ["9",
-         "Which cases involve Termination of Parental Rights?",
-         "Aggregate query;\n"
-         "9 cases in database;\n"
-         "document agents limited\nto their corpus"],
-        ["10",
-         "What was the exact time gap between the thump Dena\n"
-         "heard and when they took Jaylen to the hospital?",
-         "Arithmetic reasoning;\n"
-         "requires extracting and\ncalculating from data"],
-    ]
-
-    # Render prompts table with multi-line cells
-    pdf.set_font("Helvetica", "B", 7)
-    pdf.set_fill_color(*TABLE_HEADER_BG)
-    pdf.set_text_color(*TABLE_HEADER_FG)
-    for i, h in enumerate(prompt_headers):
-        pdf.cell(prompt_widths[i], 7, h, border=0, align="C", fill=True)
-    pdf.ln()
-
-    pdf.set_font("Helvetica", "", 7)
-    for r_idx, row in enumerate(prompt_rows):
-        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
-        pdf.set_fill_color(*bg)
-        pdf.set_text_color(*DARK)
-        y_start = pdf.get_y()
-        x_start = pdf.get_x()
-        # Measure height needed for the question text
-        line_count = row[1].count("\n") + 1
-        row_h = max(line_count * 4 + 2, 14)
-        for i, val in enumerate(row):
-            pdf.set_xy(x_start + sum(prompt_widths[:i]), y_start)
-            pdf.set_font("Helvetica", "B" if i == 0 else ("I" if i == 1 else ""), 7)
-            pdf.set_text_color(*DARK if i != 2 else MED)
-            pdf.multi_cell(prompt_widths[i], 4, val, border=0,
+                pdf.set_font("Helvetica", "B" if i == 1 else "", 7.5)
+            pdf.multi_cell(danger_widths[i], 4, sanitize_text(val), border=0,
                            align="C" if i == 0 else "L", fill=True)
         pdf.set_y(y_start + row_h)
-    pdf.ln(3)
-
-    # ══════════════════════════════════════════════════════════════════
-    # WIN/LOSS SUMMARY
-    # ══════════════════════════════════════════════════════════════════
-    pdf.add_page()
-    pdf.section_title("Overall Rankings")
-
-    rank_headers = ["Rank", "Agent", "Pass", "Partial", "Fail", "N/A"]
-    rank_widths = [10, 66, 20, 20, 20, 20]
-    rank_rows = [
-        ["1", "Web Application +", "10", "0", "0", "0"],
-        ["2", "Structured Data (Gov Cloud) +", "9", "0", "1", "0"],
-        ["3", "Structured Data (Commercial) +", "8", "2", "0", "0"],
-        ["4", "SharePoint PDF (Commercial)", "8", "2", "0", "0"],
-        ["5", "Uploaded Word (Commercial)", "6", "2", "2", "0"],
-        ["6", "Uploaded PDF (Commercial)", "6", "2", "2", "0"],
-        ["7", "SharePoint Word (Commercial)", "5", "3", "2", "0"],
-        ["8", "Uploaded PDF (Gov Cloud)", "5", "4", "1", "0"],
-        ["9", "Uploaded Word (Gov Cloud)", "3", "5", "2", "0"],
-        ["10", "SharePoint Word (Gov Cloud)", "2", "4", "4", "0"],
-        ["11", "SharePoint PDF (Gov Cloud)", "2", "2", "6", "0"],
-    ]
-    pdf.styled_table(rank_headers, rank_rows, rank_widths, font_size=8)
     pdf.ln(4)
-    pdf.set_font("Helvetica", "B", 9.5)
-    pdf.set_text_color(*NAVY)
-    pdf.multi_cell(0, 5.5,
-        "After Round 1 improvements, the Web Application leads with 10 Pass and zero failures. "
-        "All three structured-data agents now have zero or one failure. "
-        "Rows marked with + reflect post-improvement retesting."
+
+    pdf.callout_box(
+        "Level 5: Trust But Verify",
+        "The agent accelerates the human; it does not replace them. "
+        "Mandatory human review, citation linking, audit logging, and "
+        "organizational culture that treats AI output as a draft -- never "
+        "a decision. This is the only responsible operating model.",
+        height=30
     )
 
-    # ══════════════════════════════════════════════════════════════════
-    # IMPROVEMENTS ROUND 1
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
+    # THE EVIDENCE
+    # ====================================================================
     pdf.add_page()
-    pdf.section_title("Improvements Round 1")
+    pdf.section_title("The Evidence")
 
     pdf.body_text(
-        "After the initial 110 test runs, five specific data or tool gaps were identified where "
-        "structured-data agents would improve with additions already grounded in the source documents. "
-        "Every data addition traces back to an exact page in the case files. Nothing was fabricated "
-        "to satisfy a demo -- each item was a natural extraction that was missed in the initial data load."
+        "This framework is grounded in 304 empirical test runs across two government "
+        "use cases, 19 agent configurations, and six testing rounds."
     )
 
-    imp_headers = ["#", "Improvement", "What Changed", "Prompts Fixed"]
-    imp_widths = [8, 48, 68, 46]
+    pdf.subsection_title("Use Case 1: Legal Case Analysis")
+    pdf.bullet("50 synthetic legal cases with 277 people, 333 timeline events, "
+               "338 statements, and 151 discrepancies",
+               bold_lead="Data:")
+    pdf.bullet("11 configurations across 3 structured database agents and 8 "
+               "document-based agents",
+               bold_lead="Agents:")
+    pdf.bullet("Custom web application scored a perfect 10 out of 10. Document agents "
+               "scored 3 to 8 out of 10. 7 of 8 faithfully reproduced a misleading "
+               "medical finding.",
+               bold_lead="Result:")
+
+    pdf.ln(2)
+    pdf.subsection_title("Use Case 2: Investigative Analytics")
+    pdf.bullet("34 million rows of real Philadelphia public records (584,000 properties, "
+               "1.6 million code violations)",
+               bold_lead="Data:")
+    pdf.bullet("8 configurations including 3 pro-code agents with custom orchestration",
+               bold_lead="Agents:")
+    pdf.bullet("Two agents achieved perfect 10 out of 10 after iterative improvement. "
+               "The GPT-4o agent plateaued at 4 out of 10 despite identical improvements.",
+               bold_lead="Result:")
+
+    # Cross-use-case results table
+    pdf.ln(4)
+    pdf.subsection_title("Cross-Use-Case Results")
+    result_headers = ["Agent Configuration", "Use Case 1", "Use Case 2", "Model"]
+    result_widths = [58, 24, 24, 64]
+    result_rows = [
+        ["Custom Web Application", "10/10", "--", "GPT-4.1"],
+        ["Investigative Agent", "--", "10/10", "GPT-4.1"],
+        ["Copilot Studio MCP (Commercial)", "8/10", "10/10", "GPT-4.1"],
+        ["Foundry Agent", "--", "9/10", "GPT-4.1"],
+        ["Triage Agent", "--", "9/10", "GPT-4.1"],
+        ["Copilot Studio MCP (Gov Cloud)", "9/10", "4/10", "GPT-4o"],
+        ["SharePoint/PDF (Commercial)", "8/10", "8/10", "GPT-4.1"],
+        ["SharePoint/PDF (Gov Cloud)", "3-8/10", "8/10", "GPT-4o"],
+        ["M365 Copilot", "--", "2/10", "Platform-assigned"],
+    ]
+    pdf.styled_table(result_headers, result_rows, result_widths, font_size=7.5)
+
+    # ====================================================================
+    # ITERATIVE IMPROVEMENT
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("The Iterative Process")
+
+    pdf.body_text(
+        "Deploying an AI agent is not a one-time event. Each round of testing reveals "
+        "a different category of failure requiring a different type of fix. Organizations "
+        "that skip this process will encounter every failure mode documented here."
+    )
+
+    pdf.subsection_title("Round 0: Baseline Testing")
+    pdf.body_text(
+        "Deploy the agent, test against known prompts with known answers, document every "
+        "failure. This project tested 11 + 7 agent configurations across 10 prompts each "
+        "(180 baseline test runs)."
+    )
+
+    pdf.subsection_title("Round 1: Fix the Data")
+    pdf.body_text(
+        "Drug test results buried in narrative text were invisible to the model. A skeletal "
+        "survey finding missing from the database meant agents could not answer the most "
+        "dangerous prompt. Fix: 11 new SQL rows and 1 tool filter. Result: 2 Pass / 8 Fail "
+        "became 12 Pass / 1 Fail across affected prompts."
+    )
+
+    pdf.subsection_title("Round 2: Fix the Tools")
+    pdf.body_text(
+        "No tool existed to convert a street address into a database identifier (87% failure "
+        "rate). Tool descriptions did not mention they contained medical staff data. Fix: "
+        "1 new fuzzy address tool, improved descriptions, system prompt guidance. Zero data "
+        "changes."
+    )
+
+    imp_headers = ["Agent", "Round 1", "Final", "Change"]
+    imp_widths = [56, 28, 28, 58]
     imp_rows = [
-        ["1", "Audience filter on\nstatements tool",
-         "Added 'made to' parameter so agents\ncan query 'statements to law enforcement'\nwithout knowing every person's name",
-         "Prompt 8: 0/3 Pass\n-> 3/3 Pass"],
-        ["2", "Skeletal survey data\n+ discrepancy",
-         "Added radiology findings and the\nSheriff Report vs Medical Records\ncontradiction to the database",
-         "Prompt 4: 0/3 Pass\n-> 3/3 Pass"],
-        ["3", "9:30 PM thump as\nstandalone event",
-         "Added the thump as its own timeline\nevent so agents don't need to parse\nit from statement text",
-         "Prompt 10: 1/3 Pass\n-> 3/3 Pass"],
-        ["4", "Individual drug test\nevents",
-         "Added 6 discrete drug test results\ninstead of burying them in a narrative\ncourt event description",
-         "Prompt 3: 1/3 Pass\n-> 3/3 Pass"],
-        ["5", "Nurses added to\npeople table",
-         "Added two nurses from source documents\nto the case roster (Rebecca Torres RN,\nPatricia Daniels RN)",
-         "Prompt 1: data added\nbut agents don't check\npeople table yet"],
+        ["Commercial MCP", "8/10", "10/10", "PERFECT"],
+        ["Investigative Agent", "1/10", "10/10", "PERFECT (+9)"],
+        ["Foundry Agent", "4/10", "9/10", "+5, zero failures"],
+        ["Triage Agent (SK)", "0/10", "9/10", "+9 across 4 rounds"],
+        ["Gov Cloud MCP", "2/10", "4/10", "+2 (model-limited)"],
     ]
-
-    pdf.set_font("Helvetica", "B", 7)
-    pdf.set_fill_color(*TABLE_HEADER_BG)
-    pdf.set_text_color(*TABLE_HEADER_FG)
-    for i, h in enumerate(imp_headers):
-        pdf.cell(imp_widths[i], 7, h, border=0, align="C", fill=True)
-    pdf.ln()
-
-    pdf.set_font("Helvetica", "", 7)
-    for r_idx, row in enumerate(imp_rows):
-        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
-        pdf.set_fill_color(*bg)
-        pdf.set_text_color(*DARK)
-        y_start = pdf.get_y()
-        x_start = pdf.get_x()
-        row_h = 14
-        for i, val in enumerate(row):
-            pdf.set_xy(x_start + sum(imp_widths[:i]), y_start)
-            pdf.set_font("Helvetica", "B" if i == 0 else "", 7)
-            pdf.multi_cell(imp_widths[i], 4.5, val, border=0,
-                           align="C" if i == 0 else "L", fill=True)
-        pdf.set_y(y_start + row_h)
-    pdf.ln(4)
-
-    pdf.subsection_title("Net Impact")
-    pdf.body_text(
-        "Before improvements: 2 Pass, 5 Partial, 8 Fail across the 5 affected prompts (15 test runs). "
-        "After improvements: 12 Pass, 2 Partial, 1 Fail. The remaining failure is a model hallucination "
-        "(GPT-4o reporting 2:00 AM instead of 3:15 AM), not a data gap."
-    )
-    pdf.body_text(
-        "The key insight: structured-data agents improve by improving the data. When a structured agent "
-        "fails, you can trace the failure to a specific missing row or tool limitation, fix it, and "
-        "verify the fix deterministically. Document-backed agents have no equivalent feedback loop -- "
-        "the same documents produce different results on different runs."
-    )
-
-    # ══════════════════════════════════════════════════════════════════
-    # USE CASE 2: INVESTIGATIVE ANALYTICS
-    # ══════════════════════════════════════════════════════════════════
-    pdf.add_page()
-    pdf.set_font("Helvetica", "B", 18)
-    pdf.set_text_color(*NAVY)
-    pdf.cell(0, 11, "Use Case 2: Investigative Analytics", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_draw_color(*NAVY)
-    pdf.set_line_width(0.8)
-    pdf.line(pdf.l_margin, pdf.get_y(), pdf.w - pdf.r_margin, pdf.get_y())
-    pdf.set_line_width(0.2)
-    pdf.ln(3)
-    pdf.set_font("Helvetica", "I", 9.5)
-    pdf.set_text_color(*MED)
-    pdf.cell(0, 6, "Philly Poverty Profiteering  |  7 agents  |  10 prompts  |  146 test runs", new_x="LMARGIN", new_y="NEXT")
-
-    pdf.section_title("Key Findings")
-
-    pdf.subsection_title("1. Address resolution was the #1 failure mode")
-    pdf.body_text(
-        "In Round 1, agents attempted 15 address-to-parcel lookups and succeeded only twice "
-        "(13% success rate). Every agent resolved '4763 Griscom St' to a different wrong parcel "
-        "on different attempts. A dedicated fuzzy address search tool eliminated this entirely -- "
-        "zero address failures in Round 2."
-    )
-
-    pdf.subsection_title("2. The model gap is the defining result")
-    pdf.body_text(
-        "GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. "
-        "Same tools, same data, same backend. The tool improvements that lifted the Investigative "
-        "Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent -- it could not "
-        "even execute the same queries. Government Cloud is locked to GPT-4o."
-    )
-
-    pdf.subsection_title("3. Iterative improvement works -- but requires testing discipline")
-    pdf.body_text(
-        "The Triage Agent (Semantic Kernel team-of-agents) went from 0/10 to 9/10 across four "
-        "rounds of testing and prompt refinement. The Investigative Agent went from 1/10 to 10/10. "
-        "Each round revealed a different category of failure requiring a different type of fix: "
-        "missing tools, missing tool descriptions, missing parameters, prompt placement issues."
-    )
-
-    # UC2 Scorecard
-    pdf.ln(2)
-    pdf.subsection_title("Final Standings")
-    uc2_headers = ["Agent", "Pass", "Partial", "Fail", "Model"]
-    uc2_widths = [58, 16, 16, 16, 64]
-    uc2_rows = [
-        ["Philly MCP - Commercial", "10", "0", "0", "GPT-4.1  (PERFECT)"],
-        ["Investigative Agent", "10", "0", "0", "GPT-4.1  (PERFECT)"],
-        ["Foundry Agent", "9", "1", "0", "GPT-4.1"],
-        ["Triage Agent (SK)", "9", "1", "0", "GPT-4.1"],
-        ["SP/PDF - GCC", "8", "2", "0", "GPT-4o"],
-        ["SP/PDF - Commercial", "8", "2", "0", "GPT-4.1"],
-        ["Philly MCP - GCC", "4", "2", "4", "GPT-4o"],
-    ]
-    pdf.styled_table(uc2_headers, uc2_rows, uc2_widths, font_size=7.5)
+    pdf.styled_table(imp_headers, imp_rows, imp_widths, font_size=8)
 
     pdf.ln(4)
-    pdf.set_font("Helvetica", "B", 9.5)
-    pdf.set_text_color(*NAVY)
-    pdf.multi_cell(0, 5.5,
-        "Two agents achieved perfect 10/10 scores. All four GPT-4.1 structured-data agents "
-        "score 9 or 10 out of 10. The GPT-4o structured-data agent scores 4 out of 10 despite "
-        "receiving every tool and prompt improvement. The model -- not the data, tools, or "
-        "architecture -- is the limiting factor for Government Cloud."
+    pdf.subsection_title("The Pattern for Organizations")
+    pdf.bullet("Without ground truth, you cannot measure improvement. Build a test suite "
+               "before you build the agent.",
+               bold_lead="1. Test with known answers.")
+    pdf.bullet("If the answer is not in the data, no model will find it. Make facts "
+               "discrete and queryable.",
+               bold_lead="2. Fix the data first.")
+    pdf.bullet("If the model cannot reach the data, add tools. If it does not know "
+               "which tool to use, improve descriptions.",
+               bold_lead="3. Fix the tools second.")
+    pdf.bullet("Each fix can introduce new failure modes. Run the full test suite after "
+               "every change.",
+               bold_lead="4. Retest after every change.")
+
+    # ====================================================================
+    # WHAT GCC CUSTOMERS SHOULD DO
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("What Government Cloud Customers Should Do")
+
+    pdf.subsection_title("The Model Gap")
+    pdf.body_text(
+        "Government Community Cloud is currently locked to GPT-4o for Copilot Studio. "
+        "This model scored 4 out of 10 on investigative queries where GPT-4.1 scored "
+        "9.5 out of 10. No amount of tool or prompt engineering closed this gap."
     )
 
-    # ══════════════════════════════════════════════════════════════════
-    # RECOMMENDATION
-    # ══════════════════════════════════════════════════════════════════
+    pdf.bullet("Use Copilot Studio document agents for Levels 1 through 3 (GPT-4o is "
+               "adequate for retrieval and summarization)",
+               bold_lead="Option 1:")
+    pdf.bullet("Deploy pro-code agents using Azure OpenAI GPT-4.1 directly for Level 4 "
+               "and 5 workloads",
+               bold_lead="Option 2:")
+    pdf.bullet("Monitor Government Cloud model updates -- when GPT-4.1 becomes available, "
+               "Copilot Studio agents will benefit immediately",
+               bold_lead="Option 3:")
+
+    pdf.ln(4)
+    pdf.subsection_title("The Code Investment Spectrum")
+    pdf.body_text(
+        "The engineering investment changes what you can customize, not whether the agent "
+        "works at Level 4 and above."
+    )
+
+    code_headers = ["Approach", "Code Required", "Best For"]
+    code_widths = [56, 44, 70]
+    code_rows = [
+        ["M365 Copilot", "Zero (3 JSON manifests)", "Levels 1-2"],
+        ["Copilot Studio", "Zero to low", "Levels 1-3 (Com), 1-2 (GCC)"],
+        ["AI Foundry Agent", "Minimal", "Levels 3-4"],
+        ["Custom SDK", "Full (TypeScript, C#)", "Levels 4-5"],
+    ]
+    pdf.styled_table(code_headers, code_rows, code_widths, font_size=8)
+
+    pdf.ln(4)
+    pdf.body_text(
+        "Every architecture scored 9 to 10 out of 10 with GPT-4.1. The investment buys "
+        "customization, governance controls, and audit capabilities -- all of which matter "
+        "most at Levels 4 and 5."
+    )
+
+    # ====================================================================
+    # FIVE SURPRISING FINDINGS
+    # ====================================================================
     pdf.add_page()
-    pdf.section_title("Recommendation")
+    pdf.section_title("Five Findings That Surprised Us")
+
+    pdf.subsection_title("1. The most dangerous agent was the most accurate quoting its source")
+    pdf.body_text(
+        "Seven of eight document agents faithfully reproduced a sheriff's report statement "
+        "about fracture findings while the medical records told a different story. The agents "
+        "were not wrong about what the document said. They were wrong about what was true."
+    )
+
+    pdf.subsection_title("2. A single missing tool caused an 87% failure rate")
+    pdf.body_text(
+        "No tool existed to convert a street address into a database identifier. Adding one "
+        "fuzzy-match lookup tool produced zero failures in retesting. One agent went from "
+        "1 out of 10 to a perfect 10 out of 10."
+    )
+
+    pdf.subsection_title("3. The most complex agent needed four rounds of iteration")
+    pdf.body_text(
+        "The Semantic Kernel team-of-agents pattern started at 0 out of 10 and reached "
+        "9 out of 10, but only after four rounds of sub-agent prompt engineering. A simpler "
+        "Copilot Studio agent scored 8 out of 10 with no customization at all."
+    )
+
+    pdf.subsection_title("4. The model retrieved the answer and did not recognize it")
+    pdf.body_text(
+        "The agent called the right tools, received data containing 'two positive drug "
+        "screens (fentanyl) in October,' and concluded: 'no drug test results exist.' "
+        "This false negative is invisible to users because the tool calls look correct."
+    )
+
+    pdf.subsection_title("5. A pro-code agent challenged its own premise -- and was right")
+    pdf.body_text(
+        "The Foundry Agent was asked about a purchase price versus assessment ratio. "
+        "Instead of calculating the answer, it checked the source data, found the premise "
+        "was wrong, and recalculated using verified numbers. No other agent questioned "
+        "the input."
+    )
+
+    # ====================================================================
+    # CONCLUSION
+    # ====================================================================
+    pdf.ln(4)
+    pdf.section_title("Conclusion")
 
     pdf.body_text(
-        "Based on results across both use cases (274 test runs, 18 agent configurations), "
-        "neither approach alone is sufficient for production-grade reliability. "
-        "The strongest configuration layers both:"
+        "Not all AI use cases require the same investment. Levels 1 and 2 work with "
+        "existing Copilot licenses and SharePoint document libraries. Level 3 benefits "
+        "from structured data connections via Model Context Protocol. Levels 4 and 5 "
+        "require purpose-built tools, capable models (GPT-4.1 minimum), iterative "
+        "testing, and human review workflows."
     )
 
-    pdf.bullet(
-        "For precision queries: timelines, people rosters, statement comparisons, "
-        "contradiction detection, aggregate counts, and filtering by event type. These are the "
-        "questions attorneys ask most often, and where wrong answers carry the greatest risk.",
-        bold_lead="Structured data (database-backed):"
-    )
-    pdf.ln(1)
-    pdf.bullet(
-        "For narrative detail the database does not capture: nursing notes, "
-        "page-level citations, clinical observations, home visit narratives. These enrich "
-        "structured answers with the context attorneys need for legal filings.",
-        bold_lead="Document grounding (SharePoint/uploaded files):"
-    )
-    pdf.ln(1)
-    pdf.bullet(
-        "No Copilot Studio configuration was correct on every prompt. The value of Copilot Studio "
-        "is speed and coverage, not infallibility. The right question is not \"can I trust the agent?\" "
-        "but \"does it surface enough for me to make a better decision, faster?\"",
-        bold_lead="Human review remains essential."
+    pdf.callout_box(
+        "The Bottom Line",
+        "The agent is a research assistant, never the decision-maker. At Level 5, "
+        "where legal outcomes depend on accuracy, trust but verify is not a suggestion "
+        "-- it is the only responsible operating model.",
+        height=28
     )
 
     pdf.ln(6)
+    pdf.set_font("Helvetica", "I", 8)
+    pdf.set_text_color(*LIGHT)
+    pdf.multi_cell(0, 5, sanitize_text(
+        "Based on 304 test runs across 2 government use cases, 19 agent configurations, "
+        "6 testing rounds, and 3 rounds of iterative improvement."
+    ), align="C")
 
-    # Callout box
-    pdf.set_fill_color(*GRAY_BG)
-    pdf.set_draw_color(*ACCENT)
-    box_y = pdf.get_y()
-    pdf.rect(pdf.l_margin, box_y, pdf.w - pdf.l_margin - pdf.r_margin, 32, "FD")
-    pdf.set_xy(pdf.l_margin + 6, box_y + 5)
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.set_text_color(*NAVY)
-    pdf.cell(0, 7, "Bottom Line")
-    pdf.set_xy(pdf.l_margin + 6, box_y + 14)
-    pdf.set_font("Helvetica", "", 10)
-    pdf.set_text_color(*DARK)
-    pdf.multi_cell(pdf.w - pdf.l_margin - pdf.r_margin - 12, 6,
-        "Structured data delivers precision for day-to-day queries. "
-        "Document grounding adds narrative richness for complex analysis. "
-        "Together, they cover each other's blind spots. Neither alone is safe enough. "
-        "Both use cases confirmed this finding -- at case scale and at city scale."
-    )
-
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
     # OUTPUT
-    # ══════════════════════════════════════════════════════════════════
+    # ====================================================================
     out_dir = os.path.join(os.path.dirname(__file__), "..", "docs")
     out_path = os.path.join(out_dir, "executive-summary.pdf")
     pdf.output(out_path)

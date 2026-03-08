@@ -163,6 +163,64 @@ All SQL traffic is private — the SQL server has public network access **disabl
 - Function App deployments (`func azure functionapp publish`) work because Kudu runs within the Function App's VNet context, reaching storage via private endpoints
 - Any new app that needs SQL or storage access must be VNet-integrated or use a private endpoint
 
+## Agent Architecture Paths
+
+Not all agents reach the data the same way. There are two distinct paths through the stack, and understanding which agents use which path is critical for the demo narrative.
+
+| Agent | Use Case | Data Path | LLM Orchestration | Our Code | Model |
+|---|---|---|---|---|---|
+| **Custom Web SPA** | UC1 | MCP Server → APIM → Functions → SQL | MCP Server `/chat` endpoint | Full stack (TypeScript) | GPT-4.1 |
+| **Copilot Studio MCP (GCC)** | UC1, UC2 | MCP Server → APIM → Functions → SQL | Copilot Studio (low-code) | Zero — auto-discovers `/mcp` tools | GPT-4o |
+| **Copilot Studio MCP (Com)** | UC1, UC2 | MCP Server → APIM → Functions → SQL | Copilot Studio (low-code) | Zero — auto-discovers `/mcp` tools | GPT-4.1† |
+| **M365 Copilot (Com)** | UC2 | MCP Server → APIM → Functions → SQL | M365 Copilot (Teams/Outlook/Edge) | Zero — 3 JSON manifest files | Platform-assigned (no user control) |
+| **Copilot Studio SP/PDF (GCC)** | UC1, UC2 | SharePoint document library | Copilot Studio built-in RAG | Zero | GPT-4o |
+| **Copilot Studio SP/PDF (Com)** | UC1, UC2 | SharePoint document library | Copilot Studio built-in RAG | Zero | GPT-4.1 |
+| **Foundry Agent** | UC2 | MCP Server → APIM → Functions → SQL | Azure AI Agent Service | Minimal — create agent, send messages; Foundry does the rest | GPT-4.1 |
+| **Investigative Agent** | UC2 | Direct APIM → Functions → SQL | OpenAI SDK (TypeScript, custom loop) | Full — we run the agentic loop | GPT-4.1 |
+| **Triage Agent** | UC2 | Direct APIM → Functions → SQL | Semantic Kernel HandoffOrchestration (C#) | Full — we run the agentic loop | GPT-4.1 |
+
+### Path 1: Via MCP Server `/mcp` (tool discovery)
+
+The MCP server Container App exposes tools via `/mcp` (JSON-RPC 2.0). Multiple clients auto-discover and call these tools — each brings its own LLM orchestration:
+
+```
+Copilot Studio ──────→ /mcp ──┐
+M365 Copilot ────────→ /mcp ──┼──→ Container App (MCP Server) ──→ APIM ──→ Functions ──→ SQL
+Foundry Agent ───────→ /mcp ──┘
+```
+
+### Path 2: Via MCP Server `/chat` (full orchestration)
+
+The Web SPA uses `/chat`, where the MCP server runs the full agentic loop (chat completions + tool calling + Azure OpenAI):
+
+```
+Web SPA ──────────→ /chat ──→ Container App (MCP Server) ──→ APIM ──→ Functions ──→ SQL
+                                       │
+                                       └──→ Azure OpenAI
+```
+
+### Path 3: Direct APIM (custom agentic loops)
+
+These agents bypass the MCP server entirely. Our code runs the agentic loop and calls APIM endpoints directly:
+
+```
+Investigative Agent (TypeScript, OpenAI SDK) ───┐
+                                                ├───→ APIM ───→ Functions ───→ SQL
+Triage Agent (C#, Semantic Kernel) ─────────────┘
+```
+
+### Why This Matters for the Demo
+
+The MCP server is a "build once, serve many" investment — one Container App serves Copilot Studio, M365 Copilot, Foundry Agent, and the Web SPA. The spectrum of "our code" ranges from zero (M365 Copilot: 3 JSON manifests) to full (Investigative Agent: we write the entire agentic loop). This is the **build vs buy** trade-off in action:
+
+- **Zero code:** M365 Copilot (3 manifests), Copilot Studio (low-code config) — auto-discover MCP tools, platform runs the loop
+- **Minimal code:** Foundry Agent — create agent + point at `/mcp`, Agent Service runs the loop
+- **Full code:** Investigative Agent (TypeScript), Triage Agent (C#) — we run the loop, call APIM direct, control everything
+
+† UC2 COM MCP originally tested with GPT-5 Auto (Copilot Studio Commercial default). Retested with GPT-4.1: identical 10/10.
+
+The key demo talking point: **all agents hit the same APIM gateway and the same data** — the only difference is who does the LLM orchestration and which model reasons over the results.
+
 ## SharePoint Comparison Layer
 
 In addition to the MCP-backed agent, the demo includes unstructured legal documents in `sharepoint-docs/` for creating a second Copilot Studio agent grounded in SharePoint. This enables a side-by-side comparison:

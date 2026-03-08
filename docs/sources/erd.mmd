@@ -1,0 +1,65 @@
+erDiagram
+    cases {
+        VARCHAR_20 case_id PK
+        VARCHAR_200 case_title
+        VARCHAR_100 case_type
+        VARCHAR_50 circuit
+        VARCHAR_50 county
+        DATE filed_date
+        VARCHAR_50 status
+        VARCHAR_100 plaintiff
+        VARCHAR_2000 summary
+        DATETIME2 created_at
+    }
+
+    people {
+        INT person_id PK
+        VARCHAR_20 case_id FK
+        VARCHAR_100 full_name
+        VARCHAR_100 role
+        VARCHAR_200 relationship
+        DATE dob
+        VARCHAR_500 notes
+    }
+
+    timeline_events {
+        INT event_id PK
+        VARCHAR_20 case_id FK
+        DATE event_date
+        VARCHAR_20 event_time
+        VARCHAR_100 event_type
+        VARCHAR_2000 description
+        VARCHAR_200 source_document
+        VARCHAR_500 parties_involved
+    }
+
+    statements {
+        INT statement_id PK
+        VARCHAR_20 case_id FK
+        INT person_id FK
+        DATE statement_date
+        VARCHAR_100 made_to
+        VARCHAR_2000 statement_text
+        VARCHAR_200 source_document
+        VARCHAR_50 page_reference
+    }
+
+    discrepancies {
+        INT discrepancy_id PK
+        VARCHAR_20 case_id FK
+        VARCHAR_200 topic
+        INT person_a_id FK
+        VARCHAR_1000 person_a_account
+        INT person_b_id FK
+        VARCHAR_1000 person_b_account
+        VARCHAR_500 contradicted_by
+        VARCHAR_200 source_document
+    }
+
+    cases ||--o{ people : "has"
+    cases ||--o{ timeline_events : "has"
+    cases ||--o{ statements : "has"
+    cases ||--o{ discrepancies : "has"
+    people ||--o{ statements : "gave"
+    people ||--o{ discrepancies : "person_a"
+    people ||--o{ discrepancies : "person_b"

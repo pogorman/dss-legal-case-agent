@@ -1075,3 +1075,50 @@ Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP age
 - Consider BFG Repo Cleaner to purge real names from git history
 - Demo dry run with side-by-side comparison
 - Regenerate executive summary PDF with Round 2 results
+
+## Session 22 — 2026-03-07
+
+### What was done
+
+#### Triage Agent Round 2 Take 2 Retesting
+- Retested the Triage Agent (Semantic Kernel team-of-agents) on all 10 Use Case 2 prompts after sub-agent improvements made in a separate session
+- Sub-agent improvements included: improved system prompts, routing logic, and `search_properties` integration into sub-agents
+- **Score improvement: 1P/1Pa/8F → 6P/2Pa/2F** — the largest single-round improvement for the Triage Agent
+- Full trajectory across 3 rounds: 0P/0Pa/10F (R1) → 1P/1Pa/8F (R2 T1) → 6P/2Pa/2F (R2 T2)
+- Results file: `docs/test-responses/use-case-2-poverty/retests-semantic-kernel-triage-agent-take-2.txt`
+
+#### Per-prompt results
+- **Now passing:** P1 (330 props/87%), P2 (correct parcel via search_properties), P4 (perfect 6-owner chain), P7 (correct parcel, full bank narrative), P8 (45 failed, CLIP investigator), P10 (174.7% premium)
+- **Partial:** P5 (hedges on FMV source), P6 (recognizes govt vs private but doesn't auto-filter)
+- **Still failing:** P3 (wrong parcel despite P2/P4 resolving correctly — non-deterministic), P9 (blank response — regression from Take 1's partial)
+
+#### Round 3 Improvement Candidates Identified
+1. Mandate `search_properties` in ALL sub-agent system prompts (fixes P3 parcel mismatch)
+2. Add FMV field documentation to `get_property_transfers` tool description (fixes P5)
+3. Add `exclude_government` parameter to `get_top_violators` tool (fixes P6)
+4. Debug P9 blank response — investigate sub-agent timeout/crash
+5. Parcel caching in triage loop — pass resolved parcels between sub-agents
+
+#### Documentation Updates
+- Updated `docs/use-case-2-testing.md` with Round 2 retesting section, updated Final Scorecard, updated narratives throughout
+- Updated UC2 rankings to reflect latest results across all rounds
+- Total evaluation now at 133 scored responses (70 R1 + 53 R2T1 + 10 R2T2)
+
+### Key findings
+1. **Iterative improvement works across all architectures** — tool descriptions, system prompts, and data enrichment are all legitimate agent development activities that produce measurable results
+2. **`search_properties` integration into sub-agents was the key fix** — prompts where sub-agents used it passed; prompts where they didn't (P3) still fail
+3. **Non-deterministic resolution persists** — P3 gets the wrong parcel despite P2 and P4 resolving correctly in the same session, showing that sub-agent state is not shared
+4. **P9 blank response is a regression** — Take 1 got a partial (right direction, no numbers); Take 2 returned nothing. Likely a timeout or crash in the sub-agent loop
+5. **Triage Agent is no longer last** — at 6P/2Pa/2F, it now outperforms GCC MCP (4P/3Pa/3F)
+
+### Decisions made
+- This is an iterative improvement cycle — each round identifies specific tool/prompt gaps, fixes them, and retests
+- Triage Agent moved from "not demo-ready" to "conditionally demo-ready" — 6/10 passes with known gaps
+- Round 3 candidates are specific and scoped (5 items), not architectural overhauls
+
+### Open items
+- **Round 3 candidates:** Mandate search_properties in all sub-agent prompts (P3), FMV field docs (P5), exclude_government filter (P6), debug P9 blank response, parcel caching
+- **Carry-forward:** GCC MCP P1 token overflow, MCP-Com nurse lookup, upload Philly PDFs to SharePoint, UC1 redemption retests
+- Regenerate executive summary PDF with Round 2 Take 2 results
+- Consider BFG Repo Cleaner for git history
+- Demo dry run

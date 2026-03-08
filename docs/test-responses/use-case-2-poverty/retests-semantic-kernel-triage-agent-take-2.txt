@@ -1,0 +1,138 @@
+P1: How many properties does GEENA LLC own, and what percentage are vacant?
+GEENA LLC owns 330 properties in Philadelphia. Of these, 286 are classified as vacant.
+
+This means that approximately 87% of GEENA LLC's properties are vacant (286 out of 330).
+
+Triage
+→
+OwnerAnalyst
+P2: What has happened to the property at 4763 Griscom Street since it was purchased?
+  Since GEENA LLC purchased 4763 Griscom Street via Sheriff's Deed on 12/24/2019 for $6,500, the following key details apply:
+
+The property is now classified as "VACANT LAND" (Category: Vacant, Commercial, less than an acre).
+It is currently assessed at $24,800 (2025 assessment), with no structures present.
+No active licenses are on file.
+There are notable code enforcement issues: 64 violations, 45 failed inspections, and 1 demolition count.
+No ownership changes or additional transfers have occurred since GEENA LLC acquired it in 2019.
+Summary timeline (recent history):
+
+2019: Acquired by GEENA LLC via Sheriff's Deed for $6,500 (prior owner: Ricky H. Martinez).
+Violations, failed inspections, and at least one demolition action have been recorded since acquisition.
+The lot remains vacant and undeveloped.
+Would you like a breakdown of violations or details on GEENA LLC’s wider property holdings?
+
+Triage
+→
+OwnerAnalyst
+P3: What was the assessed value of 4763 Griscom Street in 2017 vs today, and why did it change?
+ The property at 4763 Griscom Street had an assessed value of $20,200 in 2017. The current assessed value is $78,500.
+
+The significant increase in the assessed value is largely due to Philadelphia's citywide property reassessment initiatives, which were aimed at aligning assessed values more closely with current market conditions and recent sales. These reassessments, conducted periodically by the Office of Property Assessment (OPA), take into account neighborhood sales data, property improvements, and market trends. The increase reflects rising property values in the area and city efforts to maintain equitable and up-to-date assessments across all neighborhoods.
+
+Triage
+→
+OwnerAnalyst
+P4: Who has owned 4763 Griscom Street, and in what order?
+ Here's the full chain of ownership for 4763 Griscom Street in Philadelphia, based on official deed and transfer records:
+
+1999-11-10: Ofides George, Ofides Vasiliky & Shehinsky Russell sold to Bryan Michael L.
+2004-03-23: Bryan Michael L sold to Habeeb Hillard J.
+2013-01-08: Habeeb Hillard J (by Sheriff's deed) to DeJesus Henry M.
+2014-07-10: DeJesus Henry M sold to Luong Hao Kim.
+2014-08-05: Luong Hao Kim sold to Martinez Ricky H.
+2019-12-24: Martinez Ricky H (by Sheriff's deed) to GEENA LLC (current owner).
+Order from earliest to current:
+
+Ofides/Shehinsky → Bryan Michael L → Habeeb Hillard J → DeJesus Henry M → Luong Hao Kim → Martinez Ricky H → GEENA LLC
+Let me know if you need owner or entity profiles, portfolio checks, or property details for any party in this ownership chain.
+
+Triage
+→
+OwnerAnalyst
+P5: The deed says 4763 Griscom was purchased for $146,000 but the fair market value was only $53,155. Where does the $53,155 come from?
+  The "fair market value" listed on Philadelphia deeds often refers to the City's official property assessment—not an independent appraisal, nor the price paid in the sale.
+
+For 4763 Griscom Street:
+
+The most recent (2025) City-assessed market value is $24,800.
+You mentioned $53,155 as "fair market value"—this likely refers to an earlier official assessment. Property assessments can change periodically as the City revalues properties.
+The $146,000 sale price is the transaction/deed price, which can be very different from the City's market value assessment.
+In summary:
+
+The $53,155 would have come from the City's OPA (Office of Property Assessment) assigned value at the time of that transaction. It is used for real estate transfer tax calculations. The official market value does not always match actual sale prices, and it is periodically reset by the City based on mass appraisal data (not individual appraisals).
+If you need to know what the "fair market value" (OPA assessment) was in a specific year or around the deed transfer date, I can look up the historical assessment data for that time. Let me know if you'd like the OPA value from a specific deed year!
+
+Triage
+→
+OwnerAnalyst
+P6: Who are the top 5 private owners with the most code violations citywide?
+The top five owners citywide with the most code violations are all public entities (Philadelphia Housing Authority, Land Bank, City, School District). If you are seeking the top five private owners (non-government), these are not included here.
+
+Would you like results for corporate/private entities only (such as landlords and LLCs), excluding public owners?
+
+get_top_violators
+P7: What financial institutions were involved with 2400 Bryn Mawr Ave, and what happened to them?
+  Several financial institutions played a role in the history of 2400 Bryn Mawr Ave (parcel number 521273000):
+
+Washington Mutual Bank FA
+Was the mortgagee in 2002 (MORTGAGE, 2002-04-18).
+Released its mortgage in 2006 (RELEASE OF MORTGAGE, 2006-08-01).
+Status: Washington Mutual failed during the 2008 financial crisis; its assets were sold to JPMorgan Chase.
+Financial Freedom Senior Funding Corporation / IndyMac Bank FSB
+Was the mortgagee for a reverse mortgage in 2006 (MORTGAGE, 2006-07-17).
+IndyMac Bank failed in July 2008; the reverse mortgage business and assets ultimately went through several ownership changes.
+Financial Freedom Acquisition LLC / Mortgage Electronic Registration Systems, Inc. (MERS)
+Assigned the mortgage to another entity in 2009 (ASSIGNMENT OF MORTGAGE, 2009-10-19).
+MERS is a system for tracking mortgage ownership but does not lend directly.
+OneWest Bank NA
+Acquired the mortgage from Financial Freedom/MERS in 2015 (ASSIGNMENT OF MORTGAGE, 2015-01-29).
+OneWest Bank was founded to acquire IndyMac's assets after IndyMac failed.
+Secretary of Housing and Urban Development (HUD)
+Was named as a mortgagee in 2006 (MORTGAGE, 2006-07-17), likely as part of FHA/HUD programs.
+What happened:
+
+Washington Mutual and IndyMac both failed during the 2008 financial crisis and were acquired by other institutions (JPMorgan Chase and OneWest Bank, respectively).
+The mortgage originated by Financial Freedom Senior Funding Corporation (reverse mortgage arm of IndyMac) was transferred through several entities, ending up with OneWest Bank NA.
+MERS tracked mortgage assignments but did not have direct financial stake.
+Secretary of HUD involvement indicates FHA or HUD-insured financing.
+In 2016, the property was lost at sheriff sale and acquired by GEENA LLC for $230,000, indicating foreclosure and the exit of all previous financial institutions.
+In summary: Multiple financial institutions (Washington Mutual, IndyMac/Financial Freedom, OneWest Bank NA, HUD, MERS) were involved, most failed or merged following the 2008 crisis, and ultimately, the property was foreclosed and sold to GEENA LLC in 2016.
+
+search_properties
+get_property_transfers
+
+P8: How many code violations at 4763 Griscom Street resulted in FAILED inspections, and what type of investigator handles them?
+4763 Griscom Street (parcel number: 232452100) has had a total of 45 code violations resulting in FAILED inspections.
+
+Most recent violations are classified as "NOTICE OF VIOLATION" with "STANDARD" priority.
+The majority of investigations are handled by "CLIP - VACANT LOT INVESTIGATOR," which refers to the Community Life Improvement Program investigators specialized for vacant lots.
+In rare cases, "CSU INVESTIGATOR" (Critical Structure Unit) was involved, especially with cases marked "UNSAFE".
+Summary:
+
+Total FAILED code violation inspections: 45
+Typical investigator for these FAILED cases: CLIP - Vacant Lot Investigator
+This pattern indicates persistent neglect and repeated failure to maintain this vacant parcel, currently owned by GEENA LLC.
+
+search_properties
+get_property_violations
+P9: Compare zip codes 19104 and 19132 — which has more vacant properties and more code violations?
+
+P10: The deed for 4763 Griscom shows a purchase price of $146,000 and an assessment of $53,155. What percentage discount or premium was the purchase price vs the assessed value?
+The 2004 deed for 4763 Griscom St (parcel number 232452100) shows:
+
+Purchase price (total consideration): $146,000
+Assessed value at that time: $53,155 (from "fair_market_value" field on the deed record)
+Calculation:
+
+Premium or discount (%) = ((Purchase Price - Assessed Value) / Assessed Value) × 100
+= (($146,000 - $53,155) / $53,155) × 100
+= ($92,845 / $53,155) × 100 ≈ 174.7%
+Result:
+
+The purchase price was approximately 175% higher than the assessed value. This is a premium, not a discount.
+Summary:
+
+4763 Griscom St (parcel 232452100) sold for $146,000—a ~175% premium over its assessed value of $53,155 at the time of sale.
+search_properties
+get_property_transfers
+get_property_assessments

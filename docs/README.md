@@ -1,30 +1,26 @@
 # Documentation Index
 
-## Deliverables
+## Deliverables (docs/pdf/)
 
-| File | Description |
-|---|---|
-| [executive-summary.pdf](executive-summary.pdf) | C-suite summary -- five-level accuracy framework, 304 test runs, zero abbreviations |
-| [demo-guide.pdf](demo-guide.pdf) | Presenter guide -- five-level demo script, talking points, Q&A handling |
-| [slide-outline.md](slide-outline.md) | 20-slide deck outline with key messages and visual suggestions |
+All PDFs are generated from hardcoded Python scripts — no separate MD source files.
+To update content, edit the script in `scripts/` and regenerate.
+
+| File | Generator | Description |
+|---|---|---|
+| [pdf/executive-summary.pdf](pdf/executive-summary.pdf) | `scripts/generate-executive-pdf.py` | C-suite summary -- five-level accuracy framework, 305 test runs |
+| [pdf/demo-guide.pdf](pdf/demo-guide.pdf) | `scripts/generate-demo-guide-pdf.py` | Presenter guide -- demo script, talking points, Q&A handling |
+| [pdf/slide-outline.pdf](pdf/slide-outline.pdf) | `scripts/generate-slide-outline-pdf.py` | 21-slide deck outline with key messages and visual suggestions |
+| [pdf/architecture.pdf](pdf/architecture.pdf) | `scripts/generate-architecture-pdf.py` | System architecture, data flow, networking, data provenance |
+| [pdf/user-guide.pdf](pdf/user-guide.pdf) | `scripts/generate-user-guide-pdf.py` | How to use the demo application |
+| [pdf/faqs.pdf](pdf/faqs.pdf) | `scripts/generate-faqs-pdf.py` | Frequently asked questions from development sessions |
 
 ## Reference
 
 | File | Description |
 |---|---|
-| [architecture.md](architecture.md) | System architecture, data flow, networking, data provenance |
-| [user-guide.md](user-guide.md) | How to use the demo application |
-| [faqs.md](faqs.md) | Frequently asked questions from development sessions |
 | [session-log.md](session-log.md) | Chronological log of development sessions |
 | [erd.png](erd.png) | Entity relationship diagram |
-
-## Sources (used to generate deliverables)
-
-| File | Generates |
-|---|---|
-| [sources/executive-summary.md](sources/executive-summary.md) | executive-summary.pdf (via `scripts/generate-executive-pdf.py`) |
-| [sources/demo-guide.md](sources/demo-guide.md) | demo-guide.pdf (via `scripts/generate-demo-guide-pdf.py`) |
-| [sources/erd.mmd](sources/erd.mmd) | erd.png (Mermaid diagram source) |
+| [sources/erd.mmd](sources/erd.mmd) | Mermaid source for ERD |
 
 ## Archive (testing data and improvement logs)
 
@@ -34,14 +30,3 @@
 | [archive/use-case-2-testing.md](archive/use-case-2-testing.md) | UC2: Investigative Analytics -- 8 agents, 10 prompts, 176 test runs |
 | [archive/improvements/](archive/improvements/) | Round-by-round tool and data improvements |
 | [archive/test-responses/](archive/test-responses/) | Raw agent responses organized by use case |
-
-## Scripts
-
-Utility scripts live in [`../scripts/`](../scripts/):
-
-| File | Description |
-|---|---|
-| [generate-executive-pdf.py](../scripts/generate-executive-pdf.py) | Generates executive-summary.pdf from hardcoded content |
-| [generate-demo-guide-pdf.py](../scripts/generate-demo-guide-pdf.py) | Generates demo-guide.pdf from sources/demo-guide.md |
-| [sanitize-docs.py](../scripts/sanitize-docs.py) | Replaces real PII with synthetic data in source Word docs |
-| [convert-md-to-docs.py](../scripts/convert-md-to-docs.py) | Converts sharepoint-docs markdown files to .docx and .pdf |

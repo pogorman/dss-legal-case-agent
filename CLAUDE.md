@@ -53,7 +53,7 @@ To update content, edit the Python script directly and regenerate.
 - Source documents (`.docx`, `.msg`) are in `docs/` locally but **excluded from git** via `.gitignore`
 - The `.msg` email still contains real names/screenshots — local only, not sanitizable
 - No real PII was ever loaded into Azure SQL
-- See `docs/architecture.md` → "Data Provenance" section for full details including replacement mapping
+- See `docs/pdf/architecture.pdf` → "Data Provenance" section for full details including replacement mapping
 
 ## Networking
 - SQL Server (`philly-stats-sql-01`) has **public network access disabled**

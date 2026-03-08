@@ -56,11 +56,9 @@ dss-legal-case-agent/
 │   ├── Case-2024-DR-15-0341/  5 legal documents (TPR case)
 │   └── Demo_Comparison_Prompts.md
 ├── docs/                 Documentation
-│   ├── architecture.md
-│   ├── demo-guide.md
+│   ├── pdf/              Generated PDFs (architecture, demo-guide, exec-summary, faqs, slide-outline, user-guide)
 │   ├── session-log.md
-│   ├── user-guide.md
-│   └── faqs.md
+│   └── sources/erd.mmd
 └── deploy.sh             Deployment script
 ```
 

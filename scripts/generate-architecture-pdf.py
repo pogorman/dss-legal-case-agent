@@ -1,5 +1,5 @@
 """
-Generate an architecture PDF from hardcoded content matching docs/architecture.md.
+Generate architecture.pdf from hardcoded content.
 Uses fpdf2 -- no external dependencies beyond what's already installed.
 
 Usage: python scripts/generate-architecture-pdf.py

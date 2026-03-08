@@ -1,0 +1,328 @@
+How many properties does GEENA LLC own, and what percentage are vacant?
+
+GEENA LLC Property Portfolio and Vacancy Rate
+
+Total Properties Owned
+
+GEENA LLC owns 194 properties across 15 zip codes in Philadelphia​1​.
+Vacancy Percentage
+
+Of these, 178 properties (91.8%) are classified as vacant land​1​.
+Summary Table
+
+Total properties: 194
+Vacant properties: 178
+Vacancy rate: 91.8%
+This information is based on official City of Philadelphia records as of February 2026​1​.
+
+1 reference
+1
+Entity_Investigation_Report.pdf
+
+  2. What happened to 4763 Griscom Street between when GEENA LLC bought it and today? Have they done anything with the property?
+
+Here is a detailed account of what has happened to 4763 Griscom Street between when GEENA LLC bought it and today, and what (if anything) they have done with the property:
+
+Acquisition and Current Status
+
+GEENA LLC acquired 4763 Griscom Street at a sheriff sale on December 24, 2019, for $6,500. At the time, the property was a vacant lot; the previous building had been demolished by the city in June 2019 due to hazardous conditions. The demolition was city-ordered and performed at taxpayer expense, not by the owner​1​.
+Since acquisition, GEENA LLC has not filed any building permits, development applications, or license applications for the property. There is no record of any construction, redevelopment, or active use of the lot. The property remains vacant land as of January 2026​2​.
+Code Enforcement and Maintenance
+
+The property has accumulated 64 code enforcement investigations since 2016, with 45 resulting in failed inspections (a 70.3% failure rate). Since GEENA LLC took ownership, the pattern has been cyclical: the lot fails inspection for issues like overgrown vegetation, debris, or illegal dumping, receives a notice of violation, is eventually cleaned to pass a follow-up inspection, and then falls back into violation within weeks or months. The property has never gone more than four months without a new violation case since GEENA LLC acquired it​2​.
+All code enforcement cases since 2020 list GEENA LLC as the owner and are classified as "NOTICE OF VIOLATION" with responsibility assigned to the Community Life Improvement Program (CLIP) and vacant lot investigators​2​.
+No Investment or Development
+
+There is no evidence that GEENA LLC has made any improvements, investments, or changes to the property. The only activity has been minimal, reactive lot cleaning in response to city code enforcement actions. The property has no active licenses, no pending appeals, and no scheduled hearings​2​.
+Summary
+
+Since GEENA LLC bought 4763 Griscom Street, they have not done anything with the property except respond to repeated city code violations for lot maintenance. The lot remains vacant, undeveloped, and subject to ongoing enforcement cycles​2​​​1​.
+If you need more details on the ownership chain or code enforcement history, let me know!
+
+2 references
+1
+Transfer_Chain_Analysis_4763_Griscom.pdf
+2
+Property_Enforcement_File_4
+
+
+  3. What was the assessment value of 4763 Griscom Street in 2017, and what is it now? What happened?
+
+Assessment Value of 4763 Griscom Street: 2017 vs. Now
+
+2017 Assessment Value
+
+In 2017, the property at 4763 Griscom Street was assessed at a market value of $56,900.
+Taxable building value: $42,390
+Taxable land value: $14,510
+The property had a standing structure at this time​1​.
+Current Assessment Value (2025)
+
+As of the 2025 tax year, the property is assessed at a total market value of $24,800.
+Taxable building value: $0 (reflecting the vacant lot status)
+Taxable land value: $24,800​1​.
+What Happened?
+
+The property maintained a steady value of $56,900 from 2015 through 2018 while the building was still standing.
+In 2019, the city ordered the demolition of the building due to hazardous conditions. The demolition was completed between April and June 2019 at city expense.
+The 2019 assessment dropped to $37,200 (partial-year adjustment for demolition).
+By 2020, the value collapsed to $17,500 (a 69% decline from pre-demolition), with the building value at $0.
+The property has remained a vacant lot since, with only the land being assessed.
+The 2025 assessment shows a modest recovery to $24,800, attributed to land value appreciation in the area, not to any improvement on the property itself.
+Since demolition, the property has accumulated numerous code violations for lot maintenance, with no development or improvement activity​1​.
+Summary Table
+
+Year	Market Value	Building Value	Land Value	Notes
+2017	$56,900	$42,390	$14,510	Structure standing
+2019	$37,200	$27,714	$9,486	Demolition year
+2020	$17,500	$0	$17,500	Vacant land only
+2025	$24,800	$0	$24,800	Land value increase
+The drastic drop in value was caused by the city-ordered demolition of the deteriorated building, after which the property became a vacant lot. The recent slight increase in assessed value is due to rising land values in the neighborhood, not any change to the property itself​1​.
+
+1 reference
+1
+Property_Enforcement_File_4763
+
+
+  4. Trace the complete ownership history of 4763 Griscom Street. How many times was it sold at sheriff sale?
+
+Ownership History of 4763 Griscom Street
+
+Initial Sale (November 10, 1999):
+
+Grantors: George Ofides, Vasiliky Ofides, Russell Shehinsky
+Grantee: Michael L. Bryan
+Sale Price: $10,650
+Document Type: DEED
+Sale to Hillard J. Habeeb (March 23, 2004):
+
+Grantor: Michael L. Bryan
+Grantee: Hillard J. Habeeb
+Sale Price: $146,000
+Document Type: DEED
+First Sheriff Sale (January 8, 2013):
+
+Grantor: Hillard J. Habeeb
+Grantee: Henry M. DeJesus
+Sale Price: $13,200
+Document Type: DEED SHERIFF
+Quick Flip to Hao Kim Luong (July 10, 2014):
+
+Grantor: Henry M. DeJesus
+Grantee: Hao Kim Luong
+Sale Price: $20,000
+Document Type: DEED
+Second Quick Flip to Ricky H. Martinez (August 5, 2014):
+
+Grantor: Hao Kim Luong
+Grantee: Ricky H. Martinez
+Sale Price: $21,500
+Document Type: DEED
+Second Sheriff Sale to GEENA LLC (December 24, 2019):
+
+Grantor: Ricky H. Martinez
+Grantee: GEENA LLC
+Sale Price: $6,500
+Document Type: SHERIFF'S DEED
+Summary of Sheriff Sales:
+
+The property was sold at sheriff sale two times:
+January 8, 2013 (Habeeb to DeJesus)
+December 24, 2019 (Martinez to GEENA LLC)
+Total Number of Sheriff Sales: 2
+
+​1​
+
+1 reference
+1
+Transfer_Chain_Analysis_4763_Griscom.pdf
+
+
+
+  5. The transfer records show 4763 Griscom was sold for $146,000 in 2004. What was the fair market value at the time of that sale?
+
+Fair Market Value of 4763 Griscom in 2004
+
+The property at 4763 Griscom was sold for $146,000 in March 2004.
+The fair market value recorded at the time of that sale was $53,155.
+The sale price exceeded the appraised value by $92,845, which is 275% of the fair market value. This discrepancy is noted as a hallmark of predatory or inflated transactions during the mid-2000s housing bubble​1​.
+Summary Table
+
+Sale Date	Sale Price	Fair Market Value (Recorded)
+March 23, 2004	$146,000	$53,155
+If you need further details or context about the transaction, let me know!
+
+1 reference
+1
+Transfer_Chain_Analysis_4763_G
+
+
+  6. Who are the top 5 private property owners in Philadelphia by code violation count? Exclude government entities.
+
+Top Private Property Owners in Philadelphia by Code Violation Count (Excluding Government Entities)
+
+Based on the most recent and comprehensive code enforcement records available, the following information is supported:
+
+1. GEENA LLC
+
+GEENA LLC is a Pennsylvania limited liability company with a portfolio of 194 properties across 15 Philadelphia zip codes.
+This entity has accumulated a total of 1,411 code enforcement investigation records with the Department of Licenses and Inspections, of which 823 (58.3%) resulted in failed inspections.
+This is described as "one of the highest failure rates among private property owners with portfolios of 10 or more properties in Philadelphia."
+The violations are predominantly for lot maintenance, debris accumulation, illegal dumping, and failure to secure vacant structures.
+GEENA LLC's holdings are overwhelmingly vacant land (91.8%), with the remainder being single-family, multi-family, or apartment buildings​1​.
+Other Owners
+
+The available records provide detailed, entity-level code violation data only for GEENA LLC. No other private property owners are named or quantified in the provided sources as being among the top five by code violation count.
+The reports do mention that GEENA LLC's violation count and failure rate are among the highest for private owners with large portfolios, but do not list or rank other private owners for comparison​1​.
+Summary Table
+
+Rank	Owner Name	Code Violation Count	Notes
+1	GEENA LLC	1,411 investigations (823 failed)	Highest documented for private owners
+Note:
+
+The sources do not provide a full ranked list of the top five private property owners by code violation count. Only GEENA LLC is specifically identified and quantified as a top violator among private owners. No government entities are included in this ranking​1​.
+If you need further details or a broader list, additional or more comprehensive citywide code enforcement data would be required.
+
+1 reference
+1
+Entity_Investigation_Report.pdf
+
+  7. What financial institutions were involved in the mortgage history of 2400 Bryn Mawr Avenue, and what happened to them?
+
+Mortgage History and Financial Institutions for 2400 Bryn Mawr Avenue
+
+1. Institutions Involved:
+
+Washington Mutual Bank F.A.
+
+Original mortgage lender (2002).
+Washington Mutual was the largest savings and loan institution in the U.S. and collapsed in September 2008, becoming the largest bank failure in American history​1​.
+Financial Freedom Senior Funding Corporation
+
+Provided a reverse mortgage (2006).
+Subsidiary of IndyMac Bank, specializing in reverse mortgages for seniors​1​.
+IndyMac Bank F.S.B.
+
+Co-lender on the reverse mortgage (2006).
+IndyMac collapsed in July 2008 and was seized by the FDIC​1​.
+U.S. Department of Housing and Urban Development (HUD)
+
+Provided a Home Equity Conversion Mortgage (HECM) guarantee (2006).
+HUD became a party to the foreclosure when the reverse mortgage defaulted​1​.
+Walter P. Lomax Jr.
+
+Private individual who provided a second mortgage (2006, 2009).
+Indicates ongoing financial distress for the homeowner​1​.
+Financial Freedom Acquisition LLC & Mortgage Electronic Registration Systems (MERS)
+
+Mortgage assignees after IndyMac’s collapse (2009).
+MERS is a national mortgage tracking system, named in nationwide litigation​1​.
+OneWest Bank N.A.
+
+Final mortgage holder (2015).
+Formed from IndyMac’s remnants, acquired by CIT Group in 2015, later merged into CIT Bank​1​.
+GEENA LLC
+
+Purchased the property at sheriff sale in 2016.
+Current owner; no further mortgage activity recorded since acquisition​1​.
+2. What Happened to Them:
+
+Washington Mutual, IndyMac, Financial Freedom:
+All failed during the 2008 financial crisis and were seized or reconstituted by regulators​1​.
+Financial Freedom Acquisition LLC, OneWest Bank:
+Created from the remnants of failed institutions; OneWest was acquired and merged into CIT Bank​1​.
+MERS:
+Continues as a mortgage tracking system, but has been involved in nationwide litigation​1​.
+HUD:
+Acted as foreclosure party due to the federally insured reverse mortgage​1​.
+Walter P. Lomax Jr.:
+Private lender; no further information on his fate, but his involvement suggests financial distress for the homeowner​1​.
+GEENA LLC:
+Acquired the property at a substantial discount; has not invested or improved the property, which has since deteriorated​1​.
+Key Findings:
+
+Every major mortgage institution involved either failed, was seized, or reconstituted.
+The property was ultimately lost to foreclosure and acquired by a speculative LLC.
+No productive use or investment has occurred since GEENA LLC’s acquisition; the property’s condition and value have declined​1​.
+1 reference
+1
+Ownership_Financial_History
+
+  8. How many code violations at 4763 Griscom Street resulted in FAILED inspections, and what type of investigator handles them?
+
+Code Violations and Inspection Outcomes at 4763 Griscom Street
+
+The property at 4763 Griscom Street has accumulated a total of 64 code enforcement investigations with the Department of Licenses and Inspections.
+Of these, 45 resulted in FAILED inspections, representing a 70.3% failure rate.
+The investigations span from 2016 through 2024, covering both pre- and post-demolition periods.
+Type of Investigator Handling Violations
+
+Since 2020, all investigations list the owner as GEENA LLC and are classified as "NOTICE OF VIOLATION."
+Case responsibility is assigned to CLIP (Community Life Improvement Program) and specifically to the CLIP - Vacant Lot Investigator for vacant lot maintenance issues (such as overgrown vegetation, debris, and dumping).
+Prior to the demolition (2016-2019), hazardous building conditions were handled by a Property Maintenance Investigator​1​.
+Summary Table
+
+Period	Failed Inspections	Investigator Type
+2016-2019	Structure-related	Property Maintenance Investigator
+2020-2024	Vacant lot-related	CLIP - Vacant Lot Investigator
+All information is based on official city enforcement records​1​.
+
+1 reference
+1
+Property_Enforcement_File_4763_Gri
+
+  9. Compare the vacancy rates and violation rates between zip codes 19104 and 19132. Which is worse?
+
+Vacancy Rates and Violation Rates Comparison: Zip Codes 19104 vs. 19132
+
+Vacancy Rates
+
+19104 (University City / Mantua):
+50 properties, 45 classified as vacant (90% vacancy rate).
+19132 (Strawberry Mansion):
+36 properties, 33 classified as vacant (91.7% vacancy rate).
+Both zip codes have extremely high vacancy rates, but 19132 is slightly higher​1​.
+Violation Rates
+
+Both zip codes are described as "among the highest-vacancy, highest-violation areas in the city" according to L&I area statistics​1​.
+Across the GEENA LLC portfolio, 58.3% of code enforcement investigations resulted in failed inspections, with violations concentrated in lot maintenance, debris accumulation, illegal dumping, and failure to secure vacant structures​1​.
+Which is Worse?
+
+19132 has a marginally higher vacancy rate than 19104.
+Both zip codes are equally cited for high violation rates and are considered among the worst in Philadelphia for these issues​1​.
+Summary
+
+19132 is slightly worse in terms of vacancy rate, but both zip codes are equally problematic for code violations and overall property distress​1​.
+1 reference
+1
+Entity_Investigation_Report.pdf
+
+  10. GEENA LLC bought 2400 Bryn Mawr for $230,000 in 2016. The assessed value at the time was $357,100. What was the discount
+  percentage, and how has the assessment changed since then?
+
+Discount Percentage at Purchase (2016)
+
+GEENA LLC bought 2400 Bryn Mawr for $230,000 in June 2016.
+The assessed value at the time was $357,100.
+The purchase price was a 35.6% discount to the assessed value. This is calculated as:
+(Assessed Value - Purchase Price) / Assessed Value = ($357,100 - $230,000) / $357,100 ≈ 35.6%​1​.
+Assessment Change Since 2016
+
+The assessed market value was $357,100 from 2015 through 2017.
+In 2018, the assessment dropped to $317,100 (an 11.2% reduction).
+In 2019, it dropped again to $265,600 (a further 16.2% reduction).
+From 2019 through 2025, the assessment has remained flat at $265,600.
+Overall, the assessed value has declined by 25.6% since GEENA LLC’s purchase​1​.
+Summary Table
+
+Year	Assessed Value
+2016	$357,100
+2018	$317,100
+2019+	$265,600
+Key Points
+
+The property was acquired at a substantial discount.
+The assessment has only decreased since the purchase, reflecting lack of investment or maintenance​1​.
+1 reference
+1
+Property_Case_File_2400_Br

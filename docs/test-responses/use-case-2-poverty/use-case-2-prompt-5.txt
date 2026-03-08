@@ -1,0 +1,67 @@
+The transfer records show 4763 Griscom was sold for $146,000 in 2004. What was the fair market value at the time of that sale?
+
+GCC MCP Copilot Studio ------
+
+The fair market value of the property located at 4763 Griscom in 2004 is not directly available in the provided assessment data. The earliest available assessment data is from 2015, with a market value of $111,000.
+
+If you need further assistance or more specific data, please let me know!
+
+
+COM MCP Copilot Studio -----
+
+$53,155.20.
+
+Details: The deed for 4763 Griscom St recorded on 2004-03-25 shows total consideration of $146,000 with a fair market value of $53,155.20 (OPA account 232452100, record_id 5089276711393154).
+
+
+GCC SP/PDF Copilot Studio----
+
+The fair market value of the property at 4763 Griscom Street in 2004 was recorded as $53,155 ​1​.
+
+1 reference
+1
+Transfer_Chain_Analysis_4763_G
+
+
+Foundry Agent from philly profiteering spa-----
+
+Philadelphia's open property data does not provide public record of assessment values prior to 2015. The earliest available assessment for 4763 Griscom St (parcel 882162200) is in 2015, with a fair market value of $420,600. Public records in the database do not go back to 2004, when the sale for $146,000 occurred.
+
+Summary:
+
+2015 Fair market value: $420,600 (first available in system)
+2004 Value: Not available in official city data records
+Historical context: Most Philadelphia properties were assessed at artificially low values prior to AVI (Actual Value Initiative) in 2013–2014. The 2004 fair market value used for tax purposes was usually much lower than actual market values and cannot be directly compared to post-AVI assessments. The $146,000 paid in 2004 could have been above, at, or below assessed value at the time, but the exact figure is not recoverable from current databases.
+
+Investigative agent (open ai spa) -------------
+
+The City of Philadelphia's property assessment records for 4763 Griscom Street do not provide a fair market value specifically for 2004. The oldest available market value assessment on file is from 2015, which is $116,900—significantly lower than the 2004 sale price of $146,000.
+
+It's important to note that City assessments before 2014 were often not updated to reflect market value. Therefore, without older official assessment records, we cannot state the city's 2004 market value, but based on the 2015 assessed value, the 2004 sale price was likely above what the City would have considered as its "fair market value" around that time.
+
+Summary:
+
+2004 sale price: $146,000
+Earliest available market value assessment: $116,900 (2015)
+2004 city-assessed market value: Not available in public database (likely lower than sale price).
+get_property_assessments
+
+
+semantic kernel (philly spa)------------
+
+Philadelphia assessment records for 4763 Griscom Street do not show fair market values prior to 2015. For context, the market value in 2015 was $474,500.
+
+In 2004, the property's recorded sale price was $146,000. Historically, assessed values prior to 2014 were often much lower than market prices; city records from this period typically do not reflect true market value.
+
+Summary:
+
+Market value at time of 2004 sale (assessed): Not available in official records.
+Known sale price in 2004: $146,000.
+Assessment history starts in 2015 with a market value of $474,500.
+If you need more specific historical comparables or want neighborhood trends for 2004, I can research further.
+
+Triage
+→
+AreaAnalyst
+
+

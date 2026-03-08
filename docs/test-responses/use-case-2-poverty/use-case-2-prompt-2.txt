@@ -1,0 +1,88 @@
+What happened to 4763 Griscom Street between when GEENA LLC bought it and today? Have they done anything with the property?
+GCC MCP Copilot Studio ------
+Error Message: The request is resulting in too much data to handle, please evaluate the amount of data being returned by your actions.[Learn more]​https://learn.microsoft.com/en-us/microsoft-copilot-studio/error-codes?tabs=webApp#toomuchdatatohandle​Error Code: OpenAIModelTokenLimit Conversation Id: d206a884-bc34-4a14-a5ce-77276f93c326 Time (UTC): 2026-03-07T23:42:09.867Z
+
+COM MCP Copilot Studio -----
+
+Error Message: The request is resulting in too much data to handle, please evaluate the amount of data being returned by your actions.[Learn more]​https://learn.microsoft.com/en-us/microsoft-copilot-studio/error-codes?tabs=webApp#toomuchdatatohandle​Error Code: OpenAIModelTokenLimit Conversation Id: 10d6de72-122f-48c7-ba67-67d508e9d235 Time (UTC): 2026-03-07T23:41:56.024Z
+
+GCC SP/PDF Copilot Studio----
+
+Since GEENA LLC acquired the property at 4763 Griscom Street in December 2019, the property has remained a vacant lot. No building permits, development applications, or license applications have been filed for this parcel since the acquisition. The property has accumulated numerous code enforcement investigations, primarily for lot maintenance issues such as overgrown vegetation, debris, and dumping. The violation pattern is cyclical, with the property failing inspections, receiving notices of violation, being cleaned to pass follow-up inspections, and then falling back into disrepair.
+
+The building that previously occupied the lot was demolished by the city before GEENA LLC acquired the property. The property is located in a mixed-use area in Frankford, Philadelphia, and GEENA LLC owns several other vacant properties in the same zip code, contributing to visual blight and safety concerns for residents ​1​.
+
+1 reference
+1
+Property_Enforcement_File_4763_Griscom.pdf
+
+
+Foundry Agent from philly profiteering spa-----
+Here's what happened to 4763 Griscom Street (parcel 232452100) from the time GEENA LLC acquired it until now:
+
+Acquisition by GEENA LLC
+
+GEENA LLC acquired the property via sheriff's deed on 2019-12-24 for $6,500. The prior owner was Ricky H. Martinez, and the sheriff sale likely stemmed from unpaid taxes or liens.
+Property Status
+
+It is currently classified as "VACANT LAND," and has no building (demolished).
+The market value is $24,800 (2025 assessment).
+No building has been constructed or occupied since GEENA LLC purchased it. No active business or rental licenses have been issued for the address.
+Demolition
+
+The lot is vacant because the City of Philadelphia demolished a structure on this parcel. The demolition:
+Was city-initiated (taxpayer-funded), not owner-initiated.
+Was completed in June 2019, before GEENA LLC purchased the lot.
+Previous owner at time of demolition: Ricky H. Martinez.
+Contractor: Pedro Palmer Construction Inc.
+Code Violations
+
+There is heavy code enforcement on this lot:
+64 total code violation cases in the last decade.
+45 failed inspections (most recent in June and July 2024).
+Recent violations are for unsecured, neglected vacant land ("CLIP Vacant Lot Investigator" responsibility).
+GEENA LLC has been cited repeatedly since taking possession.
+Examples of recent failed cases:
+CF-2024-048352 (failed 7/22/2024): Vacant lot issues.
+CF-2024-065589 (failed 6/21/2024): Same issues.
+No Attempts at Redevelopment
+
+There are NO:
+Business licenses (including rental/vacant licenses),
+Permit or zoning appeals,
+New construction or use permits,
+Signs of any development or sanctioned use,
+  since GEENA LLC acquired the parcel.
+
+Transfer/Ownership Chain
+
+After demolition, the property has only transferred through the sheriff's sale to GEENA LLC.
+No evidence of flipping, further transfers, or internal LLC shuffling since then.
+Summary: Since GEENA LLC acquired 4763 Griscom Street at sheriff sale in December 2019, they have made no effort to improve or use the property. The lot remains vacant, regularly cited for neglect by City inspectors (with 45 failed inspections under GEENA LLC’s ownership), and no business or building activities have taken place. The site was previously city-demolished due to dangerous/neglected conditions.
+
+Pattern: GEENA LLC exhibits a pattern of speculative holding or neglect on this property, paying virtually nothing at auction, letting maintenance lapse, and failing to put the land back into productive/revenue-generating use. This aligns with classic land-banking or absentee speculator behavior, with negative effects for the community.
+
+If you'd like full lists of all their open violations, I can provide those as well. Let me know if you want to investigate GEENA LLC's other properties for similar patterns.
+
+Investigative agent (open ai spa)
+There is no record of GEENA LLC ever owning 4763 Griscom Street (parcel 332326800, which is 4111 K Street). As of the most recent data (2024), the current owner is "Rosa Francisco Isaam." All property transfers—going back to at least 2005—have been between individuals or financial institutions (Miguel A. Negron, Maureen O'Brien, various banks), but never GEENA LLC or anything similar.
+
+Most recent DEED transfer: April 13, 2012, from Miguel A. Negron to Rosa Francisco Isaam for $95,000.
+Subsequent activity: Largely mortgage assignments, satisfaction, and foreclosure-related filings, not a typical sale to a new owner like an LLC.
+There are no business licenses or active commercial activity, no demolitions, and only 2 code violations noted for this address since the last transfer. No evidence of landlord activity or LLC shuffling here.
+
+If you have a different parcel number or spelling, or want to investigate GEENA LLC activity citywide, let me know.
+
+get_property_profile
+get_property_transfers
+
+
+semantic kernel (philly spa)
+GEENA LLC purchased 4763 Griscom Street, and since their acquisition, the property has been monitored for activity and changes. Owner-related investigations show GEENA LLC as the current owner, but there is no evidence of a sale or transfer since their purchase. Violation and enforcement records indicate that there have been no recent code violations, demolitions, or L&I enforcement actions associated with the address since GEENA LLC took ownership. Overall, since GEENA LLC acquired 4763 Griscom Street, there is no substantial record of changes, developments, or compliance actions taken at the property.
+
+Triage
+→
+OwnerAnalyst
+→
+ViolationAnalyst
+

@@ -1,0 +1,121 @@
+Compare the vacancy rates and violation rates between zip codes 19104 and 19132. Which is worse?
+
+GCC MCP Copilot Studio ------
+
+Comparison of Vacancy Rates and Violation Rates
+Zip Code 19104:
+Total Properties: 11,947
+Vacant Properties: 2,516
+Vacancy Rate: 21.06%
+Total Investigations: 45,818
+Failed Investigations: 27,412
+Violation Rate: 59.83%
+Zip Code 19132:
+Total Properties: 20,650
+Vacant Properties: 4,549
+Vacancy Rate: 22.03%
+Total Investigations: 83,284
+Failed Investigations: 51,698
+Violation Rate: 62.06%
+Conclusion:
+Zip code 19132 has both a higher vacancy rate (22.03%) and a higher violation rate (62.06%) compared to zip code 19104, which has a vacancy rate of 21.06% and a violation rate of 59.83%. Therefore, zip code 19132 is worse in terms of both vacancy and violation rates.
+
+COM MCP Copilot Studio -----
+
+The discount was $127,100, which is about 35.6% below the assessed value (sale price was ~64.4% of assessed).
+
+
+GCC SP/PDF Copilot Studio----
+
+GEENA LLC bought 2400 Bryn Mawr Avenue for $230,000 in 2016, when the assessed value was $357,100. The discount was calculated as follows:
+
+Discount Calculation:
+
+Assessed Value: $357,100
+Purchase Price: $230,000
+Discount: 
+(
+Assessed Value
+−
+Purchase Price
+)
+/
+Assessed Value
+×
+100
+Discount
+=
+(
+357
+,
+100
+−
+230
+,
+000
+357
+,
+100
+)
+×
+100
+≈
+35.6
+%
+Therefore, the discount was approximately 35.6% ​1​.
+
+1 reference
+1
+Property_Case_File_2400_Bryn_Mawr.pdf
+
+Foundry Agent from philly profiteering spa-----
+
+The assessment history for 2400 Bryn Mawr Ave (parcel 521192100) shows:
+
+Assessed market value in 2016: $159,400 (annual assessment was unchanged from 2015 through 2018).
+You stated a value of $357,100 at the time, but the public record does not show this as the official assessment for 2016. If your figure refers to an appraisal, BRT estimate, or another source, please clarify.
+Using city assessment for 2016:
+
+GEENA LLC purchase price (2016): $230,000
+OPA Market Value (2016): $159,400
+If we use your figure ($357,100):
+
+Discount = $357,100 (your value) − $230,000 (sale price) = $127,100 below that value (or about a 35.6% discount).
+If we use the official OPA assessment ($159,400):
+
+The purchase price was $70,600 (44%) above the city assessment, not a discount.
+Summary:
+
+GEENA LLC's 2016 purchase price of $230,000 was 44% above the official OPA assessment for 2016 ($159,400).
+If your cited value is correct and refers to a valid assessment, the LLC bought at a 35.6% discount.
+Let me know if you’d like deeper detail or verification of assessment sources!
+
+
+
+Investigative agent (open ai spa) -------------
+
+Here is a comparison of vacancy and violation rates for zip codes 19104 and 19132:
+
+Vacancy Rates:
+
+19104: 2,516 out of 11,947 properties are vacant (21.1%)
+19132: 4,549 out of 20,650 properties are vacant (22.0%)
+Violation Rates:
+
+19104: 45,818 total code investigations, 27,412 failed, across 11,947 properties (2.3 failed violations per property).
+19132: 83,284 total code investigations, 51,698 failed, across 20,650 properties (2.5 failed violations per property).
+Summary:
+
+19132 has a slightly higher vacancy rate (22.0% vs 21.1%) and a higher failed code violation rate (2.5 vs 2.3 per property) compared to 19104.
+Both zip codes are severely impacted by vacancies and code violations, but 19132 is measurably worse on both counts.
+Additionally, 19132 has almost double the city-initiated demolitions (1,523 vs. 410), indicating a chronic problem of blight and neglect.
+
+get_area_stats
+get_area_stats
+
+
+semantic kernel (philly spa)------------
+
+got this error 3 times...
+
+Server error (500): {"error":"HTTP 400 (invalid_request_error: )\nParameter: messages\n\nAn assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'. The following tool_call_ids did not have response messages: call_NmHnghcJbTCETshQnSPDfvvL","executionTimeMs":57004}

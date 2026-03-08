@@ -1,0 +1,118 @@
+Trace the complete ownership history of 4763 Griscom Street. How many times was it sold at sheriff sale?
+
+GCC MCP Copilot Studio ------
+
+The complete ownership history of 4763 Griscom Street includes the following transfers:
+
+Assignment of Mortgage
+
+Date: October 22, 2008
+Grantor: Mortgage Electronic Registration Systems Inc
+Grantee: U S Bank National Association TR
+Document ID: 51982511
+Satisfaction
+
+Date: August 31, 2005
+Grantor: PNC Mortgage Corp of America; Washington Mutual Bank FA
+Grantee: Vo Duc Minh
+Document ID: 51256592
+Mortgage
+
+Date: August 29, 2005
+Grantor: Vo Duc Minh
+Grantee: Fremont Investment & Loan; Mortgage Electronic Registration Systems Inc
+Document ID: 51254390
+Unfortunately, the search for sheriff sale records did not return any results. Therefore, it appears that there are no records of 4763 Griscom Street being sold at a sheriff sale.
+
+COM MCP Copilot Studio -----
+
+Here’s the ownership chain for 4763 Griscom Street (parcel 232452100), based on recorded deed transfers. I list only deeds (ownership changes), omitting mortgages/assignments:
+
+1999-11-10 DEED: OFIDES George; OFIDES Vasiliky; SHEHINSKY Russell → BRYAN MICHAEL L for $10,650 (recorded 2000-03-15).
+2004-03-23 DEED: BRYAN MICHAEL L → HABEEB HILLARD J for $146,000 (recorded 2004-03-25).
+2013-01-08 DEED SHERIFF: HABEEB HILLARD J → DEJESUS HENRY M for $13,200 (recorded 2013-02-11). [Sheriff sale]
+2014-07-10 DEED: DEJESUS HENRY M → LUONG HAO KIM for $20,000 (recorded 2014-07-15).
+2014-08-05 DEED: LUONG HAO KIM → MARTINEZ RICKY H for $21,500 (recorded 2014-08-07).
+2019-12-24 SHERIFF’S DEED: MARTINEZ RICKY H → GEENA LLC for $6,500 (recorded 2020-01-16). [Sheriff sale]
+Answer: It was sold at sheriff sale 2 times (in 2013 and 2019).
+
+GCC SP/PDF Copilot Studio----
+
+The complete ownership history of 4763 Griscom Street is as follows:
+
+Initial Sale (November 10, 1999)
+
+Grantors: George Ofides, Vasiliky Ofides, Russell Shehinsky
+Grantee: Michael L. Bryan
+Sale Date: November 10, 1999
+Total Consideration: $10,650 ​1​
+Sale to Habeeb (March 23, 2004)
+
+Grantor: Michael L. Bryan
+Grantee: Hillard J. Habeeb
+Sale Date: March 23, 2004
+Total Consideration: $146,000 ​1​
+First Sheriff Sale (January 8, 2013)
+
+Grantor: Hillard J. Habeeb
+Grantee: Henry M. DeJesus
+Sale Date: January 8, 2013
+Total Consideration: $13,200 ​1​
+Quick Flip to Luong (July 10, 2014)
+
+Grantor: Henry M. DeJesus
+Grantee: Hao Kim Luong
+Sale Date: July 10, 2014
+Total Consideration: $20,000 ​1​
+Second Quick Flip to Martinez (August 5, 2014)
+
+Grantor: Hao Kim Luong
+Grantee: Ricky H. Martinez
+Sale Date: August 5, 2014
+Total Consideration: $21,500 ​1​
+Second Sheriff Sale to GEENA LLC (December 24, 2019)
+
+Grantor: Ricky H. Martinez
+Grantee: GEENA LLC
+Sale Date: December 24, 2019
+Total Consideration: $6,500 ​1​
+Number of Times Sold at Sheriff Sale: 2 times
+
+First Sheriff Sale: January 8, 2013 ​1​
+Second Sheriff Sale: December 24, 2019 ​1​
+If you need any further information, feel free to ask!
+
+1 reference
+1
+Transfer_Chain_Analysis_4763_Grisc
+
+Foundry Agent from philly profiteering spa-----
+
+There was an internal error with address-to-parcel mapping and transfer lookups. To proceed accurately, I need the correct OPA parcel number for 4763 Griscom Street to pull the ownership and sheriff sale history directly. 
+
+Do you have the parcel number (six or nine digits)? If not, once system errors resolve, I will retry the parcel lookup and complete your request. 
+
+At this moment, I cannot confirm the sheriff sale count for 4763 Griscom Street without the correct parcel number. Would you like to try again or provide additional info?
+
+Investigative agent (open ai spa) -------------
+
+There is no ownership or transfer history available in the database for 4763 Griscom Street (parcel number 882500350). This may indicate:
+
+The property record could be missing, out of date, or the parcel number/address does not currently exist in the city's property system.
+As a result, there are zero recorded sheriff sales or any ownership transfers for 4763 Griscom Street in the system.
+
+If you have an alternate address spelling, cross street, or a different way to identify the property, I can investigate further.
+
+get_property_transfers
+get_property_profile
+
+
+semantic kernel (philly spa)------------
+
+Property transfer records for parcel 652507900 (4763 Griscom Street) show no real estate transactions, including sheriff sales, in the available dataset. Attempts to retrieve a detailed property profile resulted in a 404 error. No entity networks associated with this address or parcel number could be traced in city or business ownership datasets.
+
+Conclusion: There is no evidence that 4763 Griscom Street has ever been sold at a sheriff sale, nor any transfer history available in Philadelphia's property record systems.
+
+Triage
+→
+OwnerAnalyst

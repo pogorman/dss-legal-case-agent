@@ -929,3 +929,87 @@ Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP age
 - Run all 24 redemption retests (document agents, Use Case 1)
 - Consider BFG Repo Cleaner to purge real names from git history
 - Demo dry run with side-by-side comparison
+
+---
+
+## Session 19 — 2026-03-07
+
+### What was done
+- **Use Case 2 testing started**: Ran Prompt 1 ("How many properties does GEENA LLC own, and what percentage are vacant?") across 5 agents
+- **Two new agents introduced**: Investigative Agent (Semantic Kernel + OpenAI) and Foundry Agent (Azure AI Foundry) from the Philly Profiteering web SPA — pro-code agents alongside Copilot Studio for comparison
+- **Key finding — ambiguous ground truth**: 5 agents returned 3 different property counts (194, 330, 631). The investigation report says 194, the MCP database returns 631 raw rows or 330 distinct parcels. No single correct answer — "ownership" means different things depending on deduplication and entity network traversal
+- **Scoring rubric adapted**: Shifted from "correct vs incorrect" (Use Case 1, synthetic data) to "defensible, sourced answer" (Use Case 2, real data with inherent ambiguity)
+- **GCC MCP token limit failure**: Copilot Studio GCC hit OpenAIModelTokenLimit — the MCP tool returned all 631 property rows as raw JSON, overwhelming the context window. Data was visible in tool activity but the model couldn't summarize it
+- **Documentation restructured**:
+  - `docs/copilot-studio-testing.md` renamed to `docs/use-case-1-testing.md` (executive summary added)
+  - Created `docs/use-case-2-testing.md` — new testing doc with 5-agent matrix, adapted scoring rubric, Prompt 1 results
+  - Created `docs/executive-summary-combined.md` — "no kidding" C-suite summary covering both use cases, zero abbreviations
+  - Test response files reorganized: `docs/test-responses/use-case-1-dss-legal/` and `docs/test-responses/use-case-2-poverty/`
+
+### Prompt 1 results
+
+| Agent | Properties | Vacancy % | Grade |
+|---|---|---|---|
+| Philly MCP - GCC | Error (token limit) | Error | Fail |
+| Philly MCP - Com | 330 distinct parcels | 86.67% | Pass |
+| Philly SP/PDF - GCC | 194 (from report) | 91.8% | Pass |
+| Investigative Agent (Web SPA) | 631 (raw rows) | ~60% | Partial |
+| Foundry Agent (Web SPA) | 631 (raw rows) | 45.3% | Partial |
+
+### Decisions made
+- Use Case 2 gets its own testing doc (`use-case-2-testing.md`) rather than folding into Use Case 1
+- Pro-code agents (Investigative, Foundry) positioned as epilogue/"what's next" — mic drop showing what custom agent architectures can do beyond Copilot Studio
+- Combined executive summary uses zero abbreviations for C-suite readability
+- Original `copilot-studio-testing.md` kept alongside `use-case-1-testing.md` during transition
+
+### Open items
+- **Run Use Case 2 prompts 2-10** across all 5 agents
+- Upload 5 Philly PDFs to SharePoint for document agent testing
+- Run all 24 redemption retests (document agents, Use Case 1)
+- Consider BFG Repo Cleaner to purge real names from git history
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider adding summary/count mode to Philly MCP entity network tool (fixes GCC token limit)
+
+## Session 20 — 2026-03-07
+
+### What was done
+- **Use Case 2 testing completed**: Ran all 10 prompts across 7 agents (70 total responses scored)
+- **Triage Agent added**: Semantic Kernel team-of-agents pattern (6th agent, later 7th with COM SP/PDF)
+- **COM SP/PDF added**: Commercial (GPT-4.1) SharePoint/PDF document agent — 7th agent, run with clean context windows for all 10 prompts
+- **Full testing doc written**: `docs/use-case-2-testing.md` now contains ground truth, per-agent results, comparison matrices, and analysis for all 10 prompts plus final scorecard and epilogue
+
+### Final Rankings (70 responses)
+
+| Agent | Pass | Partial | Fail | Rate |
+|---|---|---|---|---|
+| SP/PDF - Com (GPT-4.1) | 8 | 2 | 0 | 80% |
+| MCP - Com (GPT-4.1) | 8 | 0 | 2 | 80% |
+| SP/PDF - GCC (GPT-4o) | 8 | 2 | 0 | 80% |
+| Foundry Agent | 4 | 1 | 5 | 40% |
+| MCP - GCC (GPT-4o) | 2 | 1 | 7 | 20% |
+| Investigative Agent | 1 | 2 | 7 | 10% |
+| Triage Agent (SK) | 0 | 0 | 10 | 0% |
+
+### Key findings
+1. **Address resolution is the #1 failure mode** — 10+ different wrong parcel numbers across agents for 2 addresses. Non-deterministic: same agent gets different parcels for the same address across prompts. Foundry Agent found 45 failed inspections in P2 (correct parcel) and 0 in P8 (wrong parcel) — contradicting itself
+2. **GPT-4.1 >> GPT-4o for MCP agents** — COM MCP 80% vs GCC MCP 20%. Same backend, same tools. For document agents the model doesn't change the pass rate (both 80%) but GPT-4.1 produces richer analytical answers
+3. **Aggregate queries work; address queries fail** — prompts using entity search or zip codes (P1, P6, P9) all MCP agents pass. Address-based prompts (P2-P5, P7-P8) only COM MCP reliably passes
+4. **Low-code beat pro-code** — Copilot Studio COM MCP outperformed all 3 pro-code agents (Foundry 40%, Investigative 10%, Triage 0%)
+5. **Document agents are 100% reliable within scope** — both SP/PDF agents scored 8P/2Pa/0F. The 2 Partials are structural (can't do citywide aggregates)
+6. **Updated danger taxonomy**: wrong-entity analysis (real data, wrong property), self-contradiction (same agent, opposite answers), wrong-prompt response (agent answers a previous question)
+
+### Decisions made
+- Triage Agent (SK team-of-agents) is not demo-ready — 0/10 passes
+- Pro-code agents positioned as "sprinkles on top" — supplemental to Copilot Studio comparison
+- Address resolution fix is top priority before further testing
+- GCC SP/PDF scorecard corrected from 7P/2Pa/1F to 8P/2Pa/0F
+
+### Open items
+- **Fix address-to-parcel resolution** in Philly MCP tools (top priority)
+- Upload 5 Philly PDFs to SharePoint for document agent testing
+- Run all 24 redemption retests (document agents, Use Case 1)
+- Consider BFG Repo Cleaner to purge real names from git history
+- Demo dry run with side-by-side comparison
+- Update Bicep to include storage private endpoints (still CLI-only)
+- Consider summary/count mode for Philly MCP entity network tool (fixes GCC token limit)

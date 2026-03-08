@@ -141,6 +141,35 @@ A: Prompts 6 (top 5 private violators citywide) and 9 (zip code vacancy comparis
 **Q: How do I convert the markdown documents to PDF?**
 A: Run `python scripts/convert-philly-docs.py`. This uses fpdf2 to parse markdown structure and render styled PDFs with navy headers, alternating-row tables, and professional footers. The script handles Unicode character replacement for Helvetica font compatibility.
 
+## Use Case 2 Testing
+
+**Q: Why are there different property counts for GEENA LLC across agents?**
+A: The investigation report says 194 properties. The MCP database returns 631 rows (including duplicates from permits, violations, tax records, and related entities) or 330 distinct parcels (deduplicated by parcel number). The "correct" answer depends on how "ownership" is defined — OPA-registered ownership (194), distinct parcels in the entity network (330), or all property touchpoints (631). This is inherent ambiguity in real-world data, not an agent error.
+
+**Q: Why did the GCC MCP agent fail on Prompt 1?**
+A: The MCP tool returned all 631 property records as raw JSON, exceeding Copilot Studio's `OpenAIModelTokenLimit`. The data was retrieved successfully (visible in the tool activity log) but the model couldn't process it to generate a summary. This is a tool design issue — the MCP server should return pre-aggregated statistics for large result sets instead of raw rows.
+
+**Q: Why is Use Case 2 scoring different from Use Case 1?**
+A: Use Case 1 used synthetic data with known ground truth — every answer was designed by the team. Use Case 2 uses real public data where "correct" answers can be ambiguous (e.g., property counts depend on deduplication logic). Scoring shifted from "matched ground truth" to "gave a defensible, sourced answer with sound methodology."
+
+**Q: What are the Investigative Agent, Foundry Agent, and Triage Agent?**
+A: Pro-code agents from the Philly Profiteering web SPA (mcp-apim project). The Investigative Agent uses OpenAI's chat interface; the Foundry Agent uses Azure AI Foundry; the Triage Agent uses Semantic Kernel with a team-of-agents routing pattern (dispatches to OwnerAnalyst, ViolationAnalyst, AreaAnalyst sub-agents). All query the same MCP backend as the Copilot Studio agents. They're "sprinkles on top" — supplemental to the Copilot Studio comparison, Use Case 2 only.
+
+**Q: Where are the Use Case 2 test response files?**
+A: `docs/test-responses/use-case-2-poverty/`. Use Case 1 responses are in `docs/test-responses/use-case-1-dss-legal/`.
+
+**Q: What was the biggest finding from Use Case 2 testing?**
+A: Address resolution is broken. MCP agents can't reliably map a street address (e.g., "4763 Griscom Street") to the correct parcel number. Across prompts 2-8, agents produced 10+ different wrong parcel numbers for 2 addresses. The mapping is non-deterministic — the same agent gets different parcels for the same address across prompts. The Foundry Agent found 45 failed inspections in Prompt 2 (correct parcel) and 0 in Prompt 8 (wrong parcel), contradicting itself.
+
+**Q: Why does GPT-4.1 outperform GPT-4o so dramatically for MCP agents but not document agents?**
+A: MCP agents require multi-step reasoning: resolve an address, select the right tool, interpret results, and compose an answer. GPT-4.1's improved tool selection and reasoning produces 80% pass rates vs GPT-4o's 20%. Document agents just retrieve and summarize text from PDFs — a simpler task where both models achieve 80%. The model upgrade matters most when the task requires complex tool orchestration.
+
+**Q: Why did the Triage Agent score 0/10?**
+A: The Semantic Kernel team-of-agents pattern introduces hand-off failures that single-agent architectures avoid. Failures included: false negatives (ViolationAnalyst found 0 violations where 45 exist), answering the wrong prompt (responded to P6 when asked P7), refusing to filter (asked for clarification instead of excluding government entities), and infrastructure crashes (tool_call_id mismatch causing 500 errors). The routing layer adds complexity without improving answer quality.
+
+**Q: How many agents were tested in Use Case 2?**
+A: Seven: GCC MCP, COM MCP, GCC SP/PDF, COM SP/PDF (all Copilot Studio), plus Investigative Agent (OpenAI), Foundry Agent (AI Foundry), and Triage Agent (Semantic Kernel). 70 total responses scored across 10 prompts.
+
 ---
 
 *This file is updated when clarification questions arise during development sessions.*

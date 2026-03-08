@@ -1,0 +1,125 @@
+Who are the top 5 private property owners in Philadelphia by code violation count? Exclude government entities.
+
+GCC MCP Copilot Studio ------
+
+The top 5 private property owners in Philadelphia by code violation count, excluding government entities, are:
+
+GEENA LLC
+
+Property Count: 194
+Total Market Value: $8,621,700
+Vacant Count: 178
+Total Violations: 1,411
+Total Failed: 823
+Total Demolitions: 40
+Total Appeals: 3
+PHILADELPHIA REDEVELOPMENT
+
+Property Count: 80
+Total Market Value: $31,725,500
+Vacant Count: 60
+Total Violations: 1,073
+Total Failed: 583
+Total Demolitions: 13
+Total Appeals: 22
+These entities have the highest number of code violations among private property owners in Philadelphia.
+
+COM MCP Copilot Studio -----
+
+Top 5 private property owners in Philadelphia by total code violations (excluding government entities):
+
+GEENA LLC — 1,411 violations (194 properties; 178 listed vacant; 40 demolitions)
+S3 ENTERPRISES LLC — 1,009 violations (77 properties; 45 listed vacant)
+ULATOWSKI WALTER — 915 violations (140 properties)
+CORESTATES GROUP LLC — 773 violations (99 properties)
+CHOICE RENTALS LLC — 763 violations (56 properties)
+Source: Citywide violation aggregation by owner; government owners (e.g., City, Land Bank, School District, Redevelopment Authority) excluded from the ranking.
+
+
+
+
+GCC SP/PDF Copilot Studio----
+
+The retrieval results do not provide a comprehensive list of the top private property owners in Philadelphia by code violation count. However, based on the available information, GEENA LLC is identified as a significant private property owner with a substantial number of code violations. GEENA LLC has accumulated 64 code enforcement investigations for the property at 4763 Griscom Street alone, with a 70.3% failure rate in inspections ​1​. Additionally, GEENA LLC is noted for owning a large portfolio of vacant and distressed properties in Philadelphia, often resulting in numerous code violations and city-funded demolitions ​2​.
+
+2 references
+1
+Property_Enforcement_File_4763_Griscom.pdf
+2
+Entity_Investigation_Report.pdf
+
+Foundry Agent from philly profiteering spa-----
+
+Excluding government and quasi-government entities from the city’s top violation holders, the five private property owners with the most code violations in Philadelphia are:
+
+GEENA LLC
+Properties owned: 194
+Total code violations: 1,411
+Failed violations: 823
+Vacant properties: 178
+Demolitions: 40
+S3 ENTERPRISES LLC
+Properties owned: 77
+Total code violations: 1,009
+Failed violations: 603
+Vacant properties: 45
+Demolitions: 2
+CORESTATES GROUP LLC
+Properties owned: 99
+Total code violations: 773
+Failed violations: 453
+Vacant properties: 3
+Demolitions: 1
+CHOICE RENTALS LLC
+Properties owned: 56
+Total code violations: 763
+Failed violations: 419
+Vacant properties: 0
+GILLER REALTY LLC
+Properties owned: 134
+Total code violations: 702
+Failed violations: 361
+Vacant properties: 6
+Demolitions: 4
+These entities collectively account for thousands of violations—indicating large portfolios often marred by neglect. If you want a detailed profile (addresses, parcel numbers, recent violations) for any of these LLCs or want to examine their transfer patterns for exploitative practices, specify an owner and I’ll dig deeper.
+
+
+Investigative agent (open ai spa) -------------
+
+The top 5 private property owners in Philadelphia by code violation count (excluding government entities or authorities) are:
+
+GEENA LLC
+Total code violations: 1,411
+Properties: 194
+Vacant count: 178
+Demolitions: 40
+S3 ENTERPRISES LLC
+Total code violations: 1,009
+Properties: 77
+Vacant count: 45
+Demolitions: 2
+ULATOWSKI WALTER
+Total code violations: 915
+Properties: 140
+Vacant count: 0
+Demolitions: 0
+(The other entities in the top 10 are government-affiliated: Philadelphia Housing Authority, Philadelphia Land Bank, School District of Philadelphia, Redevelopment Authority, etc.).
+
+Summary: GEENA LLC tops the list among private/non-government owners, with over 1,400 code violations across 194 properties, almost all vacant. S3 ENTERPRISES LLC and ULATOWSKI WALTER follow, each with 900+ violations and dozens or more properties.
+
+Would you like more detailed data on these owners or to investigate specific cases of neglect?
+
+get_top_violators
+get_top_violators
+
+
+semantic kernel (philly spa)------------
+
+The top 5 property owners by code violation count are all government entities. Since you requested private owners, none of the top 5 overall are eligible. Please clarify if you want to see the top private LLCs or individuals instead, or set a different property count threshold to exclude government holders.
+
+Would you like a list of the top private LLCs or individuals with the most code violations?
+
+Triage
+→
+ViolationAnalyst
+

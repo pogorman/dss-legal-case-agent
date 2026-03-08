@@ -1,0 +1,39 @@
+How many code violations at 4763 Griscom Street resulted in FAILED inspections, and what type of investigator handles them?
+
+GCC MCP Copilot Studio ------
+
+There is one code violation at 4763 Griscom Street that resulted in a FAILED inspection. The type of investigator handling this case is not specified in the available data.
+
+COM MCP Copilot Studio -----
+
+Failed inspections: 45 at 4763 Griscom Street.
+Investigator types on those FAILED cases: 14 by “CLIP – Vacant Lot Investigator,” 3 by “CLIP,” 1 by “CSU Investigator,” and 27 with no investigator type recorded.
+
+GCC SP/PDF Copilot Studio----
+
+There have been 45 code violations at 4763 Griscom Street that resulted in FAILED inspections, which is a 70.3% failure rate. The investigations are handled by the Community Life Improvement Program (CLIP) - Vacant Lot Investigator ​1​.
+
+1 reference
+1
+Property_Enforcement_File_4763_
+
+Foundry Agent from philly profiteering spa-----
+
+There are 0 code violation cases at 4763 Griscom Street that resulted in FAILED inspections, so no inspector type is assigned. If you have another address to check or would like details on PASSED, CLOSED, or all violations, let me know!
+
+Investigative agent (open ai spa) -------------
+
+There are no code enforcement cases at 4763 Griscom Street that resulted in FAILED inspections—meaning there are currently zero open/failed code violations for this address. Since there are no FAILED cases, there is no investigator type assigned for these inspections.
+
+get_property_violations
+
+semantic kernel (philly spa)------------
+
+4763 Griscom Street has 0 code violations that resulted in FAILED inspections. No investigator type is listed since no failed cases are present.
+
+Let me know if you'd like details for PASSED or CLOSED investigations, or wish to check other properties.
+
+Triage
+→
+ViolationAnalyst
+4.0s

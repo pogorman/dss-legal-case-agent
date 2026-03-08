@@ -1,0 +1,144 @@
+Compare the vacancy rates and violation rates between zip codes 19104 and 19132. Which is worse?
+
+GCC MCP Copilot Studio ------
+
+Here is the comparison between the vacancy rates and violation rates for zip codes 19104 and 19132:
+
+Zip Code 19104:
+Total Properties: 11,947
+Vacant Properties: 2,516
+Vacancy Rate: 21.06%
+Total Investigations: 45,818
+Failed Investigations: 27,412
+Violation Rate: 59.83%
+Zip Code 19132:
+Total Properties: 20,650
+Vacant Properties: 4,549
+Vacancy Rate: 22.03%
+Total Investigations: 83,284
+Failed Investigations: 51,698
+Violation Rate: 62.06%
+Conclusion:
+Vacancy Rate: Zip code 19132 has a slightly higher vacancy rate (22.03%) compared to zip code 19104 (21.06%).
+Violation Rate: Zip code 19132 also has a higher violation rate (62.06%) compared to zip code 19104 (59.83%).
+Overall, zip code 19132 has worse vacancy and violation rates compared to zip code 19104.
+
+COM MCP Copilot Studio -----
+
+Here’s a side-by-side on vacancy and violations.
+
+19104
+
+Vacancy rate: 2,516 vacant out of 11,947 total = 21.1%
+Violation failure rate: 27,412 failed out of 45,818 investigations = 59.9%
+Failed investigations per 100 properties: 27,412 / 11,947 ≈ 229
+19132
+
+Vacancy rate: 4,549 vacant out of 20,650 total = 22.0%
+Violation failure rate: 51,698 failed out of 83,284 investigations = 62.0%
+Failed investigations per 100 properties: 51,698 / 20,650 ≈ 250
+Bottom line: 19132 is worse on both metrics—higher vacancy and a higher share of failed investigations, with more failed investigations per property as well.
+
+
+GCC SP/PDF Copilot Studio----
+
+The provided documents do not contain specific information about the vacancy rates and violation rates for zip codes 19104 and 19132. However, I can provide some insights based on the available data related to GEENA LLC properties in other zip codes.
+
+GEENA LLC Property Data:
+Zip Code 19131 (Overbrook):
+
+2400 Bryn Mawr Avenue: This property has 34 code enforcement investigations with a 64.7% failure rate. It is the only occupied structure among the 16 properties owned by GEENA LLC in this zip code, with the rest being vacant land ​1​.
+Violation Types: Unsecured openings, structural concerns, exterior deterioration, and lot maintenance ​1​.
+Zip Code 19124 (Frankford):
+
+4763 Griscom Street: This property had 21 violation investigations before its demolition in 2019. The violations included hazardous building conditions and structural concerns. The property has remained a vacant lot since its demolition ​2​.
+Violation Types: Hazardous building conditions, unsecured openings, structural concerns ​2​.
+General Violation Data for GEENA LLC:
+GEENA LLC properties have accumulated a total of 1,411 code enforcement investigation records, with 823 resulting in failed inspections (58.3% failure rate) ​3​.
+The predominant violation type is "NOTICE OF VIOLATION," with responsibilities assigned to "CLIP" and "CLIP - VACANT LOT INVESTIGATOR" ​3​.
+Summary:
+Violation Rates: The failure rates for GEENA LLC properties in the provided zip codes (19131 and 19124) are high, with 64.7% for 2400 Bryn Mawr Avenue and consistent violations leading to demolition for 4763 Griscom Street.
+Vacancy Rates: GEENA LLC owns a significant number of vacant properties, contributing to visual blight and safety concerns in the neighborhoods.
+For a detailed comparison of vacancy and violation rates between zip codes 19104 and 19132, specific data for those areas would be required.
+
+3 references
+1
+Property_Case_File_2400_Bryn_Mawr.pdf
+2
+Property_Enforcement_File_4763_Griscom.pdf
+3
+Entity_Investigation_Report.pdf
+
+
+Foundry Agent from philly profiteering spa-----
+
+Here’s a direct comparison of vacancy rates and code violation rates between zip codes 19104 and 19132:
+
+19104 (West Philly, includes University City)
+Total Properties: 11,947
+Vacant Properties: 2,516
+Vacancy Rate: 21.1%
+Code Violation Investigations (total): 45,818
+Failed Investigations: 27,412
+Violation Rate: 2.29 failed investigations per property
+19132 (North Philly, Strawberry Mansion, etc.)
+Total Properties: 20,650
+Vacant Properties: 4,549
+Vacancy Rate: 22.0%
+Code Violation Investigations (total): 83,284
+Failed Investigations: 51,698
+Violation Rate: 2.50 failed investigations per property
+Direct Comparison
+Vacancy Rate:  
+19104: 21.1%  
+19132: 22.0%  
+  19132 is slightly worse for vacancies.
+
+Failed Code Violation Rate:  
+19104: 2.29 failed investigations per property  
+19132: 2.50 failed investigations per property  
+  19132 also has a higher failed violation rate.
+
+Vacant Licenses:  
+19104: 1,075  
+19132: 1,658  
+  Indicates more actively tracked vacant structures in 19132.
+
+Conclusion
+19132 is overall worse than 19104 in both vacancy and property violation rates. It has:
+
+A higher proportion of vacant buildings,
+More code violations per property (indicator of neglect, blight, or trouble maintaining housing stock).
+This fits citywide patterns: 19132 (North Philly) is among the city's hardest-hit zip codes for property distress and disinvestment.
+
+
+Investigative agent (open ai spa) -------------
+
+Here is a comparison of key distress indicators for zip codes 19104 and 19132:
+
+Vacancy Rates:
+
+19104: 2,516 vacant properties out of 11,947 total = 21.1% vacancy rate
+19132: 4,549 vacant properties out of 20,650 total = 22.0% vacancy rate
+Code Violation Rates:
+
+19104: 45,818 total code investigations (27,412 failed) for 11,947 properties — that's about 3.84 investigations/property, 2.3 failed/property.
+19132: 83,284 total code investigations (51,698 failed) for 20,650 properties — about 4.03 investigations/property, 2.5 failed/property.
+Which is Worse?
+
+19132 has a slightly higher vacancy rate (22.0% vs. 21.1%) and meaningfully more code violation activity per property.
+19132 has a much higher absolute number of demolitions (1,654 vs. 830), especially city-initiated (“worst-case” demolitions).
+Summary: Zip code 19132 is worse on both vacancy and code violation rates, and also suffers more frequent city interventions for dangerous properties, indicating deeper and more prevalent distress.
+
+get_area_stats
+get_area_stats
+
+semantic kernel (philly spa)------------
+
+4763 Griscom Street currently has zero code violations that resulted in FAILED inspections. No failed cases are present, so no investigators are assigned to such cases at this address.
+
+If you need information about other types of violations or want details on passed, closed, or pending cases, please let me know.
+
+Triage
+→
+ViolationAnalyst

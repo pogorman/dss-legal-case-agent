@@ -1,137 +1,161 @@
-# DSS Legal Case Agent — Executive Summary
+# Agent Evaluation — Combined Executive Summary
 
-## MCP-Backed Agents vs. Document-Backed Agents for Legal Case Analysis
+## Purpose
 
-### The Question
+This document summarizes the findings from evaluating AI agent configurations across two government use cases. The evaluation compares structured database agents against document-based agents to determine which approach delivers more accurate, consistent, and trustworthy answers for government analysts.
 
-When attorneys need answers from case files, which approach delivers more reliable results: an AI agent backed by **structured data** (SQL database via MCP tools) or one backed by **unstructured documents** (PDFs and Word files in SharePoint or uploaded to Copilot Studio)?
+## Use Case 1: Legal Case Analysis
 
-### What We Tested
+**Domain:** Department of Social Services, Office of Legal Services
+**Data:** 50 synthetic legal cases with 277 people, 333 timeline events, 338 statements, and 151 discrepancies
+**Agents tested:** 11 configurations (3 structured database agents, 8 document-based agents)
+**Prompts tested:** 10 legal analysis questions covering fact extraction, cross-document reasoning, contradiction detection, statement comparison, aggregate queries, and arithmetic
 
-We built the same legal case data in two forms — a normalized SQL database with 50 cases, 275 people, 325 timeline events, 338 statements, and 150 documented discrepancies, and a set of 11 narrative legal documents (investigation reports, medical records, court orders, sheriff reports) covering 2 primary cases. We then tested **11 agent configurations** across **11 prompts** designed to simulate real attorney questions: timeline reconstruction, witness statement comparison, contradiction detection, filtering by event type, aggregate case queries, and arithmetic reasoning from case data.
+### Results
 
-### Key Findings
+The custom web application agent scored a perfect 10/10. Structured database agents consistently returned accurate, citable answers but missed details not modeled in the database (e.g., the admitting nurse's name). Document-based agents found those missing details but suffered from misattribution, hallucination, and inability to cross-reference across documents.
 
-**1. Structured data agents are consistently precise; document agents are inconsistently rich.**
+**Top 3 agents:**
+1. Custom Web Application (structured database) — 10 Pass, 0 Partial, 0 Fail
+2. Copilot Studio with structured database (Government Cloud, GPT-4o) — 9 Pass, 0 Partial, 1 Fail
+3. Copilot Studio with structured database (Commercial, GPT-4.1) — 8 Pass, 2 Partial, 0 Fail
 
-MCP-backed agents (Web SPA, Copilot Studio MCP) return complete, accurate answers on every prompt where the data exists in SQL. On timeline enumeration, all 3 MCP agents scored 12/12 events with zero fabrication. Document agents ranged from 12/12 (best case) to 4/12 with data from the wrong case mixed in.
+**Bottom 2 agents:**
+- Copilot Studio with SharePoint documents (Government Cloud) — 3 Pass, 1 Partial, 6 Fail
+- Copilot Studio with SharePoint PDFs (Government Cloud) — 3 Pass, 1 Partial, 6 Fail
 
-**2. Every agent has a failure mode — there is no unconditional winner.**
+**Critical finding:** 7 of 8 document-based agents repeated a misleading statement from one source document without checking it against the medical records — the AI equivalent of an analyst copying an error from one report into their own without verification.
 
-| Failure Type | Severity | Example | Which Agents |
-|---|---|---|---|
-| Cross-case contamination | Critical | Case 2 (Crystal Price) data injected into Case 1 timeline | SP/PDF - GCC |
-| Misleading source faithfully reproduced | Critical | 7/8 doc agents repeated Sheriff Report's incorrect "no fractures" claim | All doc agents except SP/PDF - Com |
-| False negative on retrieved data | Critical | GPT-4.1 agents never call `get_discrepancies` — conclude "no evidence" when contradiction data exists | Web SPA, MCP - Com |
-| Misattribution | High | 4/8 doc agents attribute Dena Holloway's statement to Marcus Webb | SP/DOCX-Com, KB/DOCX-Com, SP/PDF-GCC, KB/DOCX-GCC |
-| Hallucinated fact with confidence | High | MCP-GCC fabricated "2:00 AM" ER time (actual: 3:15 AM) | MCP - GCC |
-| Timeline collapse | Medium | Investigation phase (5 events) compressed into 1 vague paragraph | KB/PDF - Com |
-| Silent failure | Medium | Hallucinated a case number, returned no results, gave no warning | Web SPA on Case 2 |
+### Danger Taxonomy
 
-**3. The model matters as much as the architecture.**
+Testing revealed five categories of AI failure, ranked by severity:
 
-GCC Copilot Studio is locked to GPT-4o; Commercial uses GPT-4.1. Neither can be changed. This creates a measurable split:
+1. **False negative (Critical):** The agent retrieved the correct data but failed to recognize the answer within it
+2. **Misleading source faithfully reproduced (Critical):** The agent accurately quoted a source document that itself contained an error, presenting the error as fact
+3. **Misattribution (High):** The agent reported a real fact but attributed it to the wrong person — e.g., attributing a mother's statement about bedtime to the father
+4. **Hallucinated fact with confidence (High):** The agent invented a specific time, case number, or detail that does not exist in any source
+5. **Silent failure (Medium):** The agent returned no results or a hallucinated case number without indicating anything went wrong
 
-- **GPT-4o (GCC):** Better tool selection (always calls `get_discrepancies`), uses precise legal phrasing ("materially changes her account"), gets bedtime time correct (10 PM). Worse fact faithfulness — fabricates when uncertain.
-- **GPT-4.1 (Commercial):** Better fact faithfulness, fewer hallucinations. Worse tool selection — never calls the discrepancy detection tool, leading to false negatives on contradiction questions.
+## Use Case 2: Investigative Analytics
 
-**4. Document format and retrieval method affect results more than expected.**
+**Domain:** City of Philadelphia property and code enforcement investigation
+**Data:** 34 million rows of real public records (584,000 properties, 1.6 million code violations)
+**Agents tested:** 7 configurations (2 Copilot Studio structured database agents, 2 Copilot Studio document agents, 3 pro-code agents)
+**Prompts tested:** 10 of 10 completed across 7 agents (70 total test runs)
 
-| Format | Avg Score (Prompt 5) | Notes |
-|---|---|---|
-| MCP / SQL | 12/12 | Deterministic, complete |
-| SharePoint PDF (Com) | 12/12 | Strongest doc agent overall |
-| SharePoint DOCX (Com) | 12/12 | 8 PM error + fabricated event |
-| SharePoint DOCX (GCC) | 9/12 | Correct facts, limited sources |
-| KB PDF (GCC) | 10/12 | Best KB agent |
-| KB DOCX (Com) | 9/12 | Good investigation, no post-removal |
-| KB DOCX (GCC) | 8/12 | Single source doc |
-| KB PDF (Com) | 6/12 | Collapsed timeline |
-| SharePoint PDF (GCC) | ~4/12 | Cross-case contamination |
+### Results
 
-**5. Structured data fails responsibly; documents fail dangerously.**
+The Commercial MCP agent (GPT-4.1) was the strongest overall performer, going 4 for 4 on the final stretch of prompts after initially struggling with address resolution. The Government Cloud document agent (SharePoint PDFs, GPT-4o) matched it on overall pass rate by leveraging pre-computed summaries in the investigation reports. The Government Cloud MCP agent (GPT-4o) was crippled by two issues: token overflow on large entities and the model gap vs GPT-4.1.
 
-When MCP agents lack data (e.g., the skeletal survey question), they say "this information is not in the structured data" — an honest absence. When document agents encounter a misleading source, they reproduce it faithfully with a citation. The citation makes the wrong answer *look* authoritative. An attorney reading "no fractures detected [Sheriff Report, p. 3]" has no reason to doubt it — but the medical records show two fractures that the sheriff report's summary omitted.
+**Final standings (after Round 2 improvements, 146 test runs):**
 
-### The Recommendation
-
-Neither approach alone is sufficient. The strongest architecture **layers both**:
-
-- **Structured data (MCP/SQL)** for precision queries: timelines, people rosters, statement comparisons, discrepancy detection, aggregate counts, filtering by event type or audience. These are the questions attorneys ask most and where wrong answers are most dangerous.
-- **Document grounding (SharePoint/KB)** for narrative detail the schema doesn't capture: nursing notes, page-level citations, clinical observations, GAL home visit narratives. These enrich the structured answers with context.
-- **Human review remains essential.** No agent configuration — structured or unstructured — was correct on every prompt. The value of AI is speed and coverage, not infallibility. The right question is not "can I trust the agent?" but "does the agent surface enough for me to make a better decision, faster?"
-
-### Results at a Glance
-
-Each prompt tests a different attorney question type. The table below shows how the three architecture groups performed and the key takeaway.
-
-| # | Prompt | MCP (3 agents) | Best Doc Agent | Worst Doc Agent | Key Takeaway |
-|---|--------|---------------|----------------|-----------------|-------------|
-| 1 | ER time + nurse | 2/3 correct time; 0/3 found nurse | KB/PDF-Com: time + nurse + employee ID | SP/DOCX-GCC: found nothing | Nurse only in documents, not SQL — need both layers |
-| 2 | Marcus Webb statements | Web SPA: full quotes, cross-doc analysis | KB/PDF-Com: 10 PM correct, detailed | SP/PDF-GCC: missed hospital stmt + 8 PM error | 4/8 doc agents misattribute Dena's words to Marcus |
-| 3 | Crystal Price "clean now" | GCC: best (used discrepancies tool); GPT-4.1: false negative | SP/PDF-Com: 3-doc synthesis, dates, missed screens | Web SPA: hallucinated case # then missed contradiction | GPT-4.1 never calls `get_discrepancies` — misses contradictions |
-| 4 | Skeletal survey fractures | Honest absence — "not in data" | SP/PDF-Com: **only agent** to catch cross-doc conflict | 7/8 doc agents: repeated Sheriff's incorrect "no fractures" | Most dangerous prompt — misleading source faithfully reproduced |
-| 5 | Full timeline (12 events) | All 3: 12/12 | SP/PDF-Com: 12/12, richer medical detail | SP/PDF-GCC: ~4/12, **Case 2 contamination** | Structured data makes enumeration trivial; doc agents range 4–12 |
-| 6 | People roster (8 people) | All 3: 8/8 | SP/PDF-Com: 8/8 + 4 doc-only extras | SP/PDF-GCC & SP/DOCX-GCC: 5/8 | Doc agents found 4 real people not in SQL — genuine value-add |
-| 7 | Statement evolution (3 changes) | Web: 3/3; GCC: 3/3; Com: **2/3** | SP/PDF-Com: 3/3 + fear motive + summary table | MCP-Com: 2/3 (missed rough handling) | Strongest consensus — 10/11 found all changes |
-| 8 | LE statements filter (4 stmts) | **All 3 MCP agents failed** (tool lacks audience filter) | SP/DOCX-Com: 4/4, identified intermediate interview | SP/PDF-GCC: 0/4, returned court testimony | First prompt where doc agents strictly outperform MCP |
-| 9 | TPR cases (9 in DB) | All 3: **9/9** | SP/DOCX-Com: 1/9 + statutory citations | All doc agents: 1/9 (expected) | Aggregate queries are MCP's strongest advantage — doc agents can't search across cases |
-| 10 | Time gap (thump → ER) | Com: **gold standard** (all 3 times, both gaps); GCC: ~4h (imprecise) | SP/DOCX-Com: 5h45m exact | SP/PDF-GCC: fabricated 7:30 AM → 10h | Arithmetic reasoning exposes every agent's weaknesses — even correct retrieval ≠ correct calculation |
-
-### Agent Scorecard
-
-Grades: **Pass** = accurate and useful. **Partial** = correct core facts but shallow, minor errors, or missing depth. **Fail** = wrong answer, dangerous error, or critical omission. **N/A** = data not in source; agent was honest about it.
-
-| Agent | Model | P1: ER Time | P2: Marcus Webb | P3: Crystal Price | P4: Skeletal Survey | P5: Timeline | P6: People | P7: Stmt Evolution | P8: LE Filter | P9: TPR Cases | P10: Time Gap |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| **Web SPA** | GPT-4.1 | Pass (no nurse) | **Pass** — best quotes | **Fail** — hallucinated case #, then missed fentanyl | Partial — fractures from SQL, no doc conflict | **Pass** 12/12 | **Pass** 8/8 | **Pass** 3/3, discrepancy ref | **Fail** — tool lacks audience filter | **Pass** 9/9 | **Fail** — conflated thump w/ discovery, said 1h15m |
-| **MCP - Com** | GPT-4.1 | Pass (no nurse) | Partial — needed case # | Partial — found it, no dates | N/A — honest absence | **Pass** 12/12 | **Pass** 8/8 | Partial — **2/3**, missed rough handling | **Fail** — 3 tries, all failed | **Pass** 9/9 | **Pass** — gold standard, all 3 times + both gaps |
-| **MCP - GCC** | GPT-4o | **Fail** — hallucinated 2:00 AM | **Pass** — consistent ×3 | **Pass** — used discrepancies tool | N/A — honest absence (w/ case #) | **Pass** 12/12 | **Pass** 8/8 | **Pass** 3/3 + 6 discrepancies | Partial — pivoted to timeline, 2/4 | **Pass** 9/9 | Partial — ~4h (should be 4.5h) |
-| **SP/PDF - Com** | GPT-4.1 | **Pass** + nurse | Partial — no quotes | **Pass** — 3-doc gold standard | **Pass** — caught cross-doc conflict | **Pass** 12/12 | **Pass** 8/8 + 4 extras | **Pass** 3/3 + fear motive + table | **Pass** 4/4, 3 sources | Partial — 1/9 + flagged CPS as potential TPR | **Pass** — 4.5h, distinguished 2 AM vs 3:15 AM |
-| **SP/DOCX - Com** | GPT-4.1 | **Pass** + nurse | **Fail** — 8 PM misattribution | Partial — contradiction, no dates | **Fail** — repeated "no fractures" | Partial 12/12 — 8 PM error + fabrication | **Pass** 8/8 + 4 extras | **Pass** 3/3 + "material" framing | **Pass** 4/4, intermediate interview | Partial — 1/9 + statutory citations | **Pass** — 5h45m exact |
-| **KB/DOCX - Com** | GPT-4.1 | **Pass** + nurse | **Fail** — 8 PM + missed hospital | **Pass** — specific dates | **Fail** — repeated "no fractures" | Partial 9/12 | **Pass** 8/8 + 2 extras | **Pass** 3/3, 3 sources | **Pass** 4/4, unique Marcus quote | Partial — 1/9 | **Pass** — 4.5h |
-| **KB/PDF - Com** | GPT-4.1 | **Pass** + nurse + ID | **Pass** — 10 PM, detailed | **Pass** — dates + missed screens | **Fail** — repeated "no fractures" | **Fail** 6/12 — collapsed timeline | **Pass** 8/8 + 2 extras | **Pass** 3/3 + grandmother detail | **Pass** 4/4, DSS follow-ups | Partial — 1/9 | Partial — honest absence of ER time, 2.5h only |
-| **SP/PDF - GCC** | GPT-4o | Pass (no nurse) | **Fail** — missed hospital + 8 PM | Partial — shallow | **Fail** — repeated "no fractures" | **Fail** ~4/12 — Case 2 contamination | **Fail** 5/8 | **Pass** 3/3 | **Fail** — returned court testimony | Partial — 1/9, generic framing | **Fail** — fabricated 7:30 AM, said 10h |
-| **SP/DOCX - GCC** | GPT-4o | **Fail** — nothing found | Partial — correct, shallow | Partial — shallow | **Fail** — repeated "no fractures" | Partial 9/12 | **Fail** 5/8 | **Pass** 3/3 | **Fail** — returned hospital versions | Partial — 1/9 | **Pass** — 4.5h correct |
-| **KB/PDF - GCC** | GPT-4o | Partial — 12:47 AM (real doc time) | Partial — correct, thin | **Pass** — specific dates | **Fail** — repeated "no fractures" | **Pass** 10/12 | **Pass** 8/8 + 3 extras | **Pass** 3/3 | **Pass** 4/4, best GCC | Partial — 1/9, GAL detail | Partial — 3h17m (used Sheriff Report 12:47 AM) |
-| **KB/DOCX - GCC** | GPT-4o | Partial — 12:47 AM (real doc time) | **Fail** — 8 PM misattribution | **Pass** — specific dates | **Fail** — repeated "no fractures" | Partial 8/12 | Partial 7/8 | **Pass** 3/3, best demeanor analysis | **Pass** 4/4, no 8 PM error | Partial — 1/9, procedural detail | Partial — 2.5h (thump→discovery, not hospital) |
-
-### Win/Loss Summary
-
-| Agent | Pass | Partial | Fail | N/A |
+| Agent | Pass | Partial | Fail | Change from Round 1 |
 |---|---|---|---|---|
-| **SP/PDF - Com** | **8** | 2 | 0 | 0 |
-| **KB/DOCX - Com** | 6 | 2 | 2 | 0 |
-| **MCP - GCC** | 6 | 2 | 1 | 1 |
-| **KB/PDF - Com** | 6 | 2 | 2 | 0 |
-| **Web SPA** | 6 | 1 | 3 | 0 |
-| **SP/DOCX - Com** | 5 | 3 | 2 | 0 |
-| **MCP - Com** | 5 | 3 | 1 | 1 |
-| **KB/PDF - GCC** | 5 | 4 | 1 | 0 |
-| **KB/DOCX - GCC** | 3 | 5 | 2 | 0 |
-| **SP/DOCX - GCC** | 2 | 4 | 4 | 0 |
-| **SP/PDF - GCC** | 2 | 2 | 6 | 0 |
+| Philly MCP - Com (structured database, GPT-4.1) | **10** | 0 | 0 | +2P (was 8/0/2) — **PERFECT** |
+| Investigative Agent (OpenAI chat, GPT-4.1) | **10** | 0 | 0 | +9P (was 1/0/9) — **PERFECT** |
+| Foundry Agent (Azure AI Foundry, GPT-4.1) | 9 | 1 | 0 | +5P (was 4/0/6) |
+| Triage Agent (Semantic Kernel, GPT-4.1) | 9 | 1 | 0 | +9P (was 0/0/10) |
+| Philly SP/PDF - GCC (SharePoint docs, GPT-4o) | 8 | 2 | 0 | unchanged |
+| Philly SP/PDF - Com (SharePoint docs, GPT-4.1) | 8 | 2 | 0 | unchanged |
+| Philly MCP - GCC (structured database, GPT-4o) | 4 | 2 | 4 | +2P (was 2/0/8) |
 
-**SP/PDF - Com is the clear winner** with 8 Passes and zero Fails across all 10 prompts — the only agent with no dangerous errors on any question type. MCP-Com redeemed itself on Prompt 10 with the gold standard response (all three time milestones, both gap calculations), while the Web SPA failed its third prompt by conflating the thump with the discovery event. SP/PDF-GCC remains the weakest agent with 6 Fails including a fabricated 7:30 AM hospital time on Prompt 10.
+**Critical finding:** Address resolution was the #1 failure mode in Round 1. Across Prompts 2-4, agents attempted 15 address-to-parcel lookups and succeeded only twice (13% success rate). A dedicated fuzzy address search tool eliminated this entirely — zero address failures in Round 2 for agents that used it.
 
-**Final verdict:** The layered approach holds — MCP/SQL for precision (timelines, aggregates, completeness) and document grounding for narrative richness (nurse names, statutory citations, clinical observations). Neither alone is sufficient.
+**Finding #2: The model gap is the defining result.** GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. Same tools, same data, same backend. The tool improvements that lifted the Investigative Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent — it could not even execute the same queries. Government Cloud is locked to GPT-4o, and no amount of tool or prompt engineering can close this gap.
 
-### Testing Status
+**Finding #3:** Aggregate queries (citywide stats, zip code comparisons) worked reliably for all MCP agents. Address-based queries failed reliably in Round 1 but were completely fixed by the address search tool in Round 2.
 
-| Prompt | Category | Status |
-|---|---|---|
-| 1. ER time + nurse | Fact extraction | Complete (11 agents) |
-| 2. Marcus Webb statements | Cross-doc reasoning | Complete (11 agents) |
-| 3. Crystal Price "clean now" | Contradiction detection | Complete (11 agents) |
-| 3.2. Transportation barrier | Contradiction detection | Complete (MCP only) |
-| 4. Skeletal survey | Cross-doc conflict | Complete (11 agents) |
-| 5. Full timeline | Completeness | Complete (11 agents) |
-| 6. People roster | Completeness | Complete (11 agents) |
-| 7. Statement evolution | Change detection | Complete (11 agents) |
-| 8. LE statements filter | Filtering precision | Complete (11 agents) |
-| 9. TPR cases | Aggregate query | Complete (11 agents) |
-| 10. Time gap calculation | Arithmetic | Complete (11 agents) |
+## What's Next
+
+Round 2 retesting is complete with 146 test runs across 4 rounds. The iterative improvement process has reached diminishing returns for GPT-4.1 agents — four agents are at 9-10/10. One issue remains:
+
+1. **GCC MCP performance (4/10)** — GPT-4o cannot effectively use the same tools that GPT-4.1 agents use flawlessly. This is a platform constraint, not an engineering problem. Government Cloud organizations should plan for lower agent performance until GCC upgrades to a more capable model.
+
+## Pro-Code Agent Architectures
+
+Use Case 2 introduced two agents not available in Use Case 1: an Investigative Agent built with Semantic Kernel and OpenAI, and a Foundry Agent built with Azure AI Foundry. Both query the same structured database as the Copilot Studio agents but through custom-built agent loops rather than a low-code platform.
+
+Results across 10 prompts and 4 test rounds show these agents share the same data access as Copilot Studio but differ in how they process results. The Investigative Agent achieved a perfect 10/10 — matching COM MCP as the only two agents with zero failures, up from 1/10 in Round 1. The Foundry Agent reached 9/10 and produced the best analytical moment in the entire evaluation (challenging a premise against source data on Prompt 10). The Triage Agent (Semantic Kernel team-of-agents) showed the most dramatic improvement arc in the evaluation — from 0/10 in Round 1 to 9/10 after four rounds of iterative sub-agent prompt improvements. All three pro-code agents use GPT-4.1, and all three now outperform every document-based agent.
+
+This is the question every technology leader faces: **build or buy?** The structured database versus document comparison answers "what data architecture do I need." The Copilot Studio versus pro-code comparison answers "what agent architecture do I need." Together, they form a complete decision framework for government AI adoption.
+
+## The Iterative Improvement Process
+
+Deploying an AI agent is not a one-time event. It is an iterative engineering process where each round of testing reveals a different category of failure, each requiring a different type of fix. Organizations that skip this process — deploying a Copilot Studio agent, pointing it at a SharePoint library, and expecting production-quality results — will encounter every failure mode documented in this report.
+
+This evaluation went through three distinct phases:
+
+### Round 0: Baseline Testing
+
+Deploy the agent, test it against known prompts with known answers, and document every failure. This project tested 11 agent configurations across 10 prompts (110 test runs for Use Case 1) and 7 agent configurations across 10 prompts (70 test runs for Use Case 2). Failures were categorized into a danger taxonomy ranging from silent failures (medium severity) to faithfully reproduced misinformation (critical severity).
+
+**Key insight:** You cannot evaluate an agent without ground truth. For Use Case 1, synthetic data with known answers made scoring binary (right or wrong). For Use Case 2, real data introduced ambiguity — but even ambiguous prompts revealed clear agent failures (wrong parcel numbers, token overflows, hallucinated facts).
+
+### Round 1: Data Layer Improvements
+
+Testing revealed that structured database agents failed specific prompts because the data wasn't granular enough for the model to extract. Drug test results buried in a narrative court event description were invisible to the model. A skeletal survey finding missing from the database meant agents couldn't answer the most dangerous prompt in the suite.
+
+**Changes made:** 11 new SQL rows (discrete drug test events, skeletal survey findings, nurse records) and 1 tool filter addition (`made_to` parameter on the statements tool). Zero changes to the documents or agent configuration.
+
+**Results:** Retesting the 5 affected prompts across 3 MCP agents showed improvement from 2 Pass / 5 Partial / 8 Fail to 12 Pass / 2 Partial / 1 Fail. The remaining failures shifted from "missing data" to "model behavior" — a fundamentally different problem requiring a different fix.
+
+### Round 2: Tool Architecture and Prompt Engineering
+
+With the data layer corrected, Round 2 addressed how models interact with tools. Use Case 2 revealed an 87% failure rate on address-based queries — not because the data was wrong, but because no tool existed to convert a street address into a database identifier. Use Case 1 revealed that agents had nurse data available but never called the tool that returns it, because the tool description didn't mention it contained medical staff.
+
+**Changes made:** 1 new tool (fuzzy address-to-parcel lookup with USPS normalization), 1 tool enhancement (entity network summary mode to prevent token overflow), improved tool descriptions across both use cases, and system prompt additions with explicit workflow guidance. Zero data changes.
+
+**Results (76 retests across 3 takes):**
+
+| Agent | Round 1 | Final (Round 2) | Change |
+|-------|---------|---------|--------|
+| COM MCP (GPT-4.1) | 8P / 0Pa / 2F | **10P / 0Pa / 0F** | **PERFECT** |
+| Investigative Agent (GPT-4.1) | 1P / 0Pa / 9F | **10P / 0Pa / 0F** | **PERFECT** (+9P) |
+| Foundry Agent (GPT-4.1) | 4P / 0Pa / 6F | **9P / 1Pa / 0F** | +5P, zero failures |
+| Triage Agent (GPT-4.1, SK) | 0P / 0Pa / 10F | **9P / 1Pa / 0F** | +9P across 4 rounds |
+| GCC MCP (GPT-4o) | 2P / 0Pa / 8F | **4P / 2Pa / 4F** | +2P (model-limited) |
+
+The single highest-impact change was the address resolution tool: zero address lookup failures for agents that used it, compared to 87% failure in Round 1. The second-most impactful was FMV field documentation in tool descriptions, which fixed P5 for three agents. The `excludeGovernment` parameter fixed P6 for two agents.
+
+**The model gap is the defining result of Round 2.** Every GPT-4.1 agent benefited dramatically from tool improvements. The GPT-4o agent (GCC MCP) could not even execute the same queries that GPT-4.1 agents handled flawlessly. The same tools, the same data, the same backend — GPT-4.1 agents average 9.5/10, GPT-4o scores 4/10.
+
+### The Pattern for Organizations
+
+Every organization deploying AI agents will go through these same rounds, in this order:
+
+1. **Test with known answers.** Without ground truth, you cannot measure improvement. Build a test suite before you build the agent.
+2. **Fix the data first.** If the answer isn't in the data, no model or prompt will find it. Make facts discrete and queryable, not buried in narrative text.
+3. **Fix the tools second.** If the model can't reach the data through the available tools, add tools. If the model doesn't know which tool to use, improve descriptions and add system prompt guidance.
+4. **Retest after every change.** Each fix can introduce new failure modes. The only way to know is to run the full test suite again.
+
+This is not optional engineering overhead — it is the difference between a demo that impresses and a deployment that misleads. The danger taxonomy from this evaluation (false negatives, faithfully reproduced misinformation, misattribution, confident hallucination) represents real risks to real decisions. An attorney who trusts "no fractures detected" because an AI agent said so is making a worse decision than an attorney with no AI at all.
+
+## Five Findings That Surprised Us
+
+1. **The most dangerous agent was also the most accurate quoting its source.** Seven of eight document-based agents faithfully reproduced a Sheriff Report statement that "no fractures detected on skeletal survey" — while the Medical Records in the same case clearly documented two fractures in a child abuse investigation. The agents weren't wrong about what the document said. They were wrong about what was true. This is the hardest failure mode to detect because the citation is real and the confidence is justified — but the conclusion is dangerous.
+
+2. **The most complex agent went from 0 out of 10 to 9 out of 10 — but it took four rounds of iteration to get there.** The Triage Agent — a Semantic Kernel team-of-agents pattern with a routing agent dispatching to specialized sub-agents (OwnerAnalyst, ViolationAnalyst, AreaAnalyst) — started as the worst agent in the evaluation. Round 1: 0/10 (crashes, wrong prompts, 500 errors). After the same tool improvements that lifted the Investigative Agent from 1/10 to 8/10, the Triage Agent improved to only 1/10 — its sub-agents never called the new tools. It took two more rounds of sub-agent prompt engineering (mandating tool usage, adding few-shot examples, prompt placement optimization) to reach 9/10. Meanwhile, a simple Copilot Studio agent pointed at SharePoint PDFs scored 8/10 without any improvements at all. The lesson is nuanced: architectural complexity requires more iteration, not less — but it can ultimately match or exceed simpler architectures when paired with disciplined testing.
+
+3. **The model retrieved the answer and didn't recognize it.** On Use Case 1, Prompt 3, the custom web application agent called the right tools, received data containing "two positive drug screens (fentanyl) in October," and concluded: "no drug test results exist in the available data." The answer was in the tool output. The model read past it. This "false negative" failure — data retrieved but not recognized — is invisible to users because the agent sounds confident and the tool calls look correct.
+
+4. **A single missing tool caused an 87% failure rate — and adding it back produced the largest improvement.** Use Case 2 had no way to convert a street address ("4763 Griscom St") into a database identifier (parcel number 232452100). Six of ten prompts mentioned street addresses. Across those six prompts and five SQL-backed agents, only 2 of 15 address lookups succeeded. Every agent resolved the same address to a different wrong parcel on different attempts — producing non-deterministic, unreliable answers to the same question. Adding one fuzzy-match lookup tool produced zero address resolution failures in Round 2 retesting. The Investigative Agent went from 1/10 to 8/10. The COM MCP agent achieved a perfect 10/10. Same data, same models, same code — one new tool.
+
+5. **A pro-code agent challenged its own premise — and was right.** On Prompt 10, the Foundry Agent (Azure AI Foundry) was asked about a purchase price of $146,000 versus a $357,100 assessment. Instead of calculating the percentage, it checked the OPA assessment data and found the actual assessed value was $53,155 — not the $357,100 stated in the prompt. It flagged the discrepancy and recalculated using the verified number. No other agent questioned the premise. This is the kind of analytical rigor that justifies the engineering investment in custom agents — but only when paired with the iterative testing process that makes them reliable.
+
+## Cross-Use-Case Conclusions (Preliminary)
+
+1. **Structured data wins on consistency and precision.** Across both use cases, structured database agents return the same answer every time for the same question. Document agents' answers vary based on which chunks the retrieval engine surfaces.
+
+2. **Documents win on narrative context.** Details like institutional histories, investigator observations, and contextual explanations live in documents, not databases. Both approaches are needed.
+
+3. **Real data is harder than synthetic data.** Use Case 1's synthetic data had clean ground truth. Use Case 2's real data introduced ambiguity on the very first prompt. Government AI deployments will face Use Case 2's complexity, not Use Case 1's clarity.
+
+4. **Government Cloud model constraints matter.** Government Cloud Copilot Studio is locked to GPT-4o while Commercial uses GPT-4.1. This model gap consistently affected accuracy across both use cases.
+
+5. **Tool design is as important as model selection.** The Government Cloud structured database agent failed Prompt 1 not because the model was weak, but because the tool returned 631 raw records instead of a summary. The best model in the world can't help if the tool overwhelms its context window.
 
 ---
 
-*Testing conducted March 5-6, 2026. Full results: `docs/copilot-studio-testing.md`*
+*Use Case 1: Complete (110 test runs + 15 Round 1 retests + 3 Round 2 retests). Use Case 2: Complete (70 Round 1 runs + 76 Round 2 retests across 3 takes). Total: 274 test runs across 2 use cases, 4 improvement rounds, 18 agent configurations.*
+
+*Detailed results: `use-case-1-testing.md` | `use-case-2-testing.md` | `improvements/improvements-round-1.md` | `improvements/improvements-round-2.md`*

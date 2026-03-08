@@ -18,7 +18,7 @@ After every session or when O'G asks, update these files in `docs/`:
 - Web: `web/index.html`, `web/js/chat.js`, `web/js/cases.js` (50 embedded cases), `web/js/app.js`, `web/css/style.css`
 - SharePoint docs: `sharepoint-docs/` — 11 realistic legal documents for Cases 1-2 in md/docx/pdf formats, plus `Demo_Comparison_Prompts.md`
 - Scripts: `scripts/sanitize-docs.py` (PII replacement), `scripts/convert-md-to-docs.py` (md→docx/pdf)
-- Testing: `docs/use-case-1-testing.md` (DSS Legal, 11 agents, 10 prompts), `docs/use-case-2-testing.md` (Philly, 5 agents, 10 prompts), `docs/executive-summary-combined.md` (combined C-suite summary)
+- Testing: `docs/use-case-1-testing.md` (DSS Legal, 11 agents, 10 prompts), `docs/use-case-2-testing.md` (Philly, 5 agents, 10 prompts), `docs/executive-summary.md` (C-suite summary)
 - Test responses: `docs/test-responses/use-case-1-dss-legal/`, `docs/test-responses/use-case-2-poverty/`
 - Infra: `infra/main.bicep`, `infra/parameters.json`, `deploy.sh`
 

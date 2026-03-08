@@ -305,7 +305,7 @@ def build_pdf():
         ("executive-summary.pdf", "C-suite handoff (both use cases)"),
         ("use-case-1-testing.md", "UC1: 128 runs, 11 agents"),
         ("use-case-2-testing.md", "UC2: 146 runs, 7 agents"),
-        ("executive-summary-combined.md", "Full markdown summary"),
+        ("executive-summary.md", "Full markdown summary"),
         ("demo-guide.md", "Demo walkthrough + prompts"),
     ]
     for filename, desc in refs:

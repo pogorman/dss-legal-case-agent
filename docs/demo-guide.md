@@ -251,3 +251,85 @@ What are the key discrepancies between Marcus Webb's and Dena Holloway's account
 | Q&A | 5-10 min | ~25 min |
 
 **Total: ~25 minutes** with comparison, ~20 without. Can compress to 10 by skipping Acts 4 and 6 and shortening the walkthrough.
+
+---
+
+## Appendix: Data Design Decision
+
+### "How did the data get from documents into the database?"
+
+**The Short Answer:** The data was never extracted from documents. It went the other direction: structured SQL data was designed first, then realistic legal documents were written from that data to populate SharePoint.
+
+**The Design:**
+
+1. **Structured data came first.** The SQL schema (`cases`, `people`, `timeline_events`, `statements`, `discrepancies`) was designed as the source of truth. Cases 1-2 were hand-crafted with rich detail; Cases 3-50 were procedurally generated for volume.
+
+2. **SharePoint documents were written from the structured data.** The 11 files in `sharepoint-docs/` are realistic legal documents (investigation reports, medical records, sheriff reports, court orders, GAL reports) that embed the same facts into narrative prose. They deliberately:
+   - Scatter facts across multiple documents (e.g., the same injury appears in medical records, the sheriff report, and the court filing)
+   - Use the same `page_reference` values that appear in the SQL data
+   - Embed verbatim quotes from the `statements` table into narrative paragraphs
+
+3. **Two agents query the same facts through different lenses.** MCP agent hits structured SQL; SharePoint agent searches unstructured documents. Same ground truth, different retrieval methods.
+
+### How to Frame It for the Audience
+
+**"This is what digitization looks like."**
+
+> "In the real world, DSS already has this information — it's in Word documents, PDFs, case files scattered across SharePoint. What we did is model that same information as structured data: timelines, statements, people, discrepancies. Think of it as the difference between a filing cabinet and a database. The MCP agent queries the database; the SharePoint agent searches the filing cabinet. Same facts, dramatically different precision."
+
+You do not need to explain which came first. The audience cares about the outcome: structured data enables precise queries, cross-referencing, and aggregation that document search cannot match.
+
+### 5 Discrepancy Questions to Ask the Agent
+
+These questions are grounded in the actual seed data and SharePoint documents. Questions 1 and 5 expose cross-document conflicts that the SharePoint agent is likely to mishandle, while the MCP agent returns one consistent answer.
+
+**Question 1: "What time was Jaylen Webb brought to the emergency room, and who was the admitting nurse?"**
+
+What it exposes: A cross-document conflict in the SharePoint docs.
+- Medical Records say arrival at **03:15 AM**, nurse **Rebecca Torres**
+- Sheriff Report says arrival at **approximately 0047 hours** (12:47 AM), nurse **Charge Nurse Patricia Daniels**
+
+MCP agent returns one consistent answer from structured data. SharePoint agent may surface both conflicting versions — or pick one without flagging the contradiction.
+
+**Question 2: "What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement?"**
+
+What it exposes: A subtle two-hour discrepancy between statements.
+- Nursing notes (Medical Records p. 8): Marcus told hospital staff he put Jaylen to bed "**around ten**"
+- Sheriff Report (p. 3): Marcus told Lt. Odom he put the child to bed at approximately **8:00 PM**
+
+MCP agent pulls both statements side-by-side from the `statements` table filtered by `made_to`. SharePoint agent has to find these in two different documents and may not catch the discrepancy.
+
+**Question 3: "Crystal Price told the court she was 'clean now' at the November 2023 hearing. What do the drug test results show?"**
+
+What it exposes: A direct contradiction between Crystal's testimony and lab results.
+- Crystal's statement to court (Nov 14, 2023): "I am clean now"
+- Drug screen results: Two positive fentanyl screens on **October 8** and **October 22** — just three weeks earlier
+- Also: Missed screens on December 5, January 15, and March 3
+
+MCP agent returns the contradiction with dates and sources from the `discrepancies` table. SharePoint agent has to cross-reference the court transcript with the DSS investigation report.
+
+**Question 4: "Crystal Price said she couldn't comply with the treatment plan because she lacked transportation. What support did DSS actually provide?"**
+
+What it exposes: Crystal's stated barrier is contradicted by DSS records.
+- Crystal claims: Lack of transportation and support
+- DSS records show: Monthly bus passes issued, three housing referrals provided, IOP transportation assistance **offered and declined by Crystal**
+
+**Question 5: "Did the Sheriff's Office investigation find fractures in Jaylen Webb's skeletal survey?"**
+
+What it exposes: A direct factual conflict between two documents about the same hospital visit.
+- Sheriff Report (p. 2): "Radiology report indicated **no fractures detected** on skeletal survey"
+- Medical Records (pp. 3-4): Bilateral long bone fractures with extensive radiological findings
+
+### Recommended Demo Order for Discrepancy Questions
+
+1. Start with **Question 3** (Crystal's sobriety) — easy to understand, clear contradiction
+2. Follow with **Question 4** (transportation excuse) — builds the pattern of Crystal's credibility issues
+3. Ask **Question 2** (Marcus bedtime discrepancy) — shifts to the Webb case, shows subtle cross-referencing
+4. Ask **Question 5** (fractures in skeletal survey) — the cross-document bombshell
+5. Close with **Question 1** (ER arrival time and nurse) — reinforces that document-based search can't be trusted for precise facts
+
+### What NOT to Say
+
+- Do not bash SharePoint. The message is "different tools for different jobs."
+- SharePoint is great for unstructured narratives, policy documents, and memos.
+- When case data is structured, MCP gives precision that document search cannot match.

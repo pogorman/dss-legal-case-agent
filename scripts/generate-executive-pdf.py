@@ -600,6 +600,20 @@ def build_pdf():
         "most at Levels 4 and 5."
     )
 
+    pdf.ln(4)
+    pdf.subsection_title("Why Copilot Studio")
+    pdf.body_text(
+        "Copilot Studio is the platform that ties the spectrum together. It hosts both "
+        "zero-code SharePoint agents (Levels 1-2) and MCP-connected structured data agents "
+        "(Levels 3-4) under a single governance boundary. Model flexibility is the headline: "
+        "the same Copilot Studio agent configuration scored 4 out of 10 with GPT-4o and "
+        "10 out of 10 with GPT-4.1 -- no configuration changes required. When Government "
+        "Cloud gains access to more capable models, every Copilot Studio agent improves "
+        "overnight. Enterprise governance (data loss prevention, audit logging, admin "
+        "pre-approval for tool calls) and M365 distribution (agents appear in Teams and "
+        "Copilot chat) are built into the platform, not bolted on after the fact."
+    )
+
     # ====================================================================
     # FIVE SURPRISING FINDINGS
     # ====================================================================
@@ -613,11 +627,12 @@ def build_pdf():
         "were not wrong about what the document said. They were wrong about what was true."
     )
 
-    pdf.subsection_title("2. A single missing tool caused an 87% failure rate")
+    pdf.subsection_title("2. A single missing tool caused an 87% failure rate -- and one day of engineering fixed it")
     pdf.body_text(
         "No tool existed to convert a street address into a database identifier. Adding one "
         "fuzzy-match lookup tool produced zero failures in retesting. One agent went from "
-        "1 out of 10 to a perfect 10 out of 10."
+        "1 out of 10 to a perfect 10 out of 10. The cost of not having the tool was enormous; "
+        "the cost of building it was trivial."
     )
 
     pdf.subsection_title("3. The most complex agent needed four rounds of iteration")

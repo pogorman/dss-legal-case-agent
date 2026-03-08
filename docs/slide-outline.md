@@ -1,6 +1,6 @@
 # AI Agent Accuracy Spectrum -- Slide Outline
 
-Target: 20 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)
+Target: 21 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)
 
 ---
 
@@ -12,6 +12,8 @@ Subtitle: Findings from 304 Test Runs Across 19 Agent Configurations
 
 Visual: Clean title slide with agency-appropriate branding
 
+Speaker notes: "Some of you may remember me from such demos as the delegation demo, or [insert another]. Those demos and this one have something in common: I like to build test harnesses for real-world use cases my customers care about. And both this demo and the delegation demo deal with the same fundamental topic: accuracy."
+
 ---
 
 ## Slide 2: The Question
@@ -22,6 +24,8 @@ Visual: Clean title slide with agency-appropriate branding
 - This framework helps you decide where to deploy aggressively, where to add guardrails, and where human review is non-negotiable
 
 Visual: Spectrum arrow from "Low Stakes" to "High Stakes"
+
+Speaker notes: "What this demo is: a process and methods -- with real-world examples -- for making your agents better. What it isn't: a data extraction demo, other than to show ideas on tools and process when extraction is necessary. You'll probably have more questions than answers when we're done. Let's get into it."
 
 ---
 
@@ -133,6 +137,8 @@ Visual: Split screen -- Sheriff Report quote on left, Medical Records finding on
 
 Talking point: "This is why Level 5 requires human review. Always."
 
+Speaker notes: "Connect to daily experience: Copilot helps you draft an email -- you review it. Copilot helps you write code -- you review it. Why would we skip human review at any of these five levels, especially Level 5 where the stakes are a family's future?"
+
 ---
 
 ## Slide 10: The Danger Taxonomy
@@ -200,7 +206,25 @@ Talking point: "The investment buys governance and customization, not accuracy. 
 
 ---
 
-## Slide 14: What to Do at Each Level
+## Slide 14: Why Copilot Studio (Tech Series)
+
+**One platform, declarative to pro-code**
+
+- Same environment hosts zero-code SharePoint agents AND MCP-connected structured data agents
+- Model flexibility: swap GPT-4o for GPT-4.1, accuracy goes from 4/10 to 10/10 -- no config changes
+- Enterprise governance built in: DLP, audit logging, admin pre-approval for tool calls
+- M365 distribution: agents show up in Teams and Copilot chat -- no separate app to deploy
+- Our test data proves the platform works -- the model is the variable, not the architecture
+
+Visual: Copilot Studio logo with radiating connections to SharePoint, MCP, Teams, Foundry
+
+Talking point: "Commercial Copilot Studio MCP scored a perfect 10 out of 10. The architecture is sound. The limiting factor is model availability in GCC."
+
+Speaker notes: "This slide is critical for the tech series. MUST articulate the platform value, not just the results."
+
+---
+
+## Slide 15: What to Do at Each Level
 
 | Level | Action |
 |---|---|
@@ -215,7 +239,7 @@ Talking point: "Match your investment to your accuracy requirement."
 
 ---
 
-## Slide 15: Government Cloud Customers
+## Slide 16: Government Cloud Customers
 
 **The GCC reality today**
 
@@ -234,7 +258,7 @@ Talking point: "Know what works today. Plan for what's coming."
 
 ---
 
-## Slide 16: Live Demo Title Card
+## Slide 17: Live Demo Title Card
 
 **"Let me show you the difference between Level 2 and Level 4."**
 
@@ -249,7 +273,7 @@ Visual: Demo URL and case number reference
 
 ---
 
-## Slide 17: Surprising Finding -- Agent Challenged Its Own Premise
+## Slide 18: Surprising Finding -- Agent Challenged Its Own Premise
 
 **A pro-code agent questioned the question -- and was right**
 
@@ -264,7 +288,7 @@ Talking point: "This is what custom orchestration enables -- but only with itera
 
 ---
 
-## Slide 18: Surprising Finding -- False Negative
+## Slide 19: Surprising Finding -- False Negative
 
 **The model retrieved the answer and didn't recognize it**
 
@@ -279,7 +303,7 @@ Talking point: "This is why you need ground truth testing. You cannot catch this
 
 ---
 
-## Slide 19: The Bottom Line
+## Slide 20: The Bottom Line
 
 **Three numbers to remember**
 
@@ -291,9 +315,11 @@ Visual: Three large numbers with icons (document, tools, human)
 
 Talking point: "The question is not 'should we deploy AI?' The question is 'which level are we operating at, and have we invested accordingly?'"
 
+Speaker notes: "So what do we do? Do we just give up on agents? No -- you continue to test them and make them better, and you always adhere to trust but verify. I have agents building apps for me right now. If I were building production enterprise apps, I'd have a team of human developers checking the work, helping test, reviewing agentic results. The AI accelerates the team. The team validates the AI."
+
 ---
 
-## Slide 20: Next Steps
+## Slide 21: Next Steps
 
 **Start the conversation**
 

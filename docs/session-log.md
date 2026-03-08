@@ -1222,3 +1222,41 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - Triage P3 (assessment history) — carry-forward
 - Upload Philly PDFs to SharePoint — carry-forward
 - Consider BFG Repo Cleaner for git history
+
+## Session 25 — 2026-03-08
+
+### What was done
+- Organized O'G's raw demo talking points into demo-guide.md and slide-outline.md
+- **Demo guide updates:**
+  - New opening hook ("you may remember me from such demos as...")
+  - "What it is / isn't" framing added to intro
+  - "No way to avoid getting technical" transition line at Act 3
+  - Human review thread (email, code, agents) added to Level 5 section
+  - "So what? Do we give up?" close with personal practice story
+  - M365 orchestration visibility talking point in expanded sections
+  - Data engineering story added to Appendix A
+  - New Appendix D: Copilot Studio value prop for tech series
+  - Appendix D (What Not to Say) renumbered to Appendix E
+- **Slide outline updates:**
+  - Speaker notes on Slides 1, 2, 9, 20 with narrative beats
+  - New Slide 14: Why Copilot Studio (tech series)
+  - Renumbered to 21 slides
+- **Executive summary updates:**
+  - Added "Why Copilot Studio" section under Code Investment Spectrum
+  - Sharpened Finding #2 with cost asymmetry framing
+  - Deleted unused `docs/sources/executive-summary.md` (PDF script is source of truth)
+- Regenerated both PDFs (executive-summary.pdf: updated, demo-guide.pdf: 12 pages)
+- SWA deployed to production
+
+### Decisions made
+- `docs/sources/executive-summary.md` deleted — Python script is the sole source of truth for the PDF
+- Copilot Studio value prop is a MUST for tech series audience
+- Opening hook ties this demo to the delegation demo via "accuracy" as common thread
+
+### Open items
+- Build PowerPoint deck from slide-outline.md (21 slides)
+- Demo dry run with new opening hook and closing (50-60 min target)
+- Fill in second demo reference in opening hook ("you may remember me from...")
+- Triage P3 (assessment history) — carry-forward
+- Upload Philly PDFs to SharePoint — carry-forward
+- Consider BFG Repo Cleaner for git history

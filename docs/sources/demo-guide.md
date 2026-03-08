@@ -52,11 +52,17 @@ This demo is built around a five-level accuracy spectrum that helps government l
 
 ## Demo Flow
 
-### Opening: The Framework (2 minutes, no product)
+### Opening: The Hook (3-4 minutes, no product)
 
-> "Before I show you any technology, let me share a framework we developed after running 304 test evaluations across two government use cases and 19 different agent configurations. Not all AI use cases need the same level of accuracy, and not all agent architectures deliver it."
+> "Some of you may remember me from such demos as the delegation demo, or the [insert another landmark demo here]. And there's one thing those demos have in common with this one: I like to build test harnesses that demonstrate the different capabilities of our technology in real-world use cases that my customers care about. And what's funny is -- both this demo and the delegation demo deal with the same fundamental topic: **accuracy**."
+
+> "Before we dive in, let me tell you what this demo is and what it isn't. **It's a way to show you a process and methods -- with real-world examples -- for making your agents better.** It is not a demo on data extraction, other than to provide ideas on tools and process for getting that done when extraction is necessary."
+
+> "I have a feeling that when we're all said and done, you'll have more questions than answers. But let's get into it."
 
 **Show the five-level spectrum slide.**
+
+> "We developed this framework after running 304 test evaluations across two government use cases and 19 different agent configurations. Not all AI use cases need the same level of accuracy, and not all agent architectures deliver it."
 
 > "Level 1: finding a policy document. Level 5: preparing facts for a legal hearing where a family's future depends on accuracy. Most agencies jump straight to Copilot without asking 'where does my use case fall on this spectrum?' Today I'll show you why that question matters."
 
@@ -101,6 +107,8 @@ How many active cases does DSS currently have? Break them down by case type.
 ### Act 3: Level 4 -- The Inflection Point (5-7 minutes)
 
 **This is the centerpiece of the demo.**
+
+> "Now, there's no way to have this conversation without getting a little technical. But I'll do my best."
 
 > "Level 4 is investigative work. Cross-referencing records, building timelines, finding discrepancies between accounts. This is where agent architecture starts to matter -- a lot."
 
@@ -168,6 +176,10 @@ Did the sheriff's investigation find fractures in Jaylen Webb's skeletal survey?
 
 **Pause. Let it land.**
 
+**The human review thread -- connect it to their daily experience:**
+
+> "Think about how you already use AI today. Copilot helps you draft an email -- you review it before you hit send. Copilot helps you write code -- you better be reviewing that before it goes to production. So why would we skip human review for any of these five levels? Especially at Level 5, where the stakes are a family's future?"
+
 > "This is why Level 5 requires a different operating model. The AI is a research assistant -- it drafts, it retrieves, it organizes. The human decides. Trust but verify is not a suggestion at this level. It is the only responsible way to operate."
 
 ---
@@ -184,6 +196,14 @@ Did the sheriff's investigation find fractures in Jaylen Webb's skeletal survey?
 
 > "**Level 5:** Everything from Level 4, plus governance. Audit logging. Citation linking. Human review workflows. The AI accelerates the attorney -- it does not replace the attorney."
 
+**The "So what?" close:**
+
+> "So what do we do? Do we just give up on using agents?"
+
+> "No. You continue to test them and make them better. And you always adhere to trust but verify."
+
+> "In my world, I have agents building apps for me right now. I'm not building production enterprise applications anymore, but if I were, I would have a team of human developers involved in the process -- checking the work my agents are producing with my guidance, helping to test, reviewing agentic test results. That's the operating model. The AI accelerates the team. The team validates the AI."
+
 > "The question isn't 'should we deploy AI?' The question is 'which level are we operating at, and have we invested accordingly?'"
 
 ---
@@ -192,7 +212,7 @@ Did the sheriff's investigation find fractures in Jaylen Webb's skeletal survey?
 
 | Section | Duration | Running Total |
 |---------|----------|---------------|
-| Opening: Framework | 3-4 min | 4 min |
+| Opening: Hook + Framework | 4-5 min | 5 min |
 | Act 1: Level 2 Summarization | 3-4 min | 8 min |
 | Act 2: Level 3 Aggregation (DSS + Philly) | 4-5 min | 13 min |
 | Act 3: Level 4 Investigation (Money Prompt) | 8-10 min | 23 min |
@@ -219,6 +239,11 @@ Then show the aggregate power:
 What are the top 5 addresses by code violation count, excluding government-owned properties?
 ```
 Talking point: "Same architecture, completely different domain. The tools are different but the pattern is identical."
+
+**M365 Copilot (optional, time permitting):**
+If you show M365 Copilot, lean into the orchestration UX -- the confirmation dialog shows every tool call before it executes. This is actually a great demo asset for enterprise security conversations:
+> "Notice it's showing you exactly what it's about to do and asking for permission. This is the kind of transparency enterprise customers want. You can see the orchestration happening in real time."
+Note: Confirmation can be disabled via admin pre-approval or `x-openai-isConsequential: false` in the manifest.
 
 **Act 5 (expanded):** Walk through the code spectrum slide (zero code to full code) and the GCC-specific guidance. This is where you land the services conversation: "Levels 1-3 are Copilot licenses you already own. Levels 4-5 are where we help."
 
@@ -261,6 +286,12 @@ Talking point: "Same architecture, completely different domain. The tools are di
 > "This is what digitization looks like. Your agency already has this information -- it's in Word documents, PDFs, case files scattered across SharePoint. What we did is model that same information as structured data: timelines, statements, people, discrepancies. The MCP agent queries the database; the SharePoint agent searches the filing cabinet. Same facts, dramatically different precision."
 
 You do not need to explain which came first. The audience cares about the outcome: structured data enables precise queries, cross-referencing, and aggregation that document search cannot match.
+
+### The data engineering story (if asked about the process)
+
+> "I took a very first cut at chunking up the data -- deciding what a 'timeline event' is, what a 'statement' is, what a 'discrepancy' looks like as structured fields. Then I used an AI coding agent to generate additional cases and refine the schema. Two hand-crafted cases became 50, with increasing detail at every round."
+
+> "This is the part people underestimate. The AI layer on top is straightforward once you've done the data engineering. Deciding what to extract, how to schema it, what granularity matters -- that's the investment that separates Level 3-4 from Level 1-2."
 
 ---
 
@@ -330,7 +361,28 @@ Medical Records: arrival at 03:15 AM, nurse Rebecca Torres. Sheriff Report: arri
 
 ---
 
-## Appendix D: What Not to Say
+## Appendix D: Copilot Studio Value Prop (Tech Series)
+
+When presenting to a technical audience, you MUST articulate why Copilot Studio matters in this story. This is not a "pick your own adventure" -- Copilot Studio is the platform that ties it together.
+
+**Key points to land:**
+
+1. **Single platform for declarative AND pro-code agents.** The same Copilot Studio environment hosts the zero-code SharePoint agent (Level 1-2) and the MCP-connected structured data agent (Level 3-4). One governance boundary, one admin console, one DLP policy set.
+
+2. **Model flexibility is the headline.** Same Copilot Studio agent, swap GPT-4o for GPT-4.1, and accuracy goes from 4/10 to 10/10 without changing a single line of configuration. That's a platform story, not a coding story. When GCC gets a better model, every Copilot Studio agent improves overnight.
+
+3. **Enterprise governance is built in.** DLP policies, audit logging, admin pre-approval for tool calls, the M365 Copilot confirmation UX. These are not things you bolt on later -- they come with the platform.
+
+4. **M365 distribution.** Agents show up where users already work: Teams, Copilot chat, SharePoint. No separate app to deploy or URL to bookmark. For Level 1-3 use cases, this is the fastest path to adoption.
+
+5. **The test data proves it.** Our evaluation shows the platform works -- the limiting factor is the model, not the platform. Commercial Copilot Studio MCP scored a perfect 10/10 with GPT-4.1. The architecture is sound.
+
+**The services hook:**
+> "Levels 1-3 are Copilot licenses you already own. Levels 4-5 are where purpose-built tools and iterative testing come in -- and where we can help."
+
+---
+
+## Appendix E: What Not to Say
 
 - Do not bash SharePoint. The message is "different tools for different jobs."
 - SharePoint is great for unstructured narratives, policy documents, and memos (Levels 1-2).

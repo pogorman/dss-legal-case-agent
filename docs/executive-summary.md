@@ -40,42 +40,57 @@ Testing revealed five categories of AI failure, ranked by severity:
 
 **Domain:** City of Philadelphia property and code enforcement investigation
 **Data:** 34 million rows of real public records (584,000 properties, 1.6 million code violations)
-**Agents tested:** 7 configurations (2 Copilot Studio structured database agents, 2 Copilot Studio document agents, 3 pro-code agents)
-**Prompts tested:** 10 of 10 completed across 7 agents (70 total test runs)
+**Agents tested:** 8 configurations (2 Copilot Studio structured database agents, 2 Copilot Studio document agents, 1 M365 Copilot agent, 3 pro-code agents)
+**Prompts tested:** 10 of 10 completed across 8 agents (176 total test runs including retests)
 
 ### Results
 
-The Commercial MCP agent (GPT-4.1) was the strongest overall performer, going 4 for 4 on the final stretch of prompts after initially struggling with address resolution. The Government Cloud document agent (SharePoint PDFs, GPT-4o) matched it on overall pass rate by leveraging pre-computed summaries in the investigation reports. The Government Cloud MCP agent (GPT-4o) was crippled by two issues: token overflow on large entities and the model gap vs GPT-4.1.
+The Commercial MCP agent was the strongest overall performer, going 4 for 4 on the final stretch of prompts after initially struggling with address resolution. (Rounds 1-2 used GPT-5 Auto; retested with GPT-4.1 in Round 3 with identical 10/10 results — see Model Validation below.) The Government Cloud document agent (SharePoint PDFs, GPT-4o) matched it on overall pass rate by leveraging pre-computed summaries in the investigation reports. The Government Cloud MCP agent (GPT-4o) was crippled by two issues: token overflow on large entities and the model gap vs GPT-4.1.
 
-**Final standings (after Round 2 improvements, 146 test runs):**
+**Final standings (176 test runs across 6 rounds):**
 
 | Agent | Pass | Partial | Fail | Change from Round 1 |
 |---|---|---|---|---|
-| Philly MCP - Com (structured database, GPT-4.1) | **10** | 0 | 0 | +2P (was 8/0/2) — **PERFECT** |
+| Philly MCP - Com (structured database, GPT-5 Auto†) | **10** | 0 | 0 | +2P (was 8/0/2) — **PERFECT** |
 | Investigative Agent (OpenAI chat, GPT-4.1) | **10** | 0 | 0 | +9P (was 1/0/9) — **PERFECT** |
 | Foundry Agent (Azure AI Foundry, GPT-4.1) | 9 | 1 | 0 | +5P (was 4/0/6) |
 | Triage Agent (Semantic Kernel, GPT-4.1) | 9 | 1 | 0 | +9P (was 0/0/10) |
 | Philly SP/PDF - GCC (SharePoint docs, GPT-4o) | 8 | 2 | 0 | unchanged |
 | Philly SP/PDF - Com (SharePoint docs, GPT-4.1) | 8 | 2 | 0 | unchanged |
 | Philly MCP - GCC (structured database, GPT-4o) | 4 | 2 | 4 | +2P (was 2/0/8) |
+| M365 Copilot (structured database, platform-assigned) | 2 | 3 | 5 | New agent |
 
 **Critical finding:** Address resolution was the #1 failure mode in Round 1. Across Prompts 2-4, agents attempted 15 address-to-parcel lookups and succeeded only twice (13% success rate). A dedicated fuzzy address search tool eliminated this entirely — zero address failures in Round 2 for agents that used it.
 
-**Finding #2: The model gap is the defining result.** GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. Same tools, same data, same backend. The tool improvements that lifted the Investigative Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent — it could not even execute the same queries. Government Cloud is locked to GPT-4o, and no amount of tool or prompt engineering can close this gap.
+**Finding #2: The model gap is the defining result.** GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. M365 Copilot (platform-assigned model) scores 2 out of 10. Same tools, same data, same backend. The tool improvements that lifted the Investigative Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent — it could not even execute the same queries. Government Cloud is locked to GPT-4o, and no amount of tool or prompt engineering can close this gap. (†Round 3 model validation confirmed that COM MCP's 10/10 score is identical on GPT-4.1 and GPT-5 Auto — the gap is GPT-4o vs everything above it.) M365 Copilot's failure modes differ from GPT-4o's — tool-level reliability issues and incorrect assumptions about data availability — but the result is the same: platform constraints limit agent performance.
 
 **Finding #3:** Aggregate queries (citywide stats, zip code comparisons) worked reliably for all MCP agents. Address-based queries failed reliably in Round 1 but were completely fixed by the address search tool in Round 2.
 
 ## What's Next
 
-Round 2 retesting is complete with 146 test runs across 4 rounds. The iterative improvement process has reached diminishing returns for GPT-4.1 agents — four agents are at 9-10/10. One issue remains:
+Testing is complete with 176 test runs across 6 rounds and 8 agents. The iterative improvement process has reached diminishing returns for GPT-4.1 agents — four agents are at 9-10/10. Three findings remain:
 
 1. **GCC MCP performance (4/10)** — GPT-4o cannot effectively use the same tools that GPT-4.1 agents use flawlessly. This is a platform constraint, not an engineering problem. Government Cloud organizations should plan for lower agent performance until GCC upgrades to a more capable model.
+2. **GPT-4.1 = GPT-5 Auto on this workload** — COM MCP scored 10/10 on both models. COM SP/PDF scored 8/2/0 on both. The model gap is GPT-4o vs everything above it, not a difference between newer models.
+3. **M365 Copilot (2/10)** — The zero-code M365 agent with a platform-assigned model scored worst of all MCP agents. Its failure modes differ from GPT-4o (tool reliability and incorrect data availability assumptions vs address resolution failures), but the impact is the same. When it works (P4 ownership chain, P6 top violators), the quality matches COM MCP — but it works only 20% of the time. The confirmation UX (showing each tool call for user approval) is a strong demo asset for enterprise security conversations.
 
 ## Pro-Code Agent Architectures
 
-Use Case 2 introduced two agents not available in Use Case 1: an Investigative Agent built with Semantic Kernel and OpenAI, and a Foundry Agent built with Azure AI Foundry. Both query the same structured database as the Copilot Studio agents but through custom-built agent loops rather than a low-code platform.
+Use Case 2 introduced three pro-code agents not available in Use Case 1: an Investigative Agent (OpenAI SDK), a Foundry Agent (Azure AI Foundry), and a Triage Agent (Semantic Kernel team-of-agents). All three query the same structured database through the same APIM gateway and Azure Functions — but they bypass the MCP server entirely. Each agent brings its own LLM orchestration layer and calls APIM directly.
 
-Results across 10 prompts and 4 test rounds show these agents share the same data access as Copilot Studio but differ in how they process results. The Investigative Agent achieved a perfect 10/10 — matching COM MCP as the only two agents with zero failures, up from 1/10 in Round 1. The Foundry Agent reached 9/10 and produced the best analytical moment in the entire evaluation (challenging a premise against source data on Prompt 10). The Triage Agent (Semantic Kernel team-of-agents) showed the most dramatic improvement arc in the evaluation — from 0/10 in Round 1 to 9/10 after four rounds of iterative sub-agent prompt improvements. All three pro-code agents use GPT-4.1, and all three now outperform every document-based agent.
+This is an important architectural distinction. The Web SPA and Copilot Studio MCP agents both use the MCP server Container App as a shared orchestration layer — it handles tool dispatch, the chat completions loop, and Azure OpenAI calls. The pro-code agents skip that layer. They call the same APIM endpoints with the same subscription key, but they manage their own tool-calling loops, their own Azure OpenAI connections, and their own agent logic. Same data, same backend, different orchestration.
+
+| Agent | Orchestration | Data Path |
+|---|---|---|
+| Web SPA | MCP Server `/chat` | MCP Server → APIM → Functions → SQL |
+| Copilot Studio MCP | MCP Server `/mcp` | MCP Server → APIM → Functions → SQL |
+| Investigative Agent | OpenAI SDK (custom loop) | Direct → APIM → Functions → SQL |
+| Foundry Agent | Azure AI Foundry | Direct → APIM → Functions → SQL |
+| Triage Agent | Semantic Kernel (team-of-agents) | Direct → APIM → Functions → SQL |
+
+Results across 10 prompts and 4 test rounds show these agents share the same data access as Copilot Studio but differ in how they process results. The Investigative Agent achieved a perfect 10/10 — matching COM MCP as the only two agents with zero failures, up from 1/10 in Round 1. The Foundry Agent reached 9/10 and produced the best analytical moment in the entire evaluation (challenging a premise against source data on Prompt 10). The Triage Agent showed the most dramatic improvement arc in the evaluation — from 0/10 in Round 1 to 9/10 after four rounds of iterative sub-agent prompt improvements. All three pro-code agents use GPT-4.1, and all three now outperform every document-based agent.
+
+The pro-code agents demonstrate what custom orchestration enables: the Triage Agent routes queries to specialized sub-agents (owner analysis, violation analysis, area analysis), the Foundry Agent challenged a prompt's premise against source data, and the Investigative Agent combined multiple tool calls in ways that Copilot Studio's built-in orchestration does not support. These capabilities come at the cost of more engineering — each agent required its own deployment, its own prompt tuning, and its own testing iterations.
 
 This is the question every technology leader faces: **build or buy?** The structured database versus document comparison answers "what data architecture do I need." The Copilot Studio versus pro-code comparison answers "what agent architecture do I need." Together, they form a complete decision framework for government AI adoption.
 
@@ -109,7 +124,7 @@ With the data layer corrected, Round 2 addressed how models interact with tools.
 
 | Agent | Round 1 | Final (Round 2) | Change |
 |-------|---------|---------|--------|
-| COM MCP (GPT-4.1) | 8P / 0Pa / 2F | **10P / 0Pa / 0F** | **PERFECT** |
+| COM MCP (GPT-5 Auto†) | 8P / 0Pa / 2F | **10P / 0Pa / 0F** | **PERFECT** |
 | Investigative Agent (GPT-4.1) | 1P / 0Pa / 9F | **10P / 0Pa / 0F** | **PERFECT** (+9P) |
 | Foundry Agent (GPT-4.1) | 4P / 0Pa / 6F | **9P / 1Pa / 0F** | +5P, zero failures |
 | Triage Agent (GPT-4.1, SK) | 0P / 0Pa / 10F | **9P / 1Pa / 0F** | +9P across 4 rounds |
@@ -156,6 +171,22 @@ This is not optional engineering overhead — it is the difference between a dem
 
 ---
 
-*Use Case 1: Complete (110 test runs + 15 Round 1 retests + 3 Round 2 retests). Use Case 2: Complete (70 Round 1 runs + 76 Round 2 retests across 3 takes). Total: 274 test runs across 2 use cases, 4 improvement rounds, 18 agent configurations.*
+*Use Case 1: Complete (110 test runs + 15 Round 1 retests + 3 Round 2 retests). Use Case 2: Complete (70 Round 1 runs + 76 Round 2 retests across 3 takes + 20 Round 3 model validation + 10 M365 Copilot). Total: 304 test runs across 2 use cases, 6 rounds, 19 agent configurations.*
+
+## Appendix: Agent Architecture Matrix
+
+Every agent hits the same backend (APIM → Functions → SQL). The only variables are who runs the LLM orchestration, how much code we write, and which model reasons over the results.
+
+| Agent | Orchestration | Our Code | Data Path | Model |
+|---|---|---|---|---|
+| **Custom Web SPA** | MCP Server `/chat` | Full stack (TypeScript) | MCP Server → APIM → Functions → SQL | GPT-4.1 |
+| **Copilot Studio MCP** | Copilot Studio (low-code) | Zero — auto-discovers `/mcp` tools | MCP Server → APIM → Functions → SQL | GPT-4o (GCC) / GPT-4.1 (Com) |
+| **M365 Copilot** | M365 Copilot (Teams/Outlook/Edge) | Zero — 3 JSON manifest files | MCP Server → APIM → Functions → SQL | Platform-assigned (no user control) |
+| **Foundry Agent** | Azure AI Agent Service | Minimal — create agent, point at `/mcp` | MCP Server → APIM → Functions → SQL | GPT-4.1 |
+| **Investigative Agent** | OpenAI SDK (TypeScript) | Full — we run the agentic loop | Direct → APIM → Functions → SQL | GPT-4.1 |
+| **Triage Agent** | Semantic Kernel HandoffOrchestration (C#) | Full — we run the agentic loop | Direct → APIM → Functions → SQL | GPT-4.1 |
+| **Copilot Studio SP/PDF** | Copilot Studio built-in RAG | Zero | SharePoint document library | GPT-4o (GCC) / GPT-4.1 (Com) |
+
+The spectrum runs from **zero code** (M365 Copilot: 3 JSON manifests) to **full code** (Investigative Agent: we write the entire agentic loop). Every point on this spectrum scored 9-10/10 with GPT-4.1 — the engineering investment changes what you can customize, not whether it works. The caveat: M365 Copilot (zero code, platform-assigned model) scored 2/10 — demonstrating that model selection matters as much as architecture. When you control the model (GPT-4.1), even zero-code agents like Copilot Studio achieve 10/10. When you don't, tool reliability suffers.
 
 *Detailed results: `use-case-1-testing.md` | `use-case-2-testing.md` | `improvements/improvements-round-1.md` | `improvements/improvements-round-2.md`*

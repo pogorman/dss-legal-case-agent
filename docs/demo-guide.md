@@ -333,3 +333,21 @@ What it exposes: A direct factual conflict between two documents about the same 
 - Do not bash SharePoint. The message is "different tools for different jobs."
 - SharePoint is great for unstructured narratives, policy documents, and memos.
 - When case data is structured, MCP gives precision that document search cannot match.
+
+## Appendix: Agent Architecture Matrix
+
+Every agent hits the same backend (APIM → Functions → SQL). The only variables are who runs the orchestration, how much code we write, and which model reasons over the results.
+
+| Agent | Orchestration | Our Code | Data Path | Model |
+|---|---|---|---|---|
+| **Custom Web SPA** | MCP Server `/chat` | Full stack (TypeScript) | MCP Server → APIM → Functions → SQL | GPT-4.1 |
+| **Copilot Studio MCP** | Copilot Studio (low-code) | Zero — auto-discovers `/mcp` tools | MCP Server → APIM → Functions → SQL | GPT-4o (GCC) / GPT-4.1 (Com) |
+| **M365 Copilot** | M365 Copilot (Teams/Outlook/Edge) | Zero — 3 JSON manifest files | MCP Server → APIM → Functions → SQL | Platform-assigned (no user control) |
+| **Foundry Agent** | Azure AI Agent Service | Minimal — create agent, point at `/mcp` | MCP Server → APIM → Functions → SQL | GPT-4.1 |
+| **Investigative Agent** | OpenAI SDK (TypeScript) | Full — we run the agentic loop | Direct → APIM → Functions → SQL | GPT-4.1 |
+| **Triage Agent** | Semantic Kernel HandoffOrchestration (C#) | Full — we run the agentic loop | Direct → APIM → Functions → SQL | GPT-4.1 |
+| **Copilot Studio SP/PDF** | Copilot Studio built-in RAG | Zero | SharePoint document library | GPT-4o (GCC) / GPT-4.1 (Com) |
+
+**Key talking point:** The spectrum runs from zero code (M365 Copilot: 3 JSON manifests) to full code (Investigative Agent: we write the entire agentic loop). Every point on this spectrum scored 9-10/10 with GPT-4.1. The engineering investment changes what you can customize, not whether it works. Note: M365 Copilot (platform-assigned model) scored 2/10 — model selection matters as much as architecture.
+
+**M365 Copilot demo talking point:** M365 Copilot shows each external tool call to the user and requires confirmation before executing. This is a strong differentiator for enterprise security conversations — it makes the MCP tool calls visible and explainable. For production, admins can pre-approve specific agents so actions execute without confirmation (admin pre-approval available since August 2025, or set `x-openai-isConsequential: false` in the manifest for read-only operations).

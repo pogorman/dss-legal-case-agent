@@ -4,7 +4,7 @@
 
 **Use Case 2: Investigative Analytics — Philly Poverty Profiteering**
 
-Real public data from the City of Philadelphia (34M rows, 584K properties, 1.6M violations). Five investigation PDF reports about GEENA LLC and two properties. Testing started 2026-03-07. **All 10 prompts complete across 7 agents (70 total responses). Round 2 retesting complete (53 runs). Round 2 Take 2 Triage Agent retest complete (10 runs). Total: 133 scored responses.**
+Real public data from the City of Philadelphia (34M rows, 584K properties, 1.6M violations). Five investigation PDF reports about GEENA LLC and two properties. Testing started 2026-03-07. **All 10 prompts complete across 8 agents (176 total responses). Round 2 retesting complete (53 runs). Round 2 Take 2 Triage Agent retest complete (10 runs). Round 2 Take 3 (13 runs). Round 3 model validation (20 runs). M365 Copilot testing (10 runs).**
 
 **Key early findings:**
 - Prompt 1 produced 3 different property counts (194, 330, 631) — scoring shifts from "correct vs incorrect" to "defensible, sourced answer"
@@ -31,15 +31,18 @@ Multiple agent configurations tested against 10 prompts comparing structured SQL
 | Agent Name | Backend | Model | Project | Status |
 |---|---|---|---|---|
 | Philly MCP - GCC | Copilot Studio - Philly MCP/SQL | GPT-4o | Philly Profiteering | Active |
-| Philly MCP - Com | Copilot Studio - Philly MCP/SQL | GPT-4.1 | Philly Profiteering | Active |
+| Philly MCP - Com | Copilot Studio - Philly MCP/SQL | GPT-4.1† | Philly Profiteering | Active |
 | Philly SP/PDF - GCC | Copilot Studio - SharePoint PDFs | GPT-4o | Philly Profiteering | Active |
 | Philly SP/PDF - Com | Copilot Studio - SharePoint PDFs | GPT-4.1 | Philly Profiteering | Active |
 | Investigative Agent | OpenAI (Web SPA) | GPT-4.1 | Philly Profiteering | Active |
 | Foundry Agent | Azure AI Foundry (Web SPA) | GPT-4.1 | Philly Profiteering | Active |
 | Triage Agent | Semantic Kernel team-of-agents (Web SPA) | GPT-4.1 | Philly Profiteering | Active |
+| M365 Copilot | M365 Copilot (Teams/Outlook/Edge) - Philly MCP | Platform-assigned | Philly Profiteering | Active |
 
 **Notes:**
-- GCC Copilot Studio locked to GPT-4o; Commercial uses GPT-4.1
+- GCC Copilot Studio locked to GPT-4o; Commercial uses GPT-4.1 (see † below)
+- † COM MCP Round 1-2 testing used GPT-5 Auto (Copilot Studio Commercial default). Discovered during Round 3 preparation. Agent reconfigured to GPT-4.1 and retested: identical 10/10. See "Round 3: Model Validation."
+- M365 Copilot uses the same `/mcp` endpoint as Copilot Studio — zero code, 3 JSON manifest files. Model is platform-assigned (no user control).
 - Investigative Agent, Foundry Agent, and Triage Agent are from the Philly Profiteering web SPA (mcp-apim project), not DSS
 - These three agents represent pro-code agent architectures (OpenAI chat, Azure AI Foundry, Semantic Kernel team-of-agents) vs Copilot Studio's low-code approach
 - Triage Agent uses a routing pattern: a triage agent dispatches to specialized sub-agents (OwnerAnalyst, ViolationAnalyst, etc.)
@@ -1327,30 +1330,31 @@ Scores reflect the most recent test run for each agent: Round 1 for doc agents (
 
 | Agent | Pass | Partial | Fail | Pass Rate | Round | Notes |
 |---|---|---|---|---|---|---|
-| **MCP - Com** | 10 | 0 | 0 | 100% | R2 T1 | **PERFECT SCORE.** search_properties fixed last 2 failures |
+| **MCP - Com** | 10 | 0 | 0 | 100% | R2 T1 | **PERFECT SCORE.** R1-R2 used GPT-5 Auto; retested GPT-4.1 in R3: same 10/10 |
 | **SP/PDF - Com** | 8 | 2 | 0 | 80% (10/10 usable) | R1 | Partial on P6, P9 (expected — can't do citywide). Zero failures. |
 | **SP/PDF - GCC** | 8 | 2 | 0 | 80% (10/10 usable) | R1 | Partial on P6, P9 (expected — can't do citywide). Zero failures. |
 | **Investigative Agent** | 10 | 0 | 0 | 100% | R2 T3 | **PERFECT SCORE.** P5 + P6 fixed by tool description + excludeGovernment |
 | **Foundry Agent** | 9 | 1 | 0 | 90% | R2 T3 | P5 fixed by FMV tool description. P1 remains Partial. |
 | **Triage Agent** | 9 | 1 | 0 | 90% | R2 T3 | Sub-agent improvements: 0→1→6→9 Pass across 4 rounds. P3 remains Partial. |
 | **MCP - GCC** | 4 | 2 | 4 | 40% | R2 T3 | GPT-4o couldn't execute P5/P6 retests. P6 regressed Partial→Fail. |
+| **M365 Copilot** | 2 | 3 | 5 | 20% | New | Platform-assigned model. Tool reliability issues beyond address resolution. |
 
 ### By Prompt
 
 Triage column shows R2 Take 3 results. All other agents show their latest round.
 
-| # | Prompt | SP/PDF GCC | SP/PDF Com | COM MCP | GCC MCP | Foundry | Investigative | Triage |
-|---|---|---|---|---|---|---|---|---|
-| 1 | GEENA LLC property count | Pass | Pass | Pass | Fail | Partial | Partial | **Pass** |
-| 2 | 4763 Griscom since purchase | Pass | Pass | Fail | Fail | Pass | Fail | **Pass** |
-| 3 | Assessment 2017 vs 2025 | Pass | Pass | Fail | Fail | Fail | Fail | Partial |
-| 4 | Ownership chain + sheriff sales | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
-| 5 | $146K FMV at 2004 sale | Pass | Pass | Pass | Fail | **Pass** | **Pass** | **Pass** |
-| 6 | Top 5 private violators | Partial | Partial | Pass | Fail | Pass | **Pass** | **Pass** |
-| 7 | Financial institutions + fates | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
-| 8 | Failed violations + investigator | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
-| 9 | Zip code 19104 vs 19132 | Partial | Partial | Pass | Pass | Pass | Pass | Partial |
-| 10 | Purchase discount % | Pass | Pass | Pass | Fail | Pass | Fail | **Pass** |
+| # | Prompt | SP/PDF GCC | SP/PDF Com | COM MCP | GCC MCP | Foundry | Investigative | Triage | M365 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | GEENA LLC property count | Pass | Pass | Pass | Fail | Partial | Partial | **Pass** | Partial |
+| 2 | 4763 Griscom since purchase | Pass | Pass | Fail | Fail | Pass | Fail | **Pass** | Fail |
+| 3 | Assessment 2017 vs 2025 | Pass | Pass | Fail | Fail | Fail | Fail | Partial | Fail |
+| 4 | Ownership chain + sheriff sales | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** | **Pass** |
+| 5 | $146K FMV at 2004 sale | Pass | Pass | Pass | Fail | **Pass** | **Pass** | **Pass** | Fail |
+| 6 | Top 5 private violators | Partial | Partial | Pass | Fail | Pass | **Pass** | **Pass** | **Pass** |
+| 7 | Financial institutions + fates | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** | Fail |
+| 8 | Failed violations + investigator | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** | Fail |
+| 9 | Zip code 19104 vs 19132 | Partial | Partial | Pass | Pass | Pass | Pass | Partial | Partial |
+| 10 | Purchase discount % | Pass | Pass | Pass | Fail | Pass | Fail | **Pass** | Partial |
 
 ### Key Patterns
 
@@ -1401,11 +1405,12 @@ The Investigative Agent (OpenAI chat), Foundry Agent (Azure AI Foundry), and Tri
 ### Danger Taxonomy (Updated from Use Case 1)
 
 1. **Critical: Wrong-entity analysis** — real data, wrong property. Agent confidently reports on a different address. (Investigative P2, GCC MCP P3, P7)
-2. **Critical: False negative** — data exists but agent claims it doesn't. 45 violations → "zero violations." (Triage P2/P8, multiple agents P3-P5)
-3. **Critical: Self-contradiction** — same agent, same property, different answers. (Foundry P2 vs P8: 45 → 0)
+2. **Critical: False negative** — data exists but agent claims it doesn't. 45 violations → "zero violations." (Triage P2/P8, M365 P2, multiple agents P3-P5)
+3. **Critical: Self-contradiction** — same agent, same property, different answers. (Foundry P2 vs P8: 45 → 0; M365 P4 vs P5: parcel works → "does NOT exist")
 4. **High: Non-deterministic address resolution** — 10+ different wrong parcel numbers across agents and prompts for 2 addresses
 5. **High: Wrong prompt answered** — agent responds to a previous question instead of the current one (Triage P7/P9, GCC MCP P10, Investigative P10)
-6. **Medium: Confident fabrication** — plausible but wrong narrative (Triage P3: tax-exempt explanation for a demolished building)
+6. **High: Incorrect data availability claim** — agent states data doesn't exist in the system when it does, never attempts the lookup. (M365 P7: "mortgage histories are not included" — they are in transfer records)
+7. **Medium: Confident fabrication** — plausible but wrong narrative (Triage P3: tax-exempt explanation for a demolished building)
 
 ### Recommendation
 
@@ -1415,4 +1420,110 @@ The GCC MCP agent (GPT-4o) remains at 4/10 despite receiving every tool and prom
 
 ---
 
-*Testing complete. 146 responses scored across 10 prompts, 7 agents, and 4 test rounds (Round 1: 70, Round 2 Take 1: 53, Round 2 Take 2: 10, Round 2 Take 3: 13). Two agents achieved perfect 10/10: COM MCP and Investigative Agent. GPT-4.1 agents average 9.5/10; GPT-4o agent: 4/10.*
+## Round 3: Model Validation (20 runs)
+
+During Round 3 preparation, we discovered that Commercial Copilot Studio defaults to GPT-5 Auto, not GPT-4.1. All COM MCP results from Rounds 1-2 used GPT-5 Auto. To validate the findings, two tests were run — same backend, same tools, different model configurations:
+
+1. **COM MCP reconfigured to GPT-4.1** — all 10 prompts retested
+2. **COM SP/PDF with GPT-5 Auto** — all 10 prompts tested as a new comparison point
+
+### COM MCP: GPT-5 Auto vs GPT-4.1
+
+| # | Prompt | GPT-5 Auto (R2) | GPT-4.1 (R3) |
+|---|--------|------------------|---------------|
+| 1 | GEENA LLC count + vacancy | Pass (330, 86.7%) | Pass (330, 86.7%) |
+| 2 | 4763 Griscom since purchase | Pass | Pass |
+| 3 | Assessment 2017 vs now | Pass | Pass |
+| 4 | Ownership chain | Pass | Pass (includes mortgage assignments) |
+| 5 | $146K FMV | Pass ($53,155.20) | Pass ($53,155.20) |
+| 6 | Top 5 violators | Pass | Pass (richer per-entity detail) |
+| 7 | Financial institutions | Pass | Pass |
+| 8 | Failed violations | Pass (45) | Pass (45) |
+| 9 | Zip code comparison | Pass | Pass |
+| 10 | Discount + assessment | Pass (35.6%) | Pass (35.6%) |
+
+**COM MCP: GPT-5 Auto 10/10, GPT-4.1 10/10. No performance difference on this workload.**
+
+GPT-4.1 responses were qualitatively similar — same facts, same parcel numbers, same calculations. The original 10/10 result was not inflated by GPT-5 Auto.
+
+### COM SP/PDF: GPT-5 Auto (new test)
+
+| # | Prompt | GPT-5 Auto | Score |
+|---|--------|------------|-------|
+| 1 | GEENA LLC count + vacancy | 194, 91.8% from report | Pass |
+| 2 | 4763 Griscom since purchase | Vacant lot, violations, demolition | Pass |
+| 3 | Assessment 2017 vs now | $56,900 → $24,800, demolition | Pass |
+| 4 | Ownership chain | Complete chain, 2 sheriff sales, doc IDs cited | Pass |
+| 5 | $146K FMV | $53,155, 275% calculation | Pass |
+| 6 | Top 5 violators | Only GEENA LLC — can't do citywide from docs | Partial |
+| 7 | Financial institutions | Complete institutional chain | Pass |
+| 8 | Failed violations | 45 failed, CLIP + Property Maintenance | Pass |
+| 9 | Zip code comparison | GEENA LLC properties only, not citywide | Partial |
+| 10 | Discount + assessment | 35.6%, $357,100 → $265,600 | Pass |
+
+**COM SP/PDF with GPT-5 Auto: 8P / 2Pa / 0F — identical to COM SP/PDF with GPT-4.1.** The 2 Partials (P6, P9) are structural limitations of document agents, unchanged by model.
+
+### Model Validation Finding
+
+The model gap that defines this evaluation is **GPT-4o vs everything above it**, not GPT-4.1 vs GPT-5 Auto:
+
+| Model | COM MCP | COM SP/PDF |
+|-------|---------|------------|
+| GPT-4o (GCC) | 4/10 | 8/10 |
+| GPT-4.1 | 10/10 | 8/10 |
+| GPT-5 Auto | 10/10 | 8/10 |
+
+GPT-4.1 is sufficient for perfect scores with the right tools. The bottleneck is GPT-4o, which cannot effectively use the same tools regardless of improvements. Organizations choosing between GPT-4.1 and GPT-5 Auto can expect equivalent agent performance on this class of workload.
+
+This round adds another dimension to the evaluation's core thesis: we are testing every combination of agent architecture, model, and data path against the same backend. Same APIM gateway, same Functions, same SQL. The only variables are who does the orchestration and which model reasons over the results.
+
+---
+
+---
+
+## M365 Copilot Testing (10 runs)
+
+M365 Copilot uses the same `/mcp` endpoint as Copilot Studio — zero code, 3 JSON manifest files. The model is platform-assigned (no user control). Unlike Copilot Studio, M365 Copilot presents each external tool call to the user for confirmation before executing — a "human in the loop" UX that can be disabled via admin pre-approval or the `x-openai-isConsequential` manifest property.
+
+### Results
+
+| # | Prompt | Score | Notes |
+|---|--------|-------|-------|
+| 1 | GEENA LLC count + vacancy | **Partial** | Got 330 properties (matches COM MCP), but entity network tool failed — no vacancy % |
+| 2 | 4763 Griscom since purchase | **Fail** | Found correct parcel (232452100) but all detail lookups returned no data. Concluded "no violations, no demolitions" — false negative (64 violations, 45 failed) |
+| 3 | Assessment 2017 vs now | **Fail** | Couldn't resolve address despite correct parcel in P2. Asked user for parcel number. |
+| 4 | Ownership chain | **Pass** | Outstanding. Correct parcel, complete 6-transfer chain, both sheriff sales, mortgage context, speculative pattern analysis |
+| 5 | $146K FMV | **Fail** | Claimed parcel 232452100 "does NOT exist in OPA system" despite using it successfully in P4. Sent user to property.phila.gov |
+| 6 | Top 5 private violators | **Pass** | Perfect match with ground truth. Best P6 of any agent — both LLCs and individuals, rich per-entity analysis, government properly excluded |
+| 7 | Financial institutions | **Fail** | Claimed "mortgage histories are not included in the city's datasets" — wrong. Transfer records contain the full institutional chain (COM MCP proved this in R1) |
+| 8 | Failed violations | **Fail** | Couldn't resolve address. Asked user for parcel number. |
+| 9 | Zip code comparison | **Partial** | Tools "failed to execute." Gave qualitative answer from general knowledge — correct direction (19132 worse) but zero database numbers |
+| 10 | Discount + assessment | **Partial** | Correctly calculated 35.6% discount. Couldn't resolve parcel for assessment trajectory. |
+
+**Final: 2 Pass / 3 Partial / 5 Fail — 20% Pass Rate**
+
+### M365 Copilot Analysis
+
+#### Tool reliability is the defining failure mode — not address resolution
+
+Unlike other agents whose failures were almost entirely address resolution, M365 Copilot exhibits a different failure pattern: tools that return no data even with the correct parcel (P2), tools that fail entirely (P1, P9), and incorrect assumptions about data availability (P7). The agent found parcel 232452100 in P2 and produced a perfect ownership chain from it in P4, but claimed the same parcel "does NOT exist" in P5. This is non-deterministic tool execution at the tool-call level, beyond the address-resolution non-determinism seen with other agents.
+
+#### The confirmation UX is a demo asset
+
+M365 Copilot shows each external tool call to the user and requires confirmation before executing. For demos, this is a strong differentiator — it makes the MCP tool calls visible and explainable rather than a black box. Enterprise security and compliance teams value this "human in the loop" pattern. For production, admins can pre-approve specific agents so actions execute without confirmation (available since August 2025).
+
+#### Platform-assigned model creates a black box
+
+Unlike every other agent in the evaluation where we know the model (GPT-4o or GPT-4.1), M365 Copilot's model is platform-assigned and not configurable. The 20% pass rate is the worst of any MCP agent, but we cannot attribute this to a specific model version. The failure modes (tool reliability, incorrect assumptions about data availability) differ from the GPT-4o agent's failures (address resolution, inability to execute queries), suggesting either a different model or different orchestration logic.
+
+#### When it works, it's excellent
+
+P4 (ownership chain) and P6 (top 5 violators) are among the best responses in the entire evaluation. P4 includes mortgage context and speculative pattern analysis. P6 matches COM MCP's quality exactly — the only two agents that included both LLCs and individuals with rich per-entity analysis. The problem isn't capability — it's consistency.
+
+#### New danger taxonomy entry
+
+M365 Copilot introduces a new failure mode not seen with other agents: **incorrect data availability claims** (P7). The agent confidently stated that mortgage histories "are not included in the city's datasets" when they are — COM MCP retrieved the complete institutional chain from the same transfer records. This is different from a false negative (where data is retrieved but not recognized); here the agent never attempted the lookup because it assumed the data didn't exist.
+
+---
+
+*Testing complete. 176 responses scored across 10 prompts, 8 agents, and 6 test rounds (Round 1: 70, Round 2 Take 1: 53, Round 2 Take 2: 10, Round 2 Take 3: 13, Round 3: 20, M365 Copilot: 10). Two agents achieved perfect 10/10: COM MCP and Investigative Agent. GPT-4.1 agents average 9.5/10 (validated by Round 3 retest); GPT-4o agent: 4/10; M365 Copilot (platform-assigned model): 2/10.*

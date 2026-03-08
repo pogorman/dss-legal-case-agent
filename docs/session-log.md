@@ -1257,6 +1257,24 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - Build PowerPoint deck from slide-outline.md (21 slides)
 - Demo dry run with new opening hook and closing (50-60 min target)
 - Fill in second demo reference in opening hook ("you may remember me from...")
-- Triage P3 (assessment history) — carry-forward
+- Upload Philly PDFs to SharePoint — carry-forward
+- Consider BFG Repo Cleaner for git history
+
+## Session 25b — 2026-03-08
+
+### What was done
+- **Triage P3 (assessment history) confirmed PASS** — O'G manually tested, agent resolved address to parcel 232452100, returned assessment values across multiple years with trend narrative
+- Triage Agent final score: **10P/0Pa/0F** (was 9P/1Pa/0F) — PERFECT, matching COM MCP and Investigative Agent
+- Updated all docs, PDFs, and MEMORY.md with corrected Triage score
+- Total test run count: 305 (was 304)
+
+### Decisions made
+- Triage P3 no longer a carry-forward item
+- Three agents now at perfect 10/10: COM MCP, Investigative Agent, Triage Agent
+
+### Open items
+- Build PowerPoint deck from slide-outline.md (21 slides)
+- Demo dry run with new opening hook and closing (50-60 min target)
+- Fill in second demo reference in opening hook ("you may remember me from...")
 - Upload Philly PDFs to SharePoint — carry-forward
 - Consider BFG Repo Cleaner for git history

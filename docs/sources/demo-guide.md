@@ -41,7 +41,7 @@ This demo is built around a five-level accuracy spectrum that helps government l
 
 | Stat | Value |
 |---|---|
-| Total test runs | 304 across 19 agent configurations |
+| Total test runs | 305 across 19 agent configurations |
 | Document agents (Levels 1-2) | 8/10 with zero engineering |
 | GPT-4.1 agents (Levels 3-5) | 9.5/10 average |
 | GPT-4o agents (GCC model gap) | 4/10 average |
@@ -62,7 +62,7 @@ This demo is built around a five-level accuracy spectrum that helps government l
 
 **Show the five-level spectrum slide.**
 
-> "We developed this framework after running 304 test evaluations across two government use cases and 19 different agent configurations. Not all AI use cases need the same level of accuracy, and not all agent architectures deliver it."
+> "We developed this framework after running 305 test evaluations across two government use cases and 19 different agent configurations. Not all AI use cases need the same level of accuracy, and not all agent architectures deliver it."
 
 > "Level 1: finding a policy document. Level 5: preparing facts for a legal hearing where a family's future depends on accuracy. Most agencies jump straight to Copilot without asking 'where does my use case fall on this spectrum?' Today I'll show you why that question matters."
 

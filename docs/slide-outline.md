@@ -8,7 +8,7 @@ Target: 21 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min
 
 **AI Agent Accuracy for Government: A Five-Level Framework**
 
-Subtitle: Findings from 304 Test Runs Across 19 Agent Configurations
+Subtitle: Findings from 305 Test Runs Across 19 Agent Configurations
 
 Visual: Clean title slide with agency-appropriate branding
 
@@ -153,7 +153,7 @@ Speaker notes: "Connect to daily experience: Copilot helps you draft an email --
 
 Visual: Severity ladder or risk matrix, color-coded red to yellow
 
-Talking point: "These are not hypothetical. We documented each one across 304 test runs."
+Talking point: "These are not hypothetical. We documented each one across 305 test runs."
 
 ---
 
@@ -174,18 +174,18 @@ Talking point: "Every organization will go through these rounds, in this order."
 
 ## Slide 12: Results After Iteration
 
-**Four agents reached 9-10 out of 10 after iterative improvement**
+**Four agents reached 9-10 out of 10 after iterative improvement (three at perfect 10)**
 
 | Agent | Round 1 | Final | Rounds |
 |---|---|---|---|
 | Commercial MCP (Copilot Studio) | 8/10 | 10/10 | 2 |
 | Investigative Agent (OpenAI SDK) | 1/10 | 10/10 | 2 |
 | Foundry Agent (Azure AI Foundry) | 4/10 | 9/10 | 2 |
-| Triage Agent (Semantic Kernel) | 0/10 | 9/10 | 4 |
+| Triage Agent (Semantic Kernel) | 0/10 | 10/10 | 5 |
 
 Visual: Improvement arc showing Round 1 baseline to final score
 
-Talking point: "The Triage Agent took four rounds. The investment is real -- but so are the results."
+Talking point: "The Triage Agent took five rounds to reach a perfect score. The investment is real -- but so are the results."
 
 ---
 

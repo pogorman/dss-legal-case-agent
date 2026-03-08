@@ -77,7 +77,7 @@ class ExecutivePDF(FPDF):
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, sanitize_text("Confidential  |  March 2026  |  304 test runs across 19 agent configurations"), align="C")
+        self.cell(0, 4, sanitize_text("Confidential  |  March 2026  |  305 test runs across 19 agent configurations"), align="C")
 
     # -- Helpers --------------------------------------------------------------
     def section_title(self, text):
@@ -234,13 +234,13 @@ def build_pdf():
     pdf.multi_cell(0, 6.5, sanitize_text(
         "Not all AI use cases require the same level of accuracy, and not all agent "
         "architectures deliver it. This report presents a five-level framework based on "
-        "304 empirical test runs across 19 agent configurations and two government use cases."
+        "305 empirical test runs across 19 agent configurations and two government use cases."
     ), align="C")
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("304 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  6 testing rounds"),
+    pdf.cell(0, 7, sanitize_text("305 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  6 testing rounds"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -380,7 +380,7 @@ def build_pdf():
 
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical -- each was documented across 304 test runs."
+        "not hypothetical -- each was documented across 305 test runs."
     )
 
     danger_headers = ["Severity", "Failure Mode", "Description"]
@@ -447,7 +447,7 @@ def build_pdf():
     pdf.section_title("The Evidence")
 
     pdf.body_text(
-        "This framework is grounded in 304 empirical test runs across two government "
+        "This framework is grounded in 305 empirical test runs across two government "
         "use cases, 19 agent configurations, and six testing rounds."
     )
 
@@ -484,7 +484,7 @@ def build_pdf():
         ["Investigative Agent", "--", "10/10", "GPT-4.1"],
         ["Copilot Studio MCP (Commercial)", "8/10", "10/10", "GPT-4.1"],
         ["Foundry Agent", "--", "9/10", "GPT-4.1"],
-        ["Triage Agent", "--", "9/10", "GPT-4.1"],
+        ["Triage Agent", "--", "10/10", "GPT-4.1"],
         ["Copilot Studio MCP (Gov Cloud)", "9/10", "4/10", "GPT-4o"],
         ["SharePoint/PDF (Commercial)", "8/10", "8/10", "GPT-4.1"],
         ["SharePoint/PDF (Gov Cloud)", "3-8/10", "8/10", "GPT-4o"],
@@ -533,7 +533,7 @@ def build_pdf():
         ["Commercial MCP", "8/10", "10/10", "PERFECT"],
         ["Investigative Agent", "1/10", "10/10", "PERFECT (+9)"],
         ["Foundry Agent", "4/10", "9/10", "+5, zero failures"],
-        ["Triage Agent (SK)", "0/10", "9/10", "+9 across 4 rounds"],
+        ["Triage Agent (SK)", "0/10", "10/10", "+10 across 5 rounds"],
         ["Gov Cloud MCP", "2/10", "4/10", "+2 (model-limited)"],
     ]
     pdf.styled_table(imp_headers, imp_rows, imp_widths, font_size=8)
@@ -635,11 +635,11 @@ def build_pdf():
         "the cost of building it was trivial."
     )
 
-    pdf.subsection_title("3. The most complex agent needed four rounds of iteration")
+    pdf.subsection_title("3. The most complex agent needed five rounds to reach perfection")
     pdf.body_text(
         "The Semantic Kernel team-of-agents pattern started at 0 out of 10 and reached "
-        "9 out of 10, but only after four rounds of sub-agent prompt engineering. A simpler "
-        "Copilot Studio agent scored 8 out of 10 with no customization at all."
+        "a perfect 10 out of 10, but only after five rounds of sub-agent prompt engineering. "
+        "A simpler Copilot Studio agent scored 8 out of 10 with no customization at all."
     )
 
     pdf.subsection_title("4. The model retrieved the answer and did not recognize it")
@@ -683,7 +683,7 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5, sanitize_text(
-        "Based on 304 test runs across 2 government use cases, 19 agent configurations, "
+        "Based on 305 test runs across 2 government use cases, 19 agent configurations, "
         "6 testing rounds, and 3 rounds of iterative improvement."
     ), align="C")
 

@@ -1,73 +1,74 @@
 """
-Generate demo-guide.pdf from docs/sources/demo-guide.md.
-Reads the markdown source and renders it as a styled PDF using fpdf2.
+Generate demo-guide.pdf with hardcoded content (no markdown file dependency).
+Uses fpdf2 -- same self-contained pattern as generate-executive-pdf.py.
 
 Usage: python scripts/generate-demo-guide-pdf.py
-Output: docs/demo-guide.pdf
+Output: docs/pdf/demo-guide.pdf
 """
 
 from fpdf import FPDF
 import os
-import re
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-MD_PATH = os.path.join(SCRIPT_DIR, "..", "docs", "sources", "demo-guide.md")
-OUT_PATH = os.path.join(SCRIPT_DIR, "..", "docs", "demo-guide.pdf")
 
-# -- Colors ------------------------------------------------------------------
-NAVY = (22, 48, 82)
-ACCENT = (41, 98, 163)
-DARK = (40, 40, 40)
-MED = (90, 90, 90)
-LIGHT = (130, 130, 130)
-WHITE = (255, 255, 255)
+def sanitize_text(text):
+    """Replace Unicode characters that Helvetica cannot render."""
+    return (
+        text
+        .replace("\u2014", "--")    # em dash
+        .replace("\u2013", "-")     # en dash
+        .replace("\u2018", "'")     # left single quote
+        .replace("\u2019", "'")     # right single quote
+        .replace("\u201c", '"')     # left double quote
+        .replace("\u201d", '"')     # right double quote
+        .replace("\u2026", "...")   # ellipsis
+        .replace("\u2192", "->")   # right arrow
+        .replace("\u2022", "-")    # bullet
+        .replace("\u2003", " ")    # em space
+    )
+
+
+# -- Color palette -----------------------------------------------------------
+NAVY    = (22, 48, 82)
+ACCENT  = (41, 98, 163)
+DARK    = (40, 40, 40)
+MED     = (90, 90, 90)
+LIGHT   = (130, 130, 130)
+WHITE   = (255, 255, 255)
+ROW_ALT = (241, 245, 249)
+ROW_WHT = (255, 255, 255)
+TABLE_HEADER_BG = (22, 48, 82)
+TABLE_HEADER_FG = (255, 255, 255)
 DIVIDER = (200, 210, 220)
+GREEN   = (34, 120, 69)
+AMBER   = (180, 130, 20)
+RED     = (185, 45, 45)
+GRAY_BG = (248, 249, 250)
+CHECK_COLOR = (41, 98, 163)
 CODE_BG = (245, 245, 245)
 CODE_BORDER = (220, 220, 220)
 QUOTE_BG = (248, 249, 252)
 QUOTE_BORDER = (41, 98, 163)
-TABLE_HEADER_BG = (22, 48, 82)
-TABLE_HEADER_FG = (255, 255, 255)
-ROW_ALT = (241, 245, 249)
-ROW_WHT = (255, 255, 255)
-CHECK_COLOR = (41, 98, 163)
 
-
-def sanitize(text):
-    """Replace Unicode chars Helvetica can't render."""
-    return (
-        text
-        .replace("\u2014", "--")
-        .replace("\u2013", "-")
-        .replace("\u2018", "'")
-        .replace("\u2019", "'")
-        .replace("\u201c", '"')
-        .replace("\u201d", '"')
-        .replace("\u2026", "...")
-        .replace("\u2192", "->")
-        .replace("\u2022", "-")
-        .replace("\u2003", " ")
-    )
-
-
-def strip_md_bold(text):
-    """Remove ** markers and return (cleaned_text, [(start, end), ...]) ranges."""
-    return re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+# Level colors
+LVL1_COLOR = (76, 175, 80)    # green
+LVL2_COLOR = (139, 195, 74)   # light green
+LVL3_COLOR = (255, 193, 7)    # amber
+LVL4_COLOR = (255, 87, 34)    # deep orange
+LVL5_COLOR = (211, 47, 47)    # red
 
 
 class DemoGuidePDF(FPDF):
     def __init__(self):
         super().__init__(orientation="P", unit="mm", format="Letter")
-        self.set_auto_page_break(auto=True, margin=22)
+        self.set_auto_page_break(auto=True, margin=25)
 
     def header(self):
         if self.page_no() == 1:
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, "AI Agent Accuracy Spectrum -- Demo Guide", align="L")
-        self.cell(0, 6, f"Page {self.page_no()}", align="R",
-                  new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum -- Demo Guide"), align="L")
+        self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
         self.ln(4)
@@ -75,80 +76,158 @@ class DemoGuidePDF(FPDF):
     def footer(self):
         if self.page_no() == 1:
             return
-        self.set_y(-16)
+        self.set_y(-18)
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, "Confidential  |  March 2026", align="C")
+        self.cell(0, 4, sanitize_text("Confidential | March 2026"), align="C")
 
+    # -- Helpers --------------------------------------------------------------
+    def section_title(self, text):
+        self.ln(4)
+        self.set_font("Helvetica", "B", 15)
+        self.set_text_color(*NAVY)
+        self.cell(0, 9, sanitize_text(text), new_x="LMARGIN", new_y="NEXT")
+        self.set_draw_color(*ACCENT)
+        self.set_line_width(0.6)
+        self.line(self.l_margin, self.get_y(), self.l_margin + 50, self.get_y())
+        self.set_line_width(0.2)
+        self.ln(5)
 
-def render_inline_markdown(pdf, text, base_style="", base_size=9.5, color=DARK):
-    """Render text with **bold** inline spans using write()."""
-    text = sanitize(text)
-    pdf.set_text_color(*color)
-    parts = re.split(r"(\*\*.+?\*\*)", text)
-    for part in parts:
-        if part.startswith("**") and part.endswith("**"):
-            pdf.set_font("Helvetica", "B", base_size)
-            pdf.write(5.5, part[2:-2])
-        else:
-            pdf.set_font("Helvetica", base_style, base_size)
-            pdf.write(5.5, part)
+    def subsection_title(self, text):
+        self.ln(2)
+        self.set_font("Helvetica", "B", 11)
+        self.set_text_color(*ACCENT)
+        self.cell(0, 7, sanitize_text(text), new_x="LMARGIN", new_y="NEXT")
+        self.ln(1)
 
+    def body_text(self, text, bold_lead=None):
+        text = sanitize_text(text)
+        if bold_lead:
+            self.set_font("Helvetica", "B", 9.5)
+            self.set_text_color(*DARK)
+            self.write(5.5, sanitize_text(bold_lead) + " ")
+        self.set_font("Helvetica", "", 9.5)
+        self.set_text_color(*DARK)
+        self.multi_cell(0, 5.5, text)
+        self.ln(2)
 
-def parse_table(lines):
-    """Parse markdown table lines into headers and rows."""
-    rows = []
-    for line in lines:
-        line = line.strip()
-        if line.startswith("|") and line.endswith("|"):
-            cells = [c.strip() for c in line[1:-1].split("|")]
-            # Skip separator rows (|---|---|)
-            if all(re.match(r"^-+$", c) or c == "" for c in cells):
-                continue
-            rows.append(cells)
-    if len(rows) < 2:
-        return None, None
-    return rows[0], rows[1:]
+    def bullet(self, text, bold_lead=None, indent=8):
+        text = sanitize_text(text)
+        x = self.get_x()
+        self.set_x(x + indent)
+        self.set_font("Helvetica", "", 9.5)
+        self.set_text_color(*MED)
+        self.write(5.5, "- ")
+        if bold_lead:
+            self.set_font("Helvetica", "B", 9.5)
+            self.set_text_color(*DARK)
+            self.write(5.5, sanitize_text(bold_lead) + "  ")
+        self.set_font("Helvetica", "", 9.5)
+        self.set_text_color(*DARK)
+        self.multi_cell(self.w - self.r_margin - self.get_x(), 5.5, text)
+        self.ln(1)
 
+    def checkbox(self, text, checked=False, indent=8):
+        """Render a checkbox list item with [ ] or [x] marker."""
+        text = sanitize_text(text)
+        x = self.get_x()
+        self.set_x(x + indent)
+        self.set_font("Helvetica", "", 9.5)
+        marker = "[x]" if checked else "[ ]"
+        self.set_text_color(*CHECK_COLOR if not checked else MED)
+        self.write(5.5, marker + "  ")
+        self.set_text_color(*DARK)
+        self.set_font("Helvetica", "", 9.5)
+        self.multi_cell(self.w - self.r_margin - self.get_x(), 5.5, text)
+        self.ln(1)
 
-def render_table(pdf, headers, rows):
-    """Render a simple table."""
-    n_cols = len(headers)
-    usable_w = pdf.w - pdf.l_margin - pdf.r_margin
-    col_w = usable_w / n_cols
+    def styled_table(self, headers, rows, col_widths, row_height=6, font_size=7.5):
+        self.set_font("Helvetica", "B", font_size)
+        self.set_fill_color(*TABLE_HEADER_BG)
+        self.set_text_color(*TABLE_HEADER_FG)
+        for i, h in enumerate(headers):
+            self.cell(col_widths[i], row_height + 1, sanitize_text(h), border=0, align="C", fill=True)
+        self.ln()
+        self.set_font("Helvetica", "", font_size)
+        for r_idx, row in enumerate(rows):
+            bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
+            self.set_fill_color(*bg)
+            for i, val in enumerate(row):
+                self.set_text_color(*DARK)
+                self.cell(col_widths[i], row_height, sanitize_text(val), border=0,
+                          align="C" if i > 0 else "L", fill=True)
+            self.ln()
 
-    # Header
-    pdf.set_font("Helvetica", "B", 7.5)
-    pdf.set_fill_color(*TABLE_HEADER_BG)
-    pdf.set_text_color(*TABLE_HEADER_FG)
-    for h in headers:
-        pdf.cell(col_w, 7, sanitize(h), border=0, align="C", fill=True)
-    pdf.ln()
+    def callout_box(self, title, text, height=32):
+        self.set_fill_color(*GRAY_BG)
+        self.set_draw_color(*ACCENT)
+        box_y = self.get_y()
+        self.rect(self.l_margin, box_y, self.w - self.l_margin - self.r_margin, height, "FD")
+        self.set_xy(self.l_margin + 6, box_y + 5)
+        self.set_font("Helvetica", "B", 11)
+        self.set_text_color(*NAVY)
+        self.cell(0, 7, sanitize_text(title))
+        self.set_xy(self.l_margin + 6, box_y + 14)
+        self.set_font("Helvetica", "", 10)
+        self.set_text_color(*DARK)
+        self.multi_cell(self.w - self.l_margin - self.r_margin - 12, 6, sanitize_text(text))
+        self.set_y(box_y + height + 4)
 
-    # Rows
-    pdf.set_font("Helvetica", "", 7.5)
-    for r_idx, row in enumerate(rows):
-        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
-        pdf.set_fill_color(*bg)
-        pdf.set_text_color(*DARK)
-        for i, cell in enumerate(row):
-            align = "L" if i == 0 else "C"
-            pdf.cell(col_w, 6, sanitize(cell), border=0, align=align, fill=True)
-        pdf.ln()
-    pdf.ln(2)
+    def blockquote(self, text):
+        """Render a blockquote with italic text and a left accent bar."""
+        text = sanitize_text(text)
+        y_start = self.get_y()
+        self.set_x(self.l_margin + 6)
+        self.set_font("Helvetica", "I", 9)
+        self.set_text_color(*MED)
+        cell_w = self.w - self.l_margin - self.r_margin - 12
+        self.multi_cell(cell_w, 5, text)
+        y_end = self.get_y()
+        # Draw accent bar
+        self.set_draw_color(*QUOTE_BORDER)
+        self.set_line_width(0.8)
+        self.line(self.l_margin + 3, y_start, self.l_margin + 3, y_end)
+        self.set_line_width(0.2)
+        self.ln(2)
+
+    def code_block(self, lines):
+        """Render a code block with gray background."""
+        y_start = self.get_y()
+        block_h = len(lines) * 4.5 + 6
+        if y_start + block_h > self.h - 25:
+            self.add_page()
+            y_start = self.get_y()
+        self.set_fill_color(*CODE_BG)
+        self.set_draw_color(*CODE_BORDER)
+        self.rect(self.l_margin + 4, y_start,
+                  self.w - self.l_margin - self.r_margin - 8,
+                  block_h, "FD")
+        self.set_xy(self.l_margin + 8, y_start + 3)
+        self.set_font("Courier", "", 8)
+        self.set_text_color(*DARK)
+        for cl in lines:
+            self.cell(0, 4.5, sanitize_text(cl), new_x="LMARGIN", new_y="NEXT")
+            self.set_x(self.l_margin + 8)
+        self.set_y(y_start + block_h + 2)
+
+    def horizontal_rule(self):
+        """Draw a horizontal divider line."""
+        self.ln(2)
+        self.set_draw_color(*DIVIDER)
+        self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
+        self.ln(4)
 
 
 def build_pdf():
-    with open(MD_PATH, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-
     pdf = DemoGuidePDF()
     pdf.set_margins(20, 20, 20)
 
-    # ── Cover page ──────────────────────────────────────────────────────
+    # ====================================================================
+    # COVER PAGE
+    # ====================================================================
     pdf.add_page()
     pdf.set_fill_color(*NAVY)
     pdf.rect(0, 0, pdf.w, 100, "F")
@@ -171,13 +250,13 @@ def build_pdf():
     pdf.set_y(80)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "Presenter Guide  |  March 2026", align="C",
+    pdf.cell(0, 7, "Presenter Guide | March 2026", align="C",
              new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_y(115)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
-    pdf.multi_cell(0, 6, sanitize(
+    pdf.multi_cell(0, 6, sanitize_text(
         "A five-level framework for demonstrating AI agent accuracy "
         "across government use cases. Includes demo script, talking points, "
         "timing guide, Q&A handling, and reference appendices."
@@ -186,221 +265,840 @@ def build_pdf():
     pdf.set_y(145)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  304 test runs",
+    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  305 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
-    # ── Render markdown body ────────────────────────────────────────────
+    # ====================================================================
+    # THE FRAMEWORK
+    # ====================================================================
     pdf.add_page()
+    pdf.section_title("The Framework")
 
-    i = 0
-    in_code_block = False
-    code_lines = []
-    in_table = False
-    table_lines = []
+    pdf.body_text(
+        "This demo is built around a five-level accuracy spectrum that helps "
+        "government leaders decide where AI agents are safe to deploy aggressively, "
+        "where they need guardrails, and where human review is non-negotiable."
+    )
 
-    # Skip the first H1 line (already on cover)
-    while i < len(lines) and not lines[i].startswith("# "):
-        i += 1
-    if i < len(lines):
-        i += 1  # skip the H1
+    fw_headers = ["Level", "Name", "Stakes", "Key Question"]
+    fw_widths = [16, 34, 42, 78]
+    fw_rows = [
+        ["1", "Information Discovery", "Minor inconvenience",
+         '"Help me find the right document"'],
+        ["2", "Summarization", "Wasted time",
+         '"Summarize this report for my briefing"'],
+        ["3", "Operational Support", "Misallocated resources",
+         '"Show me the portfolio-level picture"'],
+        ["4", "Investigative", "Missed evidence",
+         '"Cross-reference these records"'],
+        ["5", "Legal/Adjudicative", "Wrong legal outcome",
+         '"Prepare the facts for this hearing"'],
+    ]
+    pdf.styled_table(fw_headers, fw_rows, fw_widths, font_size=8)
 
-    while i < len(lines):
-        line = lines[i].rstrip("\n")
-        raw = line
+    pdf.ln(4)
+    pdf.body_text(
+        "The story arc: Start where AI is easy and reliable. Escalate to where "
+        "engineering decisions determine success or failure. End with the "
+        "trust-but-verify moment that makes you credible.",
+        bold_lead="The story arc:"
+    )
 
-        # ── Code block toggle ──────────────────────────────────────
-        if line.strip().startswith("```"):
-            if in_code_block:
-                # End code block — render it
-                if code_lines:
-                    y_start = pdf.get_y()
-                    block_h = len(code_lines) * 4.5 + 6
-                    if y_start + block_h > pdf.h - 25:
-                        pdf.add_page()
-                        y_start = pdf.get_y()
-                    pdf.set_fill_color(*CODE_BG)
-                    pdf.set_draw_color(*CODE_BORDER)
-                    pdf.rect(pdf.l_margin + 4, y_start,
-                             pdf.w - pdf.l_margin - pdf.r_margin - 8,
-                             block_h, "FD")
-                    pdf.set_xy(pdf.l_margin + 8, y_start + 3)
-                    pdf.set_font("Courier", "", 8)
-                    pdf.set_text_color(*DARK)
-                    for cl in code_lines:
-                        pdf.cell(0, 4.5, sanitize(cl), new_x="LMARGIN", new_y="NEXT")
-                        pdf.set_x(pdf.l_margin + 8)
-                    pdf.set_y(y_start + block_h + 2)
-                code_lines = []
-                in_code_block = False
-            else:
-                in_code_block = True
-            i += 1
-            continue
+    pdf.horizontal_rule()
 
-        if in_code_block:
-            code_lines.append(line)
-            i += 1
-            continue
+    # ====================================================================
+    # DEMO URLS
+    # ====================================================================
+    pdf.section_title("Demo URLs")
 
-        # ── Table detection ────────────────────────────────────────
-        if line.strip().startswith("|") and line.strip().endswith("|"):
-            if not in_table:
-                in_table = True
-                table_lines = []
-            table_lines.append(line)
-            i += 1
-            continue
-        elif in_table:
-            # End of table — render
-            headers, rows = parse_table(table_lines)
-            if headers and rows:
-                render_table(pdf, headers, rows)
-            in_table = False
-            table_lines = []
-            # Don't skip this line, fall through to process it
+    pdf.bullet("https://happy-wave-016cd330f.1.azurestaticapps.net",
+               bold_lead="DSS Web App:")
+    pdf.bullet("https://dss-case-agent.victoriouspond-48a6f41b.eastus2.azurecontainerapps.io/mcp",
+               bold_lead="MCP Endpoint:")
+    pdf.bullet("2024-DR-42-0892 (CPS, Webb/Holloway)",
+               bold_lead="Primary Case:")
+    pdf.bullet("2024-DR-15-0341 (TPR, Price)",
+               bold_lead="Secondary Case:")
 
-        # ── Horizontal rule ────────────────────────────────────────
-        if line.strip() == "---":
-            pdf.ln(2)
-            pdf.set_draw_color(*DIVIDER)
-            pdf.line(pdf.l_margin, pdf.get_y(),
-                     pdf.w - pdf.r_margin, pdf.get_y())
-            pdf.ln(4)
-            i += 1
-            continue
+    pdf.horizontal_rule()
 
-        # ── Empty line ─────────────────────────────────────────────
-        if line.strip() == "":
-            pdf.ln(2)
-            i += 1
-            continue
+    # ====================================================================
+    # PRE-DEMO CHECKLIST
+    # ====================================================================
+    pdf.section_title("Pre-Demo Checklist")
 
-        # ── H1 ─────────────────────────────────────────────────────
-        if line.startswith("# "):
-            pdf.add_page()
-            pdf.set_font("Helvetica", "B", 18)
-            pdf.set_text_color(*NAVY)
-            pdf.cell(0, 11, sanitize(line[2:].strip()),
-                     new_x="LMARGIN", new_y="NEXT")
-            pdf.set_draw_color(*NAVY)
-            pdf.set_line_width(0.6)
-            pdf.line(pdf.l_margin, pdf.get_y(),
-                     pdf.w - pdf.r_margin, pdf.get_y())
-            pdf.set_line_width(0.2)
-            pdf.ln(5)
-            i += 1
-            continue
+    pdf.checkbox("Sign into SWA URL 10 minutes before")
+    pdf.checkbox('Click "Warm Up" button to prime the cold-start chain')
+    pdf.checkbox("Have SharePoint agent open in a separate browser tab (for Level 2 comparison)")
+    pdf.checkbox("Have sharepoint-docs/Demo_Comparison_Prompts.md open for reference")
+    pdf.checkbox("Know the case numbers: 2024-DR-42-0892 (CPS) and 2024-DR-15-0341 (TPR)")
+    pdf.checkbox("Have the slide deck open for the framework overview")
+    pdf.checkbox("Test that the chat widget responds before the audience arrives")
 
-        # ── H2 ─────────────────────────────────────────────────────
-        if line.startswith("## "):
-            pdf.ln(4)
-            pdf.set_font("Helvetica", "B", 14)
-            pdf.set_text_color(*NAVY)
-            pdf.cell(0, 9, sanitize(line[3:].strip()),
-                     new_x="LMARGIN", new_y="NEXT")
-            pdf.set_draw_color(*ACCENT)
-            pdf.set_line_width(0.5)
-            pdf.line(pdf.l_margin, pdf.get_y(),
-                     pdf.l_margin + 45, pdf.get_y())
-            pdf.set_line_width(0.2)
-            pdf.ln(4)
-            i += 1
-            continue
+    pdf.horizontal_rule()
 
-        # ── H3 ─────────────────────────────────────────────────────
-        if line.startswith("### "):
-            pdf.ln(3)
-            pdf.set_font("Helvetica", "B", 11)
-            pdf.set_text_color(*ACCENT)
-            pdf.cell(0, 7, sanitize(line[4:].strip()),
-                     new_x="LMARGIN", new_y="NEXT")
-            pdf.ln(2)
-            i += 1
-            continue
+    # ====================================================================
+    # KEY STATS TO MEMORIZE
+    # ====================================================================
+    pdf.section_title("Key Stats to Memorize")
 
-        # ── Blockquote ─────────────────────────────────────────────
-        if line.strip().startswith("> "):
-            quote_text = line.strip()[2:]
-            # Collect continuation lines
-            while (i + 1 < len(lines) and
-                   lines[i + 1].strip().startswith("> ")):
-                i += 1
-                quote_text += " " + lines[i].strip()[2:]
+    stats_headers = ["Stat", "Value"]
+    stats_widths = [100, 70]
+    stats_rows = [
+        ["Total test runs", "305 across 19 agent configurations"],
+        ["Document agents (Levels 1-2)", "8/10 with zero engineering"],
+        ["GPT-4.1 agents (Levels 3-5)", "9.5/10 average"],
+        ["GPT-4o agents (GCC model gap)", "4/10 average"],
+        ["One fuzzy search tool", "13% to 100% accuracy"],
+        ["Document agents on skeletal survey", "7 of 8 reproduced a misleading finding"],
+    ]
+    pdf.styled_table(stats_headers, stats_rows, stats_widths, font_size=8)
 
-            y_start = pdf.get_y()
-            pdf.set_x(pdf.l_margin + 6)
-            pdf.set_font("Helvetica", "I", 9)
-            pdf.set_text_color(*MED)
-            cell_w = pdf.w - pdf.l_margin - pdf.r_margin - 12
-            pdf.multi_cell(cell_w, 5, sanitize(strip_md_bold(quote_text)))
-            y_end = pdf.get_y()
+    # ====================================================================
+    # DEMO FLOW
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Demo Flow")
 
-            # Draw quote bar
-            pdf.set_draw_color(*QUOTE_BORDER)
-            pdf.set_line_width(0.8)
-            pdf.line(pdf.l_margin + 3, y_start, pdf.l_margin + 3, y_end)
-            pdf.set_line_width(0.2)
-            pdf.ln(2)
-            i += 1
-            continue
+    # -- Opening: The Hook --
+    pdf.subsection_title("Opening: The Hook (3-4 minutes, no product)")
 
-        # ── Checkbox list item ─────────────────────────────────────
-        if re.match(r"^- \[[ x]\] ", line.strip()):
-            checked = "[x]" in line
-            text = re.sub(r"^- \[[ x]\] ", "", line.strip())
-            pdf.set_x(pdf.l_margin + 6)
-            pdf.set_font("Helvetica", "", 9.5)
-            pdf.set_text_color(*CHECK_COLOR if not checked else MED)
-            marker = "[x]" if checked else "[ ]"
-            pdf.write(5.5, marker + "  ")
-            pdf.set_text_color(*DARK)
-            pdf.set_font("Helvetica", "", 9.5)
-            pdf.multi_cell(pdf.w - pdf.r_margin - pdf.get_x(), 5.5,
-                           sanitize(strip_md_bold(text)))
-            pdf.ln(1)
-            i += 1
-            continue
+    pdf.blockquote(
+        '"Some of you may remember me from such demos as the delegation demo, '
+        "or the [insert another landmark demo here]. And there's one thing those "
+        "demos have in common with this one: I like to build test harnesses that "
+        "demonstrate the different capabilities of our technology in real-world "
+        "use cases that my customers care about. And what's funny is -- both this "
+        "demo and the delegation demo deal with the same fundamental topic: "
+        'accuracy."'
+    )
 
-        # ── Bullet point ───────────────────────────────────────────
-        if line.strip().startswith("- "):
-            text = line.strip()[2:]
-            pdf.set_x(pdf.l_margin + 6)
-            pdf.set_font("Helvetica", "", 9.5)
-            pdf.set_text_color(*MED)
-            pdf.write(5.5, "- ")
-            render_inline_markdown(pdf, text, base_size=9.5)
-            pdf.ln(5.5)
-            pdf.ln(1)
-            i += 1
-            continue
+    pdf.blockquote(
+        '"Before we dive in, let me tell you what this demo is and what it '
+        "isn't. It's a way to show you a process and methods -- with real-world "
+        "examples -- for making your agents better. It is not a demo on data "
+        "extraction, other than to provide ideas on tools and process for getting "
+        'that done when extraction is necessary."'
+    )
 
-        # ── Regular paragraph ──────────────────────────────────────
-        text = line.strip()
-        # Collect continuation lines (non-empty, non-special)
-        while (i + 1 < len(lines) and
-               lines[i + 1].strip() != "" and
-               not lines[i + 1].strip().startswith("#") and
-               not lines[i + 1].strip().startswith(">") and
-               not lines[i + 1].strip().startswith("- ") and
-               not lines[i + 1].strip().startswith("|") and
-               not lines[i + 1].strip().startswith("```") and
-               not lines[i + 1].strip() == "---"):
-            i += 1
-            text += " " + lines[i].strip()
+    pdf.blockquote(
+        '"I have a feeling that when we\'re all said and done, you\'ll have more '
+        'questions than answers. But let\'s get into it."'
+    )
 
-        render_inline_markdown(pdf, text, base_size=9.5)
-        pdf.ln(5.5)
-        pdf.ln(2)
-        i += 1
+    pdf.body_text("Show the five-level spectrum slide.", bold_lead="Show the five-level spectrum slide.")
 
-    # Flush any remaining table
-    if in_table and table_lines:
-        headers, rows = parse_table(table_lines)
-        if headers and rows:
-            render_table(pdf, headers, rows)
+    pdf.blockquote(
+        '"We developed this framework after running 305 test evaluations across '
+        "two government use cases and 19 different agent configurations. Not all "
+        "AI use cases need the same level of accuracy, and not all agent "
+        'architectures deliver it."'
+    )
 
-    pdf.output(OUT_PATH)
-    print(f"PDF generated: {os.path.abspath(OUT_PATH)}")
+    pdf.blockquote(
+        '"Level 1: finding a policy document. Level 5: preparing facts for a '
+        "legal hearing where a family's future depends on accuracy. Most agencies "
+        "jump straight to Copilot without asking 'where does my use case fall on "
+        "this spectrum?' Today I'll show you why that question matters.\""
+    )
+
+    # -- Act 1: Level 2 --
+    pdf.add_page()
+    pdf.subsection_title("Act 1: Level 2 -- Summarization Works Out of the Box (2 minutes)")
+
+    pdf.blockquote(
+        "\"Let's start at Level 2 -- summarization. This is where most agencies "
+        'start, and the good news is: it works."'
+    )
+
+    pdf.body_text("If SharePoint agent is available, show it:",
+                  bold_lead="If SharePoint agent is available, show it:")
+
+    pdf.blockquote(
+        "\"Here's a Copilot Studio agent pointed at a SharePoint document library. "
+        "No custom code. I'll ask it to summarize a case.\""
+    )
+
+    pdf.code_block([
+        "Summarize the investigation report for the Webb/Holloway case.",
+        "What are the key findings?"
+    ])
+
+    pdf.blockquote(
+        '"Solid summary. It found the main themes, identified the parties, got '
+        "the narrative right. For a policy analyst preparing a briefing, this is "
+        "perfectly useful. Score: 8 out of 10 in our testing. No engineering "
+        'required."'
+    )
+
+    pdf.blockquote(
+        '"But watch what happens when we ask harder questions."'
+    )
+
+    # -- Act 2: Level 3 --
+    pdf.add_page()
+    pdf.subsection_title("Act 2: Level 3 -- Aggregate Queries (2 minutes)")
+
+    pdf.body_text("Switch to the DSS Web App. Open the Case Browser.",
+                  bold_lead="Switch to the DSS Web App. Open the Case Browser.")
+
+    pdf.blockquote(
+        '"Now I\'m switching to our structured data agent. There are 50 synthetic '
+        "cases in this database -- completely fictional, no real data -- modeled "
+        'on real case structures."'
+    )
+
+    pdf.body_text("Click the chat widget. Ask:",
+                  bold_lead="Click the chat widget. Ask:")
+
+    pdf.code_block([
+        "How many active cases does DSS currently have?",
+        "Break them down by case type."
+    ])
+
+    pdf.blockquote(
+        '"Aggregate questions -- \'how many\', \'what\'s the breakdown\' -- these '
+        "work reliably across every agent type we tested. Even the weakest "
+        "performers got these right. This is Level 3: operational decision "
+        'support."'
+    )
+
+    pdf.blockquote(
+        '"But here\'s where it gets interesting. What happens when we move from '
+        "'show me the big picture' to 'show me the details for this specific "
+        "case'?\""
+    )
+
+    # -- Act 3: Level 4 --
+    pdf.add_page()
+    pdf.subsection_title("Act 3: Level 4 -- The Inflection Point (5-7 minutes)")
+
+    pdf.body_text("This is the centerpiece of the demo.",
+                  bold_lead="This is the centerpiece of the demo.")
+
+    pdf.blockquote(
+        '"Now, there\'s no way to have this conversation without getting a little '
+        'technical. But I\'ll do my best."'
+    )
+
+    pdf.blockquote(
+        '"Level 4 is investigative work. Cross-referencing records, building '
+        "timelines, finding discrepancies between accounts. This is where agent "
+        'architecture starts to matter -- a lot."'
+    )
+
+    pdf.body_text("Type the money prompt:", bold_lead="Type the money prompt:")
+
+    pdf.code_block([
+        "I represent DSS in case 2024-DR-42-0892. After reviewing the case,",
+        "can you provide:",
+        "1. A detailed timeline of pertinent facts with source citations",
+        "2. A chart of discrepancies between the two parents' accounts",
+        "3. All statements made by Marcus Webb to case managers or law enforcement",
+        "4. All statements made by Dena Holloway to case managers or law enforcement"
+    ])
+
+    pdf.blockquote(
+        '"This is the exact prompt structure a DSS attorney used when she tested '
+        'an earlier version. Four analytical tasks in one request."'
+    )
+
+    pdf.body_text("Wait for response (10-15 seconds).", bold_lead="Wait for response (10-15 seconds).")
+
+    pdf.body_text("Walk through each section:", bold_lead="Walk through each section:")
+
+    pdf.subsection_title("Timeline:")
+
+    pdf.blockquote(
+        '"Every event has a date, a time where available, and a source citation '
+        "-- page number in the original document. An attorney can verify every "
+        "entry. Count them: [X] timeline entries, all chronologically ordered. "
+        "The SharePoint agent returned maybe 6 or 7 and got two dates wrong.\""
+    )
+
+    pdf.subsection_title("Discrepancy Chart:")
+
+    pdf.blockquote(
+        '"Structured comparison -- what Marcus said versus what Dena said, with '
+        "the evidence that contradicts each. Not 'the parents disagreed.' "
+        "Specific, citable contradictions an attorney can use in court filings.\""
+    )
+
+    pdf.subsection_title("Statements (Marcus Webb):")
+
+    pdf.blockquote(
+        '"Every statement Marcus made, in chronological order: what he said, who '
+        "he said it to, the date, the source document, and the page number.\""
+    )
+
+    pdf.subsection_title("Statements (Dena Holloway):")
+
+    pdf.blockquote(
+        '"Same for Dena. And notice her story changes -- the hospital statement '
+        "on June 12th says one thing, but the sheriff interview the next "
+        "afternoon reveals the 9:30 PM thump she didn't mention before. That "
+        'evolution is captured because each statement is its own record."'
+    )
+
+    pdf.subsection_title("The data point:")
+
+    pdf.blockquote(
+        '"This agent scored 10 out of 10 in our evaluation. The same prompt sent '
+        "to the SharePoint document agent? It scored 3. It missed statements, got "
+        "dates wrong, and couldn't produce the discrepancy chart at all.\""
+    )
+
+    pdf.body_text("If time allows, show the model gap:",
+                  bold_lead="If time allows, show the model gap:")
+
+    pdf.blockquote(
+        '"Here\'s the number that should keep you up at night. Same tools, same '
+        "data, same backend: GPT-4.1 agents averaged 9.5 out of 10. GPT-4o -- "
+        "which is what Government Cloud Copilot Studio uses today -- scored 4 out "
+        'of 10. The model is the bottleneck."'
+    )
+
+    # -- Act 4: Level 5 --
+    pdf.add_page()
+    pdf.subsection_title("Act 4: Level 5 -- Trust But Verify (3-4 minutes)")
+
+    pdf.blockquote(
+        '"Now here\'s the slide I want you to remember after everything else fades."'
+    )
+
+    pdf.body_text("Type:", bold_lead="Type:")
+
+    pdf.code_block([
+        "Did the sheriff's investigation find fractures in Jaylen Webb's",
+        "skeletal survey?"
+    ])
+
+    pdf.body_text("Wait for response.", bold_lead="Wait for response.")
+
+    pdf.blockquote(
+        '"The agent returns the medical records showing bilateral long bone '
+        "fractures, with the radiology findings and page numbers. That's the "
+        'right answer."'
+    )
+
+    pdf.blockquote(
+        '"But here\'s what happened when we asked a document-based agent the same '
+        "question. Seven out of eight document agents quoted the Sheriff's Report "
+        "-- which says 'no fractures detected on skeletal survey.' The medical "
+        "records in the same case clearly document fractures. The Sheriff's Report "
+        "was wrong. The AI faithfully reproduced the error.\""
+    )
+
+    pdf.blockquote(
+        '"This is Level 5. The agent was not wrong about what the document said. '
+        "It was wrong about what was true. The citation was real. The confidence "
+        'was justified. The conclusion was dangerous."'
+    )
+
+    pdf.blockquote(
+        '"In a child welfare case, an attorney who trusts \'no fractures detected\' '
+        "because an AI said so is making a worse decision than an attorney with "
+        'no AI at all."'
+    )
+
+    pdf.body_text("Pause. Let it land.", bold_lead="Pause. Let it land.")
+
+    pdf.body_text("The human review thread -- connect it to their daily experience:",
+                  bold_lead="The human review thread -- connect it to their daily experience:")
+
+    pdf.blockquote(
+        '"Think about how you already use AI today. Copilot helps you draft an '
+        "email -- you review it before you hit send. Copilot helps you write code "
+        "-- you better be reviewing that before it goes to production. So why "
+        "would we skip human review for any of these five levels? Especially at "
+        "Level 5, where the stakes are a family's future?\""
+    )
+
+    pdf.blockquote(
+        '"This is why Level 5 requires a different operating model. The AI is a '
+        "research assistant -- it drafts, it retrieves, it organizes. The human "
+        "decides. Trust but verify is not a suggestion at this level. It is the "
+        'only responsible way to operate."'
+    )
+
+    # -- Act 5: What This Means --
+    pdf.add_page()
+    pdf.subsection_title("Act 5: What This Means for Your Agency (3 minutes, no typing)")
+
+    pdf.blockquote('"Let me bring it back to your decisions."')
+
+    pdf.blockquote(
+        '"Levels 1 and 2: Deploy now. Point Copilot at your SharePoint libraries. '
+        "You'll get 80 percent accuracy with zero custom engineering. That's a "
+        'real productivity gain."'
+    )
+
+    pdf.blockquote(
+        '"Level 3: Connect to your structured data. Case management systems, '
+        "property databases, HR records. Model Context Protocol makes this "
+        "straightforward -- the AI auto-discovers what data is available.\""
+    )
+
+    pdf.blockquote(
+        '"Level 4: This is where you need an engineering partner. Purpose-built '
+        "tools, fuzzy matching, entity resolution, iterative testing against "
+        "ground truth. One missing tool caused 87 percent of our failures. "
+        "Adding it back produced the single largest improvement in the entire "
+        'evaluation."'
+    )
+
+    pdf.blockquote(
+        '"Level 5: Everything from Level 4, plus governance. Audit logging. '
+        "Citation linking. Human review workflows. The AI accelerates the "
+        'attorney -- it does not replace the attorney."'
+    )
+
+    pdf.body_text('The "So what?" close:', bold_lead='The "So what?" close:')
+
+    pdf.blockquote(
+        '"So what do we do? Do we just give up on using agents?"'
+    )
+
+    pdf.blockquote(
+        '"No. You continue to test them and make them better. And you always '
+        'adhere to trust but verify."'
+    )
+
+    pdf.blockquote(
+        '"In my world, I have agents building apps for me right now. I\'m not '
+        "building production enterprise applications anymore, but if I were, I "
+        "would have a team of human developers involved in the process -- checking "
+        "the work my agents are producing with my guidance, helping to test, "
+        "reviewing agentic test results. That's the operating model. The AI "
+        'accelerates the team. The team validates the AI."'
+    )
+
+    pdf.blockquote(
+        '"The question isn\'t \'should we deploy AI?\' The question is \'which level '
+        "are we operating at, and have we invested accordingly?'\""
+    )
+
+    # ====================================================================
+    # TIMING GUIDE
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Timing Guide (50-60 Minutes)")
+
+    timing_headers = ["Section", "Duration", "Running Total"]
+    timing_widths = [100, 35, 35]
+    timing_rows = [
+        ["Opening: Hook + Framework", "4-5 min", "5 min"],
+        ["Act 1: Level 2 Summarization", "3-4 min", "8 min"],
+        ["Act 2: Level 3 Aggregation (DSS + Philly)", "4-5 min", "13 min"],
+        ["Act 3: Level 4 Investigation (Money Prompt)", "8-10 min", "23 min"],
+        ["Act 3b: Side-by-Side Comparison", "5-7 min", "30 min"],
+        ["Act 3c: Use Case 2 (Philly Properties)", "5-7 min", "37 min"],
+        ["Act 4: Level 5 Trust But Verify", "5-6 min", "43 min"],
+        ["Act 5: Code Spectrum + GCC Guidance", "5-7 min", "50 min"],
+        ["Q&A", "10-15 min", "60-65 min"],
+    ]
+    pdf.styled_table(timing_headers, timing_rows, timing_widths, font_size=8)
+
+    pdf.ln(4)
+    pdf.subsection_title("Expanded Sections for 50-60 Minutes")
+
+    pdf.body_text(
+        'Show aggregate queries on BOTH use cases. After "How many active cases?", '
+        'switch to Philly: "How many properties does GEENA LLC own?" Shows Level 3 '
+        "works across domains with live structured data.",
+        bold_lead="Act 2 (expanded):"
+    )
+
+    pdf.body_text(
+        "Run the money prompt on the SharePoint agent in a separate tab. Walk "
+        "through what's missing, what's wrong, and what's different. Use 2-3 of "
+        "the discrepancy questions from Appendix C. This is where the "
+        '"structured data vs documents" argument becomes visceral.',
+        bold_lead="Act 3b: Side-by-Side Comparison (new section):"
+    )
+
+    pdf.body_text(
+        "Switch to Philly property investigation. Show address resolution in action:",
+        bold_lead="Act 3c: Use Case 2 (new section):"
+    )
+
+    pdf.code_block([
+        "Tell me about the property at 4763 Griscom Street. Who owns it,",
+        "what violations does it have, and what's the ownership history?"
+    ])
+
+    pdf.body_text("Then show the aggregate power:")
+
+    pdf.code_block([
+        "What are the top 5 addresses by code violation count,",
+        "excluding government-owned properties?"
+    ])
+
+    pdf.body_text(
+        'Talking point: "Same architecture, completely different domain. The tools '
+        'are different but the pattern is identical."'
+    )
+
+    pdf.body_text(
+        "If you show M365 Copilot, lean into the orchestration UX -- the confirmation "
+        "dialog shows every tool call before it executes. This is actually a great "
+        "demo asset for enterprise security conversations:",
+        bold_lead="M365 Copilot (optional, time permitting):"
+    )
+
+    pdf.blockquote(
+        '"Notice it\'s showing you exactly what it\'s about to do and asking for '
+        "permission. This is the kind of transparency enterprise customers want. "
+        'You can see the orchestration happening in real time."'
+    )
+
+    pdf.body_text(
+        "Note: Confirmation can be disabled via admin pre-approval or "
+        "x-openai-isConsequential: false in the manifest."
+    )
+
+    pdf.body_text(
+        "Walk through the code spectrum slide (zero code to full code) and the "
+        'GCC-specific guidance. This is where you land the services conversation: '
+        '"Levels 1-3 are Copilot licenses you already own. Levels 4-5 are where '
+        'we help."',
+        bold_lead="Act 5 (expanded):"
+    )
+
+    pdf.body_text(
+        "Skip Acts 1, 3b, 3c. Shorten Act 3 to just the money prompt result. "
+        "Skip Act 5 code spectrum.",
+        bold_lead="Compressed (20 min):"
+    )
+
+    pdf.body_text(
+        "Skip Act 3c (Philly). Shorten side-by-side to one comparison prompt.",
+        bold_lead="Standard (35 min):"
+    )
+
+    # ====================================================================
+    # HANDLING Q&A
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Handling Q&A")
+
+    pdf.body_text('"Is this real data?"', bold_lead='"Is this real data?"')
+    pdf.blockquote(
+        "No. All 50 DSS cases are completely synthetic. The Philadelphia property "
+        "data is real public records (34 million rows) but contains no personally "
+        "identifiable information. We tested on both synthetic and real data -- "
+        "real data is harder."
+    )
+
+    pdf.body_text('"How long did this take to build?"', bold_lead='"How long did this take to build?"')
+    pdf.blockquote(
+        "The structured database, API layer, MCP server, and web interface were "
+        "built in a single session. The iterative testing and tool improvements "
+        "took 6 rounds. The key insight: structuring the data is the hard part. "
+        "Once it's structured, the AI layer is straightforward."
+    )
+
+    pdf.body_text('"Can this work with our case management system?"',
+                  bold_lead='"Can this work with our case management system?"')
+    pdf.blockquote(
+        "Yes. Same pattern regardless of where data lives. If your system has an "
+        "API or database, we connect MCP tools to that instead of this demo "
+        "database. The agent auto-discovers whatever tools are available."
+    )
+
+    pdf.body_text('"What about security?"', bold_lead='"What about security?"')
+    pdf.blockquote(
+        "Azure AD authentication, managed identity for all service-to-service auth, "
+        "AI model hosted in your Azure tenant, no data leaves your tenant. At "
+        "Level 5, add audit logging of every tool call and human review gates."
+    )
+
+    pdf.body_text('"Can the agent make mistakes?"', bold_lead='"Can the agent make mistakes?"')
+    pdf.blockquote(
+        "Yes -- and we documented exactly how. [Show the danger taxonomy.] The "
+        "structured data agent won't hallucinate facts that aren't in the database, "
+        "but it can miss data it retrieves (false negative), attribute facts to the "
+        "wrong person (misattribution), or faithfully reproduce errors from source "
+        "documents."
+    )
+
+    pdf.body_text('"What about Government Cloud?"', bold_lead='"What about Government Cloud?"')
+    pdf.blockquote(
+        "Government Cloud Copilot Studio is currently locked to GPT-4o, which "
+        "scored 4 out of 10 on investigative queries in our testing. For Levels 1 "
+        "through 3, GPT-4o is adequate. For Levels 4 and 5, deploy pro-code agents "
+        "using Azure OpenAI GPT-4.1 directly. When Government Cloud upgrades to a "
+        "more capable model, Copilot Studio agents will benefit immediately."
+    )
+
+    # ====================================================================
+    # APPENDIX A: DATA DESIGN DECISION
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix A: Data Design Decision")
+
+    pdf.subsection_title('"How did the data get from documents into the database?"')
+
+    pdf.body_text(
+        "The data was never extracted from documents. Structured SQL data was "
+        "designed first, then realistic legal documents were written from that "
+        "data for the SharePoint comparison.",
+        bold_lead="The short answer:"
+    )
+
+    pdf.body_text("How to frame it:", bold_lead="How to frame it:")
+
+    pdf.blockquote(
+        '"This is what digitization looks like. Your agency already has this '
+        "information -- it's in Word documents, PDFs, case files scattered across "
+        "SharePoint. What we did is model that same information as structured data: "
+        "timelines, statements, people, discrepancies. The MCP agent queries the "
+        "database; the SharePoint agent searches the filing cabinet. Same facts, "
+        'dramatically different precision."'
+    )
+
+    pdf.body_text(
+        "You do not need to explain which came first. The audience cares about "
+        "the outcome: structured data enables precise queries, cross-referencing, "
+        "and aggregation that document search cannot match."
+    )
+
+    pdf.subsection_title("The data engineering story (if asked about the process)")
+
+    pdf.blockquote(
+        '"I took a very first cut at chunking up the data -- deciding what a '
+        "'timeline event' is, what a 'statement' is, what a 'discrepancy' looks "
+        "like as structured fields. Then I used an AI coding agent to generate "
+        "additional cases and refine the schema. Two hand-crafted cases became 50, "
+        'with increasing detail at every round."'
+    )
+
+    pdf.blockquote(
+        '"This is the part people underestimate. The AI layer on top is '
+        "straightforward once you've done the data engineering. Deciding what to "
+        "extract, how to schema it, what granularity matters -- that's the "
+        'investment that separates Level 3-4 from Level 1-2."'
+    )
+
+    # ====================================================================
+    # APPENDIX B: AGENT ARCHITECTURE MATRIX
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix B: Agent Architecture Matrix")
+
+    pdf.body_text(
+        "Every agent hits the same backend (APIM to Functions to SQL). The only "
+        "variables are who runs the orchestration, how much code you write, and "
+        "which model reasons over the results."
+    )
+
+    arch_headers = ["Agent", "Orchestration", "Code Required", "Data Path", "Model"]
+    arch_widths = [32, 26, 26, 50, 36]
+    arch_rows = [
+        ["Custom Web SPA", "MCP Server /chat", "Full (TypeScript)",
+         "MCP to APIM to Functions to SQL", "GPT-4.1"],
+        ["Copilot Studio MCP", "Copilot Studio", "Zero",
+         "MCP to APIM to Functions to SQL", "GPT-4o (GCC) / GPT-4.1 (Com)"],
+        ["M365 Copilot", "M365 platform", "Zero (3 JSON files)",
+         "MCP to APIM to Functions to SQL", "Platform-assigned"],
+        ["Foundry Agent", "AI Agent Service", "Minimal",
+         "MCP to APIM to Functions to SQL", "GPT-4.1"],
+        ["Investigative Agent", "OpenAI SDK", "Full (TypeScript)",
+         "Direct to APIM to Func to SQL", "GPT-4.1"],
+        ["Triage Agent", "Semantic Kernel", "Full (C#)",
+         "Direct to APIM to Func to SQL", "GPT-4.1"],
+        ["Copilot Studio SP/PDF", "Built-in RAG", "Zero",
+         "SharePoint docs", "GPT-4o (GCC) / GPT-4.1 (Com)"],
+    ]
+    pdf.styled_table(arch_headers, arch_rows, arch_widths, font_size=6.5, row_height=7)
+
+    pdf.ln(4)
+    pdf.body_text(
+        "Every architecture scored 9 to 10 out of 10 with GPT-4.1. The engineering "
+        "investment buys customization and governance, not accuracy, which comes "
+        "from the model and data. Exception: M365 Copilot (platform-assigned model) "
+        "scored 2 out of 10 -- model selection matters as much as architecture.",
+        bold_lead="Key insight:"
+    )
+
+    # ====================================================================
+    # APPENDIX C: FIVE DISCREPANCY QUESTIONS
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix C: Five Discrepancy Questions")
+
+    pdf.body_text(
+        "These questions are grounded in the actual seed data and SharePoint "
+        "documents. They expose cross-document conflicts that document agents "
+        "are likely to mishandle."
+    )
+
+    pdf.body_text("Recommended demo order:", bold_lead="Recommended demo order:")
+
+    # Question 1
+    pdf.subsection_title("1. Crystal's sobriety (easy to understand, clear contradiction)")
+
+    pdf.code_block([
+        'Crystal Price told the court she was "clean now" at the November',
+        "2023 hearing. What do the drug test results show?"
+    ])
+
+    pdf.body_text(
+        'Crystal\'s statement: "I am clean now" (November 14, 2023). Drug screens: '
+        "two positive fentanyl screens on October 8 and October 22 -- three weeks "
+        "earlier. Also missed screens on December 5, January 15, and March 3."
+    )
+
+    # Question 2
+    pdf.subsection_title("2. Transportation excuse (builds the credibility pattern)")
+
+    pdf.code_block([
+        "Crystal Price said she couldn't comply with the treatment plan",
+        "because she lacked transportation. What support did DSS actually provide?"
+    ])
+
+    pdf.body_text(
+        "Crystal claims: lack of transportation and support. DSS records show: "
+        "monthly bus passes issued, three housing referrals provided, IOP "
+        "transportation assistance offered and declined by Crystal."
+    )
+
+    # Question 3
+    pdf.subsection_title("3. Marcus bedtime discrepancy (subtle cross-referencing)")
+
+    pdf.code_block([
+        "What did Marcus Webb tell hospital staff about when he put Jaylen",
+        "to bed, and did he give the same answer to law enforcement?"
+    ])
+
+    pdf.body_text(
+        'Nursing notes (Medical Records p. 8): Marcus told hospital staff "around '
+        'ten." Sheriff Report (p. 3): Marcus told Lt. Odom approximately 8:00 PM. '
+        "Two-hour discrepancy."
+    )
+
+    # Question 4
+    pdf.subsection_title("4. Skeletal survey (the cross-document bombshell)")
+
+    pdf.code_block([
+        "Did the Sheriff's Office investigation find fractures in Jaylen Webb's",
+        "skeletal survey?"
+    ])
+
+    pdf.body_text(
+        'Sheriff Report (p. 2): "no fractures detected on skeletal survey." '
+        "Medical Records (pp. 3-4): bilateral long bone fractures with extensive "
+        "radiological findings. Direct factual conflict between two documents "
+        "about the same hospital visit."
+    )
+
+    # Question 5
+    pdf.subsection_title("5. ER arrival time and nurse (reinforces document unreliability)")
+
+    pdf.code_block([
+        "What time was Jaylen Webb brought to the emergency room, and who",
+        "was the admitting nurse?"
+    ])
+
+    pdf.body_text(
+        "Medical Records: arrival at 03:15 AM, nurse Rebecca Torres. Sheriff "
+        "Report: arrival at approximately 0047 hours (12:47 AM), nurse Charge "
+        "Nurse Patricia Daniels. Two conflicting versions of the same event."
+    )
+
+    # ====================================================================
+    # APPENDIX D: COPILOT STUDIO VALUE PROP
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix D: Copilot Studio Value Prop (Tech Series)")
+
+    pdf.body_text(
+        "When presenting to a technical audience, you MUST articulate why Copilot "
+        "Studio matters in this story. This is not a \"pick your own adventure\" -- "
+        "Copilot Studio is the platform that ties it together."
+    )
+
+    pdf.body_text("Key points to land:", bold_lead="Key points to land:")
+
+    pdf.bullet(
+        "The same Copilot Studio environment hosts the zero-code SharePoint agent "
+        "(Level 1-2) and the MCP-connected structured data agent (Level 3-4). One "
+        "governance boundary, one admin console, one DLP policy set.",
+        bold_lead="1. Single platform for declarative AND pro-code agents."
+    )
+
+    pdf.bullet(
+        "Same Copilot Studio agent, swap GPT-4o for GPT-4.1, and accuracy goes "
+        "from 4/10 to 10/10 without changing a single line of configuration. "
+        "That's a platform story, not a coding story. When GCC gets a better "
+        "model, every Copilot Studio agent improves overnight.",
+        bold_lead="2. Model flexibility is the headline."
+    )
+
+    pdf.bullet(
+        "DLP policies, audit logging, admin pre-approval for tool calls, the M365 "
+        "Copilot confirmation UX. These are not things you bolt on later -- they "
+        "come with the platform.",
+        bold_lead="3. Enterprise governance is built in."
+    )
+
+    pdf.bullet(
+        "Agents show up where users already work: Teams, Copilot chat, SharePoint. "
+        "No separate app to deploy or URL to bookmark. For Level 1-3 use cases, "
+        "this is the fastest path to adoption.",
+        bold_lead="4. M365 distribution."
+    )
+
+    pdf.bullet(
+        "Our evaluation shows the platform works -- the limiting factor is the "
+        "model, not the platform. Commercial Copilot Studio MCP scored a perfect "
+        "10/10 with GPT-4.1. The architecture is sound.",
+        bold_lead="5. The test data proves it."
+    )
+
+    pdf.ln(2)
+    pdf.body_text("The services hook:", bold_lead="The services hook:")
+
+    pdf.blockquote(
+        '"Levels 1-3 are Copilot licenses you already own. Levels 4-5 are where '
+        "purpose-built tools and iterative testing come in -- and where we can "
+        'help."'
+    )
+
+    # ====================================================================
+    # APPENDIX E: WHAT NOT TO SAY
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix E: What Not to Say")
+
+    pdf.bullet(
+        'The message is "different tools for different jobs."',
+        bold_lead="Do not bash SharePoint."
+    )
+    pdf.bullet(
+        "SharePoint is great for unstructured narratives, policy documents, and "
+        "memos (Levels 1-2)."
+    )
+    pdf.bullet(
+        "When case data needs cross-referencing and precision (Levels 4-5), "
+        "structured data with MCP delivers what document search cannot."
+    )
+    pdf.bullet(
+        "Do not promise Government Cloud will get GPT-4.1 on a specific date."
+    )
+    pdf.bullet(
+        "Do not suggest the AI replaces human judgment at Level 5. The agent "
+        "accelerates the human."
+    )
+
+    # ====================================================================
+    # OUTPUT
+    # ====================================================================
+    out_dir = os.path.join(os.path.dirname(__file__), "..", "docs", "pdf")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, "demo-guide.pdf")
+    pdf.output(out_path)
+    print(f"PDF generated: {os.path.abspath(out_path)}")
     print(f"Pages: {pdf.page_no()}")
 
 

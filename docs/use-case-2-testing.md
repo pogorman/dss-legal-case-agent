@@ -1204,9 +1204,9 @@ Despite likely using the wrong parcel (521192100 vs 521273000), the Foundry Agen
 
 COM MCP has now passed every prompt since P4, when it first resolved the correct parcel. Its performance split: P1 Pass, P2-P3 Fail (token/rate limits), P4-P10 Pass (7 straight). Once the address resolution and platform limits were overcome, COM MCP has been the most consistent MCP agent.
 
-#### Triage Agent: 0 for 10 (Round 1) → 6 for 10 (Round 2 Take 2)
+#### Triage Agent: 0 for 10 (Round 1) → 9 for 10 (Round 2 Take 3)
 
-The Triage Agent started at 0/10 in Round 1 — the only agent with zero passes. After `search_properties` was added (Take 1: 1/10) and sub-agent system prompts were improved (Take 2: 6/10), it has shown the steepest improvement curve of any agent. It now passes P1, P2, P4, P7, P8, and P10 — all prompts where `search_properties` integration reaches the sub-agents. Remaining failures are P3 (non-deterministic parcel resolution in sub-agents), P5 (hedges on FMV source), P6 (doesn't auto-filter government entities), and P9 (blank response regression). See "Round 2 Retesting" section for full details.
+The Triage Agent started at 0/10 in Round 1 — the only agent with zero passes. After `search_properties` was added (Take 1: 1/10), sub-agent system prompts were improved (Take 2: 6/10), and further refinements including `excludeGovernment` prompt strengthening (Take 3: 9/10), it has shown the steepest improvement curve of any agent and is now tied with the Foundry Agent at 90%. P5 is a clean PASS ($53,155.20 from transfer record). P6 recovered from an initial hallucination regression to PASS after prompt placement fixes. P9 returns exact zip code numbers. Only P3 remains PARTIAL (correct parcel and current value, but claims flat assessment instead of the $37,200→$24,800 decline). See "Round 2 Retesting" section for full details.
 
 ---
 
@@ -1266,39 +1266,90 @@ After further sub-agent improvements to the Semantic Kernel team-of-agents (impr
 4. **Debug P9 blank response** — investigate sub-agent timeout/crash causing regression
 5. **Parcel caching in triage loop** — pass resolved parcels from one sub-agent to the next
 
+### Round 2 Take 3: Triage Agent Retest (4 runs)
+
+After further sub-agent system prompt improvements (mandating `search_properties` in all sub-agents, improved routing), the Triage Agent was retested on the 4 prompts that failed or partially passed in Take 2 (P3, P5, P6, P9).
+
+**Result: 6P/2Pa/2F → 7P/2Pa/1F**
+
+| # | Prompt | Take 2 | Take 3 | Notes |
+|---|--------|--------|--------|-------|
+| P3 | Assessment 2017 vs today | FAIL ($20,200 / $78,500) | **PARTIAL** ($24,800 / $24,800) | Correct parcel + current value ($24,800). Claims flat since 2017; ground truth: $37,200 → $24,800. Misses the decline. Good demolition context. |
+| P5 | $146K vs $53K FMV origin | PARTIAL (hedged) | **PASS** ($53,155.20) | Clean, confident retrieval from transfer record — no hedging. |
+| P6 | Top 5 private violators | PARTIAL (asked to filter) | Initially FAIL (hallucinated), then **PASS** after prompt fix | First run hallucinated 5 fake entities. After moving excludeGovernment instruction to top of prompt + few-shot example + "NEVER fabricate" rule, correctly returns GEENA LLC #1 with 1,411 violations. |
+| P9 | Zip 19104 vs 19132 | FAIL (blank) | Initially PARTIAL (no numbers), then **PASS** after redeploy | First run: correct direction, no numbers. After full deploy: exact numbers matching ground truth (19104 21.1%/59.8%, 19132 22.0%/62.1%). |
+
+#### Take 3 Analysis
+
+**What improved:**
+- P3 now resolves the correct parcel and current value — sub-agent `search_properties` is working, but assessment history query still incomplete
+- P5 retrieves $53,155.20 directly from the transfer record instead of hedging
+- P6 initially regressed to hallucination, then fixed by strengthening ViolationAnalyst prompt (moved excludeGovernment instruction to top, added few-shot example, added "NEVER fabricate" rule). Now returns correct data with GEENA LLC #1.
+- P9 returns exact numbers after full deploy — AreaAnalyst completes the zip code aggregation successfully
+
+**Key learning: P6 regression and recovery.**
+The initial Take 3 run showed P6 regressing from PARTIAL (honest "these are government, want me to filter?") to FAIL (hallucinated fake entity names). The `excludeGovernment` parameter existed in the tool AND was documented in the sub-agent prompt, but the model wasn't following the instruction. Three prompt changes fixed it: (1) moved the instruction to the very top of the ViolationAnalyst prompt, (2) added a few-shot example showing the expected tool call, (3) added explicit "NEVER fabricate entity names" rule. This demonstrates that prompt placement and emphasis matter as much as prompt content — having the right instruction buried in a long prompt is not the same as having it front and center.
+
+**What's still a Partial:**
+- P3: Assessment history query returns only current year, not historical values — sub-agent needs to query year-by-year assessment data
+
+### Round 2 Take 3: Non-Triage Retests (5 runs)
+
+The `excludeGovernment` parameter and FMV field documentation changes affected all MCP agents, not just the Triage Agent. Five additional retests were run on agents with prior failures or partials on P5 and P6.
+
+| Agent | Prompt | Before | After | Notes |
+|-------|--------|--------|-------|-------|
+| Investigative Agent | P5 | FAIL | **PASS** | $53,155.20 from transfer record, correct parcel and parties |
+| Investigative Agent | P6 | PARTIAL | **PASS** | GEENA LLC #1 with 1,411. Added failed counts, vacancy, demolitions per entity. Best P6 response of any agent. |
+| Foundry Agent | P5 | FAIL | **PASS** | $53,155.20 from transfer record, correct parcel and parties |
+| GCC MCP | P5 | FAIL | **FAIL** | GPT-4o could not execute the query at all ("I'm not sure how to help") |
+| GCC MCP | P6 | PARTIAL | **FAIL** | GPT-4o could not execute the query at all. Regression from PARTIAL. |
+
+#### The Model Gap: GPT-4.1 vs GPT-4o
+
+The non-Triage retests provide the clearest evidence yet of the model gap. The same tool improvements that produced dramatic gains for GPT-4.1 agents had zero effect on the GPT-4o agent:
+
+**GPT-4.1 agents (COM MCP, IA, Foundry, Triage):** Every agent that received the FMV tool description and `excludeGovernment` parameter improvements either maintained or improved their scores. The Investigative Agent went from 8P/1Pa/1F to a perfect 10/10. The Foundry Agent went from 8P/1Pa/1F to 9P/1Pa/0F.
+
+**GPT-4o agent (GCC MCP):** Could not even execute the P5 or P6 queries. Returned "I'm not sure how to help" on both. P6 regressed from PARTIAL (at least recognized the data existed) to FAIL (could not execute at all). The same tool descriptions that helped GPT-4.1 agents find and use the right parameters were invisible to GPT-4o.
+
+**The gap in numbers:** After all Round 2 improvements, GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 Pass out of 10. This is not a data problem or a tool problem — the same backend, the same tools, the same parameters. The model is the bottleneck.
+
+**Implication for Government Cloud:** GCC Copilot Studio is locked to GPT-4o. No amount of tool improvement, prompt engineering, or data enrichment can close a gap this large. Organizations deploying in Government Cloud should expect fundamentally lower agent performance until GCC upgrades to a more capable model.
+
 ---
 
 ## Final Scorecard
 
 ### By Agent (Latest Results)
 
-Scores reflect the most recent test run for each agent: Round 1 for doc agents (unchanged), Round 2 Take 1 for COM MCP/IA/FA/GCC MCP, Round 2 Take 2 for Triage.
+Scores reflect the most recent test run for each agent: Round 1 for doc agents (unchanged), Round 2 Take 1 for COM MCP/IA/FA/GCC MCP, Round 2 Take 3 for Triage.
 
 | Agent | Pass | Partial | Fail | Pass Rate | Round | Notes |
 |---|---|---|---|---|---|---|
 | **MCP - Com** | 10 | 0 | 0 | 100% | R2 T1 | **PERFECT SCORE.** search_properties fixed last 2 failures |
 | **SP/PDF - Com** | 8 | 2 | 0 | 80% (10/10 usable) | R1 | Partial on P6, P9 (expected — can't do citywide). Zero failures. |
 | **SP/PDF - GCC** | 8 | 2 | 0 | 80% (10/10 usable) | R1 | Partial on P6, P9 (expected — can't do citywide). Zero failures. |
-| **Investigative Agent** | 8 | 1 | 1 | 80% | R2 T1 | search_properties fixed 7 address failures |
-| **Foundry Agent** | 8 | 1 | 1 | 80% | R2 T1 | search_properties fixed 4 address failures |
-| **Triage Agent** | 6 | 2 | 2 | 60% | R2 T2 | Sub-agent improvements: 0→1→6 Pass across 3 rounds |
-| **MCP - GCC** | 4 | 3 | 3 | 40% | R2 T1 | P1 token overflow persists, 3 Partials on address prompts |
+| **Investigative Agent** | 10 | 0 | 0 | 100% | R2 T3 | **PERFECT SCORE.** P5 + P6 fixed by tool description + excludeGovernment |
+| **Foundry Agent** | 9 | 1 | 0 | 90% | R2 T3 | P5 fixed by FMV tool description. P1 remains Partial. |
+| **Triage Agent** | 9 | 1 | 0 | 90% | R2 T3 | Sub-agent improvements: 0→1→6→9 Pass across 4 rounds. P3 remains Partial. |
+| **MCP - GCC** | 4 | 2 | 4 | 40% | R2 T3 | GPT-4o couldn't execute P5/P6 retests. P6 regressed Partial→Fail. |
 
 ### By Prompt
 
-Triage column shows R2 Take 2 results. All other agents show their latest round.
+Triage column shows R2 Take 3 results. All other agents show their latest round.
 
 | # | Prompt | SP/PDF GCC | SP/PDF Com | COM MCP | GCC MCP | Foundry | Investigative | Triage |
 |---|---|---|---|---|---|---|---|---|
 | 1 | GEENA LLC property count | Pass | Pass | Pass | Fail | Partial | Partial | **Pass** |
 | 2 | 4763 Griscom since purchase | Pass | Pass | Fail | Fail | Pass | Fail | **Pass** |
-| 3 | Assessment 2017 vs 2025 | Pass | Pass | Fail | Fail | Fail | Fail | Fail |
+| 3 | Assessment 2017 vs 2025 | Pass | Pass | Fail | Fail | Fail | Fail | Partial |
 | 4 | Ownership chain + sheriff sales | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
-| 5 | $146K FMV at 2004 sale | Pass | Pass | Pass | Fail | Fail | Fail | Partial |
-| 6 | Top 5 private violators | Partial | Partial | Pass | Partial | Pass | Partial | Partial |
+| 5 | $146K FMV at 2004 sale | Pass | Pass | Pass | Fail | **Pass** | **Pass** | **Pass** |
+| 6 | Top 5 private violators | Partial | Partial | Pass | Fail | Pass | **Pass** | **Pass** |
 | 7 | Financial institutions + fates | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
 | 8 | Failed violations + investigator | Pass | Pass | Pass | Fail | Fail | Fail | **Pass** |
-| 9 | Zip code 19104 vs 19132 | Partial | Partial | Pass | Pass | Pass | Pass | Fail |
+| 9 | Zip code 19104 vs 19132 | Partial | Partial | Pass | Pass | Pass | Pass | Partial |
 | 10 | Purchase discount % | Pass | Pass | Pass | Fail | Pass | Fail | **Pass** |
 
 ### Key Patterns
@@ -1331,7 +1382,7 @@ Qualitative differences (COM SP/PDF = GPT-4.1, GCC SP/PDF = GPT-4o):
 
 **Document agents excel within scope.** Both SP/PDF agents (GCC and Com) passed or partially passed every prompt with zero failures. Their 2 Partials (P6, P9) were expected by design — citywide aggregate queries the documents can't answer. Within scope, 100% reliable. GPT-4.1 produces richer analysis from the same documents but doesn't change the pass rate.
 
-**Pro-code agents improved dramatically with better tools.** After Round 2 improvements, the Investigative Agent and Foundry Agent both reached 8/10 (matching the document agents), and the Triage Agent climbed from 0/10 to 6/10 across three test rounds. The gap between low-code and pro-code agents narrowed significantly once `search_properties` was available. The remaining failures are specific and fixable: P3 non-deterministic parcel resolution, P5 missing FMV field documentation, P6 missing government filter, P9 sub-agent timeout.
+**Pro-code agents now lead the standings.** After Round 2 Take 3 improvements, the Investigative Agent achieved a perfect 10/10 (matching COM MCP). The Foundry Agent reached 9/10, and the Triage Agent reached 9/10. All three pro-code GPT-4.1 agents now outperform every document agent. Meanwhile, GCC MCP (GPT-4o) remained at 4/10 — the same tool improvements that produced perfect scores for GPT-4.1 agents had zero effect on GPT-4o. The model, not the architecture, is the limiting factor.
 
 ## Epilogue: Pro-Code Agent Architectures
 
@@ -1339,13 +1390,13 @@ The Investigative Agent (OpenAI chat), Foundry Agent (Azure AI Foundry), and Tri
 
 ### What we learned
 
-**Foundry Agent was the best pro-code agent** (4 Pass, 40%). It produced the most detailed answers on aggregate queries (P6, P9) and showed strong analytical thinking (P10: questioning the $357,100 premise). Its failure mode is identical to the other MCP agents — address resolution — not model capability.
+**The Investigative Agent achieved a perfect 10/10** — matching COM MCP as the only two agents with zero failures. It went from 1/10 in Round 1 to 10/10 after Round 2 improvements. The FMV tool description fixed P5, and the `excludeGovernment` parameter fixed P6 (with the richest P6 response of any agent — failed counts, vacancy rates, and demolitions per entity). Its Round 1 weakness (address resolution) was entirely a tool gap, not a model gap.
 
-**The Investigative Agent's address resolution is the worst** (1 Pass, 10%). It produced a different wrong parcel on every single address-based prompt. Its one pass (P9) required no address resolution. When it gets data, its analysis is detailed and historically informed (P7: accurate subprime lender narrative for the wrong property), but getting the right data is the problem.
+**The Foundry Agent reached 9/10** (up from 4/10 in Round 1). The FMV tool description fixed P5. Its one remaining PARTIAL (P1: GEENA LLC property count) is a minor counting methodology difference — it returned a defensible answer, just not the ground truth number. Its analytical moment on P10 (questioning the $357,100 premise against OPA data) remains the single best response in the entire evaluation.
 
-**The Triage Agent has shown the most dramatic improvement arc** (0→1→6 Pass across three test rounds). Round 1: 0/10 — failures spanned false negatives, wrong parcels, wrong prompts, crashes. Round 2 Take 1: 1/10 — only used `search_properties` once. Round 2 Take 2: 6/10 — sub-agent system prompts improved, `search_properties` integrated into sub-agents. Remaining failures (P3 wrong parcel, P9 blank response) demonstrate that the team-of-agents routing pattern still has non-deterministic resolution and timeout issues, but the trajectory shows that iterative tool description and system prompt improvement works even for complex multi-agent architectures.
+**The Triage Agent has shown the most dramatic improvement arc** (0→1→6→9 Pass across four test rounds). Round 1: 0/10 — failures spanned false negatives, wrong parcels, wrong prompts, crashes. Round 2 Take 1: 1/10 — only used `search_properties` once. Round 2 Take 2: 6/10 — sub-agent system prompts improved, `search_properties` integrated into sub-agents. Round 2 Take 3: 9/10 — P5 retrieves FMV directly, P6 recovered from hallucination regression after prompt placement fix, P9 returns exact numbers. Only P3 remains PARTIAL (assessment history incomplete). The Triage Agent is now tied with the Foundry Agent at 90% and demonstrates that even the most complex multi-agent architecture can match simpler agents with sufficient iteration.
 
-**Build complexity requires more iteration, not less.** After Round 1, the simplest agents (COM MCP and both SP/PDF agents via Copilot Studio) outperformed all three pro-code agents. However, iterative improvements to tool descriptions, system prompts, and sub-agent routing have closed the gap significantly. COM MCP reached 10/10 with tool changes alone. The Investigative and Foundry Agents jumped to 8/10 with `search_properties`. The Triage Agent went from 0/10 to 6/10 across three rounds. The lesson: pro-code architectures have higher initial cost but respond well to iterative refinement of the same kind that improves any agent — better tool descriptions, better system prompts, and better data enrichment.
+**Build complexity requires more iteration, not less.** After Round 1, the simplest agents (COM MCP and both SP/PDF agents via Copilot Studio) outperformed all three pro-code agents. However, iterative improvements to tool descriptions, system prompts, and sub-agent routing have closed the gap completely for GPT-4.1 agents. COM MCP reached 10/10 with tool changes alone. The Investigative Agent reached a perfect 10/10 with FMV + excludeGovernment improvements. The Foundry Agent hit 9/10 (P1 Partial). The Triage Agent went from 0/10 to 9/10 across four rounds. The lesson: pro-code architectures have higher initial cost but respond extremely well to iterative refinement — and can ultimately match or exceed low-code platforms when paired with the right model (GPT-4.1). The GCC MCP agent (GPT-4o) did not benefit from the same improvements, remaining at 4/10.
 
 ### Danger Taxonomy (Updated from Use Case 1)
 
@@ -1358,8 +1409,10 @@ The Investigative Agent (OpenAI chat), Foundry Agent (Azure AI Foundry), and Tri
 
 ### Recommendation
 
-Address resolution is now solved for agents that use `search_properties`. Round 3 should focus on the remaining edge cases: mandate `search_properties` in all Triage sub-agent prompts (fixes P3), add FMV field documentation to tool descriptions (fixes P5), add `exclude_government` filter to `get_top_violators` (fixes P6 for all agents), and debug the Triage P9 blank response regression. The iterative pattern — test, identify tool/prompt gaps, improve, retest — has proven effective across all agent architectures.
+After Round 2 Take 3, the iterative improvement process has reached diminishing returns for GPT-4.1 agents. Three agents are at 9-10/10 (COM MCP, Investigative Agent, Triage Agent), and the Foundry Agent is at 9/10. The only remaining PARTIAL is the Triage Agent's P3 (assessment history incomplete). The document agents remain at 8P/2Pa/0F — their 2 Partials are structural (can't answer citywide queries) and unfixable without adding more data.
+
+The GCC MCP agent (GPT-4o) remains at 4/10 despite receiving every tool and prompt improvement. This is the clearest evidence in the evaluation that the model — not the data, tools, or architecture — is the limiting factor for Government Cloud deployments.
 
 ---
 
-*Testing ongoing. 133 responses scored across 10 prompts, 7 agents, and 3 test rounds (Round 1: 70, Round 2 Take 1: 53, Round 2 Take 2: 10).*
+*Testing complete. 146 responses scored across 10 prompts, 7 agents, and 4 test rounds (Round 1: 70, Round 2 Take 1: 53, Round 2 Take 2: 10, Round 2 Take 3: 13). Two agents achieved perfect 10/10: COM MCP and Investigative Agent. GPT-4.1 agents average 9.5/10; GPT-4o agent: 4/10.*

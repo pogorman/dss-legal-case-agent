@@ -52,7 +52,7 @@ class ExecutivePDF(FPDF):
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, "Confidential  |  March 2026  |  Testing conducted March 5-7, 2026", align="C")
+        self.cell(0, 4, "Confidential  |  March 2026  |  Testing conducted March 5-8, 2026", align="C")
 
     # ── Helpers ─────────────────────────────────────────────────────
     def section_title(self, text):
@@ -200,23 +200,23 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
     pdf.multi_cell(0, 6.5,
-        "This report presents findings from a structured evaluation of Copilot Studio agents "
-        "across multiple government use cases. Each use case tests the same core question: do agents "
+        "This report presents findings from a structured evaluation of AI agents "
+        "across two government use cases. Each use case tests the same core question: do agents "
         "backed by structured databases or unstructured documents deliver more reliable answers? "
-        "Use Case 1 (Legal Case Analysis) is complete. Use Case 2 (Investigative Analytics) is planned.",
+        "Both use cases are complete. Two agents achieved a perfect 10/10.",
         align="C"
     )
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "125 test runs  |  11 agents  |  10 prompts  |  5 data improvements", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "274 test runs  |  18 agents  |  20 prompts  |  2 use cases  |  4 improvement rounds", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
     pdf.set_font("Helvetica", "B", 9)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5.5,
-        "Use Case 1: Legal Case Analysis  |  Use Case 2: Investigative Analytics (planned)",
+        "Use Case 1: Legal Case Analysis (complete)  |  Use Case 2: Investigative Analytics (complete)",
         align="C"
     )
 
@@ -727,37 +727,59 @@ def build_pdf():
     pdf.ln(3)
     pdf.set_font("Helvetica", "I", 9.5)
     pdf.set_text_color(*MED)
-    pdf.cell(0, 6, "Philly Poverty Profiteering  |  Testing Planned", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "Philly Poverty Profiteering  |  7 agents  |  10 prompts  |  146 test runs", new_x="LMARGIN", new_y="NEXT")
 
-    pdf.ln(6)
+    pdf.section_title("Key Findings")
+
+    pdf.subsection_title("1. Address resolution was the #1 failure mode")
     pdf.body_text(
-        "The second use case evaluates the same Copilot Studio agent configurations against a "
-        "large-scale investigative analytics workload: 34 million rows of Philadelphia public "
-        "records spanning property ownership, code violations, demolitions, business licenses, "
-        "tax assessments, and real estate transfers."
+        "In Round 1, agents attempted 15 address-to-parcel lookups and succeeded only twice "
+        "(13% success rate). Every agent resolved '4763 Griscom St' to a different wrong parcel "
+        "on different attempts. A dedicated fuzzy address search tool eliminated this entirely -- "
+        "zero address failures in Round 2."
     )
+
+    pdf.subsection_title("2. The model gap is the defining result")
     pdf.body_text(
-        "The underlying system uses the same architecture pattern -- a structured data server backed "
-        "by Azure Functions and Azure SQL -- with 14 investigative tools. Copilot Studio agents will be "
-        "tested using the same methodology: structured data vs. document-backed "
-        "(SharePoint and uploaded files), scored on accuracy, completeness, and safety."
+        "GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. "
+        "Same tools, same data, same backend. The tool improvements that lifted the Investigative "
+        "Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent -- it could not "
+        "even execute the same queries. Government Cloud is locked to GPT-4o."
     )
+
+    pdf.subsection_title("3. Iterative improvement works -- but requires testing discipline")
     pdf.body_text(
-        "This use case will stress-test Copilot Studio's ability to handle aggregate queries "
-        "across millions of records, cross-dataset pattern detection, and complex multi-step "
-        "investigative reasoning -- capabilities that go well beyond single-case retrieval."
+        "The Triage Agent (Semantic Kernel team-of-agents) went from 0/10 to 9/10 across four "
+        "rounds of testing and prompt refinement. The Investigative Agent went from 1/10 to 10/10. "
+        "Each round revealed a different category of failure requiring a different type of fix: "
+        "missing tools, missing tool descriptions, missing parameters, prompt placement issues."
     )
+
+    # UC2 Scorecard
+    pdf.ln(2)
+    pdf.subsection_title("Final Standings")
+    uc2_headers = ["Agent", "Pass", "Partial", "Fail", "Model"]
+    uc2_widths = [58, 16, 16, 16, 64]
+    uc2_rows = [
+        ["Philly MCP - Commercial", "10", "0", "0", "GPT-4.1  (PERFECT)"],
+        ["Investigative Agent", "10", "0", "0", "GPT-4.1  (PERFECT)"],
+        ["Foundry Agent", "9", "1", "0", "GPT-4.1"],
+        ["Triage Agent (SK)", "9", "1", "0", "GPT-4.1"],
+        ["SP/PDF - GCC", "8", "2", "0", "GPT-4o"],
+        ["SP/PDF - Commercial", "8", "2", "0", "GPT-4.1"],
+        ["Philly MCP - GCC", "4", "2", "4", "GPT-4o"],
+    ]
+    pdf.styled_table(uc2_headers, uc2_rows, uc2_widths, font_size=7.5)
 
     pdf.ln(4)
-    pdf.set_fill_color(*GRAY_BG)
-    pdf.set_draw_color(*ACCENT)
-    box_y = pdf.get_y()
-    pdf.rect(pdf.l_margin, box_y, pdf.w - pdf.l_margin - pdf.r_margin, 18, "FD")
-    pdf.set_xy(pdf.l_margin + 6, box_y + 5)
-    pdf.set_font("Helvetica", "I", 10)
-    pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "Results will be added to this report after testing is complete.")
-    pdf.set_y(box_y + 24)
+    pdf.set_font("Helvetica", "B", 9.5)
+    pdf.set_text_color(*NAVY)
+    pdf.multi_cell(0, 5.5,
+        "Two agents achieved perfect 10/10 scores. All four GPT-4.1 structured-data agents "
+        "score 9 or 10 out of 10. The GPT-4o structured-data agent scores 4 out of 10 despite "
+        "receiving every tool and prompt improvement. The model -- not the data, tools, or "
+        "architecture -- is the limiting factor for Government Cloud."
+    )
 
     # ══════════════════════════════════════════════════════════════════
     # RECOMMENDATION
@@ -766,8 +788,9 @@ def build_pdf():
     pdf.section_title("Recommendation")
 
     pdf.body_text(
-        "Based on Use Case 1 results, neither Copilot Studio approach alone is sufficient for "
-        "production-grade reliability. The strongest configuration layers both:"
+        "Based on results across both use cases (274 test runs, 18 agent configurations), "
+        "neither approach alone is sufficient for production-grade reliability. "
+        "The strongest configuration layers both:"
     )
 
     pdf.bullet(
@@ -809,7 +832,7 @@ def build_pdf():
         "Structured data delivers precision for day-to-day queries. "
         "Document grounding adds narrative richness for complex analysis. "
         "Together, they cover each other's blind spots. Neither alone is safe enough. "
-        "Use Case 2 will test whether this finding holds at scale."
+        "Both use cases confirmed this finding -- at case scale and at city scale."
     )
 
     # ══════════════════════════════════════════════════════════════════

@@ -117,11 +117,11 @@ def build_pdf():
     pdf.set_x(left_x + 3)
     pdf.set_font("Helvetica", "B", 8)
     pdf.set_text_color(*ACCENT)
-    pdf.multi_cell(0, 4.5, "1. Why some GCC Copilot Studio agents struggle in production")
+    pdf.multi_cell(0, 4.5, "1. The model matters more than the architecture")
     body_text(
-        "GCC is locked to GPT-4o. It hallucinates facts (2:00 AM vs 3:15 AM), "
-        "fabricates citations, and you can't change the model. Show the consistency "
-        "retest: same wrong answer both times.",
+        "GPT-4.1 agents avg 9.5/10. GPT-4o agent: 4/10. Same tools, same data. "
+        "GCC is locked to GPT-4o -- you can't change it. Tool improvements that "
+        "produced a perfect 10/10 on GPT-4.1 had zero effect on GPT-4o.",
         indent=7
     )
     pdf.ln(2.5)
@@ -131,9 +131,9 @@ def build_pdf():
     pdf.set_text_color(*ACCENT)
     pdf.multi_cell(0, 4.5, "2. What you feed your agent matters as much as your prompt")
     body_text(
-        "Same docs, different format = different results. PDF > DOCX > MD. "
-        "Structured data is deterministic: same query, same answer, every time. "
-        "Skeletal survey: 7/8 doc agents repeated \"no fractures\" when two fractures existed.",
+        "PDF > DOCX > MD. Structured data is deterministic: same query, same answer. "
+        "Skeletal survey: 7/8 doc agents repeated \"no fractures\" when two existed. "
+        "Address resolution: 87% failure rate until we added one lookup tool.",
         indent=7
     )
     pdf.ln(2.5)
@@ -141,10 +141,11 @@ def build_pdf():
     pdf.set_x(left_x + 3)
     pdf.set_font("Helvetica", "B", 8)
     pdf.set_text_color(*ACCENT)
-    pdf.multi_cell(0, 4.5, "3. Connect Copilot Studio to a real backend -- no custom connectors")
+    pdf.multi_cell(0, 4.5, "3. Iteration beats architecture -- test, fix, retest")
     body_text(
-        "Copilot Studio is the interface, Azure is the engine. MCP plugin = one URL, "
-        "no connector code. SWA -> Container App -> APIM -> Functions -> SQL.",
+        "Triage Agent: 0/10 -> 9/10 in 4 rounds. Investigative Agent: 1/10 -> 10/10. "
+        "Each round fixes a different problem (data, tools, prompts, placement). "
+        "No agent was production-ready on first deploy.",
         indent=7
     )
     pdf.ln(3.5)
@@ -182,15 +183,15 @@ def build_pdf():
     pdf.ln(3)
 
     # ── RANKINGS ───────────────────────────────────────────────────
-    section_header("Final Rankings")
+    section_header("UC2 Rankings (Philly)")
 
     rank_data = [
-        ("#1", "Web App", "10P / 0F", GREEN),
-        ("#2", "Structured (GCC)", "9P / 1F", GREEN),
-        ("#3", "Structured (Com)", "8P / 0F", GREEN),
-        ("#4", "SP/PDF (Com)", "8P / 0F", ACCENT),
-        ("#5", "KB/DOCX (Com)", "6P / 2F", AMBER),
-        ("#11", "SP/PDF (GCC)", "2P / 6F", RED),
+        ("#1", "MCP-Com (4.1)", "10P / 0F", GREEN),
+        ("#1", "Investigative (4.1)", "10P / 0F", GREEN),
+        ("#3", "Foundry (4.1)", "9P / 0F", GREEN),
+        ("#3", "Triage/SK (4.1)", "9P / 0F", GREEN),
+        ("#5", "SP/PDF (GCC+Com)", "8P / 0F", ACCENT),
+        ("#7", "MCP-GCC (4o)", "4P / 4F", RED),
     ]
     for rank, name, score, color in rank_data:
         pdf.set_x(left_x + 4)
@@ -217,20 +218,21 @@ def build_pdf():
     section_header("5 Findings (Your Talking Points)")
 
     findings = [
-        ("1. Structured agents are consistently precise.",
-         "Same query = same answer every time. 12/12 timeline events, zero fabrication. "
-         "Doc agents ranged 4-12/12 with wrong-case contamination."),
-        ("2. Every agent has a failure mode.",
-         "No config was correct on all 10 prompts. Structured agents fail safely "
-         "(\"not in the data\"). Doc agents fail dangerously (wrong answer + citation)."),
-        ("3. The AI model matters as much as architecture.",
-         "GPT-4o (GCC): better tool selection, more hallucinations. "
-         "GPT-4.1 (Com): fewer hallucinations, skips the discrepancy tool entirely."),
-        ("4. Document format affects results.",
-         "PDF > DOCX > MD. SharePoint > Uploaded. Same files, different indexing = different answers."),
-        ("5. Structured data fails safely; documents fail dangerously.",
-         "Structured agents say \"not in the data.\" Doc agents reproduce a misleading "
-         "source with a citation -- the wrong answer looks authoritative."),
+        ("1. GPT-4.1 vs GPT-4o is the #1 factor.",
+         "UC2: GPT-4.1 agents avg 9.5/10. GPT-4o: 4/10. Same tools, same backend. "
+         "GCC is locked to GPT-4o with no upgrade path."),
+        ("2. One missing tool caused 87% failure rate.",
+         "UC2: No address lookup tool = wrong parcel on every query. Adding one "
+         "fuzzy-match tool: zero failures. IA went 1/10 to 10/10."),
+        ("3. Structured data fails safely; documents fail dangerously.",
+         "UC1: 7/8 doc agents repeated \"no fractures\" from Sheriff Report. "
+         "Medical Records showed two fractures. Citation made it authoritative."),
+        ("4. Iteration beats architecture.",
+         "Triage Agent (most complex): 0/10 to 9/10 in 4 rounds. "
+         "Simple SP/PDF agent: 8/10 with zero changes. Both work -- iteration is the key."),
+        ("5. Test with known answers or you're guessing.",
+         "274 test runs, ground truth for every prompt. Without known answers "
+         "you can't tell if 'no fractures' is a correct extraction or a dangerous miss."),
     ]
     for heading, text in findings:
         pdf.set_x(right_x)
@@ -267,12 +269,13 @@ def build_pdf():
     # ── FEEDBACK LOOP ──────────────────────────────────────────────
     section_header("The Feedback Loop Story")
     body_text(
-        "Before improvements: 2P / 5Pa / 8F. After: 12P / 2Pa / 1F. "
-        "5 fixes traced to exact pages in source documents."
+        "UC1: 2P/5Pa/8F -> 12P/2Pa/1F (5 data fixes). "
+        "UC2: Triage 0/10 -> 9/10 (4 rounds of tool + prompt fixes). "
+        "IA: 1/10 -> 10/10. Each round fixes a different problem type."
     )
     pdf.ln(1)
     body_text(
-        "\"When a structured agent fails, you find the missing row, add it, "
+        "\"When a structured agent fails, you find the missing row or tool, fix it, "
         "and verify deterministically. Document agents have no equivalent feedback loop.\"",
         style="I", color=ACCENT
     )
@@ -299,11 +302,11 @@ def build_pdf():
     section_header("Quick Reference (docs/)")
 
     refs = [
-        ("executive-summary.pdf", "10-page C-suite handoff"),
-        ("copilot-studio-testing.md", "Full 110-run results + ground truth"),
-        ("architecture.md", "4-tier diagram, networking, auth"),
-        ("user-guide.md", "Demo walkthrough, warm-up, prompts"),
-        ("improvements-round-1.md", "5 data fixes with before/after"),
+        ("executive-summary.pdf", "C-suite handoff (both use cases)"),
+        ("use-case-1-testing.md", "UC1: 128 runs, 11 agents"),
+        ("use-case-2-testing.md", "UC2: 146 runs, 7 agents"),
+        ("executive-summary-combined.md", "Full markdown summary"),
+        ("demo-guide.md", "Demo walkthrough + prompts"),
     ]
     for filename, desc in refs:
         pdf.set_x(right_x + 4)
@@ -327,7 +330,7 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 6.5)
     pdf.set_text_color(*LIGHT)
     pdf.set_x(page_margin)
-    pdf.cell(page_w, 3.5, "125 test runs  |  11 agents  |  10 prompts  |  5 data improvements  |  50 synthetic cases  |  All data is fictional", align="C")
+    pdf.cell(page_w, 3.5, "274 test runs  |  18 agents  |  2 use cases  |  4 improvement rounds  |  GPT-4.1 avg 9.5/10, GPT-4o: 4/10", align="C")
     pdf.ln()
     pdf.set_x(page_margin)
     pdf.cell(page_w, 3.5, "Confidential  |  March 2026  |  Generated from dss-legal-case-agent repo", align="C")

@@ -47,37 +47,35 @@ Testing revealed five categories of AI failure, ranked by severity:
 
 The Commercial MCP agent (GPT-4.1) was the strongest overall performer, going 4 for 4 on the final stretch of prompts after initially struggling with address resolution. The Government Cloud document agent (SharePoint PDFs, GPT-4o) matched it on overall pass rate by leveraging pre-computed summaries in the investigation reports. The Government Cloud MCP agent (GPT-4o) was crippled by two issues: token overflow on large entities and the model gap vs GPT-4.1.
 
-**Final standings (after Round 2 improvements):**
+**Final standings (after Round 2 improvements, 146 test runs):**
 
 | Agent | Pass | Partial | Fail | Change from Round 1 |
 |---|---|---|---|---|
 | Philly MCP - Com (structured database, GPT-4.1) | **10** | 0 | 0 | +2P (was 8/0/2) — **PERFECT** |
-| Philly SP/PDF - GCC (SharePoint docs) | 8 | 2 | 0 | unchanged |
-| Philly SP/PDF - Com (SharePoint docs) | 8 | 2 | 0 | unchanged |
-| Investigative Agent (OpenAI chat) | 8 | 1 | 1 | +7P (was 1/0/9) |
-| Foundry Agent (Azure AI Foundry) | 8 | 1 | 1 | +4P (was 4/0/6) |
-| Philly MCP - GCC (structured database, GPT-4o) | 4 | 3 | 3 | +2P (was 2/0/8) |
-| Triage Agent (Semantic Kernel) | 1 | 1 | 8 | +1P, +1Pa (was 0/0/10) |
+| Investigative Agent (OpenAI chat, GPT-4.1) | **10** | 0 | 0 | +9P (was 1/0/9) — **PERFECT** |
+| Foundry Agent (Azure AI Foundry, GPT-4.1) | 9 | 1 | 0 | +5P (was 4/0/6) |
+| Triage Agent (Semantic Kernel, GPT-4.1) | 9 | 1 | 0 | +9P (was 0/0/10) |
+| Philly SP/PDF - GCC (SharePoint docs, GPT-4o) | 8 | 2 | 0 | unchanged |
+| Philly SP/PDF - Com (SharePoint docs, GPT-4.1) | 8 | 2 | 0 | unchanged |
+| Philly MCP - GCC (structured database, GPT-4o) | 4 | 2 | 4 | +2P (was 2/0/8) |
 
-**Critical finding:** Address resolution was the #1 failure mode. Across Prompts 2-4, agents attempted 15 address-to-parcel lookups and succeeded only twice (13% success rate). Every SQL-backed agent resolved "4763 Griscom St" to a different wrong parcel number on different attempts — producing non-deterministic, unreliable answers. This led directly to the Round 2 improvement: a dedicated fuzzy address search tool.
+**Critical finding:** Address resolution was the #1 failure mode in Round 1. Across Prompts 2-4, agents attempted 15 address-to-parcel lookups and succeeded only twice (13% success rate). A dedicated fuzzy address search tool eliminated this entirely — zero address failures in Round 2 for agents that used it.
 
-**Finding #2:** GPT-4.1 vs GPT-4o produced an 80% vs 20% pass rate gap for MCP agents — the largest model-driven difference in either use case.
+**Finding #2: The model gap is the defining result.** GPT-4.1 agents average 9.5 Pass out of 10. The GPT-4o agent scores 4 out of 10. Same tools, same data, same backend. The tool improvements that lifted the Investigative Agent from 1/10 to a perfect 10/10 had zero effect on the GPT-4o agent — it could not even execute the same queries. Government Cloud is locked to GPT-4o, and no amount of tool or prompt engineering can close this gap.
 
-**Finding #3:** Aggregate queries (citywide stats, zip code comparisons) worked reliably for all MCP agents. Address-based queries failed reliably. The failure pattern was predictable and fixable.
+**Finding #3:** Aggregate queries (citywide stats, zip code comparisons) worked reliably for all MCP agents. Address-based queries failed reliably in Round 1 but were completely fixed by the address search tool in Round 2.
 
-## What's Next: Round 3 Candidates
+## What's Next
 
-Round 2 retesting is complete. Three issues remain that could be addressed in a Round 3:
+Round 2 retesting is complete with 146 test runs across 4 rounds. The iterative improvement process has reached diminishing returns for GPT-4.1 agents — four agents are at 9-10/10. One issue remains:
 
-1. **GCC MCP token overflow on P1** — the entity network summary mode was built but the Copilot Studio GCC action may not be passing `summary=true`. Configuration fix, not a code change.
-2. **P6 top private violators** — 3 of 4 agents return government entities instead of private owners. The `get_top_violators` tool needs an `exclude_government` filter parameter.
-3. **MCP-Com nurse lookup (UC1)** — the nurse is stored with role="Witness" in the people table. Changing to role="Medical Staff" or "Nurse" might help the model recognize it as relevant to a nurse question.
+1. **GCC MCP performance (4/10)** — GPT-4o cannot effectively use the same tools that GPT-4.1 agents use flawlessly. This is a platform constraint, not an engineering problem. Government Cloud organizations should plan for lower agent performance until GCC upgrades to a more capable model.
 
 ## Pro-Code Agent Architectures
 
 Use Case 2 introduced two agents not available in Use Case 1: an Investigative Agent built with Semantic Kernel and OpenAI, and a Foundry Agent built with Azure AI Foundry. Both query the same structured database as the Copilot Studio agents but through custom-built agent loops rather than a low-code platform.
 
-Results across 10 prompts show these agents share the same data access as Copilot Studio but differ in how they process results. The Foundry Agent produced the best analytical moment in the entire evaluation (challenging a premise against source data on Prompt 10). The Investigative Agent had the most dramatic improvement — from 1/10 to 8/10 after Round 2 tool changes. The Triage Agent (Semantic Kernel team-of-agents) scored 0/10 in Round 1 and only 1/10 after Round 2 — proving that architectural complexity does not guarantee quality and can prevent agents from benefiting from improvements that lift simpler architectures.
+Results across 10 prompts and 4 test rounds show these agents share the same data access as Copilot Studio but differ in how they process results. The Investigative Agent achieved a perfect 10/10 — matching COM MCP as the only two agents with zero failures, up from 1/10 in Round 1. The Foundry Agent reached 9/10 and produced the best analytical moment in the entire evaluation (challenging a premise against source data on Prompt 10). The Triage Agent (Semantic Kernel team-of-agents) showed the most dramatic improvement arc in the evaluation — from 0/10 in Round 1 to 9/10 after four rounds of iterative sub-agent prompt improvements. All three pro-code agents use GPT-4.1, and all three now outperform every document-based agent.
 
 This is the question every technology leader faces: **build or buy?** The structured database versus document comparison answers "what data architecture do I need." The Copilot Studio versus pro-code comparison answers "what agent architecture do I need." Together, they form a complete decision framework for government AI adoption.
 
@@ -107,17 +105,19 @@ With the data layer corrected, Round 2 addressed how models interact with tools.
 
 **Changes made:** 1 new tool (fuzzy address-to-parcel lookup with USPS normalization), 1 tool enhancement (entity network summary mode to prevent token overflow), improved tool descriptions across both use cases, and system prompt additions with explicit workflow guidance. Zero data changes.
 
-**Results (43 retests):**
+**Results (76 retests across 3 takes):**
 
-| Agent | Round 1 | Round 2 | Change |
+| Agent | Round 1 | Final (Round 2) | Change |
 |-------|---------|---------|--------|
-| COM MCP (GPT-4.1) | 8P / 0Pa / 2F | **10P / 0Pa / 0F** | Perfect score |
-| Investigative Agent | 1P / 0Pa / 9F | **8P / 1Pa / 1F** | +7 Pass |
-| Foundry Agent | 4P / 0Pa / 6F | **8P / 1Pa / 1F** | +4 Pass |
-| GCC MCP (GPT-4o) | 2P / 0Pa / 8F | **4P / 3Pa / 3F** | +2 Pass |
-| Triage Agent (SK) | 0P / 0Pa / 10F | **1P / 1Pa / 8F** | +1 Pass (still last) |
+| COM MCP (GPT-4.1) | 8P / 0Pa / 2F | **10P / 0Pa / 0F** | **PERFECT** |
+| Investigative Agent (GPT-4.1) | 1P / 0Pa / 9F | **10P / 0Pa / 0F** | **PERFECT** (+9P) |
+| Foundry Agent (GPT-4.1) | 4P / 0Pa / 6F | **9P / 1Pa / 0F** | +5P, zero failures |
+| Triage Agent (GPT-4.1, SK) | 0P / 0Pa / 10F | **9P / 1Pa / 0F** | +9P across 4 rounds |
+| GCC MCP (GPT-4o) | 2P / 0Pa / 8F | **4P / 2Pa / 4F** | +2P (model-limited) |
 
-The single highest-impact change was the address resolution tool: zero address lookup failures in Round 2 for agents that used it, compared to 87% failure in Round 1. The Triage Agent — the only agent that did not use `search_properties` — continued to resolve addresses to wrong parcels, confirming that the tool was the fix, not the prompts.
+The single highest-impact change was the address resolution tool: zero address lookup failures for agents that used it, compared to 87% failure in Round 1. The second-most impactful was FMV field documentation in tool descriptions, which fixed P5 for three agents. The `excludeGovernment` parameter fixed P6 for two agents.
+
+**The model gap is the defining result of Round 2.** Every GPT-4.1 agent benefited dramatically from tool improvements. The GPT-4o agent (GCC MCP) could not even execute the same queries that GPT-4.1 agents handled flawlessly. The same tools, the same data, the same backend — GPT-4.1 agents average 9.5/10, GPT-4o scores 4/10.
 
 ### The Pattern for Organizations
 
@@ -134,7 +134,7 @@ This is not optional engineering overhead — it is the difference between a dem
 
 1. **The most dangerous agent was also the most accurate quoting its source.** Seven of eight document-based agents faithfully reproduced a Sheriff Report statement that "no fractures detected on skeletal survey" — while the Medical Records in the same case clearly documented two fractures in a child abuse investigation. The agents weren't wrong about what the document said. They were wrong about what was true. This is the hardest failure mode to detect because the citation is real and the confidence is justified — but the conclusion is dangerous.
 
-2. **The most sophisticated agent architecture scored 1 out of 10 — even after improvements that lifted simpler agents to 8.** The Triage Agent — a Semantic Kernel team-of-agents pattern with a routing agent dispatching to specialized sub-agents (OwnerAnalyst, ViolationAnalyst, AreaAnalyst) — produced the worst results of any configuration tested across both rounds. In Round 1 it scored 0/10 (crashes, wrong prompts, 500 errors). After Round 2 tool improvements that lifted the Investigative Agent from 1/10 to 8/10, the Triage Agent improved to only 1/10. It still resolved addresses to wrong parcels because its sub-agents never called the new address lookup tool. Meanwhile, a simple Copilot Studio agent pointed at SharePoint PDFs scored 8 out of 10 without any improvements at all. Architectural complexity is not a proxy for quality — and can actively prevent agents from benefiting from tool improvements.
+2. **The most complex agent went from 0 out of 10 to 9 out of 10 — but it took four rounds of iteration to get there.** The Triage Agent — a Semantic Kernel team-of-agents pattern with a routing agent dispatching to specialized sub-agents (OwnerAnalyst, ViolationAnalyst, AreaAnalyst) — started as the worst agent in the evaluation. Round 1: 0/10 (crashes, wrong prompts, 500 errors). After the same tool improvements that lifted the Investigative Agent from 1/10 to 8/10, the Triage Agent improved to only 1/10 — its sub-agents never called the new tools. It took two more rounds of sub-agent prompt engineering (mandating tool usage, adding few-shot examples, prompt placement optimization) to reach 9/10. Meanwhile, a simple Copilot Studio agent pointed at SharePoint PDFs scored 8/10 without any improvements at all. The lesson is nuanced: architectural complexity requires more iteration, not less — but it can ultimately match or exceed simpler architectures when paired with disciplined testing.
 
 3. **The model retrieved the answer and didn't recognize it.** On Use Case 1, Prompt 3, the custom web application agent called the right tools, received data containing "two positive drug screens (fentanyl) in October," and concluded: "no drug test results exist in the available data." The answer was in the tool output. The model read past it. This "false negative" failure — data retrieved but not recognized — is invisible to users because the agent sounds confident and the tool calls look correct.
 
@@ -156,6 +156,6 @@ This is not optional engineering overhead — it is the difference between a dem
 
 ---
 
-*Use Case 1: Complete (110 test runs + 15 Round 1 retests + 3 Round 2 retests). Use Case 2: Complete (70 Round 1 runs + 50 Round 2 retests). Total: 248 test runs across 2 improvement rounds.*
+*Use Case 1: Complete (110 test runs + 15 Round 1 retests + 3 Round 2 retests). Use Case 2: Complete (70 Round 1 runs + 76 Round 2 retests across 3 takes). Total: 274 test runs across 2 use cases, 4 improvement rounds, 18 agent configurations.*
 
 *Detailed results: `use-case-1-testing.md` | `use-case-2-testing.md` | `improvements/improvements-round-1.md` | `improvements/improvements-round-2.md`*

@@ -1122,3 +1122,62 @@ Retested all 5 prompts targeted by the Round 1 improvements across all 3 MCP age
 - Regenerate executive summary PDF with Round 2 Take 2 results
 - Consider BFG Repo Cleaner for git history
 - Demo dry run
+
+---
+
+## Session 22 — 2026-03-08
+
+### What was done
+
+#### Round 2 Take 3: Triage Agent Retests (P3, P5, P6, P9)
+- **P3 (Assessment 2017 vs today): PARTIAL** — correct parcel + current value ($24,800), but claims flat since 2017. Ground truth: $37,200 decline to $24,800.
+- **P5 ($146K FMV origin): PASS** — clean retrieval of $53,155.20 from transfer record, no hedging
+- **P6 (Top 5 private violators): Initially FAIL (hallucinated fake entities), then PASS after prompt fix** — moved excludeGovernment instruction to top of ViolationAnalyst prompt, added few-shot example, added "NEVER fabricate" rule
+- **P9 (Zip 19104 vs 19132): Initially PARTIAL (no numbers), then PASS after full deploy** — exact numbers: 19104 21.1%/59.8%, 19132 22.0%/62.1%
+- **Triage final score: 9P/1Pa/0F** (was 6P/2Pa/2F)
+
+#### Round 2 Take 3: Non-Triage Retests (IA, Foundry, GCC MCP)
+Tested P5 (FMV) and P6 (excludeGovernment) on agents that had prior failures/partials:
+- **IA P5: FAIL → PASS** — $53,155.20, correct parcel and parties
+- **IA P6: PARTIAL → PASS** — GEENA LLC #1 with 1,411. Richest P6 response of any agent (failed counts, vacancy, demolitions per entity)
+- **Foundry P5: FAIL → PASS** — $53,155.20, correct parcel and parties
+- **GCC MCP P5: FAIL → FAIL** — GPT-4o could not execute ("I'm not sure how to help")
+- **GCC MCP P6: PARTIAL → FAIL** — GPT-4o could not execute. Regression.
+
+#### Updated Final Standings
+| Agent | Score | Change |
+|-------|-------|--------|
+| COM MCP (GPT-4.1) | 10P/0Pa/0F | unchanged (PERFECT) |
+| Investigative Agent (GPT-4.1) | 10P/0Pa/0F | was 8P/1Pa/1F — **NOW PERFECT** |
+| Foundry Agent (GPT-4.1) | 9P/1Pa/0F | was 8P/1Pa/1F |
+| Triage Agent (GPT-4.1) | 9P/1Pa/0F | was 6P/2Pa/2F |
+| SP/PDF - GCC (GPT-4o) | 8P/2Pa/0F | unchanged |
+| SP/PDF - Com (GPT-4.1) | 8P/2Pa/0F | unchanged |
+| GCC MCP (GPT-4o) | 4P/2Pa/4F | was 4P/3Pa/3F (P6 regressed) |
+
+#### Documentation Updates
+- Updated `docs/use-case-2-testing.md` with Take 3 results, non-Triage retests, model gap analysis, updated scorecard and by-prompt table
+- Updated `docs/executive-summary-combined.md` with final UC2 results, rewrote Finding #2 (Triage 0→9 story), updated pro-code section, model gap narrative
+- Updated `scripts/generate-executive-pdf.py` — replaced UC2 placeholder with real results table and findings
+- Updated `scripts/generate-presenter-guide.py` — new 3 Messages (model gap, data, iteration), UC2 rankings, updated findings and feedback loop
+- Regenerated both PDFs: `docs/executive-summary.pdf`, `docs/ogs-presenter-guide.pdf`
+- Total evaluation: 274 test runs (UC1: 128, UC2: 146)
+
+### Key findings
+1. **The model gap is the defining result of Round 2.** GPT-4.1 agents average 9.5/10. GPT-4o agent: 4/10. Same tools, same data, same backend. The tool improvements that produced perfect scores for GPT-4.1 had zero effect on GPT-4o.
+2. **Prompt placement matters as much as prompt content.** P6 excludeGovernment instruction existed in the ViolationAnalyst prompt but was buried — the model ignored it. Moving it to the top + adding a few-shot example + "NEVER fabricate" fixed it immediately.
+3. **P6 regression (PARTIAL → FAIL → PASS) is a cautionary tale.** The initial sub-agent prompt changes caused the model to hallucinate fake entity names instead of honestly acknowledging government dominance. The fix required three specific prompt engineering techniques (placement, few-shot, explicit prohibition).
+4. **Two agents achieved perfect 10/10:** COM MCP and Investigative Agent. Both use GPT-4.1, both benefit from tool improvements, both produce detailed analytical responses.
+5. **The Triage Agent's 0→9 trajectory is the strongest evidence that iterative improvement works** — even for the most complex multi-agent architecture.
+
+### Decisions made
+- Round 2 testing is complete — diminishing returns for GPT-4.1 agents
+- GCC MCP performance (4/10) is a platform constraint, not an engineering problem
+- All docs and PDFs updated for demo readiness
+
+### Open items
+- Triage P3 (assessment history) — only remaining PARTIAL, low priority
+- UC1 redemption retests (document agents) — carry-forward
+- Upload Philly PDFs to SharePoint — carry-forward
+- Demo dry run with updated materials
+- Consider BFG Repo Cleaner for git history

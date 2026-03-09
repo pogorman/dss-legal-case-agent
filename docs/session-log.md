@@ -1441,3 +1441,22 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 
 ### Next session priorities
 1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial
+
+## Session 29 — 2026-03-08
+
+### What was done
+- **PowerPoint deck generated** from slide outline PDF
+  - New script: `scripts/generate-slide-deck.py` (python-pptx)
+  - Output: `decks/agent-accuracy-spectrum.pptx` — 21 slides, widescreen 16:9
+  - Navy/blue branding with 5-level color bar (green-to-red) on content slides
+  - Tables: Five Levels, Results After Iteration, Code Spectrum, What to Do at Each Level
+  - Visuals: horizontal bar chart (model gap), before/after cards (tool gap), split-screen (Level 5 sheriff vs medical), danger taxonomy severity pills, three big number cards (bottom line), decision tree (GCC), iterative process rounds
+  - Speaker notes included on slides 1, 2, 7, 8, 9, 14, 20
+  - New `decks/` folder for presentation outputs
+
+### Decisions made
+- PowerPoint generator follows same pattern as PDF generators (self-contained Python script, hardcoded content)
+- Deck stored in `decks/` (separate from `docs/pdf/` which is for reference PDFs)
+
+### Next session priorities
+1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial

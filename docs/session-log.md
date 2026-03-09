@@ -1460,3 +1460,25 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 
 ### Next session priorities
 1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial
+
+## Session 30 — 2026-03-08
+
+### What was done
+- **Summary PDF refinements** (continued from sessions 28/29)
+  - **Tool Gap table**: Redesigned to match Data Gap table format (Issue / User Input / In Database / Agent Result). Removed duplicate before/after agent scores (now only in Iterative Process). Single row focused on address resolution.
+  - **Data Extraction Options table**: Moved from inline (Data Gap section) to its own appendix page with TOC entry and intro paragraph
+  - **Bold formatting**: Bolded "GPT-4o (Government Cloud) and GPT-4.1 (Commercial) performed identically at this level" in Level 1-2 section
+  - **Removed Level 5 reminder callout box** (redundant with content above)
+  - **Round 0 baseline testing**: Removed standalone section, distributed into each improvement subsection — Document Agents Round 0 (12 configs, 120 runs) and Structured Data Agents Round 0 (7 configs, 70 runs)
+  - **Fixed fpdf2 markdown strikethrough bug**: All `--` in rendered text was being interpreted as strikethrough markers by fpdf2's `markdown=True`. Replaced 11 instances with periods, commas, or semicolons throughout the document
+  - **Renamed section**: "What Government Cloud Customers Should Do" → "Government Cloud (GCC) Options" (TOC + heading)
+  - **Split Option 3**: Separated Foundry Agent (zero to low code) from fully custom agent (maximum control) into Options 3 and 4. Now 5 options total.
+  - **Added transition text**: Setup sentence before options ("five practical paths forward today") and transition paragraph after options leading into Code Investment Spectrum
+
+### Decisions made
+- `--` should never appear in text rendered with fpdf2 `markdown=True` (triggers strikethrough)
+- Tool Gap and Data Gap tables share same column structure for visual continuity
+- Round 0 baseline belongs in each improvement subsection, not as a standalone section
+
+### Next session priorities
+1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial

@@ -14,7 +14,7 @@ def sanitize_text(text):
     """Replace Unicode characters that Helvetica cannot render."""
     return (
         text
-        .replace("\u2014", "--")    # em dash
+        .replace("\u2014", " - ")   # em dash (avoid -- which triggers fpdf2 strikethrough)
         .replace("\u2013", "-")     # en dash
         .replace("\u2018", "'")     # left single quote
         .replace("\u2019", "'")     # right single quote
@@ -302,7 +302,7 @@ def build_pdf():
     pdf.multi_cell(0, 6, sanitize_text(
         "The agent accelerates the human; it does not replace them. "
         "Mandatory human review, citation linking, audit logging, and "
-        "organizational culture that treats AI output as a draft -- never "
+        "organizational culture that treats AI output as a draft, never "
         "a decision. This is the only responsible operating model."
     ), align="C")
 
@@ -318,10 +318,11 @@ def build_pdf():
         "The Danger Taxonomy",
         "The Evidence",
         "The Iterative Process",
-        "What Government Cloud Customers Should Do",
+        "Government Cloud (GCC) Options",
         "Five Findings That Surprised Us",
         "Conclusion",
         "Appendix: Agent Configurations",
+        "Appendix: Data Extraction Options",
     ]
     # Create link targets for each TOC entry
     toc_links = {entry: pdf.add_link() for entry in toc_entries}
@@ -372,13 +373,15 @@ def build_pdf():
     )
     pdf.body_text(
         "Document-based agents (Copilot Studio with SharePoint grounding) scored 8 out of "
-        "10 on both use cases with zero customization. GPT-4o and GPT-4.1 performed "
-        "identically at this level. Model choice does not matter here.",
+        "10 on both use cases with zero customization. **GPT-4o (Government Cloud) and GPT-4.1 (Commercial) performed "
+        "identically at this level.** Model choice does not matter here. "
+        "Invest in document hygiene (cross-reference headers that point "
+        "reviewers to related documents, consistent formatting, meaningful "
+        "filenames, metadata tags) rather than custom engineering.",
         bold_lead="What we found:"
     )
     pdf.body_text(
-        "Deploy Copilot with SharePoint. Invest in document hygiene (consistent "
-        "formatting, meaningful filenames, metadata tags) rather than custom engineering. "
+        "Deploy Copilot with SharePoint. "
         "This is where most agencies should start.",
         bold_lead="Recommendation:"
     )
@@ -393,10 +396,11 @@ def build_pdf():
     )
     pdf.body_text(
         "Aggregate queries (portfolio summaries, citywide statistics, workload counts) "
-        "worked reliably across all agent types, including the weakest performers. This is "
-        "where agents with structured data access begin to outperform document agents, "
-        "including both Copilot Studio MCP agents and pro-code agents. Live structured "
-        "data delivers answers that static documents cannot.",
+        "worked reliably across all agent types, including the weakest performers. "
+        "**This is where agents with structured data access begin to outperform "
+        "document agents,** including both Copilot Studio MCP agents and pro-code "
+        "agents (prior to improvements). Live structured data delivers answers "
+        "that static documents cannot.",
         bold_lead="What we found:"
     )
     pdf.body_text(
@@ -428,7 +432,7 @@ def build_pdf():
     model_widths = [50, 40, 80]
     model_rows = [
         ["GPT-4.1", "9.5 / 10", "Commercial Copilot Studio, Pro-code agents"],
-        ["GPT-5 Auto", "10 / 10", "Commercial Copilot Studio (identical to 4.1)"],
+        ["GPT-5 Auto", "9.5 / 10", "Commercial Copilot Studio (identical to 4.1)"],
         ["GPT-4o", "4 / 10", "Government Cloud Copilot Studio"],
         ["Platform-assigned", "2 / 10", "M365 Copilot Commercial (no user control)"],
     ]
@@ -473,22 +477,13 @@ def build_pdf():
         "fixed it in 30 minutes of engineering."
     )
 
-    tg_headers = ["Metric", "Before Tool", "After Tool"]
-    tg_widths = [70, 50, 50]
+    tg_headers = ["Issue", "User Input", "In Database", "Agent Result"]
+    tg_widths = [30, 42, 42, 56]
     tg_rows = [
-        ["Address failure rate", "87%", "0%"],
-        ["Copilot Studio MCP (Commercial)", "8 / 10", "10 / 10"],
-        ["Copilot Studio MCP (Gov Cloud)", "2 / 10", "4 / 10"],
-        ["Investigative Agent (OpenAI SDK)", "1 / 10", "10 / 10"],
-        ["Foundry Agent (Agent Service)", "4 / 10", "9 / 10"],
-        ["Triage Agent (Semantic Kernel)", "0 / 10", "10 / 10"],
+        ["Street address", "\"4763 Griscom Street\"", "\"4763 GRISCOM ST\"", "Wrong property 87% of the time"],
     ]
     pdf.styled_table(tg_headers, tg_rows, tg_widths, font_size=7.5,
-                      col_aligns=["L", "C", "C"])
-    pdf.ln(1)
-    pdf.set_font("Helvetica", "I", 7)
-    pdf.set_text_color(*LIGHT)
-    pdf.cell(0, 4, "* Ranked by score", new_x="LMARGIN", new_y="NEXT")
+                      col_aligns=["L", "L", "L", "L"])
 
     pdf.ln(2)
     pdf.body_text(
@@ -569,14 +564,6 @@ def build_pdf():
         bold_lead="Recommendation:"
     )
 
-    pdf.ln(2)
-    pdf.callout_box(
-        "*  Reminder",
-        "The agent accelerates the human; it does not replace them. Mandatory human "
-        "review, citation linking, audit logging, and organizational culture that treats "
-        "AI output as a draft -- never a decision. This is the only responsible operating model."
-    )
-
     # ====================================================================
     # DANGER TAXONOMY
     # ====================================================================
@@ -585,27 +572,32 @@ def build_pdf():
 
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical -- each was documented across 313 test runs."
+        "not hypothetical. Each was documented across 313 test runs."
     )
 
-    danger_headers = ["Severity", "Failure Mode", "Description", "Example from Testing"]
-    danger_widths = [18, 32, 60, 60]
+    danger_headers = ["Severity", "Failure Mode", "Description", "Example from Testing", "Agent(s)"]
+    danger_widths = [16, 30, 48, 48, 28]
     danger_rows = [
         ["Critical", "False negative",
-         "Data retrieved but not recognized\nas the answer",
-         "Agent found two positive fentanyl\nscreens, then concluded no drug\ntest results existed"],
+         "Data retrieved but not\nrecognized as the answer",
+         "Found two positive fentanyl\nscreens, then concluded no\ndrug test results existed",
+         "Web SPA\n(GPT-4.1)"],
         ["Critical", "Faithfully reproduced\nmisinformation",
-         "Agent accurately quoted a source\nwhose characterization was\nmisleading in isolation",
-         "Sheriff report: 'no fractures\ndetected' -- medical records\nshowed bilateral fractures"],
+         "Accurately quoted a source\nwhose characterization was\nmisleading in isolation",
+         "Sheriff report: 'no fractures\ndetected'; medical records\nshowed bilateral fractures",
+         "7 of 8 doc agents\n(GCC + Com)"],
         ["High", "Misattribution",
-         "Correct fact assigned to the\nwrong person",
-         "Mother's '8 PM bedtime' statement\nattributed to father, who\nconsistently said 'around ten'"],
+         "Correct fact assigned to\nthe wrong person",
+         "Mother's '8 PM bedtime'\nattributed to father, who\nconsistently said 'around ten'",
+         "4 of 8 doc agents\n(GCC + Com)"],
         ["High", "Hallucinated fact\nwith confidence",
-         "Invented specific detail with\nno source",
-         "Agent reported ER arrival at\n'2:00 AM' -- actual time was\n3:15 AM (no source for 2:00)"],
+         "Invented specific detail\nwith no source",
+         "Reported ER arrival at\n'2:00 AM'; actual time was\n3:15 AM (no source for 2:00)",
+         "Copilot Studio MCP\n(GCC / GPT-4o)"],
         ["Medium", "Silent failure",
-         "No results returned without\nindicating anything went wrong",
-         "Web SPA hallucinated a case\nnumber; doc agent returned 1 of 9\nresults with no warning"],
+         "No results returned without\nindicating anything wrong",
+         "Hallucinated a case number;\ndoc agent returned 1 of 9\nresults with no warning",
+         "Web SPA +\ndoc agents"],
     ]
 
     pdf.set_font("Helvetica", "B", 7.5)
@@ -652,7 +644,7 @@ def build_pdf():
                 pdf.set_text_color(*DARK)
                 pdf.set_font("Helvetica", "B" if i == 1 else "", 7.5)
             pdf.multi_cell(danger_widths[i], line_h, sanitize_text(val), border=0,
-                           align="C" if i <= 1 else "L")
+                           align="C" if i <= 1 or i == 4 else "L")
         pdf.set_y(y_start + row_h)
     pdf.ln(4)
 
@@ -701,7 +693,7 @@ def build_pdf():
         ["Custom Web App (pro-code / MCP Chat)", "10/10", "--", "GPT-4.1"],
         ["Investigative Agent (pro-code / OpenAI SDK)", "--", "10/10", "GPT-4.1"],
         ["Copilot Studio MCP (Commercial)", "8/10", "10/10", "GPT-4.1 / GPT-5 Auto"],
-        ["Foundry Agent (pro-code / Agent Service)", "--", "9/10", "GPT-4.1"],
+        ["Foundry Agent (Foundry Agent Service)", "--", "9/10", "GPT-4.1"],
         ["Triage Agent (pro-code / Semantic Kernel)", "--", "10/10", "GPT-4.1"],
         ["Copilot Studio MCP (Gov Cloud)", "9/10", "4/10", "GPT-4o"],
         ["SharePoint/PDF (Commercial)", "8/10", "8/10", "GPT-4.1 / GPT-5 Auto"],
@@ -726,15 +718,13 @@ def build_pdf():
         "that skip this process will encounter every failure mode documented here."
     )
 
-    pdf.subsection_title("Round 0: Baseline Testing")
-    pdf.body_text(
-        "Deploy the agent, test against known prompts with known answers, document every "
-        "failure. This project tested 11 + 8 agent configurations across 10 prompts each "
-        "(190 baseline test runs). This step applies to both document and structured data "
-        "agents -- without a baseline, you cannot measure improvement."
-    )
-
     pdf.subsection_title("Improving Document Agents")
+    pdf.body_text(
+        "Baseline: 12 document agent configurations tested across 10 prompts each "
+        "(120 test runs). Scores ranged from 3 out of 10 to 8 out of 10. Without a "
+        "baseline, you cannot measure improvement.",
+        bold_lead="Round 0: Test everything."
+    )
     pdf.body_text(
         "Document agents cannot be improved through tool engineering. Their accuracy "
         "depends on document quality and platform retrieval. Seven of eight missed the "
@@ -767,13 +757,20 @@ def build_pdf():
     pdf.body_text(
         "Copilot Studio topics, SharePoint metadata tags, and Power Automate "
         "cloud flows for cross-validation. These are platform configuration, not "
-        "custom code -- testing whether they can push document agents past 8 out "
+        "custom code. Testing whether they can push document agents past 8 out "
         "of 10 on both Government Cloud and Commercial.",
         bold_lead="Round 2: Configure the agent (planned)."
     )
 
     pdf.ln(2)
     pdf.subsection_title("Improving Structured Data Agents")
+
+    pdf.body_text(
+        "Baseline: 7 structured data agent configurations tested across 10 prompts each "
+        "(70 test runs). Scores ranged from 0 out of 10 to 8 out of 10. The best agent "
+        "still missed 2 prompts due to missing data.",
+        bold_lead="Round 0: Test everything."
+    )
 
     pdf.body_text(
         "Structured data agents improved dramatically through iterative engineering."
@@ -796,7 +793,7 @@ def build_pdf():
     imp_rows = [
         ["Copilot Studio MCP (Commercial)", "8/10", "10/10", "PERFECT"],
         ["Investigative Agent (pro-code / OpenAI SDK)", "1/10", "10/10", "PERFECT (+9)"],
-        ["Foundry Agent (pro-code / Agent Service)", "4/10", "9/10", "+5, zero failures"],
+        ["Foundry Agent (Foundry Agent Service)", "4/10", "9/10", "+5, zero failures"],
         ["Triage Agent (pro-code / Semantic Kernel)", "0/10", "10/10", "+10 across 5 rounds"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10", "+2 (model-limited)"],
         ["M365 Copilot MCP (Com)", "--", "2/10", "Not tested in Round 1"],
@@ -822,7 +819,7 @@ def build_pdf():
     # WHAT GCC CUSTOMERS SHOULD DO
     # ====================================================================
     pdf.add_page()
-    pdf.section_title("What Government Cloud Customers Should Do", link=toc_links["What Government Cloud Customers Should Do"])
+    pdf.section_title("Government Cloud (GCC) Options", link=toc_links["Government Cloud (GCC) Options"])
 
     pdf.subsection_title("The Model Gap")
     pdf.body_text(
@@ -833,21 +830,35 @@ def build_pdf():
         "engineering closed the structured data gap."
     )
 
+    pdf.body_text(
+        "Organizations on Government Cloud have five practical paths forward today:"
+    )
+
     pdf.bullet("Improve document quality now. Cross-reference headers, consistent "
                "formatting, and metadata tags improved retrieval from 0/2 to 2/2 on the "
-               "hardest prompts -- zero code, zero model dependency",
+               "hardest prompts. Zero code, zero model dependency",
                bold_lead="Option 1:")
     pdf.bullet("Use Copilot Studio document agents for Levels 1 through 3 (GPT-4o is "
                "adequate for retrieval and summarization)",
                bold_lead="Option 2:")
-    pdf.bullet("Deploy a Foundry Agent (zero to low code, portal or SDK) or a fully custom "
-               "agent using Azure OpenAI GPT-4.1 directly for Level 4 and 5 workloads",
+    pdf.bullet("Deploy a Foundry Agent (zero to low code, portal or SDK) using Azure OpenAI "
+               "GPT-4.1 for Level 4 and 5 workloads",
                bold_lead="Option 3:")
-    pdf.bullet("Monitor Government Cloud model updates -- when GPT-4.1 becomes available, "
-               "Copilot Studio agents will benefit immediately",
+    pdf.bullet("Build a fully custom agent using Azure OpenAI GPT-4.1 directly for maximum "
+               "control over orchestration, tools, and evaluation",
                bold_lead="Option 4:")
+    pdf.bullet("Monitor Government Cloud model updates. When GPT-4.1 becomes available, "
+               "Copilot Studio agents will benefit immediately",
+               bold_lead="Option 5:")
 
-    pdf.ln(4)
+    pdf.ln(2)
+    pdf.body_text(
+        "These options are not mutually exclusive. Most organizations will combine "
+        "document agents for everyday queries with a structured data agent for "
+        "investigative workloads. The table below shows how engineering investment "
+        "scales across these approaches."
+    )
+
     pdf.subsection_title("The Code Investment Spectrum")
     pdf.body_text(
         "The engineering investment changes what you can customize, not whether the agent "
@@ -868,7 +879,7 @@ def build_pdf():
     pdf.ln(2)
     pdf.body_text(
         "Every architecture scored 9 to 10 out of 10 with GPT-4.1. The investment buys "
-        "customization, governance controls, and audit capabilities -- all of which matter "
+        "customization, governance controls, and audit capabilities, all of which matter "
         "most at Levels 4 and 5."
     )
 
@@ -899,7 +910,7 @@ def build_pdf():
         "were not wrong about what the document said. They were wrong about what was true."
     )
 
-    pdf.subsection_title("2. A single missing tool caused an 87% failure rate -- and 30 minutes of engineering fixed it")
+    pdf.subsection_title("2. A single missing tool caused an 87% failure rate, and 30 minutes of engineering fixed it")
     pdf.body_text(
         "No tool existed to convert a street address into a database identifier. Adding one "
         "address lookup tool produced zero failures in retesting. One agent went from "
@@ -921,7 +932,7 @@ def build_pdf():
         "This false negative is invisible to users because the tool calls look correct."
     )
 
-    pdf.subsection_title("5. An advanced agent challenged its own premise -- and was right")
+    pdf.subsection_title("5. An advanced agent challenged its own premise, and was right")
     pdf.body_text(
         "The Foundry Agent was asked about a purchase price versus assessment ratio. "
         "Instead of calculating the answer, it checked the source data, found the premise "
@@ -1006,7 +1017,7 @@ def build_pdf():
         ["Copilot Studio MCP (Com)", "Copilot Studio", "GPT-4.1", "10/10"],
         ["Investigative Agent", "OpenAI SDK", "GPT-4.1", "10/10"],
         ["Triage Agent", "Semantic Kernel", "GPT-4.1", "10/10"],
-        ["Foundry Agent", "AI Agent Service", "GPT-4.1", "9/10"],
+        ["Foundry Agent", "Foundry Agent Service", "GPT-4.1", "9/10"],
         ["Copilot Studio SP/PDF (GCC)", "Copilot Studio", "GPT-4o", "8/10"],
         ["Copilot Studio SP/PDF (Com)", "Copilot Studio", "GPT-4.1", "8/10"],
         ["Copilot Studio MCP (GCC)", "Copilot Studio", "GPT-4o", "4/10"],
@@ -1018,7 +1029,7 @@ def build_pdf():
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 4, sanitize_text(
         "* Ranked by score. Custom Web App is pro-code, tested on Use Case 1 only. "
-        "Investigative, Foundry, and Triage are pro-code, tested on Use Case 2 only. "
+        "Investigative and Triage are pro-code; Foundry uses Agent Service (zero to low code). All tested on Use Case 2 only. "
         "M365 Copilot MCP (Commercial) uses a platform-assigned model with no user control."
     ))
 
@@ -1030,8 +1041,8 @@ def build_pdf():
     pdf.bullet("M365 Copilot (Commercial): Zero-code agent deployed via 3 JSON manifest files. "
                "Appears in Teams, Outlook, and Edge. Platform assigns the model.",
                bold_lead="M365 Copilot (Com):")
-    pdf.bullet("Azure AI Foundry managed agent with "
-               "MCPTool for automatic tool discovery. Stateful threads.",
+    pdf.bullet("Azure AI Foundry Agent Service with "
+               "MCPTool for automatic tool discovery. Zero to low code (portal or SDK). Stateful threads.",
                bold_lead="Foundry Agent:")
     pdf.bullet("OpenAI SDK: Custom TypeScript agent using Azure OpenAI "
                "chat completions with tool calling. Full developer control.",
@@ -1039,6 +1050,65 @@ def build_pdf():
     pdf.bullet("Semantic Kernel: C# team-of-agents pattern with a triage agent "
                "dispatching to specialized sub-agents (ownership, violations, transfers).",
                bold_lead="Triage Agent:")
+
+    # ====================================================================
+    # APPENDIX: DATA EXTRACTION OPTIONS
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix: Data Extraction Options", link=toc_links["Appendix: Data Extraction Options"])
+
+    pdf.body_text(
+        "When critical facts live only in unstructured documents, they must be extracted "
+        "and loaded into structured storage before an agent can query them. The right "
+        "approach depends on document variety, data volume, and existing skill sets."
+    )
+
+    ext_headers = ["Approach", "Effort", "Best For", "GCC"]
+    ext_widths = [42, 44, 62, 22]
+    ext_aligns = ["L", "L", "L", "C"]
+    ext_rows = [
+        ["Manual entry", "High (per document)", "Small datasets, one-time loads", "Yes"],
+        ["AI Builder", "Medium (template setup)", "Structured forms, limited doc types", "Yes"],
+        ["Agentic (e.g. GitHub\nCopilot + developer)", "Low-medium (schema +\nextraction logic)", "Complex docs, custom schemas", "Yes"],
+        ["Azure Document\nIntelligence", "Low (prebuilt + custom\nmodels)", "High volume, diverse doc types", "Yes"],
+    ]
+    # Header
+    pdf.set_font("Helvetica", "B", 7.5)
+    pdf.set_fill_color(*TABLE_HEADER_BG)
+    pdf.set_text_color(*TABLE_HEADER_FG)
+    for i, h in enumerate(ext_headers):
+        pdf.cell(ext_widths[i], 7, sanitize_text(h), border=0, align="C", fill=True)
+    pdf.ln()
+    # Rows with auto-height
+    ext_line_h = 4
+    ext_pad = 2
+    pdf.set_font("Helvetica", "", 7.5)
+    for r_idx, row in enumerate(ext_rows):
+        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
+        y_start = pdf.get_y()
+        x_start = pdf.get_x()
+        cell_heights = []
+        for i, val in enumerate(row):
+            pdf.set_font("Helvetica", "B" if i == 0 else "", 7.5)
+            h = pdf.multi_cell(ext_widths[i], ext_line_h, sanitize_text(val),
+                               dry_run=True, output="HEIGHT")
+            cell_heights.append(h)
+        row_h = max(cell_heights) + ext_pad * 2
+        pdf.set_fill_color(*bg)
+        pdf.rect(x_start, y_start, sum(ext_widths), row_h, "F")
+        for i, val in enumerate(row):
+            cell_x = x_start + sum(ext_widths[:i])
+            cell_y = y_start + ext_pad + (max(cell_heights) - cell_heights[i]) / 2
+            pdf.set_xy(cell_x, cell_y)
+            pdf.set_text_color(*DARK)
+            pdf.set_font("Helvetica", "B" if i == 0 else "", 7.5)
+            pdf.multi_cell(ext_widths[i], ext_line_h, sanitize_text(val), border=0,
+                           align=ext_aligns[i])
+        pdf.set_y(y_start + row_h)
+    pdf.ln(1)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*LIGHT)
+    pdf.cell(0, 4, "* Representative methods, not exhaustive.", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
     # OUTPUT

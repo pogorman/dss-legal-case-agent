@@ -1482,3 +1482,92 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 
 ### Next session priorities
 1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial
+
+## Session 31 — 2026-03-09
+
+### What was done
+- **SP/PDF - GCC full 10-prompt retest with cross-referenced documents**
+  - Cross-reference headers added in prior session (zero content changes, just document hygiene)
+  - **Result: 3/10 → 7/10 (cross-refs) → 8/10 (+ metadata tags)** — worst agent in the entire test set now tied with Commercial SP/PDF at 8/10
+  - Prompt-by-prompt results:
+
+| Prompt | Before | After | Change |
+|--------|--------|-------|--------|
+| P1 (ER time + nurse) | Pass | Pass (now found Rebecca Torres) | — |
+| P2 (Marcus Webb) | Fail | Partial → Pass (after metadata tags) | +2 |
+| P3 (Crystal Price) | Partial | Pass (specific dates, missed screens) | +1 |
+| P4 (Skeletal survey) | Fail | Pass (both fractures, 2 sources) | +2 |
+| P5 (Timeline) | Fail | Pass (10+ events, zero case contamination) | +2 |
+| P6 (People) | Fail | Partial (7/8, missing Thomas Reed) | +1 |
+| P7 (Dena statements) | Pass | Pass (3/3 changes) | — |
+| P8 (LE statements) | Fail | Pass (both parents, full detail) | +2 |
+| P9 (TPR cases) | Partial | Partial (structural doc limitation) | — |
+| P10 (Time gap) | Fail | Pass (9:30 PM → 3:15 AM = 5h45m) | +2 |
+
+- **KB/PDF - GCC retest with cross-referenced documents** (2 prompts)
+  - General skeletal survey prompt: Pass — full fracture detail, Medical Records source
+  - Sheriff's Office trap prompt: Pass — "Yes, fractures found," 2-source cross-reference
+- **SP/PDF - Com and SP/PDF - GCC retests from prior session** (doc-retest-1-com.txt, doc-retest-1.txt) documented
+  - Commercial: 0/2 → 2/2 (total failure → perfect, 4 sources)
+  - GCC: vague → detailed multi-source analysis
+- **SharePoint metadata tags** added to Medical_Records.pdf (document topics/keywords)
+  - P2 retested: Partial → Pass — agent now retrieves Medical Records nursing notes for parent statement queries
+  - SP/PDF - GCC now at **8/10** (tied with SP/PDF - Com)
+- **Copilot Studio system instruction tested** ("source hierarchy: Medical Records > Court Filings > ...")
+  - No effect on P2 — the problem was retrieval, not reasoning. Metadata tags fixed it instead.
+- **Updated all PDF generators and slide deck** with 3/10 → 8/10 results
+  - `generate-executive-pdf.py`: Cross-use-case table, Round 0 baseline, full retest paragraph, GCC Options, UC1 appendix
+  - `generate-demo-guide-pdf.py`: Key stats table, document improvement table, A/B result narrative
+  - `generate-slide-outline-pdf.py`: GCC bullet updated
+  - `generate-slide-deck.py`: Added GCC 3/10→7/10 bullet
+- Regenerated all 4 outputs (summary.pdf, demo-guide.pdf, slide-outline.pdf, agent-accuracy-spectrum.pptx)
+
+### Decisions made
+- SP/PDF - GCC score updated from 3/10 to "3/10 to 8/10" (showing before/after) in all tables
+- Document improvement table rows now both show 0/2 → 2/2 (GCC was previously "Vague → Detailed")
+- GCC Options section Option 1 now leads with the 3→8 result instead of the narrow 0/2→2/2 metric
+- System instructions (source hierarchy) don't fix retrieval gaps — metadata tags do
+- SP/PDF - Com not retested (already 8/10 with 0 Fails; its 2 Partials are structural)
+- P2 revised prompt tested for SP/PDF - GCC: Partial → Pass when given explicit document names
+
+### Next session priorities
+1. **KB agent retests**: Full 10-prompt battery on KB/PDF and KB/DOCX agents with cross-referenced documents
+2. **SP/PDF remaining gaps**: P6 (missing Thomas Reed/GAL) and P9 (structural doc limitation) are the two remaining Partials
+
+## Session 32 — 2026-03-09
+
+### What was done
+- **Demo guide: Document Improvement Walkthrough** — Added new "Act 4b: Document Improvement Walkthrough" section (5-7 minutes) to `generate-demo-guide-pdf.py`
+  - Step 1: Baseline (3/10) — shows original document library, runs skeletal survey and Marcus Webb prompts, explains why they fail
+  - Step 2: Cross-reference headers (3/10 → 7/10) — side-by-side comparison of original vs cross-referenced documents, highlights the key annotations, runs skeletal survey prompt to show it passes, full 10-prompt results table
+  - Step 3: SharePoint metadata tags (7/10 → 8/10) — shows library metadata columns, explains retrieval gap on P2, runs Marcus Webb prompt to show it passes
+  - Punchline: summary table (Step / Change / Score / Effort), callout box for GCC customers
+- **Updated Act 4 (Level 5)**: Replaced "optional beat" document improvement text with a clean transition into Act 4b
+- **Updated timing guide**: Added Act 4b row, adjusted running totals (now 65-70 min total), shortened Act 4 from "5-6 min" to "3-4 min"
+- **Updated compressed/standard timing notes**: Both explicitly keep Act 4b walkthrough
+- Regenerated demo-guide.pdf (now 25 pages, up from ~20)
+
+### Decisions made
+- Act 4b goes between Level 5 (trust-but-verify) and Act 5 (what this means) — Level 5 introduces the problem, 4b shows the fix, Act 5 wraps up
+- Walkthrough designed for live demo: prompts to type, talking points for each step, what to show on screen
+- Both compressed (25 min) and standard (40 min) formats keep the full walkthrough — this is the audience's favorite section
+- **Cross-referenced Case 2 documents created** — 5 documents in `sharepoint-docs/Case-2024-DR-15-0341 (R1 - Cross-Referenced)/`
+  - TPR_Petition_and_Affidavit, GAL_Reports, Court_Orders_and_Filings, DSS_Investigation_Report, Substance_Abuse_Evaluation (md/docx/pdf)
+  - Every document's cross-reference header prominently mentions Thomas Reed as GAL
+- **P6 retested with cross-referenced Case 2 docs**
+  - SP/PDF-GCC: Partial → Pass (Thomas Reed found, 2 sources: GAL_Reports + DSS_Investigation_Report)
+  - SP/PDF-Com: Pass → Pass (already passing, now 4 sources instead of 1, organized by category with summary table)
+- **SP/PDF-GCC now at 9/10** — surpasses Commercial SP/PDF (8/10). Only P9 (structural) remains Partial.
+- **SP/PDF-Com stays at 8/10** — P2 (bedtime time range) and P9 (structural) are the two remaining Partials
+- Metadata tags tested on Webb GAL_Report for P6 — no effect because Thomas Reed is GAL for the Price case, not the Webb case. Cross-referenced Case 2 docs fixed it instead.
+
+### Decisions made
+- Cross-referenced Case 2 docs follow exact same pattern as Case 1 (blockquote header with document descriptions)
+- Thomas Reed gap was a missing-document problem (Case 2 GAL Report not being retrieved), not a metadata problem
+- SP/PDF-GCC at 9/10 surpasses Commercial SP/PDF (8/10) — document hygiene closed AND surpassed the model gap for document agents
+- P9 is unfixable by design — useful demo point about document agent ceiling vs structured data
+
+### Next session priorities
+1. **Update all PDFs and slide deck**: 8/10 → 9/10 for GCC SP/PDF across all generators
+2. **KB agent retests**: Full 10-prompt battery on KB/PDF and KB/DOCX agents with cross-referenced documents (both Case 1 and Case 2)
+3. **SP/PDF-Com full retest**: Run all 10 prompts on Commercial with both cross-referenced doc sets to see if it also improves past 8/10

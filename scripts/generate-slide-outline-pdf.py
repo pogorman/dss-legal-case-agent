@@ -464,7 +464,7 @@ def build_pdf():
         "Commercial agent: 0/2 to 2/2 -- pulled Medical Records as primary source"
     )
     pdf.bullet(
-        "GCC agent: vague single-source answer became detailed multi-source analysis"
+        "GCC agent: 3/10 to 9/10 across all 10 prompts with document hygiene alone"
     )
     pdf.bullet(
         "Zero code, zero engineering -- document hygiene that any paralegal can implement"

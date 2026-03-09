@@ -616,8 +616,9 @@ def slide_09_level5(prs):
     add_bullet_list(slide, 1.2, 5.4, 10.9, 1.5, [
         "Added cross-reference headers to each document (zero content changes)",
         "Commercial agent: 0/2 to 2/2 -- pulled Medical Records as primary source",
+        "GCC agent: 3/10 to 9/10 -- same model, same platform, just better documents",
         "Zero code, zero engineering -- document hygiene any paralegal can implement",
-    ], font_size=15)
+    ], font_size=14)
 
     add_level_bar(slide)
     add_confidential_footer(slide)

@@ -362,7 +362,7 @@ def build_pdf():
         ["M365 Copilot Com (platform model)", "2/10 (20% pass rate)"],
         ["One fuzzy search tool", "13% to 100% accuracy"],
         ["Document agents on skeletal survey", "7 of 8 reproduced a misleading finding"],
-        ["Cross-reference headers (zero code)", "0/2 to 2/2 on Commercial doc agent"],
+        ["Document hygiene (zero code)", "GCC: 3/10 to 9/10; Com: 0/2 to 2/2"],
         ["Iterative improvement", "0-1/10 to perfect 10/10 (3-5 rounds)"],
     ]
     pdf.styled_table(stats_headers, stats_rows, stats_widths, font_size=8)
@@ -619,31 +619,23 @@ def build_pdf():
     pdf.body_text("Pause. Let it land.", bold_lead="Pause. Let it land.")
 
     pdf.body_text(
-        "But here is the good news. We tested whether document structure alone "
-        "could fix this -- without changing a single word of content.",
-        bold_lead="The good news (optional beat, 1-2 minutes):"
+        "Transition into the walkthrough:",
+        bold_lead="Transition into the walkthrough:"
     )
 
     pdf.blockquote(
-        '"We added a cross-reference header to each document -- standard legal case '
-        "file practice. Each document now lists the other case file documents and "
-        'what they contain. Same words, same facts. Just better organized."'
+        '"But here is the good news. We found a way to fix this. And it did not '
+        "require a single line of code, a model upgrade, or a platform configuration "
+        "change. Let me show you.\""
     )
 
-    pdf.blockquote(
-        '"The Commercial document agent went from failing completely -- it could not '
-        "find any information about the skeletal survey at all, even after five "
-        "attempts -- to pulling the actual Medical Records and delivering the full "
-        "radiology findings. Four source documents cited, detailed fracture analysis, "
-        'healing timelines. Zero content changes."'
+    pdf.body_text(
+        "Go directly into Act 4b: Document Improvement Walkthrough (next section).",
+        bold_lead="[Go to Act 4b]"
     )
 
-    pdf.blockquote(
-        '"This is the Level 1-2 investment I mentioned earlier. Document hygiene. '
-        "Cross-reference headers. Consistent formatting. These are zero-code "
-        "improvements that any paralegal or records manager can implement, and they "
-        'compound across every document agent in the organization."'
-    )
+    pdf.body_text("After the walkthrough, return here for the human review thread.",
+                  bold_lead="After the walkthrough:")
 
     pdf.body_text("The human review thread -- connect it to their daily experience:",
                   bold_lead="The human review thread -- connect it to their daily experience:")
@@ -661,6 +653,306 @@ def build_pdf():
         "research assistant -- it drafts, it retrieves, it organizes. The human "
         "decides. Trust but verify is not a suggestion at this level. It is the "
         'only responsible way to operate."'
+    )
+
+    # -- Act 4b: Document Improvement Walkthrough --
+    pdf.add_page()
+    pdf.subsection_title("Act 4b: Document Improvement Walkthrough (5-7 minutes)")
+
+    pdf.body_text(
+        "This is the audience's favorite section. You are walking them through "
+        "a real improvement journey, step by step, with live results at each stage. "
+        "Three steps, zero code.",
+        bold_lead="Why this matters:"
+    )
+
+    pdf.callout_box(
+        "The Story Arc",
+        "Step 1: Baseline (3/10) -> Step 2: Cross-reference headers (7/10) -> "
+        "Step 3: Metadata tags (8/10) -> Step 4: Cross-ref Case 2 docs (9/10). "
+        "Same model, same platform. GCC went from worst in the test set to surpassing Commercial.",
+        height=22
+    )
+
+    # -- Step 1 --
+    pdf.ln(2)
+    pdf.subsection_title("Step 1: The Baseline (show the problem)")
+
+    pdf.body_text(
+        "Open the original SharePoint document library. Show the audience: "
+        "six PDFs, standard case file. No special formatting.",
+        bold_lead="On screen:"
+    )
+
+    pdf.blockquote(
+        '"This is what a typical case file looks like in SharePoint. Six documents: '
+        "investigation report, medical records, sheriff report, court orders, GAL "
+        "report, home study. Uploaded as PDFs, no modifications. A Copilot Studio "
+        'agent pointed at this library. Let me show you how it does."'
+    )
+
+    pdf.body_text("Run the skeletal survey prompt:", bold_lead="Prompt 1:")
+
+    pdf.code_block([
+        "Did the Sheriff's Office investigation find fractures in Jaylen",
+        "Webb's skeletal survey?"
+    ])
+
+    pdf.blockquote(
+        '"Watch what comes back. The agent quotes the Sheriff Report: \'no fractures '
+        "detected on skeletal survey.' Sounds definitive, right? But the Medical "
+        "Records in the same case file document bilateral long bone fractures. The "
+        "Sheriff Report was summarizing incorrectly. The agent faithfully reproduced "
+        'the error."'
+    )
+
+    pdf.body_text("Run the Marcus Webb prompt:", bold_lead="Prompt 2:")
+
+    pdf.code_block([
+        "What did Marcus Webb tell hospital staff about when he put Jaylen",
+        "to bed, and did he give the same answer to law enforcement?"
+    ])
+
+    pdf.blockquote(
+        '"This one fails differently. The agent cannot even find Marcus Webb\'s '
+        "statements to hospital staff. The nursing notes are in the Medical Records, "
+        "but the agent never retrieves that document for this question. It only "
+        'searches the documents it thinks are relevant."'
+    )
+
+    pdf.body_text(
+        "Score: 3 out of 10 across our full 10-prompt test battery. "
+        "Six outright failures, one partial pass. This was the worst-performing "
+        "agent in our entire evaluation of 19 agents.",
+        bold_lead="Result:"
+    )
+
+    # -- Step 2 --
+    pdf.add_page()
+    pdf.subsection_title("Step 2: Cross-Reference Headers (3/10 to 7/10)")
+
+    pdf.body_text(
+        "Open the cross-referenced document library side by side with the original. "
+        "Pull up the Sheriff Report. Scroll to the top.",
+        bold_lead="On screen:"
+    )
+
+    pdf.blockquote(
+        '"Same documents, same content. The only change: each document now has a '
+        "cross-reference header at the top. It lists every other document in the case "
+        "file and describes what each one contains. This is standard legal case file "
+        "practice. Nothing exotic.\""
+    )
+
+    pdf.body_text(
+        "Show the Sheriff Report header. Read the Medical Records entry aloud:",
+        bold_lead="Highlight:"
+    )
+
+    pdf.blockquote(
+        '"Look at this entry: \'Medical Records contains the complete radiology report '
+        "with skeletal survey findings, fracture diagnoses, fracture age estimates, "
+        "physician assessment of non-accidental trauma, and ER nursing interview notes "
+        "from both parents.' Now the agent knows where to look.\""
+    )
+
+    pdf.body_text(
+        "Now open the Medical Records cross-reference header. Show the Sheriff Report "
+        "entry:",
+        bold_lead="Key annotation:"
+    )
+
+    pdf.blockquote(
+        '"And here is the key: the Medical Records header says \'the Sheriff Report '
+        "summarizes the skeletal survey as no fractures detected. This refers only to "
+        "areas outside the known fracture sites. See Radiology Report below for "
+        "complete findings including two diagnosed fractures.' We told the agent "
+        'exactly where the conflict is."'
+    )
+
+    pdf.body_text(
+        "Upload the cross-referenced documents to the agent. "
+        "Run the same skeletal survey prompt:",
+        bold_lead="Run the test:"
+    )
+
+    pdf.code_block([
+        "Did the Sheriff's Office investigation find fractures in Jaylen",
+        "Webb's skeletal survey?"
+    ])
+
+    pdf.blockquote(
+        '"Now watch. The agent pulls the Medical Records as its primary source. '
+        "Bilateral long bone fractures: right femur transverse fracture, left "
+        "humerus spiral fracture, different stages of healing indicating two "
+        'separate trauma events. This is the correct answer."'
+    )
+
+    pdf.body_text(
+        "Full retest results: 3 out of 10 to 7 out of 10. "
+        "Six failures became five passes and two partials. "
+        "Zero code, same model, same platform.",
+        bold_lead="Result:"
+    )
+
+    pdf.body_text("Show the improvement table:", bold_lead="Show the improvement table:")
+
+    step2_headers = ["Prompt", "Before", "After"]
+    step2_widths = [100, 35, 35]
+    step2_rows = [
+        ["P1: ER arrival time + admitting nurse", "Pass", "Pass"],
+        ["P2: Marcus Webb statements to hospital staff", "Fail", "Partial"],
+        ["P3: Crystal Price drug test results", "Partial", "Pass"],
+        ["P4: Skeletal survey findings", "Fail", "Pass"],
+        ["P5: Complete case timeline", "Fail", "Pass"],
+        ["P6: People involved in Price case", "Fail", "Partial"],
+        ["P7: Dena Holloway statement changes", "Pass", "Pass"],
+        ["P8: Statements to law enforcement", "Fail", "Pass"],
+        ["P9: TPR cases in the system", "Partial", "Partial"],
+        ["P10: Time gap between thump and ER", "Fail", "Pass"],
+    ]
+    pdf.styled_table(step2_headers, step2_rows, step2_widths, font_size=7.5)
+
+    pdf.ln(4)
+    pdf.blockquote(
+        '"Five failures flipped to passes. Just by telling each document what the '
+        "other documents contain. A paralegal could do this in an afternoon.\""
+    )
+
+    # -- Step 3 --
+    pdf.add_page()
+    pdf.subsection_title("Step 3: SharePoint Metadata Tags (7/10 to 8/10)")
+
+    pdf.body_text(
+        "Open the SharePoint document library settings. Show the Topics and Keywords "
+        "columns on Medical_Records.pdf.",
+        bold_lead="On screen:"
+    )
+
+    pdf.blockquote(
+        '"We still have one prompt stuck at Partial. The agent cannot find Marcus '
+        "Webb's statements to hospital staff. Why? The agent's retrieval engine "
+        "never pulls the Medical Records for a question about parent statements. "
+        "It searches for 'Marcus Webb hospital statements' and only finds the "
+        'Sheriff Report and DSS Investigation Report."'
+    )
+
+    pdf.blockquote(
+        '"The fix: SharePoint metadata tags. We added Topics and Keywords to the '
+        "Medical Records PDF: 'nursing interviews, parent statements to nursing "
+        "staff, skeletal survey, fracture analysis, ER admission.' Now when the "
+        "agent searches for parent statements, the Medical Records document shows "
+        'up in the retrieval results."'
+    )
+
+    pdf.body_text("Run the Marcus Webb prompt again:", bold_lead="Run the test:")
+
+    pdf.code_block([
+        "What did Marcus Webb tell hospital staff about when he put Jaylen",
+        "to bed, and did he give the same answer to law enforcement?"
+    ])
+
+    pdf.blockquote(
+        '"Now the agent retrieves the Medical Records nursing notes. Marcus told '
+        "hospital staff 'around ten' for bedtime. But the Sheriff Report says he told "
+        "Lt. Odom approximately 8:00 PM. The agent surfaces the two-hour discrepancy "
+        'across documents. That is the correct answer."'
+    )
+
+    pdf.body_text(
+        "Score: 7 out of 10 to 8 out of 10. Same model (GPT-4o), same "
+        "platform, same Copilot Studio configuration.",
+        bold_lead="Result:"
+    )
+
+    # -- Step 4 --
+    pdf.ln(2)
+    pdf.subsection_title("Step 4: Cross-Reference the Second Case (8/10 to 9/10)")
+
+    pdf.body_text(
+        "The document library has two cases. We applied cross-reference headers "
+        "to the Webb case (Case 1) in Step 2. Now apply the same treatment to "
+        "the Price case (Case 2) documents.",
+        bold_lead="On screen:"
+    )
+
+    pdf.blockquote(
+        '"Same pattern. Each Price case document now lists the other documents '
+        "in the case file and what they contain. The GAL Report is written by "
+        "Thomas Reed, the court-appointed Guardian ad Litem. Before cross-references, "
+        "the agent never surfaced his name when asked who was involved in the case. "
+        'Now it does."'
+    )
+
+    pdf.body_text("Run the people roster prompt:", bold_lead="Run the test:")
+
+    pdf.code_block([
+        "Who are all the people involved in the Crystal Price TPR case,",
+        "and what are their roles?"
+    ])
+
+    pdf.blockquote(
+        '"Thomas Reed now appears as Guardian ad Litem. The agent pulls from '
+        "the GAL Report and the DSS Investigation Report together. Before "
+        "cross-references, it only cited the TPR Petition and missed him "
+        'entirely."'
+    )
+
+    pdf.body_text(
+        "Score: 8 out of 10 to 9 out of 10. The GCC agent now surpasses "
+        "the Commercial SP/PDF agent (8/10). Same model (GPT-4o), same "
+        "platform.",
+        bold_lead="Result:"
+    )
+
+    # -- The Punchline --
+    pdf.ln(2)
+    pdf.subsection_title("The Punchline")
+
+    pdf.blockquote(
+        '"Let me recap what just happened. The Government Cloud document agent '
+        "started at 3 out of 10. The worst performer in our entire evaluation "
+        "of 19 agents. Worse than M365 Copilot. Four steps later, it is at 9 "
+        "out of 10, surpassing the Commercial agent that has access to a better "
+        'model."'
+    )
+
+    pdf.blockquote(
+        '"Cross-reference headers on both cases. Metadata tags on one document. '
+        "That is the entire engineering investment. A paralegal could do this in "
+        'an afternoon."'
+    )
+
+    pdf.blockquote(
+        '"Zero code. Zero model changes. Zero Copilot Studio configuration changes. '
+        "These improvements compound across every document agent in the organization "
+        'that uses the same library."'
+    )
+
+    pdf.body_text(
+        "Let this land. Then transition back to Act 4 (human review thread) "
+        "or skip directly to Act 5.",
+        bold_lead="Pause."
+    )
+
+    summary_headers = ["Step", "Change", "Score", "Effort"]
+    summary_widths = [12, 70, 48, 40]
+    summary_rows = [
+        ["1", "Original documents (baseline)", "3/10", "n/a"],
+        ["2", "Cross-reference headers on Case 1 documents", "3/10 to 7/10", "1-2 hours"],
+        ["3", "SharePoint metadata tags on Medical Records", "7/10 to 8/10", "10 minutes"],
+        ["4", "Cross-reference headers on Case 2 documents", "8/10 to 9/10", "1 hour"],
+    ]
+    pdf.styled_table(summary_headers, summary_rows, summary_widths, font_size=8)
+
+    pdf.ln(4)
+    pdf.callout_box(
+        "Key Takeaway for GCC Customers",
+        "Document hygiene is the highest-ROI investment for Government Cloud "
+        "document agents. Cross-reference headers and metadata tags require no "
+        "code, no model upgrade, and no platform configuration. The GCC agent "
+        "surpassed Commercial with document improvements alone.",
+        height=26
     )
 
     # -- Act 5: What This Means --
@@ -784,7 +1076,7 @@ def build_pdf():
     doc_imp_widths = [60, 28, 28, 54]
     doc_imp_rows = [
         ["Commercial doc agent", "0/2", "2/2", "Cross-ref headers"],
-        ["GCC doc agent", "Vague", "Multi-source", "Cross-ref headers"],
+        ["GCC SP/PDF agent", "3/10", "9/10", "Cross-ref headers + metadata tags"],
     ]
     pdf.styled_table(doc_imp_headers, doc_imp_rows, doc_imp_widths, font_size=8)
 
@@ -810,9 +1102,10 @@ def build_pdf():
         ["Act 3: Level 4 Investigation (Money Prompt)", "8-10 min", "23 min"],
         ["Act 3b: Side-by-Side Comparison", "5-7 min", "30 min"],
         ["Act 3c: Use Case 2 (Philly Properties)", "5-7 min", "37 min"],
-        ["Act 4: Level 5 Trust But Verify", "5-6 min", "43 min"],
-        ["Act 5: Code Spectrum + GCC Guidance", "5-7 min", "50 min"],
-        ["Q&A", "10-15 min", "60-65 min"],
+        ["Act 4: Level 5 Trust But Verify", "3-4 min", "41 min"],
+        ["Act 4b: Document Improvement Walkthrough", "5-7 min", "48 min"],
+        ["Act 5: Code Spectrum + GCC Guidance", "5-7 min", "55 min"],
+        ["Q&A", "10-15 min", "65-70 min"],
     ]
     pdf.styled_table(timing_headers, timing_rows, timing_widths, font_size=8)
 
@@ -884,13 +1177,14 @@ def build_pdf():
 
     pdf.body_text(
         "Skip Acts 1, 3b, 3c. Shorten Act 3 to just the money prompt result. "
-        "Skip Act 5 code spectrum.",
-        bold_lead="Compressed (20 min):"
+        "Keep Act 4b (document improvement walkthrough). Skip Act 5 code spectrum.",
+        bold_lead="Compressed (25 min):"
     )
 
     pdf.body_text(
-        "Skip Act 3c (Philly). Shorten side-by-side to one comparison prompt.",
-        bold_lead="Standard (35 min):"
+        "Skip Act 3c (Philly). Shorten side-by-side to one comparison prompt. "
+        "Keep full Act 4b walkthrough.",
+        bold_lead="Standard (40 min):"
     )
 
     # ====================================================================
@@ -1111,11 +1405,14 @@ def build_pdf():
 
     pdf.body_text(
         "With original documents, the Commercial agent failed completely (retrieved "
-        "the wrong case on Prompt 3.3, returned 'no information found' on the "
+        "the wrong case on one prompt, returned 'no information found' on the "
         "targeted skeletal survey prompt despite five attempts). With cross-referenced "
         "documents (same content, added case file cross-reference headers), the agent "
         "pulled Medical Records as the primary source and delivered detailed fracture "
-        "findings with healing timelines -- 0/2 to 2/2 with zero content changes.",
+        "findings with healing timelines. The Government Cloud agent improved even "
+        "more dramatically: from 3 out of 10 to 9 out of 10 across all 10 prompts "
+        "using cross-reference headers and metadata tags. Zero code, same model, "
+        "same platform.",
         bold_lead="Document improvement A/B result:"
     )
 

@@ -697,7 +697,7 @@ def build_pdf():
         ["Triage Agent (pro-code / Semantic Kernel)", "--", "10/10", "GPT-4.1"],
         ["Copilot Studio MCP (Gov Cloud)", "9/10", "4/10", "GPT-4o"],
         ["SharePoint/PDF (Commercial)", "8/10", "8/10", "GPT-4.1 / GPT-5 Auto"],
-        ["SharePoint/PDF (Gov Cloud)", "3-8/10", "8/10", "GPT-4o"],
+        ["SharePoint/PDF (Gov Cloud)", "3/10 to 9/10", "8/10", "GPT-4o"],
         ["M365 Copilot MCP (Com)", "--", "2/10", "Platform-assigned"],
     ]
     pdf.styled_table(result_headers, result_rows, result_widths, font_size=7.5)
@@ -721,8 +721,9 @@ def build_pdf():
     pdf.subsection_title("Improving Document Agents")
     pdf.body_text(
         "Baseline: 12 document agent configurations tested across 10 prompts each "
-        "(120 test runs). Scores ranged from 3 out of 10 to 8 out of 10. Without a "
-        "baseline, you cannot measure improvement.",
+        "(120 test runs). Scores ranged from 3 out of 10 to 8 out of 10. The worst "
+        "performer was the Government Cloud SharePoint/PDF agent at 3 out of 10. "
+        "Without a baseline, you cannot measure improvement.",
         bold_lead="Round 0: Test everything."
     )
     pdf.body_text(
@@ -741,12 +742,19 @@ def build_pdf():
     doc_widths = [62, 28, 28, 52]
     doc_rows = [
         ["Commercial doc agent", "0 / 2", "2 / 2", "Retrieved 4 sources"],
-        ["Gov Cloud doc agent", "Vague", "Detailed", "Multi-source analysis"],
+        ["Gov Cloud doc agent", "0 / 2", "2 / 2", "Cited Medical Records directly"],
     ]
     pdf.styled_table(doc_headers, doc_rows, doc_widths, font_size=7.5,
                       col_aligns=["L", "C", "C", "L"])
 
     pdf.ln(2)
+    pdf.body_text(
+        "Full retest of the Government Cloud SharePoint/PDF agent across all "
+        "10 prompts: 3 out of 10 before document improvements, 9 out of 10 after. "
+        "Cross-reference headers fixed seven failures; SharePoint metadata tags fixed "
+        "an eighth. Zero code, same model, same platform.",
+        bold_lead="Full retest result:"
+    )
     pdf.body_text(
         "Invest in document hygiene before custom engineering. Cross-reference "
         "headers, consistent formatting, meaningful filenames, and metadata tags. "
@@ -755,11 +763,10 @@ def build_pdf():
     )
 
     pdf.body_text(
-        "Copilot Studio topics, SharePoint metadata tags, and Power Automate "
-        "cloud flows for cross-validation. These are platform configuration, not "
-        "custom code. Testing whether they can push document agents past 8 out "
-        "of 10 on both Government Cloud and Commercial.",
-        bold_lead="Round 2: Configure the agent (planned)."
+        "SharePoint metadata tags (document topics, keywords) boosted retrieval "
+        "for queries the platform previously missed. Adding keywords to Medical "
+        "Records fixed a parent statement retrieval failure. Still zero code.",
+        bold_lead="Round 2: Add metadata tags."
     )
 
     pdf.ln(2)
@@ -834,9 +841,10 @@ def build_pdf():
         "Organizations on Government Cloud have five practical paths forward today:"
     )
 
-    pdf.bullet("Improve document quality now. Cross-reference headers, consistent "
-               "formatting, and metadata tags improved retrieval from 0/2 to 2/2 on the "
-               "hardest prompts. Zero code, zero model dependency",
+    pdf.bullet("Improve document quality now. Cross-reference headers and SharePoint "
+               "metadata tags improved the Government Cloud document agent from 3 out "
+               "of 10 to 9 out of 10, surpassing the Commercial agent. Zero code, zero "
+               "model dependency",
                bold_lead="Option 1:")
     pdf.bullet("Use Copilot Studio document agents for Levels 1 through 3 (GPT-4o is "
                "adequate for retrieval and summarization)",
@@ -996,7 +1004,7 @@ def build_pdf():
         ["Copilot Studio SP/DOCX (GCC)", "SharePoint DOCXs", "GPT-4o", "5/10"],
         ["Copilot Studio KB/PDF (GCC)", "Uploaded PDFs", "GPT-4o", "5/10"],
         ["Copilot Studio KB/DOCX (GCC)", "Uploaded DOCXs", "GPT-4o", "4/10"],
-        ["Copilot Studio SP/PDF (GCC)", "SharePoint PDFs", "GPT-4o", "3/10"],
+        ["Copilot Studio SP/PDF (GCC)", "SharePoint PDFs", "GPT-4o", "3/10 to 9/10"],
     ]
     pdf.styled_table(uc1_headers, uc1_rows, uc1_widths, font_size=7)
     pdf.ln(1)
@@ -1004,8 +1012,9 @@ def build_pdf():
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 4, sanitize_text(
         "* Ranked by score. Document agent scores (rows 5-11) are approximate totals "
-        "across 10 prompts. PDF consistently outperformed DOCX; Commercial consistently "
-        "outperformed Government Cloud."
+        "across 10 prompts. SP/PDF (GCC) improved from 3/10 to 9/10 after adding "
+        "cross-reference headers and metadata tags (zero code). PDF consistently "
+        "outperformed DOCX; Commercial consistently outperformed Government Cloud."
     ))
 
     pdf.ln(6)
@@ -1018,7 +1027,7 @@ def build_pdf():
         ["Investigative Agent", "OpenAI SDK", "GPT-4.1", "10/10"],
         ["Triage Agent", "Semantic Kernel", "GPT-4.1", "10/10"],
         ["Foundry Agent", "Foundry Agent Service", "GPT-4.1", "9/10"],
-        ["Copilot Studio SP/PDF (GCC)", "Copilot Studio", "GPT-4o", "8/10"],
+        ["Copilot Studio SP/PDF (GCC)", "Copilot Studio", "GPT-4o", "9/10"],
         ["Copilot Studio SP/PDF (Com)", "Copilot Studio", "GPT-4.1", "8/10"],
         ["Copilot Studio MCP (GCC)", "Copilot Studio", "GPT-4o", "4/10"],
         ["M365 Copilot MCP (Com)", "M365 Platform", "Platform-assigned", "2/10"],

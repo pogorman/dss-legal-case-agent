@@ -412,7 +412,7 @@ def build_pdf():
 
     pdf.qa_pair(
         "How were data gaps identified?",
-        "After 110 test runs across 11 agent configurations and 10 prompts, specific "
+        "After 190 baseline test runs across 19 agent configurations and 10 prompts each, specific "
         "failures were traced to missing data or tool limitations. Each proposed fix "
         "was validated against the source PDF documents -- no data was fabricated."
     )
@@ -436,12 +436,15 @@ def build_pdf():
     )
 
     pdf.qa_pair(
-        "Why did the Triage Agent barely improve (0/10 to 1/10) when other agents "
-        "jumped dramatically?",
+        "Why did the Triage Agent barely improve (0/10 to 1/10) in Round 2 when other "
+        "agents jumped dramatically?",
         "The Triage Agent's team-of-agents architecture (triage router to specialized "
-        "sub-agents) prevented it from using the new search_properties tool. The "
-        "sub-agents have their own system prompts that don't include the address "
-        "resolution workflow. Architectural complexity is not a proxy for quality."
+        "sub-agents) initially prevented it from using the new search_properties tool. "
+        "The sub-agents had their own system prompts that didn't include the address "
+        "resolution workflow. However, after five iterative rounds of prompt and routing "
+        "fixes, the Triage Agent ultimately reached a perfect 10 out of 10 -- the most "
+        "rounds of any agent, but proof that architectural complexity can be overcome "
+        "with persistent iteration."
     )
 
     pdf.qa_pair(
@@ -615,17 +618,72 @@ def build_pdf():
     )
 
     pdf.qa_pair(
-        "Why did the Triage Agent score 0/10?",
-        "The team-of-agents pattern introduces hand-off failures. Failures included "
-        "false negatives, answering the wrong prompt, refusing to filter, and "
-        "infrastructure crashes. The routing layer adds complexity without improving "
-        "answer quality."
+        "Why did the Triage Agent start at 0/10?",
+        "The team-of-agents pattern introduces hand-off failures. Initial failures "
+        "included false negatives, answering the wrong prompt, refusing to filter, and "
+        "infrastructure crashes. After five rounds of iterative improvement (the most "
+        "of any agent), the Triage Agent reached a perfect 10 out of 10. The lesson: "
+        "complexity is not disqualifying, but it demands more testing investment."
     )
 
     pdf.qa_pair(
         "How many agents were tested in Use Case 2?",
-        "Seven agents (plus M365 Copilot added later = 8). 70+ total responses scored "
-        "across 10 prompts."
+        "Eight agents total (seven in the initial round, M365 Copilot added in a later "
+        "round). 80+ total responses scored across 10 prompts."
+    )
+
+    # ====================================================================
+    # M365 COPILOT
+    # ====================================================================
+    pdf.section_title("M365 Copilot (Commercial)")
+
+    pdf.qa_pair(
+        "How did M365 Copilot Commercial perform?",
+        "2 Pass, 3 Partial, 5 Fail (20% pass rate) on Use Case 2. It scored worst "
+        "among all MCP-connected agents. Prompts 4 (ownership chain) and 6 (top 5 "
+        "violators) produced excellent answers -- among the best in the entire evaluation. "
+        "But tool reliability was inconsistent: the same parcel that worked for Prompt 4 "
+        "returned no data for Prompt 5."
+    )
+
+    pdf.qa_pair(
+        "Why does M365 Copilot Commercial perform worse than Copilot Studio?",
+        "Three factors: (1) the platform-assigned model cannot be changed by the user, "
+        "(2) tool execution is non-deterministic -- tools return no data with correct "
+        "parcel IDs, (3) the model makes incorrect assumptions about data availability "
+        "(e.g., claiming mortgage data is in the system when it is not). Copilot Studio "
+        "gives you model choice and more predictable tool execution."
+    )
+
+    pdf.qa_pair(
+        "Is M365 Copilot useful for anything?",
+        "Yes -- it is excellent for Levels 1-2 (discovery and summarization) where you "
+        "point it at SharePoint documents. The confirmation UX (showing each tool call "
+        "for user approval) is also a strong demo asset for enterprise security. It "
+        "struggles at Level 4+ where multi-step tool orchestration is required."
+    )
+
+    # ====================================================================
+    # ITERATIVE IMPROVEMENT
+    # ====================================================================
+    pdf.section_title("Iterative Improvement")
+
+    pdf.qa_pair(
+        "How many rounds of testing and improvement were there?",
+        "Seven testing rounds and four improvement rounds. Round 0 was the baseline. "
+        "Round 1 added missing data (11 SQL rows, 1 tool filter). Round 2 added new "
+        "tools (search_properties, summary mode) and improved prompts. Round 3 validated "
+        "across models (GPT-4.1 vs GPT-5 Auto). Subsequent rounds focused on specific "
+        "agents (Triage took 5 rounds alone). Total: 313 test runs across 19 agent "
+        "configurations."
+    )
+
+    pdf.qa_pair(
+        "What is the pattern organizations should follow?",
+        "Start with ground truth (what the correct answers are). Test against it. Fix "
+        "data gaps first, then tool gaps, then validate across models. Budget 3+ rounds "
+        "for Level 4 use cases. The investment is real but the improvement arc is "
+        "dramatic -- agents went from 0-1 out of 10 to perfect scores."
     )
 
     # ====================================================================

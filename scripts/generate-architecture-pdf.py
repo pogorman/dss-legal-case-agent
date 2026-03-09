@@ -398,7 +398,7 @@ def build_pdf():
         ["Custom Web SPA", "UC1", "MCP -> APIM -> Func -> SQL", "MCP Server /chat", "Full stack (TS)", "GPT-4.1"],
         ["CS MCP (GCC)", "1, 2", "MCP -> APIM -> Func -> SQL", "Copilot Studio", "Zero", "GPT-4o"],
         ["CS MCP (Com)", "1, 2", "MCP -> APIM -> Func -> SQL", "Copilot Studio", "Zero", "GPT-4.1"],
-        ["M365 Copilot", "UC2", "MCP -> APIM -> Func -> SQL", "M365 Copilot", "Zero (3 JSON)", "Platform"],
+        ["M365 Copilot (Com)", "UC2", "MCP -> APIM -> Func -> SQL", "M365 Copilot", "Zero (3 JSON)", "Platform"],
         ["CS SP/PDF (GCC)", "1, 2", "SharePoint doc library", "CS built-in RAG", "Zero", "GPT-4o"],
         ["CS SP/PDF (Com)", "1, 2", "SharePoint doc library", "CS built-in RAG", "Zero", "GPT-4.1"],
         ["Foundry Agent", "UC2", "MCP -> APIM -> Func -> SQL", "AI Agent Service", "Minimal", "GPT-4.1"],
@@ -462,7 +462,7 @@ def build_pdf():
         "trade-off in action:"
     )
 
-    pdf.bullet("M365 Copilot (3 manifests), Copilot Studio (low-code config) -- auto-discover MCP tools, platform runs the loop",
+    pdf.bullet("M365 Copilot Commercial (3 manifests), Copilot Studio (low-code config) -- auto-discover MCP tools, platform runs the loop",
                bold_lead="Zero code:")
     pdf.bullet("Foundry Agent -- create agent + point at /mcp, Agent Service runs the loop",
                bold_lead="Minimal code:")

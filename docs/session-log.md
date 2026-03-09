@@ -1402,3 +1402,42 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - "30 minutes" more accurately represents the search_properties tool engineering effort
 - Foundry Agent is "advanced" not "pro-code" — zero-to-low code via portal or SDK
 - Score-ranked table footnotes go below the table with `*` prefix, not above in parentheses
+
+## Session 30 — 2026-03-08
+
+### What was done
+- **Cross-PDF consistency audit** — compared all 6 PDF generator scripts against the overhauled summary
+- **Summary PDF bug fixes**
+  - "305 test runs" → "313 test runs" in danger taxonomy intro
+  - "six testing rounds" → "seven testing rounds" in evidence section intro
+  - M365 Copilot labeled as "M365 Copilot (Com)" / "M365 Copilot Commercial" across all tables and footnotes
+- **Demo guide updates (6 changes)**
+  - Cover: added Responsible AI callout ("The agent accelerates the human...")
+  - Key Stats table: added M365 Copilot Com (2/10), iterative improvement (0-1/10 → 10/10), changed "GPT-4.1 agents (Levels 3-5)" → "GPT-4.1 agents (structured data)", added "7 rounds"
+  - Act 2 Level 3: added "agents with structured data access, including both Copilot Studio MCP agents and pro-code agents"
+  - Act 3 model gap: added "Among agents with structured data access" qualifier with pro-code mention
+  - New section: **The Iterative Process** — 4 rounds breakdown, improvement results table, document agent improvement table, pattern for organizations (demo guide now 20 pages)
+  - Q&A: "6 rounds" → "7 rounds"
+  - M365 Copilot → M365 Copilot (Com) in architecture matrix and key insight
+- **FAQs updates**
+  - Triage FAQ: reframed from "barely improved 0→1" to full 5-round improvement arc ending at 10/10
+  - Triage 0/10 FAQ: reframed as "start at 0/10" with improvement story
+  - New section: **M365 Copilot (Commercial)** — 3 Q&As (performance, why worse, what it's good for)
+  - New section: **Iterative Improvement** — 2 Q&As (how many rounds, pattern for organizations)
+  - Data Improvements FAQ: 110 → 190 baseline test runs across 19 agents
+- **Slide outline update**
+  - Slide 5 (Level 3): "Model Context Protocol connects AI..." → "Agents with structured data access -- both Copilot Studio MCP and pro-code -- start outperforming document agents here"
+  - M365 Copilot labeled as "(Com)" in model gap and code spectrum tables
+- **Architecture update**
+  - M365 Copilot labeled as "(Com)" in agent table and zero-code description
+- **Baseline count fix**: demo guide Round 0 and FAQs both updated from 110 → 190 (11 + 8 agents x 10 prompts)
+- Regenerated all 5 updated PDFs (summary, demo-guide, faqs, slide-outline, architecture)
+
+### Decisions made
+- M365 Copilot always labeled "(Com)" or "Commercial" to leave room for a future GCC M365 Copilot agent
+- "Agents with structured data access" is the umbrella term for Copilot Studio MCP + pro-code agents (replaces bare "MCP agents")
+- Demo guide gets a dedicated Iterative Process section (not just scattered mentions) — mirrors the summary's structure
+- Baseline test count is 190 (11 UC1 + 8 UC2 agents x 10 prompts each), not 110 (which was UC1 only)
+
+### Next session priorities
+1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial

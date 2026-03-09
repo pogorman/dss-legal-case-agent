@@ -268,6 +268,16 @@ def build_pdf():
     pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  313 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
+    pdf.ln(6)
+    pdf.set_font("Helvetica", "I", 10)
+    pdf.set_text_color(*DARK)
+    pdf.multi_cell(0, 6, sanitize_text(
+        "The agent accelerates the human; it does not replace them. "
+        "Mandatory human review, citation linking, audit logging, and "
+        "organizational culture that treats AI output as a draft -- never "
+        "a decision."
+    ), align="C")
+
     # ====================================================================
     # THE FRAMEWORK
     # ====================================================================
@@ -345,13 +355,15 @@ def build_pdf():
     stats_headers = ["Stat", "Value"]
     stats_widths = [100, 70]
     stats_rows = [
-        ["Total test runs", "313 across 19 agent configurations"],
+        ["Total test runs", "313 across 19 agents, 7 rounds"],
         ["Document agents (Levels 1-2)", "8/10 with zero engineering"],
-        ["GPT-4.1 agents (Levels 3-5)", "9.5/10 average"],
+        ["GPT-4.1 agents (structured data)", "9.5/10 average"],
         ["GPT-4o agents (GCC model gap)", "4/10 average"],
+        ["M365 Copilot Com (platform model)", "2/10 (20% pass rate)"],
         ["One fuzzy search tool", "13% to 100% accuracy"],
         ["Document agents on skeletal survey", "7 of 8 reproduced a misleading finding"],
         ["Cross-reference headers (zero code)", "0/2 to 2/2 on Commercial doc agent"],
+        ["Iterative improvement", "0-1/10 to perfect 10/10 (3-5 rounds)"],
     ]
     pdf.styled_table(stats_headers, stats_rows, stats_widths, font_size=8)
 
@@ -459,8 +471,9 @@ def build_pdf():
 
     pdf.blockquote(
         '"Aggregate questions -- \'how many\', \'what\'s the breakdown\' -- these '
-        "work reliably across every agent type we tested. Even the weakest "
-        "performers got these right. This is Level 3: operational decision "
+        "work reliably across every agent type with structured data access, "
+        "including both Copilot Studio MCP agents and pro-code agents. Even the "
+        "weakest performers got these right. This is Level 3: operational decision "
         'support."'
     )
 
@@ -553,10 +566,11 @@ def build_pdf():
                   bold_lead="If time allows, show the model gap:")
 
     pdf.blockquote(
-        '"Here\'s the number that should keep you up at night. Same tools, same '
-        "data, same backend: GPT-4.1 agents averaged 9.5 out of 10. GPT-4o -- "
-        "which is what Government Cloud Copilot Studio uses today -- scored 4 out "
-        'of 10. The model is the bottleneck."'
+        '"Here\'s the number that should keep you up at night. Among agents with '
+        "structured data access -- both Copilot Studio MCP agents and pro-code "
+        "agents -- GPT-4.1 averaged 9.5 out of 10. GPT-4o, which is what "
+        "Government Cloud Copilot Studio uses today, scored 4 out of 10. Same "
+        "tools, same data, same backend. The model is the bottleneck.\""
     )
 
     # -- Act 4: Level 5 --
@@ -707,6 +721,81 @@ def build_pdf():
     )
 
     # ====================================================================
+    # THE ITERATIVE PROCESS
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("The Iterative Process")
+
+    pdf.body_text(
+        "A key narrative thread: deploying an agent is not a one-time event. "
+        "Our evaluation went through seven testing rounds and four improvement "
+        "rounds. This section gives you the talking points for that journey."
+    )
+
+    pdf.subsection_title("The Four Rounds")
+
+    pdf.bullet(
+        "Baseline testing -- measure failures against ground truth. "
+        "Measure failures against ground truth. This project tested 11 + 8 "
+        "agent configurations across 10 prompts each (190 baseline test runs). "
+        "Most agents scored 3-8 out of 10.",
+        bold_lead="Round 0:"
+    )
+    pdf.bullet(
+        "Fix the data -- make facts discrete and queryable. Added 11 SQL rows "
+        "and 1 tool filter. Biggest change: individual drug test results as "
+        "separate timeline events instead of buried in a paragraph.",
+        bold_lead="Round 1:"
+    )
+    pdf.bullet(
+        "Fix the tools -- help the model reach the data. Added a fuzzy "
+        "address search tool (fixed 87% failure rate), entity network summary "
+        "mode, improved tool descriptions and system prompt.",
+        bold_lead="Round 2:"
+    )
+    pdf.bullet(
+        "Validate across models -- confirmed GPT-4.1 and GPT-5 Auto produce "
+        "identical results. The gap is GPT-4o versus everything above it.",
+        bold_lead="Round 3:"
+    )
+
+    pdf.subsection_title("Improvement Results")
+
+    iter_headers = ["Agent", "Round 1", "Final", "Rounds"]
+    iter_widths = [60, 28, 28, 54]
+    iter_rows = [
+        ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "2"],
+        ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "2"],
+        ["Foundry Agent (AI Foundry)", "4/10", "9/10", "2"],
+        ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5"],
+    ]
+    pdf.styled_table(iter_headers, iter_rows, iter_widths, font_size=8)
+
+    pdf.ln(4)
+    pdf.subsection_title("Document Agent Improvement (Zero Code)")
+
+    pdf.body_text(
+        "Added cross-reference headers to each document -- standard legal case "
+        "file practice. Each document now lists the other case file documents and "
+        "what they contain. Same words, same facts. Just better organized."
+    )
+
+    doc_imp_headers = ["Agent", "Before", "After", "Change"]
+    doc_imp_widths = [60, 28, 28, 54]
+    doc_imp_rows = [
+        ["Commercial doc agent", "0/2", "2/2", "Cross-ref headers"],
+        ["GCC doc agent", "Vague", "Multi-source", "Cross-ref headers"],
+    ]
+    pdf.styled_table(doc_imp_headers, doc_imp_rows, doc_imp_widths, font_size=8)
+
+    pdf.ln(4)
+    pdf.body_text(
+        "The pattern for organizations: ground truth first, then data, then tools, "
+        "then model validation. Budget 3+ rounds for Level 4 use cases.",
+        bold_lead="The pattern:"
+    )
+
+    # ====================================================================
     # TIMING GUIDE
     # ====================================================================
     pdf.add_page()
@@ -822,7 +911,7 @@ def build_pdf():
     pdf.blockquote(
         "The structured database, API layer, MCP server, and web interface were "
         "built in a single session. The iterative testing and tool improvements "
-        "took 6 rounds. The key insight: structuring the data is the hard part. "
+        "took 7 rounds. The key insight: structuring the data is the hard part. "
         "Once it's structured, the AI layer is straightforward."
     )
 
@@ -927,7 +1016,7 @@ def build_pdf():
          "MCP to APIM to Functions to SQL", "GPT-4.1"],
         ["Copilot Studio MCP", "Copilot Studio", "Zero",
          "MCP to APIM to Functions to SQL", "GPT-4o (GCC) / GPT-4.1 (Com)"],
-        ["M365 Copilot", "M365 platform", "Zero (3 JSON files)",
+        ["M365 Copilot (Com)", "M365 platform", "Zero (3 JSON files)",
          "MCP to APIM to Functions to SQL", "Platform-assigned"],
         ["Foundry Agent", "AI Agent Service", "Minimal",
          "MCP to APIM to Functions to SQL", "GPT-4.1"],
@@ -944,8 +1033,8 @@ def build_pdf():
     pdf.body_text(
         "Every architecture scored 9 to 10 out of 10 with GPT-4.1. The engineering "
         "investment buys customization and governance, not accuracy, which comes "
-        "from the model and data. Exception: M365 Copilot (platform-assigned model) "
-        "scored 2 out of 10 -- model selection matters as much as architecture.",
+        "from the model and data. Exception: M365 Copilot Commercial (platform-assigned "
+        "model) scored 2 out of 10 -- model selection matters as much as architecture.",
         bold_lead="Key insight:"
     )
 

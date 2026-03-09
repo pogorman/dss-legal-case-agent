@@ -430,7 +430,7 @@ def build_pdf():
         ["GPT-4.1", "9.5 / 10", "Commercial Copilot Studio, Pro-code agents"],
         ["GPT-5 Auto", "10 / 10", "Commercial Copilot Studio (identical to 4.1)"],
         ["GPT-4o", "4 / 10", "Government Cloud Copilot Studio"],
-        ["Platform-assigned", "2 / 10", "M365 Copilot (no user control)"],
+        ["Platform-assigned", "2 / 10", "M365 Copilot Commercial (no user control)"],
     ]
     pdf.styled_table(model_headers, model_rows, model_widths, font_size=7.5,
                       col_aligns=["L", "C", "L"])
@@ -585,7 +585,7 @@ def build_pdf():
 
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical -- each was documented across 305 test runs."
+        "not hypothetical -- each was documented across 313 test runs."
     )
 
     danger_headers = ["Severity", "Failure Mode", "Description", "Example from Testing"]
@@ -664,7 +664,7 @@ def build_pdf():
 
     pdf.body_text(
         "This framework is grounded in 313 empirical test runs across two government "
-        "use cases, 19 agent configurations, and six testing rounds."
+        "use cases, 19 agent configurations, and seven testing rounds."
     )
 
     ev_lw = 18  # fixed label column width for Data/Agents/Result alignment
@@ -706,13 +706,13 @@ def build_pdf():
         ["Copilot Studio MCP (Gov Cloud)", "9/10", "4/10", "GPT-4o"],
         ["SharePoint/PDF (Commercial)", "8/10", "8/10", "GPT-4.1 / GPT-5 Auto"],
         ["SharePoint/PDF (Gov Cloud)", "3-8/10", "8/10", "GPT-4o"],
-        ["M365 Copilot MCP", "--", "2/10", "Platform-assigned"],
+        ["M365 Copilot MCP (Com)", "--", "2/10", "Platform-assigned"],
     ]
     pdf.styled_table(result_headers, result_rows, result_widths, font_size=7.5)
     pdf.ln(1)
     pdf.set_font("Helvetica", "I", 7)
     pdf.set_text_color(*LIGHT)
-    pdf.cell(0, 4, "* Ranked by score. M365 Copilot MCP uses a platform-assigned model with no user control.", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4, "* Ranked by score. M365 Copilot MCP (Commercial) uses a platform-assigned model with no user control.", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
     # ITERATIVE IMPROVEMENT
@@ -799,7 +799,7 @@ def build_pdf():
         ["Foundry Agent (pro-code / Agent Service)", "4/10", "9/10", "+5, zero failures"],
         ["Triage Agent (pro-code / Semantic Kernel)", "0/10", "10/10", "+10 across 5 rounds"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10", "+2 (model-limited)"],
-        ["M365 Copilot MCP", "--", "2/10", "Not tested in Round 1"],
+        ["M365 Copilot MCP (Com)", "--", "2/10", "Not tested in Round 1"],
     ]
     pdf.styled_table(imp_headers, imp_rows, imp_widths, font_size=8)
 
@@ -857,7 +857,7 @@ def build_pdf():
     code_headers = ["Approach", "Code Required", "Best For"]
     code_widths = [56, 44, 70]
     code_rows = [
-        ["M365 Copilot + MCP", "Zero (3 JSON manifests)", "Levels 1-2"],
+        ["M365 Copilot + MCP (Com)", "Zero (3 JSON manifests)", "Levels 1-2"],
         ["Copilot Studio + SharePoint", "Zero (platform configuration)", "Levels 1-3"],
         ["Copilot Studio + MCP", "Zero (platform configuration)", "Levels 1-4 (Com), 1-3 (GCC)"],
         ["Foundry Agent", "Zero to low (portal or SDK)", "Levels 3-4"],
@@ -1010,7 +1010,7 @@ def build_pdf():
         ["Copilot Studio SP/PDF (GCC)", "Copilot Studio", "GPT-4o", "8/10"],
         ["Copilot Studio SP/PDF (Com)", "Copilot Studio", "GPT-4.1", "8/10"],
         ["Copilot Studio MCP (GCC)", "Copilot Studio", "GPT-4o", "4/10"],
-        ["M365 Copilot MCP", "M365 Platform", "Platform-assigned", "2/10"],
+        ["M365 Copilot MCP (Com)", "M365 Platform", "Platform-assigned", "2/10"],
     ]
     pdf.styled_table(uc2_headers, uc2_rows, uc2_widths, font_size=7)
     pdf.ln(1)
@@ -1019,7 +1019,7 @@ def build_pdf():
     pdf.multi_cell(0, 4, sanitize_text(
         "* Ranked by score. Custom Web App is pro-code, tested on Use Case 1 only. "
         "Investigative, Foundry, and Triage are pro-code, tested on Use Case 2 only. "
-        "M365 Copilot MCP uses a platform-assigned model with no user control."
+        "M365 Copilot MCP (Commercial) uses a platform-assigned model with no user control."
     ))
 
     pdf.ln(6)
@@ -1027,9 +1027,9 @@ def build_pdf():
     pdf.bullet("Copilot Studio: Low-code agent builder with SharePoint grounding or MCP "
                "tool connections. Hosted in Power Platform.",
                bold_lead="Copilot Studio:")
-    pdf.bullet("M365 Copilot: Zero-code agent deployed via 3 JSON manifest files. "
+    pdf.bullet("M365 Copilot (Commercial): Zero-code agent deployed via 3 JSON manifest files. "
                "Appears in Teams, Outlook, and Edge. Platform assigns the model.",
-               bold_lead="M365 Copilot:")
+               bold_lead="M365 Copilot (Com):")
     pdf.bullet("Azure AI Foundry managed agent with "
                "MCPTool for automatic tool discovery. Stateful threads.",
                bold_lead="Foundry Agent:")

@@ -355,7 +355,8 @@ def build_pdf():
         "Document agents cannot answer these -- they only have individual files"
     )
     pdf.bullet(
-        "Model Context Protocol connects AI to live databases and APIs"
+        "Agents with structured data access -- both Copilot Studio MCP and pro-code -- "
+        "start outperforming document agents here"
     )
 
     pdf.visual_note(
@@ -397,7 +398,7 @@ def build_pdf():
     model_rows = [
         ["GPT-4.1", "9.5 out of 10"],
         ["GPT-4o (Government Cloud)", "4 out of 10"],
-        ["Platform-assigned (M365 Copilot)", "2 out of 10"],
+        ["Platform-assigned (M365 Copilot Com)", "2 out of 10"],
     ]
     pdf.styled_table(model_headers, model_rows, model_widths, font_size=8)
 
@@ -582,7 +583,7 @@ def build_pdf():
     code_headers = ["Approach", "Code", "Best For"]
     code_widths = [60, 52, 58]
     code_rows = [
-        ["M365 Copilot", "Zero (3 JSON manifests)", "Levels 1-2"],
+        ["M365 Copilot (Com)", "Zero (3 JSON manifests)", "Levels 1-2"],
         ["Copilot Studio", "Zero to low code", "Levels 1-3"],
         ["Foundry Agent", "Minimal code", "Levels 3-4"],
         ["Custom SDK (OpenAI, SK)", "Full code", "Levels 4-5"],

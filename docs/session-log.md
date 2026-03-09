@@ -1278,3 +1278,127 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - Fill in second demo reference in opening hook ("you may remember me from...")
 - Upload Philly PDFs to SharePoint — carry-forward
 - Consider BFG Repo Cleaner for git history
+
+## Session 26 — 2026-03-08
+
+### What was done
+- **Executive summary PDF review and update** (9 pages -> 13 pages)
+- Fixed "Azure OpenAI" -> "Pro-code agents" in model table (platform column described hosting, not agent type)
+- Rewrote Tool Gap section with C-suite examples: users type "Griscom Street," database stores "GRISCOM ST," every downstream answer confidently wrong
+- Replaced "fuzzy matching" language throughout with "address normalization" (tool uses USPS abbreviation expansion + SQL LIKE, not Levenshtein)
+- Added two Level 5 examples: fentanyl false negative (agent had the data, missed the answer) and 8 PM misattribution (mother's statement attributed to father)
+- Added "agent accelerates the human" paragraph to cover page below stats bar
+- Rewrote danger taxonomy row 2: "source document that itself contained an error" -> "source whose characterization was misleading in isolation"
+- Added GPT-5 Auto / M365 Copilot footnote to cross-use-case results table
+- Rewrote "Fix the Data" with concrete examples (narrative fentanyl text -> 6 discrete events)
+- Added "Improving Document Agents" subsection to iterative process
+- Spelled out "Copilot Studio" in improvement table, added M365 Copilot row
+- Split code investment table: Copilot Studio + SharePoint (Levels 1-3) vs Copilot Studio + MCP (Levels 1-4 Com, 1-3 GCC)
+- Added Appendix: 11 UC1 agents + 8 UC2 agents with platform descriptions
+
+### Decisions made
+- "Fuzzy matching" retired as terminology in exec summary -- tool does normalization, not string distance
+- Copilot Studio + MCP qualifies for Level 4 (Commercial with GPT-4.1 scored 10/10 on investigative prompts)
+- Other PDF generators (demo-guide, faqs, slide-outline) flagged for future consistency pass on "fuzzy" language
+
+### Open items
+- Build PowerPoint deck from slide-outline PDF (21 slides)
+- Demo dry run with 5-level narrative (50-60 min target)
+- Upload Philly PDFs to SharePoint
+- Consistency pass on other PDF generators (fuzzy -> address normalization)
+- Consider BFG Repo Cleaner for git history
+
+## Session 27 — 2026-03-08
+
+### What was done
+- **Document agent improvement round (Round 4)** — cross-reference headers as zero-code retrieval fix
+- Created `sharepoint-docs/Case-2024-DR-42-0892 (R1 - Cross-Referenced)/` with all 6 case documents
+- Added "Case File Cross-Reference" blockquote to top of each document listing all related documents and their key topics
+- Added inline annotation to Sheriff Report line 49 ("no fractures detected") pointing to Medical Records for complete radiology findings
+- Added inline annotation to Medical Records Radiologist Impression #5 clarifying "no additional fractures" scope
+- Generated PDF and DOCX from cross-referenced MDs using existing converter
+- **A/B testing: GCC document agent**
+  - Original Prompt 3.3: 1 reference (Court Orders only), vague "non-accidental trauma" answer
+  - Cross-referenced Prompt 3.3: 2 references (DSS + GAL), detailed medical findings + parental inconsistencies
+  - Both skeletal survey prompts: correct answer on both versions (secondary sources)
+- **A/B testing: Commercial document agent**
+  - Original Prompt 3.3: **WRONG CASE** — retrieved Price TPR docs, talked about drug paraphernalia
+  - Original skeletal survey: **TOTAL FAILURE** — "no information found" after 5-6 attempts
+  - Cross-referenced Prompt 3.3: 4 references (Medical Records, GAL, DSS, Sheriff Report), gold standard response
+  - Cross-referenced skeletal survey: Medical Records as primary source, complete radiology findings
+  - **0/2 to 2/2 with zero content changes**
+- Updated executive summary: expanded "Improving Document Agents" with A/B evidence, updated test count 305 -> 313, 6 -> 7 testing rounds
+- Updated demo guide: added "Document Improvement" beat to Act 4 (Level 5), added A/B result to Appendix C Q4, added cross-reference stat to Key Stats table, updated test count
+- Updated slide outline: added document improvement bullets to Slide 9 (Level 5), updated test count
+- Regenerated all 3 PDFs (executive-summary, demo-guide, slide-outline)
+- Total evaluation: **313 test runs** across 7 testing rounds and 4 rounds of iterative improvement
+
+### Key finding
+- Cross-reference headers are the highest-ROI document agent improvement: zero code, zero content changes, any paralegal can implement, and the Commercial agent went from catastrophic failure to gold standard responses
+
+### Decisions made
+- Cross-referenced docs live in a parallel directory for A/B comparison (not replacing originals)
+- "R1 - Cross-Referenced" naming convention for document improvement rounds
+- Test count: 305 + 8 new doc retest runs = 313
+
+## Session 28 — 2026-03-08
+
+### What was done
+- **Summary PDF overhaul** (formerly "executive summary")
+  - Renamed `executive-summary.pdf` → `summary.pdf` across all files
+  - Renamed series title: "AI Agent Accuracy Spectrum" → "Agent Accuracy Spectrum for Copilot Studio"
+  - Added subtitle: "A five-level framework for measuring AI agent accuracy / with a comparative look at pro-code agent architectures"
+  - Renamed "AI Foundry Agent" → "Foundry Agent" throughout
+  - Fixed `body_text` and `bullet` bold_lead alignment (fpdf2 markdown mode)
+  - Fixed `callout_box` to auto-size height with equal padding
+  - Added clickable Table of Contents (page 2) with internal PDF links
+  - Added "Data Gap" subsection to Level 4 (structured data not extracted from documents)
+  - Added Level 5 "Recommendation:" paragraph for consistency
+  - Added "Reminder" callout box at end of Level 5
+  - Model Gap: clarified gap only applies to structured data agents (doc agents 8/10 on both models)
+  - Level 3: credited both MCP and pro-code agents for outperforming doc agents
+  - M365 Copilot now shows "MCP" in all tables where Copilot Studio agents do
+  - Custom Web App labeled "(pro-code / MCP Chat)" — identified as UC1 pro-code agent
+  - All pro-code agents use consistent pattern: "(pro-code / <framework>)"
+  - Commercial rows show "GPT-4.1 / GPT-5 Auto" inline instead of footnote
+  - Danger taxonomy table: added 4th column (Example from Testing), auto-sizing rows, centered Failure Mode
+  - Data Gap, Tool Gap, Level 5: replaced wordy paragraphs with compact tables
+  - Tool Gap table: added Copilot Studio MCP (Commercial + GCC) before/after scores
+  - Iterative Process restructured: Round 0 baseline → Improving Document Agents → Improving Structured Data Agents
+  - Document improvement section: added before/after table, tightened text
+  - Structured data rounds: condensed to one-liners
+  - GCC section: added "Option 1: Improve document quality" before existing options
+  - Five levels table: aligned Level centered, Name/Stakes/Example left-aligned
+  - Model gap table: Platform column left-aligned
+  - Fixed baseline stat: "11 + 7" → "11 + 8" (180 → 190 baseline test runs)
+  - Stubbed Round 2 for document agents: topics, metadata tags, cloud flows (planned)
+- Regenerated all 6 PDFs (summary, demo-guide, slide-outline, user-guide, faqs, architecture)
+- Deleted old `docs/pdf/executive-summary.pdf`
+
+### Decisions made
+- "Summary" not "Executive Summary" — document stands alone, not summarizing something longer
+- Series title includes "for Copilot Studio" — positions for the platform without being exclusive
+- Pro-code agents use "(pro-code / <framework>)" pattern in tables
+- Custom Web App is a distinct pro-code agent (UC1), not the same as UC2 pro-code agents
+- Document agent Round 2 (topics, metadata, cloud flows) is first priority for next session — test both GCC and Commercial
+
+### Next session priorities
+1. **Document agent Round 2**: Configure Copilot Studio topics, SharePoint metadata tags, and Power Automate cloud flows to test whether platform configuration can push document agents past 8/10 — test both GCC and Commercial
+
+## Session 29 — 2026-03-08
+
+### What was done
+- **Summary PDF refinements** (continued from Session 28)
+  - "one day of engineering" → "30 minutes of engineering" (tool gap section + finding #2)
+  - "A pro-code agent challenged its own premise" → "An advanced agent" (Foundry Agent is not pro-code)
+  - GCC Model Gap Option 3: added Foundry Agent explicitly as zero-to-low-code path before custom agents
+  - Bolded "When Government Cloud gains access to more capable models, every Copilot Studio agent improves overnight." in Why Copilot Studio section
+  - Fixed fpdf2 `--` underline bleed: "-- no configuration changes" → "with no configuration changes"
+  - Enabled `markdown=True` on all `body_text` calls (was only on bold_lead paths)
+  - Reduced whitespace between Code Investment Spectrum and Why Copilot Studio (`ln(4)` → `ln(2)`)
+  - Added "* Ranked by score" footnotes below all 5 score-ranked tables (model gap, tool gap, cross-use-case results, UC1 appendix, UC2 appendix)
+
+### Decisions made
+- "30 minutes" more accurately represents the search_properties tool engineering effort
+- Foundry Agent is "advanced" not "pro-code" — zero-to-low code via portal or SDK
+- Score-ranked table footnotes go below the table with `*` prefix, not above in parentheses

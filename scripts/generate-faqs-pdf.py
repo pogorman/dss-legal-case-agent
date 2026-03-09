@@ -55,7 +55,7 @@ class FaqsPDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum  |  FAQs"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio  |  FAQs"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -156,7 +156,8 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "AI Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "for Copilot Studio", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(180, 200, 220)
@@ -477,9 +478,9 @@ def build_pdf():
     )
 
     # ====================================================================
-    # EXECUTIVE SUMMARY PDF
+    # SUMMARY PDF
     # ====================================================================
-    pdf.section_title("Executive Summary PDF")
+    pdf.section_title("Summary PDF")
 
     pdf.qa_pair(
         "Why is the PDF called \"Copilot Studio Evaluation\" and not \"AI Agent Evaluation\"?",
@@ -587,7 +588,7 @@ def build_pdf():
     pdf.qa_pair(
         "What are the Investigative Agent, Foundry Agent, and Triage Agent?",
         "Pro-code agents from the Philly Profiteering web SPA. The Investigative Agent "
-        "uses OpenAI's chat interface; the Foundry Agent uses Azure AI Foundry; the "
+        "uses OpenAI's chat interface; the Foundry Agent uses Azure AI Foundry Agent Service; the "
         "Triage Agent uses Semantic Kernel with a team-of-agents routing pattern. All "
         "query the same MCP backend. They're supplemental to the Copilot Studio comparison."
     )

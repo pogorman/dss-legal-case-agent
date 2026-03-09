@@ -67,7 +67,7 @@ class DemoGuidePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum -- Demo Guide"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio -- Demo Guide"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -235,7 +235,7 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 26)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 12, "AI Agent Accuracy Spectrum", align="C",
+    pdf.cell(0, 12, "Agent Accuracy Spectrum for Copilot Studio", align="C",
              new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 16)
     pdf.set_text_color(180, 200, 220)
@@ -265,7 +265,7 @@ def build_pdf():
     pdf.set_y(145)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  305 test runs",
+    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  313 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -345,12 +345,13 @@ def build_pdf():
     stats_headers = ["Stat", "Value"]
     stats_widths = [100, 70]
     stats_rows = [
-        ["Total test runs", "305 across 19 agent configurations"],
+        ["Total test runs", "313 across 19 agent configurations"],
         ["Document agents (Levels 1-2)", "8/10 with zero engineering"],
         ["GPT-4.1 agents (Levels 3-5)", "9.5/10 average"],
         ["GPT-4o agents (GCC model gap)", "4/10 average"],
         ["One fuzzy search tool", "13% to 100% accuracy"],
         ["Document agents on skeletal survey", "7 of 8 reproduced a misleading finding"],
+        ["Cross-reference headers (zero code)", "0/2 to 2/2 on Commercial doc agent"],
     ]
     pdf.styled_table(stats_headers, stats_rows, stats_widths, font_size=8)
 
@@ -389,7 +390,7 @@ def build_pdf():
     pdf.body_text("Show the five-level spectrum slide.", bold_lead="Show the five-level spectrum slide.")
 
     pdf.blockquote(
-        '"We developed this framework after running 305 test evaluations across '
+        '"We developed this framework after running 313 test evaluations across '
         "two government use cases and 19 different agent configurations. Not all "
         "AI use cases need the same level of accuracy, and not all agent "
         'architectures deliver it."'
@@ -602,6 +603,33 @@ def build_pdf():
     )
 
     pdf.body_text("Pause. Let it land.", bold_lead="Pause. Let it land.")
+
+    pdf.body_text(
+        "But here is the good news. We tested whether document structure alone "
+        "could fix this -- without changing a single word of content.",
+        bold_lead="The good news (optional beat, 1-2 minutes):"
+    )
+
+    pdf.blockquote(
+        '"We added a cross-reference header to each document -- standard legal case '
+        "file practice. Each document now lists the other case file documents and "
+        'what they contain. Same words, same facts. Just better organized."'
+    )
+
+    pdf.blockquote(
+        '"The Commercial document agent went from failing completely -- it could not '
+        "find any information about the skeletal survey at all, even after five "
+        "attempts -- to pulling the actual Medical Records and delivering the full "
+        "radiology findings. Four source documents cited, detailed fracture analysis, "
+        'healing timelines. Zero content changes."'
+    )
+
+    pdf.blockquote(
+        '"This is the Level 1-2 investment I mentioned earlier. Document hygiene. '
+        "Cross-reference headers. Consistent formatting. These are zero-code "
+        "improvements that any paralegal or records manager can implement, and they "
+        'compound across every document agent in the organization."'
+    )
 
     pdf.body_text("The human review thread -- connect it to their daily experience:",
                   bold_lead="The human review thread -- connect it to their daily experience:")
@@ -990,6 +1018,16 @@ def build_pdf():
         "Medical Records (pp. 3-4): bilateral long bone fractures with extensive "
         "radiological findings. Direct factual conflict between two documents "
         "about the same hospital visit."
+    )
+
+    pdf.body_text(
+        "With original documents, the Commercial agent failed completely (retrieved "
+        "the wrong case on Prompt 3.3, returned 'no information found' on the "
+        "targeted skeletal survey prompt despite five attempts). With cross-referenced "
+        "documents (same content, added case file cross-reference headers), the agent "
+        "pulled Medical Records as the primary source and delivered detailed fracture "
+        "findings with healing timelines -- 0/2 to 2/2 with zero content changes.",
+        bold_lead="Document improvement A/B result:"
     )
 
     # Question 5

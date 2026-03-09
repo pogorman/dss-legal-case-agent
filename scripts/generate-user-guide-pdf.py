@@ -59,7 +59,7 @@ class UserGuidePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum -- User Guide"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio -- User Guide"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -228,7 +228,7 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 26)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 12, "AI Agent Accuracy Spectrum", align="C",
+    pdf.cell(0, 12, "Agent Accuracy Spectrum for Copilot Studio", align="C",
              new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 16)
     pdf.set_text_color(180, 200, 220)

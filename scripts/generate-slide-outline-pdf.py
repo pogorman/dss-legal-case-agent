@@ -62,7 +62,7 @@ class SlideOutlinePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("AI Agent Accuracy Spectrum -- Slide Outline"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio -- Slide Outline"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -207,7 +207,8 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "AI Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "for Copilot Studio", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(180, 200, 220)
@@ -253,7 +254,7 @@ def build_pdf():
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("305 test runs  |  19 agents  |  21 slides  |  2 use cases"),
+    pdf.cell(0, 7, sanitize_text("313 test runs  |  19 agents  |  21 slides  |  2 use cases"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -265,7 +266,7 @@ def build_pdf():
     pdf.headline("AI Agent Accuracy for Government: A Five-Level Framework")
 
     pdf.body_text(
-        "Subtitle: Findings from 305 Test Runs Across 19 Agent Configurations"
+        "Subtitle: Findings from 313 Test Runs Across 19 Agent Configurations"
     )
 
     pdf.visual_note("Clean title slide with agency-appropriate branding")
@@ -453,6 +454,26 @@ def build_pdf():
 
     pdf.talking_point("This is why Level 5 requires human review. Always.")
 
+    pdf.ln(2)
+    pdf.bullet(
+        "Added cross-reference headers to each document (zero content changes)",
+        bold_lead="Document improvement:"
+    )
+    pdf.bullet(
+        "Commercial agent: 0/2 to 2/2 -- pulled Medical Records as primary source"
+    )
+    pdf.bullet(
+        "GCC agent: vague single-source answer became detailed multi-source analysis"
+    )
+    pdf.bullet(
+        "Zero code, zero engineering -- document hygiene that any paralegal can implement"
+    )
+
+    pdf.talking_point(
+        "The good news: document structure improvements can fix retrieval failures "
+        "without any custom engineering."
+    )
+
     pdf.speaker_note(
         "Connect to daily experience: Copilot helps you draft an email -- you review it. "
         "Copilot helps you write code -- you review it. Why would we skip human review at "
@@ -490,7 +511,7 @@ def build_pdf():
     pdf.visual_note("Severity ladder or risk matrix, color-coded red to yellow")
 
     pdf.talking_point(
-        "These are not hypothetical. We documented each one across 305 test runs."
+        "These are not hypothetical. We documented each one across 313 test runs."
     )
 
     # ====================================================================
@@ -538,7 +559,7 @@ def build_pdf():
     iter_rows = [
         ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "2"],
         ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "2"],
-        ["Foundry Agent (Azure AI Foundry)", "4/10", "9/10", "2"],
+        ["Foundry Agent", "4/10", "9/10", "2"],
         ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5"],
     ]
     pdf.styled_table(iter_headers, iter_rows, iter_widths, font_size=8)
@@ -563,7 +584,7 @@ def build_pdf():
     code_rows = [
         ["M365 Copilot", "Zero (3 JSON manifests)", "Levels 1-2"],
         ["Copilot Studio", "Zero to low code", "Levels 1-3"],
-        ["Azure AI Foundry Agent", "Minimal code", "Levels 3-4"],
+        ["Foundry Agent", "Minimal code", "Levels 3-4"],
         ["Custom SDK (OpenAI, SK)", "Full code", "Levels 4-5"],
     ]
     pdf.styled_table(code_headers, code_rows, code_widths, font_size=8)
@@ -791,7 +812,7 @@ def build_pdf():
         "the framework."
     )
 
-    pdf.visual_note("Contact information, QR code to executive summary PDF")
+    pdf.visual_note("Contact information, QR code to summary PDF")
 
     pdf.talking_point(
         "I'm not here to sell you a product. I'm here to help you make the right "

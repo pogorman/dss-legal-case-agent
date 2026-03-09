@@ -7,7 +7,7 @@ To update content, edit the script in `scripts/` and regenerate.
 
 | File | Generator | Description |
 |---|---|---|
-| [pdf/executive-summary.pdf](pdf/executive-summary.pdf) | `scripts/generate-executive-pdf.py` | C-suite summary -- five-level accuracy framework, 305 test runs |
+| [pdf/summary.pdf](pdf/summary.pdf) | `scripts/generate-executive-pdf.py` | Summary -- five-level accuracy framework, 313 test runs |
 | [pdf/demo-guide.pdf](pdf/demo-guide.pdf) | `scripts/generate-demo-guide-pdf.py` | Presenter guide -- demo script, talking points, Q&A handling |
 | [pdf/slide-outline.pdf](pdf/slide-outline.pdf) | `scripts/generate-slide-outline-pdf.py` | 21-slide deck outline with key messages and visual suggestions |
 | [pdf/architecture.pdf](pdf/architecture.pdf) | `scripts/generate-architecture-pdf.py` | System architecture, data flow, networking, data provenance |

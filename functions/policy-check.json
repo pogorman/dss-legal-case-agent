@@ -1,0 +1,14 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/5f88e6f4-a18f-4154-b55e-03165ed460b7/resourceGroups/rg-philly-profiteering/providers/Microsoft.ApiManagement/service/philly-profiteering-apim/apis/dss-case-api/policies/policy",
+      "type": "Microsoft.ApiManagement/service/apis/policies",
+      "name": "policy",
+      "properties": {
+        "value": "<policies>\r\n  <inbound>\r\n    <base />\r\n    <set-header name=\"x-functions-key\" exists-action=\"override\">\r\n      <value>{{dss-func-key}}</value>\r\n    </set-header>\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+        "format": "xml"
+      }
+    }
+  ],
+  "count": 1
+}

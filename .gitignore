@@ -14,5 +14,5 @@ __azurite*
 docs/*.docx
 docs/*.msg
 docs/*.pdf
-!docs/executive-summary.pdf
+!docs/summary.pdf
 !docs/demo-guide.pdf

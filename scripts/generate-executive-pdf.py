@@ -62,7 +62,7 @@ class ExecutivePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("Improving Copilot Studio Agents  |  Whitepaper"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Government AI  |  Whitepaper"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -77,7 +77,7 @@ class ExecutivePDF(FPDF):
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, sanitize_text("Confidential  |  March 2026  |  313 test runs across 19 agent configurations"), align="C")
+        self.cell(0, 4, sanitize_text("March 2026  |  v1.0"), align="C")
 
     # -- Helpers --------------------------------------------------------------
     def section_title(self, text, link=None):
@@ -273,14 +273,14 @@ def build_pdf():
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
     pdf.cell(0, 14, "Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 14, "for Copilot Studio", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "for Government AI", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 13)
     pdf.set_text_color(180, 200, 220)
     pdf.cell(0, 9, "A five-level framework for measuring AI agent accuracy", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "I", 12)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 8, "with a comparative look at pro-code agent architectures", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 8, "across Copilot Studio, Foundry, and pro-code architectures", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_y(95)
     pdf.set_draw_color(80, 140, 200)
@@ -291,7 +291,7 @@ def build_pdf():
     pdf.set_y(103)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "Whitepaper", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Whitepaper  |  v1.0", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # Five colored level indicators on cover
@@ -347,12 +347,12 @@ def build_pdf():
 
     toc_entries = [
         "At a Glance",
-        "Meet Your Agents",
         "The Five Levels",
         "The Iterative Process",
         "Government Cloud (GCC) Options",
         "Five Findings That Surprised Us",
         "Conclusion",
+        "Appendix: Meet Your Agents",
         "Appendix: Test Prompts",
     ]
     # Create link targets for each TOC entry
@@ -372,41 +372,25 @@ def build_pdf():
     pdf.add_page()
     pdf.section_title("At a Glance", link=toc_links["At a Glance"])
 
-    # ── Summary tile (full width, text left, legend right) ──
+    # ── Summary tile (full width, text only) ──
     total_w = pdf.w - pdf.l_margin - pdf.r_margin
     sum_pad = 5
     sum_stripe = 3
-    sum_text_w = total_w * 0.70 - sum_stripe - sum_pad * 2
-    sum_legend_x_offset = total_w * 0.70
+    sum_text_w = total_w - sum_stripe - sum_pad * 2
 
     intro_text = sanitize_text(
         "This framework is grounded in 313 test runs across 19 agent configurations, "
-        "two government use cases, and seven testing rounds. Three gaps emerged at "
+        "2 government use cases, and 7 testing rounds. Three gaps emerged at "
         "the higher levels: tools, data, and model. Every gap was fixable, and none "
         "required AI expertise. One new tool, cleaner data, and cross-referenced "
         "documents. Here is what the data says."
     )
 
-    # Measure text height (with label above)
+    # Measure text height
     sum_label_h = 5
     pdf.set_font("Helvetica", "", 9)
     text_h = pdf.multi_cell(sum_text_w, 5, intro_text, dry_run=True, output="HEIGHT")
-
-    # Legend sizing
-    legend_items = [
-        (LVL1_COLOR, "L1", "Discovery"),
-        (LVL2_COLOR, "L2", "Summarization"),
-        (LVL3_COLOR, "L3", "Operational"),
-        (LVL4_COLOR, "L4", "Investigative"),
-        (LVL5_COLOR, "L5", "Adjudicative"),
-    ]
-    legend_badge = 5
-    legend_row_h = 6.5
-    legend_label_h = 5
-    legend_total_h = legend_label_h + len(legend_items) * legend_row_h
-
-    sum_inner_h = max(sum_label_h + text_h, legend_total_h)
-    sum_h = sum_pad * 2 + sum_inner_h
+    sum_h = sum_pad * 2 + sum_label_h + text_h
     sum_y = pdf.get_y()
 
     # Background
@@ -430,167 +414,210 @@ def build_pdf():
     pdf.set_text_color(*DARK)
     pdf.multi_cell(sum_text_w, 5, intro_text)
 
-    # Legend (right side of tile)
-    legend_x = pdf.l_margin + sum_legend_x_offset + 4
-    legend_y_start = sum_y + sum_pad + (sum_inner_h - legend_total_h) / 2
-    if legend_y_start < sum_y + sum_pad:
-        legend_y_start = sum_y + sum_pad
+    pdf.set_y(sum_y + sum_h + 4)
 
-    # Legend label
-    pdf.set_xy(legend_x, legend_y_start)
+    # ── 4 level tiles (2x2, ~75% width) + legend (right ~25%) ──
+    lvl_grid = [
+        [(LVL2_COLOR, "Levels 1 - 2", "Just Works",
+          "8/10 with zero customization. Model choice irrelevant."),
+         (LVL3_COLOR, "Level 3", "Data Over Documents",
+          "MCP outperformed document search on every aggregate query.")],
+        [(LVL4_COLOR, "Level 4", "The Inflection Point",
+          "Three gaps emerged: tools, data, and model. All fixable."),
+         (LVL5_COLOR, "Level 5", "Human in the Loop",
+          "Full accuracy at L4 means humans review conclusions, not raw data.")],
+    ]
+    legend_items = [
+        (LVL1_COLOR, "L1", "Discovery"),
+        (LVL2_COLOR, "L2", "Summarization"),
+        (LVL3_COLOR, "L3", "Operational"),
+        (LVL4_COLOR, "L4", "Investigative"),
+        (LVL5_COLOR, "L5", "Adjudicative"),
+    ]
+
+    lvl_pad = 4
+    lvl_stripe = 3
+    lvl_col_gap = 3
+    lvl_row_gap = 3
+    legend_gap = 4  # gap between tiles and legend
+
+    # Layout: tiles take 75%, legend takes the rest
+    tiles_zone_w = total_w * 0.75 - legend_gap / 2
+    legend_zone_w = total_w - tiles_zone_w - legend_gap
+    tile_w = (tiles_zone_w - lvl_col_gap) / 2
+    lvl_inner_w = tile_w - lvl_stripe - lvl_pad * 2
+
+    # Measure row heights
+    row_heights = []
+    for row in lvl_grid:
+        cell_heights = []
+        for _, label, title, body in row:
+            pdf.set_font("Helvetica", "B", 7)
+            lh = pdf.multi_cell(lvl_inner_w, 4, sanitize_text(label), dry_run=True, output="HEIGHT")
+            pdf.set_font("Helvetica", "B", 10)
+            th = pdf.multi_cell(lvl_inner_w, 5, sanitize_text(title), dry_run=True, output="HEIGHT")
+            pdf.set_font("Helvetica", "", 8)
+            bh = pdf.multi_cell(lvl_inner_w, 4, sanitize_text(body), dry_run=True, output="HEIGHT")
+            cell_heights.append(lvl_pad + lh + th + 1 + bh + lvl_pad)
+        row_heights.append(max(cell_heights))
+
+    grid_total_h = sum(row_heights) + lvl_row_gap
+    grid_y = pdf.get_y()
+
+    # Render level tiles
+    cur_y = grid_y
+    for ri, row in enumerate(lvl_grid):
+        rh = row_heights[ri]
+        for ci, (color, label, title, body) in enumerate(row):
+            tx = pdf.l_margin + ci * (tile_w + lvl_col_gap)
+            # Tinted background
+            tbg = tuple(int(c * 0.12 + 255 * 0.88) for c in color)
+            pdf.set_fill_color(*tbg)
+            pdf.rect(tx, cur_y, tile_w, rh, "F")
+            # Color stripe
+            pdf.set_fill_color(*color)
+            pdf.rect(tx, cur_y, lvl_stripe, rh, "F")
+
+            cx = tx + lvl_stripe + lvl_pad
+            # Label
+            pdf.set_xy(cx, cur_y + lvl_pad)
+            pdf.set_font("Helvetica", "B", 7)
+            pdf.set_text_color(*color)
+            pdf.multi_cell(lvl_inner_w, 4, sanitize_text(label))
+            # Title
+            pdf.set_x(cx)
+            pdf.set_font("Helvetica", "B", 10)
+            pdf.set_text_color(*DARK)
+            pdf.multi_cell(lvl_inner_w, 5, sanitize_text(title))
+            # Body
+            pdf.set_xy(cx, pdf.get_y() + 1)
+            pdf.set_font("Helvetica", "", 8)
+            pdf.set_text_color(*MED)
+            pdf.multi_cell(lvl_inner_w, 4, sanitize_text(body))
+
+        cur_y += rh + lvl_row_gap
+
+    # ── Legend tile (right side, spans both rows) ──
+    legend_x = pdf.l_margin + tiles_zone_w + legend_gap
+    legend_pad = 5
+    legend_badge = 5.5
+    legend_label_h = 5
+
+    # Background
+    lbg = tuple(int(c * 0.06 + 255 * 0.94) for c in NAVY)
+    pdf.set_fill_color(*lbg)
+    pdf.rect(legend_x, grid_y, legend_zone_w, grid_total_h, "F")
+    # Subtle left stripe
+    pdf.set_fill_color(*NAVY)
+    pdf.rect(legend_x, grid_y, 2, grid_total_h, "F")
+
+    # "The Five Levels" label
+    lx = legend_x + 2 + legend_pad
+    pdf.set_xy(lx, grid_y + legend_pad - 2)
     pdf.set_font("Helvetica", "B", 7)
     pdf.set_text_color(*NAVY)
     pdf.cell(0, legend_label_h, "The Five Levels")
-    ly = legend_y_start + legend_label_h
 
+    # Vertically center the badges in remaining space
+    badges_h = len(legend_items) * (legend_badge + 3)
+    remaining_h = grid_total_h - legend_pad - legend_label_h - legend_pad
+    badge_y_start = grid_y + legend_pad + legend_label_h + (remaining_h - badges_h) / 2
+    if badge_y_start < grid_y + legend_pad + legend_label_h:
+        badge_y_start = grid_y + legend_pad + legend_label_h
+
+    ly = badge_y_start
     for color, num, name in legend_items:
         pdf.set_fill_color(*color)
-        pdf.rect(legend_x, ly + 0.5, legend_badge, legend_badge, "F")
-        pdf.set_xy(legend_x, ly + 0.5)
-        pdf.set_font("Helvetica", "B", 6)
+        pdf.rect(lx, ly, legend_badge, legend_badge, "F")
+        pdf.set_xy(lx, ly)
+        pdf.set_font("Helvetica", "B", 6.5)
         pdf.set_text_color(255, 255, 255)
         pdf.cell(legend_badge, legend_badge, num, align="C")
-        pdf.set_xy(legend_x + legend_badge + 1.5, ly + 0.5)
-        pdf.set_font("Helvetica", "", 7.5)
+        pdf.set_xy(lx + legend_badge + 2, ly)
+        pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*DARK)
         pdf.cell(0, legend_badge, sanitize_text(name))
-        ly += legend_row_h
+        ly += legend_badge + 3
 
-    pdf.set_y(sum_y + sum_h + 4)
+    pdf.set_y(grid_y + grid_total_h + 4)
 
-    # ── Colored tiles for levels 1-2, 3, 4 ──
-    tiles = [
-        (LVL2_COLOR, "Levels 1-2", "Just Works",
-         "8/10 with zero customization. Model choice irrelevant."),
-        (LVL3_COLOR, "Level 3", "Data Over Documents",
-         "MCP agents outperformed document search on every aggregate query."),
-        (LVL4_COLOR, "Level 4", "The Inflection Point",
-         "Three gaps emerged: tools, data, and model. All fixable."),
-    ]
-    tile_gap = 4
-    tile_count = len(tiles)
-    total_w = pdf.w - pdf.l_margin - pdf.r_margin
-    tile_w = (total_w - tile_gap * (tile_count - 1)) / tile_count
-    pad = 5
-    stripe_w = 3
-    inner_w = tile_w - stripe_w - pad * 2
-
-    # Measure heights for all tiles, use the tallest
-    tile_heights = []
-    for _, label, title, body in tiles:
-        pdf.set_font("Helvetica", "B", 8)
-        lh = pdf.multi_cell(inner_w, 4.5, sanitize_text(label), dry_run=True, output="HEIGHT")
-        pdf.set_font("Helvetica", "B", 11)
-        th = pdf.multi_cell(inner_w, 6, sanitize_text(title), dry_run=True, output="HEIGHT")
-        pdf.set_font("Helvetica", "", 9)
-        bh = pdf.multi_cell(inner_w, 5, sanitize_text(body), dry_run=True, output="HEIGHT")
-        tile_heights.append(pad + lh + 1 + th + 2 + bh + pad)
-    row_h = max(tile_heights)
-
-    y_start = pdf.get_y()
-    for i, (color, label, title, body) in enumerate(tiles):
-        x = pdf.l_margin + i * (tile_w + tile_gap)
-        # Tinted background (blend color with white at ~15%)
-        bg = tuple(int(c * 0.12 + 255 * 0.88) for c in color)
-        pdf.set_fill_color(*bg)
-        pdf.rect(x, y_start, tile_w, row_h, "F")
-        # Color stripe on left
-        pdf.set_fill_color(*color)
-        pdf.rect(x, y_start, stripe_w, row_h, "F")
-        # Level label
-        pdf.set_xy(x + stripe_w + pad, y_start + pad)
-        pdf.set_font("Helvetica", "B", 8)
-        pdf.set_text_color(*color)
-        pdf.multi_cell(inner_w, 4.5, sanitize_text(label))
-        label_bottom = pdf.get_y()
-        # Title
-        pdf.set_xy(x + stripe_w + pad, label_bottom + 1)
-        pdf.set_font("Helvetica", "B", 11)
-        pdf.set_text_color(*DARK)
-        pdf.multi_cell(inner_w, 6, sanitize_text(title))
-        title_bottom = pdf.get_y()
-        # Body
-        pdf.set_xy(x + stripe_w + pad, title_bottom + 2)
-        pdf.set_font("Helvetica", "", 9)
-        pdf.set_text_color(*MED)
-        pdf.multi_cell(inner_w, 5, sanitize_text(body))
-
-    pdf.set_y(y_start + row_h + 6)
-
-    # ── Combined use case tile (full width, faded divider) ──
-    uc_pad = 5
-    uc_stripe = 3
-    divider_gap = 6
-    uc_content_w = total_w - uc_stripe - uc_pad * 2
-    side_w = (uc_content_w - divider_gap) / 2
-
-    uc_sides = [
-        ("Use Case 1", "Legal Case Analysis",
+    # ── Meet Your Agents sidebar (left ~25%) + UC tiles (right ~75%) ──
+    uc_tiles = [
+        (ACCENT, "Use Case 1", "Legal Case Analysis",
          "A child welfare legal office prepares for hearings by "
          "reconstructing timelines, identifying conflicting witness "
          "statements, and flagging discrepancies across case files.",
          [("50", "cases"), ("277", "people"), ("333", "events"), ("151", "discrepancies")],
          "11 agent configurations"),
-        ("Use Case 2", "Investigative Analytics",
+        (ACCENT, "Use Case 2", "Investigative Analytics",
          "A municipal investigative unit cross-references property "
          "ownership, code violations, and business registrations to "
          "identify patterns of landlord negligence.",
          [("34M", "rows"), ("584K", "properties"), ("1.6M", "violations")],
          "8 agent configurations"),
     ]
+    agent_categories = [
+        ((140, 170, 210), "M365 Copilot", "Zero code, platform model"),
+        ((80, 130, 185),  "Copilot Studio", "Highly configurable"),
+        ((45, 85, 140),   "Foundry", "Agent Service, managed"),
+        (NAVY,            "Pro-code", "Full control, custom SDK"),
+    ]
 
-    # Measure both sides
-    side_heights = []
-    for label, title, desc, stats, agents in uc_sides:
+    uc_pad = 5
+    uc_stripe = 3
+    uc_row_gap = 3
+    agents_gap = 4
+
+    agents_zone_w = total_w * 0.25 - agents_gap / 2
+    tiles_zone_w = total_w - agents_zone_w - agents_gap
+    uc_inner_w = tiles_zone_w - uc_stripe - uc_pad * 2
+
+    # Measure UC tile heights
+    uc_row_heights = []
+    for _, label, title, desc, stats, agents_line in uc_tiles:
         pdf.set_font("Helvetica", "B", 7)
-        lh = pdf.multi_cell(side_w, 4, sanitize_text(label), dry_run=True, output="HEIGHT")
+        lh = pdf.multi_cell(uc_inner_w, 4, sanitize_text(label), dry_run=True, output="HEIGHT")
         pdf.set_font("Helvetica", "B", 10)
-        th = pdf.multi_cell(side_w, 5.5, sanitize_text(title), dry_run=True, output="HEIGHT")
+        th = pdf.multi_cell(uc_inner_w, 5.5, sanitize_text(title), dry_run=True, output="HEIGHT")
         pdf.set_font("Helvetica", "", 8)
-        dh = pdf.multi_cell(side_w, 4.5, sanitize_text(desc), dry_run=True, output="HEIGHT")
-        side_heights.append(uc_pad + lh + 1 + th + 2 + dh + 3 + 14 + 2 + 5 + uc_pad)
-    uc_h = max(side_heights)
+        dh = pdf.multi_cell(uc_inner_w, 4.5, sanitize_text(desc), dry_run=True, output="HEIGHT")
+        uc_row_heights.append(uc_pad + lh + 1 + th + 2 + dh + 2 + 10 + 5 + 3)
 
-    uc_y = pdf.get_y()
-    # Background
-    uc_bg = tuple(int(c * 0.08 + 255 * 0.92) for c in ACCENT)
-    pdf.set_fill_color(*uc_bg)
-    pdf.rect(pdf.l_margin, uc_y, total_w, uc_h, "F")
-    # Stripe
-    pdf.set_fill_color(*ACCENT)
-    pdf.rect(pdf.l_margin, uc_y, uc_stripe, uc_h, "F")
+    uc_grid_h = sum(uc_row_heights) + uc_row_gap
+    uc_grid_y = pdf.get_y()
 
-    # Faded vertical divider
-    divider_x = pdf.l_margin + uc_stripe + uc_pad + side_w + divider_gap / 2
-    divider_inset = 6
-    pdf.set_draw_color(180, 195, 220)
-    pdf.set_line_width(0.3)
-    pdf.line(divider_x, uc_y + divider_inset, divider_x, uc_y + uc_h - divider_inset)
+    # Render UC tiles (right side)
+    tiles_x = pdf.l_margin + agents_zone_w + agents_gap
+    cur_y = uc_grid_y
+    for color, label, title, desc, stats, agents_line in uc_tiles:
+        rh = uc_row_heights[uc_tiles.index((color, label, title, desc, stats, agents_line))]
+        # Tinted background
+        tbg = tuple(int(c * 0.10 + 255 * 0.90) for c in color)
+        pdf.set_fill_color(*tbg)
+        pdf.rect(tiles_x, cur_y, tiles_zone_w, rh, "F")
+        # Stripe
+        pdf.set_fill_color(*color)
+        pdf.rect(tiles_x, cur_y, uc_stripe, rh, "F")
 
-    # Render each side
-    for si, (label, title, desc, stats, agents) in enumerate(uc_sides):
-        if si == 0:
-            sx = pdf.l_margin + uc_stripe + uc_pad
-        else:
-            sx = divider_x + divider_gap / 2
+        cx = tiles_x + uc_stripe + uc_pad
         # Label
-        pdf.set_xy(sx, uc_y + uc_pad)
+        pdf.set_xy(cx, cur_y + uc_pad)
         pdf.set_font("Helvetica", "B", 7)
-        pdf.set_text_color(*ACCENT)
-        pdf.multi_cell(side_w, 4, sanitize_text(label))
+        pdf.set_text_color(*color)
+        pdf.multi_cell(uc_inner_w, 4, sanitize_text(label))
         # Title
-        pdf.set_x(sx)
+        pdf.set_x(cx)
         pdf.set_font("Helvetica", "B", 10)
         pdf.set_text_color(*DARK)
-        pdf.multi_cell(side_w, 5.5, sanitize_text(title))
+        pdf.multi_cell(uc_inner_w, 5.5, sanitize_text(title))
         # Description
-        pdf.set_xy(sx, pdf.get_y() + 1)
+        pdf.set_xy(cx, pdf.get_y() + 1)
         pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*MED)
-        pdf.multi_cell(side_w, 4.5, sanitize_text(desc))
+        pdf.multi_cell(uc_inner_w, 4.5, sanitize_text(desc))
         # Stat chips
         stat_y = pdf.get_y() + 2
-        chip_x = sx
+        chip_x = cx
         for num, lbl in stats:
             pdf.set_xy(chip_x, stat_y)
             pdf.set_font("Helvetica", "B", 11)
@@ -603,118 +630,67 @@ def build_pdf():
             pdf.cell(lbl_w, 6, sanitize_text(lbl))
             chip_x += num_w + lbl_w
         # Agents line
-        pdf.set_xy(sx, stat_y + 10)
+        pdf.set_xy(cx, stat_y + 10)
         pdf.set_font("Helvetica", "B", 8)
         pdf.set_text_color(*DARK)
-        pdf.cell(side_w, 5, sanitize_text(agents))
+        pdf.cell(uc_inner_w, 5, sanitize_text(agents_line))
 
-    pdf.set_y(uc_y + uc_h + 4)
+        cur_y += rh + uc_row_gap
 
-    # ====================================================================
-    # MEET YOUR AGENTS
-    # ====================================================================
-    pdf.add_page()
-    pdf.section_title("Meet Your Agents", link=toc_links["Meet Your Agents"])
+    # ── Meet Your Agents sidebar (left side, spans both rows) ──
+    ma_pad = 5
+    ma_x = pdf.l_margin
 
-    pdf.body_text(
-        "Every score in this report comes from one of these agents. Before diving into "
-        "the levels, here is who was tested and how they are built."
-    )
+    # Background
+    ma_bg = tuple(int(c * 0.06 + 255 * 0.94) for c in ACCENT)
+    pdf.set_fill_color(*ma_bg)
+    pdf.rect(ma_x, uc_grid_y, agents_zone_w, uc_grid_h, "F")
+    # Subtle right stripe
+    pdf.set_fill_color(*ACCENT)
+    pdf.rect(ma_x + agents_zone_w - 2, uc_grid_y, 2, uc_grid_h, "F")
 
-    # -- Key: How to read the tables --
-    pdf.ln(2)
-    key_items = [
-        ("MCP / SQL", "Agent calls tools on an MCP server backed by Azure SQL"),
-        ("SharePoint PDFs/DOCXs", "Agent retrieves documents from a SharePoint library"),
-        ("Uploaded PDFs/DOCXs", "Agent uses a knowledge base of uploaded files"),
-        ("GPT-4.1", "Latest reasoning model (Commercial cloud)"),
-        ("GPT-4o", "Current Government Cloud model"),
-        ("Platform-assigned", "Model selected by M365 (no user control)"),
-    ]
-    key_col_w = 82
-    key_y = pdf.get_y()
-    pdf.set_fill_color(*GRAY_BG)
-    # Measure height: 2 cols, ceil(len/2) rows, ~5mm each + padding
-    import math
-    key_rows_count = math.ceil(len(key_items) / 2)
-    key_h = 6 + key_rows_count * 5 + 4
-    box_w = pdf.w - pdf.l_margin - pdf.r_margin
-    pdf.rect(pdf.l_margin, key_y, box_w, key_h, "F")
-    pdf.set_xy(pdf.l_margin + 3, key_y + 3)
-    col1_items = key_items[:key_rows_count]
-    col2_items = key_items[key_rows_count:]
-    for idx, (term, desc) in enumerate(col1_items):
-        pdf.set_x(pdf.l_margin + 3)
+    # "Meet Your Agents" label
+    mx = ma_x + ma_pad
+    pdf.set_xy(mx, uc_grid_y + ma_pad - 2)
+    pdf.set_font("Helvetica", "B", 7)
+    pdf.set_text_color(*ACCENT)
+    ma_label_h = 5
+    pdf.cell(0, ma_label_h, "Meet Your Agents")
+
+    # Vertically center the agent badge tiles
+    badge_w = agents_zone_w - ma_pad * 2 - 2
+    badge_h = 10
+    badge_gap = 3
+    items_total_h = len(agent_categories) * badge_h + (len(agent_categories) - 1) * badge_gap
+    remaining_h = uc_grid_h - ma_pad - ma_label_h - ma_pad
+    item_y_start = uc_grid_y + ma_pad + ma_label_h + (remaining_h - items_total_h) / 2
+    if item_y_start < uc_grid_y + ma_pad + ma_label_h:
+        item_y_start = uc_grid_y + ma_pad + ma_label_h
+
+    ay = item_y_start
+    for color, name, desc in agent_categories:
+        # Colored badge background
+        pdf.set_fill_color(*color)
+        pdf.rect(mx, ay, badge_w, badge_h, "F")
+        # Name in white, centered vertically in badge
+        pdf.set_xy(mx + 2.5, ay + 1)
         pdf.set_font("Helvetica", "B", 7)
-        pdf.set_text_color(*NAVY)
-        pdf.cell(30, 5, sanitize_text(term))
-        pdf.set_font("Helvetica", "", 7)
-        pdf.set_text_color(*DARK)
-        pdf.cell(key_col_w - 30, 5, sanitize_text(desc))
-        # Col 2
-        if idx < len(col2_items):
-            t2, d2 = col2_items[idx]
-            pdf.set_font("Helvetica", "B", 7)
-            pdf.set_text_color(*NAVY)
-            pdf.cell(30, 5, sanitize_text(t2))
-            pdf.set_font("Helvetica", "", 7)
-            pdf.set_text_color(*DARK)
-            pdf.cell(key_col_w - 30, 5, sanitize_text(d2))
-        pdf.ln()
-    pdf.set_y(key_y + key_h + 4)
+        pdf.set_text_color(255, 255, 255)
+        pdf.cell(badge_w - 5, 4, sanitize_text(name))
+        # Description below name, still inside badge
+        pdf.set_xy(mx + 2.5, ay + 5)
+        pdf.set_font("Helvetica", "", 5.5)
+        pdf.set_text_color(220, 230, 240)
+        pdf.cell(badge_w - 5, 3.5, sanitize_text(desc))
+        ay += badge_h + badge_gap
 
-    # -- UC1 Table --
-    pdf.subsection_title("Use Case 1: Legal Case Analysis (11 Agents)")
-
-    uc1a_headers = ["Agent", "Data Source", "Model", "Score"]
-    uc1a_widths = [62, 42, 28, 38]
-    uc1a_rows = [
-        ["Case Analyst Agent (pro-code)", "MCP / SQL", "GPT-4.1", "10/10"],
-        ["Copilot Studio MCP (GCC)", "MCP / SQL", "GPT-4o", "9/10"],
-        ["Copilot Studio MCP (Com)", "MCP / SQL", "GPT-4.1", "8/10"],
-        ["Copilot Studio SP/PDF (Com)", "SharePoint PDFs", "GPT-4.1", "8/10"],
-        ["Copilot Studio SP/DOCX (Com)", "SharePoint DOCXs", "GPT-4.1", "7/10"],
-        ["Copilot Studio KB/DOCX (Com)", "Uploaded DOCXs", "GPT-4.1", "6/10"],
-        ["Copilot Studio KB/PDF (Com)", "Uploaded PDFs", "GPT-4.1", "5/10"],
-        ["Copilot Studio SP/DOCX (GCC)", "SharePoint DOCXs", "GPT-4o", "5/10"],
-        ["Copilot Studio KB/PDF (GCC)", "Uploaded PDFs", "GPT-4o", "5/10"],
-        ["Copilot Studio KB/DOCX (GCC)", "Uploaded DOCXs", "GPT-4o", "4/10"],
-        ["Copilot Studio SP/PDF (GCC)", "SharePoint PDFs", "GPT-4o", "3/10 to 9/10"],
-    ]
-    pdf.styled_table(uc1a_headers, uc1a_rows, uc1a_widths, font_size=7)
-    pdf.ln(1)
-    pdf.set_font("Helvetica", "I", 7)
+    # Note pointing to appendix
+    pdf.set_xy(mx, uc_grid_y + uc_grid_h - ma_pad - 3)
+    pdf.set_font("Helvetica", "I", 5.5)
     pdf.set_text_color(*LIGHT)
-    pdf.multi_cell(0, 4, sanitize_text(
-        "Ranked by final score. SP/PDF (GCC) improved from 3/10 to 9/10 after adding "
-        "cross-reference headers and metadata tags (zero code). PDF consistently "
-        "outperformed DOCX; Commercial consistently outperformed Government Cloud."
-    ))
+    pdf.multi_cell(badge_w, 3, sanitize_text("Full agent reference in Appendix."), align="L")
 
-    # -- UC2 Table --
-    pdf.ln(4)
-    pdf.subsection_title("Use Case 2: Investigative Analytics (8 Agents)")
-
-    uc2a_headers = ["Agent", "Platform", "Model", "Score"]
-    uc2a_widths = [62, 42, 28, 38]
-    uc2a_rows = [
-        ["Copilot Studio MCP (Com)", "Copilot Studio", "GPT-4.1", "10/10"],
-        ["Investigative Agent", "OpenAI SDK", "GPT-4.1", "10/10"],
-        ["Triage Agent", "Semantic Kernel", "GPT-4.1", "10/10"],
-        ["Foundry Agent", "Foundry Agent Service", "GPT-4.1", "9/10"],
-        ["Copilot Studio SP/PDF (GCC)", "Copilot Studio", "GPT-4o", "9/10"],
-        ["Copilot Studio SP/PDF (Com)", "Copilot Studio", "GPT-4.1", "8/10"],
-        ["Copilot Studio MCP (GCC)", "Copilot Studio", "GPT-4o", "4/10"],
-        ["M365 Copilot MCP (Com)", "M365 Platform", "Platform-assigned", "2/10"],
-    ]
-    pdf.styled_table(uc2a_headers, uc2a_rows, uc2a_widths, font_size=7)
-    pdf.ln(1)
-    pdf.set_font("Helvetica", "I", 7)
-    pdf.set_text_color(*LIGHT)
-    pdf.multi_cell(0, 4, sanitize_text(
-        "Ranked by final score. Case Analyst Agent tested on UC1 only. "
-        "M365 Copilot uses a platform-assigned model with no user control."
-    ))
+    pdf.set_y(uc_grid_y + uc_grid_h + 4)
 
     # ====================================================================
     # THE FIVE LEVELS
@@ -786,6 +762,8 @@ def build_pdf():
     )
     pdf.body_text(
         "Connect agents to structured data sources via Model Context Protocol. "
+        "If your operational data already lives in Dataverse, the built-in "
+        "Dataverse MCP connector provides this path with zero custom code. "
         "Write clear tool descriptions. Add summary modes for large result sets.",
         bold_lead="Recommendation:"
     )
@@ -984,7 +962,9 @@ def build_pdf():
     pdf.sub_subsection_title("What We Found")
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical. Each was documented across 313 test runs."
+        "not hypothetical. Each was documented across 313 test runs. **Every failure "
+        "below occurred in agents that ultimately scored 9 or 10 out of 10** - which "
+        "is why human review remains essential regardless of final accuracy scores."
     )
 
     danger_headers = ["Severity", "Failure Mode", "Description", "Example", "Agent(s)"]
@@ -1056,14 +1036,6 @@ def build_pdf():
                            align="C" if i <= 1 or i == 4 else "L")
         pdf.set_y(y_start + row_h)
 
-    pdf.ln(2)
-    pdf.set_font("Helvetica", "I", 7.5)
-    pdf.set_text_color(*MED)
-    pdf.multi_cell(0, 4, sanitize_text(
-        "These failures occurred across agents that ultimately scored well, "
-        "which is why human review remains essential at every level."
-    ))
-
     # -- Baseline Scores --
     pdf.ln(4)
     pdf.sub_subsection_title("Baseline Scores")
@@ -1127,6 +1099,7 @@ def build_pdf():
         ["Triage Agent (pro-code / Semantic Kernel)", "0/10", "1/10"],
         ["M365 Copilot MCP (Commercial)", "--", "2/10"],
     ]
+    pdf.sub_subsection_title("Round 1 Scores")
     pdf.styled_table(r1_headers, r1_rows, r1_widths, font_size=7.5)
     pdf.ln(1)
     pdf.set_font("Helvetica", "I", 7)
@@ -1136,16 +1109,29 @@ def build_pdf():
         "UC2 scores for data agents; UC1 scores for document agents."
     ), new_x="LMARGIN", new_y="NEXT")
 
+    pdf.ln(2)
+    pdf.body_text(
+        "M365 Copilot scored 2/10. Its platform-assigned model, limited tool customization, "
+        "and lack of system prompt control made iterative improvement impractical. "
+        "Organizations with existing M365 Copilot licenses should use it for Level 1 "
+        "tasks (document discovery) and deploy Copilot Studio for anything higher.",
+        bold_lead="Why M365 Copilot scored lowest:"
+    )
+
     # -- Round 2: Refine and Optimize --
     pdf.subsection_title("Round 2: Refine and Optimize")
 
     pdf.body_text(
-        "Round 2 targeted tool descriptions, metadata, and additional cross-references."
+        "Round 2 refined MCP tool descriptions, agent system prompts, and SharePoint metadata tags."
     )
 
     pdf.sub_subsection_title("Data Agents")
     pdf.body_text(
-        "Tool description refinements and retesting.",
+        "Triage Agent underwent five sub-rounds of system prompt and tool description "
+        "refinement, climbing from 1/10 to 10/10. Investigative Agent reached 10/10 "
+        "with minor tool description adjustments. Foundry Agent improved to 9/10 but its managed orchestration "
+        "layer limited tool sequencing on the hardest prompt. GCC MCP remained at 4/10 - the same improvements "
+        "that lifted other agents had no effect on GPT-4o, confirming a model gap.",
         bold_lead="What changed:"
     )
 
@@ -1170,44 +1156,49 @@ def build_pdf():
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10", "4/10"],
         ["M365 Copilot MCP (Commercial)", "--", "2/10", "--"],
     ]
+    pdf.sub_subsection_title("Round 2 Scores")
     pdf.styled_table(r2_headers, r2_rows, r2_widths, font_size=7.5)
     pdf.ln(1)
     pdf.set_font("Helvetica", "I", 7)
     pdf.set_text_color(*LIGHT)
     pdf.cell(0, 4, sanitize_text(
-        "* Ranked by Round 2 score. M365 Copilot tested only in Round 1. "
-        "UC2 scores for data agents; UC1 scores for document agents."
+        "* Ranked by Round 2 score. M365 Copilot not retested (platform constraints "
+        "prevent iterative improvement). UC2 scores for data agents; UC1 scores for document agents."
     ), new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(2)
     pdf.body_text(
-        "Five agents reached 10 out of 10. The Government Cloud document agent went "
-        "from worst performer (3 out of 10) to surpassing Commercial (9 out of 10 "
-        "versus 8 out of 10) with zero code. The Triage Agent went from 0 out of 10 "
-        "to a perfect 10 out of 10 across five sub-rounds. The GPT-4o agent plateaued "
-        "at 4 out of 10 despite receiving every improvement.",
+        "Five agents reached 10/10. Copilot Studio SP/PDF/GCC improved from 3/10 to "
+        "9/10 with zero code changes. The Triage Agent climbed from 0/10 to 10/10 "
+        "across five sub-rounds of prompt and tool refinement. Copilot Studio MCP/GCC "
+        "plateaued at 4/10 despite receiving every improvement the other agents received, "
+        "confirming a model-level ceiling with GPT-4o.",
         bold_lead="Combined result:"
     )
 
     # -- The Pattern for Organizations --
     pdf.ln(2)
-    pdf.subsection_title("The Pattern for Organizations")
+    pdf.subsection_title("The Improvement Playbook")
+    pdf.body_text(
+        "Every organization that deploys AI agents should follow this sequence. "
+        "Skipping steps does not save time - it hides failures until production."
+    )
     pdf.bullet("Without ground truth, you cannot measure improvement. Build a test suite "
                "before you build the agent.",
-               bold_lead="1. Test with known answers.")
+               bold_lead="Step 1: Test with known answers.")
     pdf.bullet("If the answer is not in the data, no model will find it. Make facts "
                "discrete and queryable.",
-               bold_lead="2. Fix the data first.")
+               bold_lead="Step 2: Fix the data.")
     pdf.bullet("If the model cannot reach the data, add tools. If it does not know "
                "which tool to use, improve descriptions.",
-               bold_lead="3. Fix the tools second.")
+               bold_lead="Step 3: Fix the tools.")
     pdf.bullet("Invest in document hygiene before custom engineering. Cross-reference "
                "headers, metadata tags, and consistent formatting compound across every "
                "document agent.",
-               bold_lead="4. Fix the documents.")
+               bold_lead="Step 4: Fix the documents.")
     pdf.bullet("Each fix can introduce new failure modes. Run the full test suite after "
                "every change.",
-               bold_lead="5. Retest after every change.")
+               bold_lead="Step 5: Retest after every change.")
 
     # ====================================================================
     # WHAT GCC CUSTOMERS SHOULD DO
@@ -1225,7 +1216,7 @@ def build_pdf():
     )
 
     pdf.body_text(
-        "Organizations on Government Cloud have five practical paths forward today:"
+        "Organizations on Government Cloud have six practical paths forward today:"
     )
 
     pdf.bullet("Improve document quality now. Cross-reference headers and SharePoint "
@@ -1242,9 +1233,12 @@ def build_pdf():
     pdf.bullet("Build a fully custom agent using Azure OpenAI GPT-4.1 directly for maximum "
                "control over orchestration, tools, and evaluation",
                bold_lead="Option 4:")
+    pdf.bullet("If case data lives in Dataverse, use the Dataverse MCP connector to give "
+               "Copilot Studio agents structured data access without building custom APIs",
+               bold_lead="Option 5:")
     pdf.bullet("Monitor Government Cloud model updates. When GPT-4.1 becomes available, "
                "Copilot Studio agents will benefit immediately",
-               bold_lead="Option 5:")
+               bold_lead="Option 6:")
 
     pdf.ln(2)
     pdf.body_text(
@@ -1256,20 +1250,22 @@ def build_pdf():
 
     pdf.subsection_title("The Code Investment Spectrum")
     pdf.body_text(
-        "This table shows the agent-side investment. Every MCP-connected agent assumes "
-        "a production MCP server and backing APIs already exist, which is a separate "
-        "pro-code investment. Once that foundation is in place, the agent-side engineering "
-        "changes what you can customize, not whether the agent works."
+        "This table shows the agent-side investment. MCP-connected agents need an MCP "
+        "server. If your data lives in Dataverse, the built-in Dataverse MCP connector "
+        "eliminates that step. For any other data source, building a custom MCP server "
+        "and backing APIs is a separate pro-code investment. Once that foundation is in "
+        "place, the agent-side engineering changes what you can customize, not whether "
+        "the agent works."
     )
 
     code_headers = ["Approach", "Code Required", "Best For"]
     code_widths = [56, 44, 70]
     code_rows = [
-        ["M365 Copilot + MCP (Com)", "Config only (3 JSON manifests)", "Levels 1-2"],
-        ["Copilot Studio + SharePoint", "Config only (platform UI)", "Levels 1-3"],
-        ["Copilot Studio + MCP", "Config only (platform UI)", "Levels 1-4 (Com), 1-3 (GCC)"],
-        ["Foundry Agent", "Low (portal or SDK)", "Levels 3-4"],
-        ["OpenAI SDK / Semantic Kernel", "Full (TypeScript, C#)", "Levels 4-5"],
+        ["M365 Copilot + MCP (Com)", "Config only", "Levels 1-2"],
+        ["Copilot Studio + SharePoint", "Config only", "Levels 1-3"],
+        ["Copilot Studio + MCP", "Config only", "Levels 1-4 (Com), 1-3 (GCC)"],
+        ["Foundry Agent", "Low", "Levels 3-4"],
+        ["OpenAI SDK / Semantic Kernel", "Full", "Levels 4-5"],
     ]
     pdf.styled_table(code_headers, code_rows, code_widths, font_size=8)
 
@@ -1285,7 +1281,9 @@ def build_pdf():
     pdf.body_text(
         "Copilot Studio is the platform that ties the spectrum together. It hosts both "
         "zero-code SharePoint agents (Levels 1-2) and MCP-connected structured data agents "
-        "(Levels 3-4) under a single governance boundary. Model flexibility is the headline: "
+        "(Levels 3-4) under a single governance boundary. For agencies with data in "
+        "Dataverse, the built-in MCP connector means zero custom code for structured "
+        "data access. Model flexibility is the headline: "
         "the same Copilot Studio agent configuration scored 4 out of 10 with GPT-4o and "
         "10 out of 10 with GPT-4.1 with no configuration changes required. **When Government "
         "Cloud gains access to more capable models, every Copilot Studio agent improves "
@@ -1347,9 +1345,16 @@ def build_pdf():
     pdf.body_text(
         "Not all AI use cases require the same investment. Levels 1 and 2 work with "
         "existing Copilot and Copilot Studio licenses, plus SharePoint document libraries. Level 3 benefits "
-        "from structured data connections via Model Context Protocol. Levels 4 and 5 "
+        "from structured data connections via Model Context Protocol - including "
+        "Dataverse's built-in MCP connector for agencies whose data already lives there. Levels 4 and 5 "
         "require purpose-built tools, capable models (GPT-4.1 minimum), iterative "
         "testing, and human review workflows."
+    )
+
+    pdf.body_text(
+        "Copilot Studio agents are included with existing Microsoft 365 and Power Platform "
+        "licenses. Foundry and pro-code agents use consumption-based Azure OpenAI pricing. "
+        "The licensing cost scales with the level of investment, not the number of agents."
     )
 
     pdf.callout_box(
@@ -1359,6 +1364,21 @@ def build_pdf():
         "-- it is the only responsible operating model."
     )
 
+    # -- Next Steps --
+    pdf.ln(4)
+    pdf.subsection_title("Next Steps")
+    pdf.bullet("Deploy a Copilot Studio agent with SharePoint grounding on a real document "
+               "library. Measure it against known answers before customizing anything.",
+               bold_lead="Start at Level 1.")
+    pdf.bullet("Build a 10-prompt test suite with verified answers for your use case. "
+               "You cannot improve what you cannot measure.",
+               bold_lead="Build your ground truth.")
+    pdf.bullet("If your accuracy target exceeds what document agents deliver, connect "
+               "structured data via MCP and follow the Improvement Playbook.",
+               bold_lead="Scale when ready.")
+    pdf.bullet("Contact your Microsoft account team to scope a pilot.",
+               bold_lead="Get started.")
+
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(*LIGHT)
@@ -1366,6 +1386,68 @@ def build_pdf():
         "Based on 313 test runs across 2 government use cases, 19 agent configurations, "
         "7 testing rounds, and 4 rounds of iterative improvement."
     ), align="C")
+
+    # ====================================================================
+    # APPENDIX: MEET YOUR AGENTS
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Appendix: Meet Your Agents", link=toc_links["Appendix: Meet Your Agents"])
+
+    pdf.body_text(
+        "Every score in this report comes from one of these agents. "
+        "Here is who was tested and how they are built."
+    )
+
+    # -- UC1 Table --
+    pdf.subsection_title("Use Case 1: Legal Case Analysis (11 Agents)")
+
+    uc1a_headers = ["Agent", "Data Source", "Model", "Final Score"]
+    uc1a_widths = [62, 42, 28, 38]
+    uc1a_rows = [
+        ["Case Analyst Agent (pro-code)", "MCP / SQL", "GPT-4.1", "10/10"],
+        ["Copilot Studio MCP/Com", "MCP / SQL", "GPT-4.1", "10/10"],
+        ["Copilot Studio SP/PDF/Com", "SharePoint PDFs", "GPT-4.1", "10/10"],
+        ["Copilot Studio MCP/GCC", "MCP / SQL", "GPT-4o", "9/10"],
+        ["Copilot Studio SP/PDF/GCC", "SharePoint PDFs", "GPT-4o", "9/10"],
+        ["Copilot Studio SP/DOCX/Com", "SharePoint DOCXs", "GPT-4.1", "7/10"],
+        ["Copilot Studio KB/DOCX/Com", "Uploaded DOCXs", "GPT-4.1", "6/10"],
+        ["Copilot Studio KB/PDF/Com", "Uploaded PDFs", "GPT-4.1", "5/10"],
+        ["Copilot Studio SP/DOCX/GCC", "SharePoint DOCXs", "GPT-4o", "5/10"],
+        ["Copilot Studio KB/PDF/GCC", "Uploaded PDFs", "GPT-4o", "5/10"],
+        ["Copilot Studio KB/DOCX/GCC", "Uploaded DOCXs", "GPT-4o", "4/10"],
+    ]
+    pdf.styled_table(uc1a_headers, uc1a_rows, uc1a_widths, font_size=7)
+    pdf.ln(1)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*LIGHT)
+    pdf.multi_cell(0, 4, sanitize_text(
+        "Ranked by final score. PDF consistently outperformed DOCX; "
+        "Commercial consistently outperformed Government Cloud."
+    ))
+
+    # -- UC2 Table --
+    pdf.ln(4)
+    pdf.subsection_title("Use Case 2: Investigative Analytics (8 Agents)")
+
+    uc2a_headers = ["Agent", "Platform", "Model", "Final Score"]
+    uc2a_widths = [62, 42, 28, 38]
+    uc2a_rows = [
+        ["Copilot Studio MCP/Com", "Copilot Studio", "GPT-4.1", "10/10"],
+        ["Investigative Agent", "OpenAI SDK", "GPT-4.1", "10/10"],
+        ["Triage Agent", "Semantic Kernel", "GPT-4.1", "10/10"],
+        ["Foundry Agent", "Foundry Agent Service", "GPT-4.1", "9/10"],
+        ["Copilot Studio SP/PDF/GCC", "Copilot Studio", "GPT-4o", "9/10"],
+        ["Copilot Studio SP/PDF/Com", "Copilot Studio", "GPT-4.1", "8/10"],
+        ["Copilot Studio MCP/GCC", "Copilot Studio", "GPT-4o", "4/10"],
+        ["M365 Copilot MCP/Com", "M365 Platform", "Platform-assigned", "2/10"],
+    ]
+    pdf.styled_table(uc2a_headers, uc2a_rows, uc2a_widths, font_size=7)
+    pdf.ln(1)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*LIGHT)
+    pdf.multi_cell(0, 4, sanitize_text(
+        "Ranked by final score. Case Analyst Agent tested on UC1 only."
+    ))
 
     # ====================================================================
     # APPENDIX: TEST PROMPTS
@@ -1412,7 +1494,7 @@ def build_pdf():
                       col_aligns=uc1_aligns, wrap=True)
 
     # ── Use Case 2: Poverty Profiteering (Data Agent) ──
-    pdf.subsection_title("Use Case 2: Poverty Profiteering (Data Agents)")
+    pdf.subsection_title("Use Case 2: Investigative Analytics (Data Agents)")
 
     uc2_prompts = [
         ["1", "How many properties does GEENA LLC own, and what percentage are vacant?",

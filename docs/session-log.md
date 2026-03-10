@@ -1654,3 +1654,73 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - Agent config tables belong early in the doc (Meet Your Agents) not buried in an appendix
 - Data Extraction appendix cut — not core to the narrative
 - "Config only" more honest than "Zero code" for agents that assume an existing MCP server
+
+---
+
+## Session 36 — 2026-03-10
+
+### What was done
+- **Dataverse MCP mentions** — Added Dataverse references to 4 sections: Level 3 Recommendation, GCC Options (new Option 5), Why Copilot Studio, and Conclusion
+- **Whitepaper final review — 12 changes across the entire document:**
+  1. **Cover title broadened** — "for Copilot Studio" → "for Government AI"; subtitle now "across Copilot Studio, Foundry, and pro-code architectures"
+  2. **Page header updated** — matches new title on every page
+  3. **Version number added** — "v1.0" on cover and footer
+  4. **Footer simplified** — removed "Confidential" and stats repetition; now just "March 2026 | v1.0"
+  5. **M365 Copilot explanation** — Added "Why M365 Copilot scored lowest" paragraph after Round 1 table explaining platform-assigned model, limited customization, no system prompt control
+  6. **M365 Round 2 "--" explained** — Footnote now says "platform constraints prevent iterative improvement"
+  7. **Danger Taxonomy framing** — Added bold callout: "Every failure below occurred in agents that ultimately scored 9 or 10 out of 10"; removed redundant italic footnote
+  8. **Improvement Playbook** — Renamed from "The Pattern for Organizations"; added numbered steps (1-5) and framing intro
+  9. **"Poverty Profiteering" renamed** — Appendix test prompts heading changed to "Investigative Analytics"
+  10. **Level 5 tile tagline** — "Trust but Verify" → "Human in the Loop" (reserves "Trust but Verify" for the Conclusion callout)
+  11. **Licensing sentence** — Added to Conclusion: Copilot Studio included with M365/Power Platform; Foundry and pro-code use consumption-based Azure OpenAI pricing
+  12. **Next Steps section** — 4 bullets before appendix: Start at Level 1, Build your ground truth, Scale when ready, Get started (contact account team)
+
+### Decisions made
+- Title "for Government AI" is more shareable outside Microsoft ecosystem — CIO can forward without it looking like vendor collateral
+- "Confidential" removed — want government buyers to share internally
+- "Trust but Verify" reserved for the closing callout where it lands hardest; Level 5 tile uses "Human in the Loop"
+- M365 Copilot needs explicit explanation since buyers already have licenses and will ask "why can't I just use that?"
+- Numbered steps in Improvement Playbook give it methodological weight vs. unordered bullets
+- Score formatting difference (prose "8 out of 10" vs. table "8/10") is intentional, left as-is
+
+---
+
+## Session 35 — 2026-03-10
+
+### What was done
+- **Meet Your Agents key box** — Fixed garbled text (2-column overflow), then removed the key box entirely as redundant (tables are self-documenting)
+
+- **At a Glance page redesign (multiple iterations)**
+  - Summary tile: removed legend, text now spans full width
+  - Level tiles: iterated through 3 columns → combined tile → 2x2 grid → 4 separate stacked → final: 2x2 grid of 4 separate colored tiles at ~75% width
+  - Added Level 5 tile: "Trust but Verify — Full accuracy at L4 means humans review conclusions, not raw data."
+  - Five Levels legend moved to right sidebar beside level tiles, with vertical divider in summary tile removed
+  - UC tiles: split from combined tile into 2 stacked tiles at ~75% width on the right
+  - Meet Your Agents sidebar: added on the left beside UC tiles with 4 colored badge tiles (M365 Copilot light blue, Copilot Studio blue, Foundry medium blue, Pro-code navy) in a code-investment spectrum
+  - Added "Full agent reference in Appendix." note at bottom of sidebar
+
+- **Meet Your Agents moved to appendix** — Now "Appendix: Meet Your Agents" (first appendix, before Test Prompts). TOC updated accordingly.
+
+- **Agent naming convention** — Changed from `SP/DOCX (GCC)` format to `SP/DOCX/GCC` slash format in both UC tables
+
+- **Score updates** — UC1 table now shows final R2 scores: CS MCP/Com 8→10, CS SP/PDF/Com 8→10, CS SP/PDF/GCC "3/10 to 9/10"→9. Column header changed to "Final Score"
+
+- **Content improvements**
+  - "Levels 1-2" → "Levels 1 - 2" (avoids fpdf2 strikethrough)
+  - Summary tile: "two" → "2", "seven" → "7"
+  - Round 2 Data Agents "What changed" expanded with real content about Triage, Investigative, Foundry, GCC MCP agents
+  - Round 2 intro text: "targeted tool descriptions, metadata, and additional cross-references" → "refined MCP tool descriptions, agent system prompts, and SharePoint metadata tags"
+  - Combined result after Round 2 cleaned up — uses actual agent names, removed vague "GPT-4o agent" reference
+  - Pattern for Organizations: removed numbered bullets
+  - Added "Round 1 Scores" and "Round 2 Scores" sub-headings before tables (Round 0 kept as "Baseline Scores", removed duplicate)
+  - Code Investment Spectrum: removed parenthetical details from Code Required column, added Dataverse MCP connector callout
+  - Copilot Studio description: "Low-code, declarative" → "Highly configurable"
+  - "orchestration ceiling" → "managed orchestration layer limited tool sequencing on the hardest prompt"
+
+### Decisions made
+- Meet Your Agents works better as an appendix — At a Glance sidebar provides the quick overview, appendix has the detail
+- Agent naming uses slash format (`SP/DOCX/GCC`) for consistency and brevity
+- Level 5 tile added to At a Glance to complete the narrative (trust but verify)
+- Four agent categories (M365 Copilot, Copilot Studio, Foundry, Pro-code) map to code-investment spectrum
+- Foundry Agent is "Low" code (not config only) — needs thin client code
+- Dataverse MCP connector worth calling out in Code Investment Spectrum

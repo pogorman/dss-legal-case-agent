@@ -325,7 +325,7 @@ def build_pdf():
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("313 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  7 testing rounds"),
+    pdf.cell(0, 7, sanitize_text("380 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  7 testing rounds"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -379,7 +379,7 @@ def build_pdf():
     sum_text_w = total_w - sum_stripe - sum_pad * 2
 
     intro_text = sanitize_text(
-        "This framework is grounded in 313 test runs across 19 agent configurations, "
+        "This framework is grounded in 380 test runs across 19 agent configurations, "
         "2 government use cases, and 7 testing rounds. Three gaps emerged at "
         "the higher levels: tools, data, and model. Every gap was fixable, and none "
         "required AI expertise. One new tool, cleaner data, and cross-referenced "
@@ -962,7 +962,7 @@ def build_pdf():
     pdf.sub_subsection_title("What We Found")
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical. Each was documented across 313 test runs. **Every failure "
+        "not hypothetical. Each was documented across 380 test runs. **Every failure "
         "below occurred in agents that ultimately scored 9 or 10 out of 10** - which "
         "is why human review remains essential regardless of final accuracy scores."
     )
@@ -1143,6 +1143,17 @@ def build_pdf():
         bold_lead="What changed:"
     )
 
+    pdf.body_text(
+        "All other document agents also benefited from "
+        "cross-referenced documents: KB/DOCX/Com improved from 6/10 to a perfect "
+        "10/10, SP/DOCX/Com from 7/10 to 9/10, "
+        "KB/PDF/GCC from 5/10 to 9/10, KB/PDF/Com from 5/10 to 8/10, "
+        "KB/DOCX/GCC from 4/10 to 8/10, and SP/DOCX/GCC from 5/10 to 7/10. "
+        "The same document hygiene improvements delivered gains across "
+        "upload method, file format, and cloud environment.",
+        bold_lead="Additional agents retested:"
+    )
+
     r2_headers = ["Agent", "Round 0", "Round 1", "Round 2"]
     r2_widths = [96, 24, 24, 26]
     r2_rows = [
@@ -1168,8 +1179,10 @@ def build_pdf():
 
     pdf.ln(2)
     pdf.body_text(
-        "Five agents reached 10/10. Copilot Studio SP/PDF/GCC improved from 3/10 to "
-        "9/10 with zero code changes. The Triage Agent climbed from 0/10 to 10/10 "
+        "Six agents reached 10/10 (including KB/DOCX/Com, which jumped from 6/10 to "
+        "a perfect score). Copilot Studio SP/PDF/GCC improved from 3/10 to "
+        "9/10 with zero code changes. Every retested document agent improved. "
+        "The Triage Agent climbed from 0/10 to 10/10 "
         "across five sub-rounds of prompt and tool refinement. Copilot Studio MCP/GCC "
         "plateaued at 4/10 despite receiving every improvement the other agents received, "
         "confirming a model-level ceiling with GPT-4o.",
@@ -1369,7 +1382,7 @@ def build_pdf():
     pdf.subsection_title("Next Steps")
     pdf.bullet("Deploy a Copilot Studio agent with SharePoint grounding on a real document "
                "library. Measure it against known answers before customizing anything.",
-               bold_lead="Start at Level 1.")
+               bold_lead="Start simple.")
     pdf.bullet("Build a 10-prompt test suite with verified answers for your use case. "
                "You cannot improve what you cannot measure.",
                bold_lead="Build your ground truth.")
@@ -1383,7 +1396,7 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5, sanitize_text(
-        "Based on 313 test runs across 2 government use cases, 19 agent configurations, "
+        "Based on 380 test runs across 2 government use cases, 19 agent configurations, "
         "7 testing rounds, and 4 rounds of iterative improvement."
     ), align="C")
 
@@ -1407,22 +1420,23 @@ def build_pdf():
         ["Case Analyst Agent (pro-code)", "MCP / SQL", "GPT-4.1", "10/10"],
         ["Copilot Studio MCP/Com", "MCP / SQL", "GPT-4.1", "10/10"],
         ["Copilot Studio SP/PDF/Com", "SharePoint PDFs", "GPT-4.1", "10/10"],
+        ["Copilot Studio KB/DOCX/Com", "Uploaded DOCXs", "GPT-4.1", "10/10"],
+        ["Copilot Studio SP/DOCX/Com", "SharePoint DOCXs", "GPT-4.1", "9/10"],
         ["Copilot Studio MCP/GCC", "MCP / SQL", "GPT-4o", "9/10"],
         ["Copilot Studio SP/PDF/GCC", "SharePoint PDFs", "GPT-4o", "9/10"],
-        ["Copilot Studio SP/DOCX/Com", "SharePoint DOCXs", "GPT-4.1", "7/10"],
-        ["Copilot Studio KB/DOCX/Com", "Uploaded DOCXs", "GPT-4.1", "6/10"],
-        ["Copilot Studio KB/PDF/Com", "Uploaded PDFs", "GPT-4.1", "5/10"],
-        ["Copilot Studio SP/DOCX/GCC", "SharePoint DOCXs", "GPT-4o", "5/10"],
-        ["Copilot Studio KB/PDF/GCC", "Uploaded PDFs", "GPT-4o", "5/10"],
-        ["Copilot Studio KB/DOCX/GCC", "Uploaded DOCXs", "GPT-4o", "4/10"],
+        ["Copilot Studio KB/PDF/GCC", "Uploaded PDFs", "GPT-4o", "9/10"],
+        ["Copilot Studio KB/PDF/Com", "Uploaded PDFs", "GPT-4.1", "8/10"],
+        ["Copilot Studio KB/DOCX/GCC", "Uploaded DOCXs", "GPT-4o", "8/10"],
+        ["Copilot Studio SP/DOCX/GCC", "SharePoint DOCXs", "GPT-4o", "7/10"],
     ]
     pdf.styled_table(uc1a_headers, uc1a_rows, uc1a_widths, font_size=7)
     pdf.ln(1)
     pdf.set_font("Helvetica", "I", 7)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 4, sanitize_text(
-        "Ranked by final score. PDF consistently outperformed DOCX; "
-        "Commercial consistently outperformed Government Cloud."
+        "Ranked by final score. All agents retested with cross-referenced "
+        "documents. PDF outperformed DOCX in 3 of 4 matchups; KB/DOCX/Com "
+        "was the exception (10/10)."
     ))
 
     # -- UC2 Table --

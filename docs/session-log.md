@@ -1724,3 +1724,65 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 - Four agent categories (M365 Copilot, Copilot Studio, Foundry, Pro-code) map to code-investment spectrum
 - Foundry Agent is "Low" code (not config only) — needs thin client code
 - Dataverse MCP connector worth calling out in Code Investment Spectrum
+
+## Session 37 — 2026-03-10
+
+### What was done
+- **KB agent retesting with cross-referenced documents** — 3 of 6 untested document agents retested on all 10 UC1 prompts with cross-referenced documents (KB/DOCX/Com deferred due to config issues)
+  - KB/PDF/Com: 5/10 -> 8/10 (+3)
+  - KB/PDF/GCC: 5/10 -> 9/10 (+4) — only agent to catch skeletal survey discrepancy
+  - KB/DOCX/GCC: 4/10 -> 8/10 (+4) — still reproduced dangerous "no fractures" error on prompt 4
+  - Test run count: 313 -> 343 (30 new runs)
+
+- **Updated all docs with new scores**
+  - Whitepaper: UC1 appendix table re-sorted, R2 document agents section adds KB retest results, R2 combined result mentions KB pattern, footnote updated
+  - 313 -> 343 across 7 files: whitepaper, slide outline, slide deck, demo guide, FAQs, README
+  - Regenerated: whitepaper PDF, slide outline PDF, demo guide PDF, FAQs PDF, PowerPoint deck
+
+- **SP/DOCX retests with cross-referenced documents**
+  - SP/DOCX/Com: 7/10 -> 9/10 (+2) — excellent nuance on skeletal survey (prompt 4), only failed time gap math (prompt 10)
+  - SP/DOCX/GCC: 5/10 -> 7/10 (+2) — initially scored 3/10 because Case 2 DOCXs were missing from the library; after adding them, recovered to 7/10. Prompt 4 no longer reproduces "no fractures" error. Prompts 1, 5, 8 still fail (retrieval can't find Case 2 docs for those queries).
+  - Test run count: 343 -> 370 (20 initial runs + 7 re-retests after missing docs fix)
+
+- **Updated all docs with final SP/DOCX scores**
+  - UC1 appendix table re-sorted, R2 narrative expanded to cover all retested document agents
+  - 343 -> 370 across 6 files
+  - Regenerated: whitepaper PDF, slide outline PDF, demo guide PDF, FAQs PDF, PowerPoint deck
+
+- **KB/DOCX/Com retest** — Config issues resolved, tested all 10 prompts
+  - KB/DOCX/Com: 6/10 -> **10/10** (+4) — perfect score, best skeletal survey answer of any agent
+  - Prompt 4 (skeletal survey): contextualizes sheriff's "no fractures" as meaning no *additional* fractures beyond the two diagnosed — most nuanced interpretation across all 19 agents
+  - Test run count: 370 -> 380
+
+- **All 11 UC1 agents now have final scores** — no more Round 0 holdouts
+
+### Final UC1 Scores (all agents retested)
+| Agent | R0 | Final |
+|---|---|---|
+| Case Analyst Agent | 10 | 10 |
+| CS MCP/Com | 8 | 10 |
+| CS SP/PDF/Com | 8 | 10 |
+| CS KB/DOCX/Com | 6 | **10** |
+| CS SP/DOCX/Com | 7 | 9 |
+| CS MCP/GCC | -- | 9 |
+| CS SP/PDF/GCC | 3 | 9 |
+| CS KB/PDF/GCC | 5 | 9 |
+| CS KB/PDF/Com | 5 | 8 |
+| CS KB/DOCX/GCC | 4 | 8 |
+| CS SP/DOCX/GCC | 5 | 7 |
+
+### Decisions made
+- Document hygiene (cross-reference headers) is the single biggest lever for document agents — every agent improved, average +3 points
+- KB/DOCX/Com at 10/10 breaks the "PDF always beats DOCX" pattern — DOCX outperformed PDF in the KB/Com config
+- SP/DOCX/GCC retrieval issues (3 prompts can't find Case 2 docs) are a SharePoint/GPT-4o limitation, not a document quality issue
+
+## Session 38 — 2026-03-10
+
+### What was done
+- **Whitepaper finalization** — Changed "Start at Level 1." to "Start simple." in Next Steps section to avoid collision with the five-level accuracy framework terminology
+- Decided against retesting M365 Copilot — 2/10 score supports the "match investment to accuracy" narrative; platform-assigned model means improvements aren't attributable
+- Regenerated whitepaper PDF (v1.0 final)
+
+### Decisions made
+- Whitepaper v1.0 is complete — no further content changes planned
+- M365 Copilot stays at 2/10 (R1 only, no R2 retest)

@@ -674,7 +674,7 @@ def build_pdf():
         "Round 1 added missing data (11 SQL rows, 1 tool filter). Round 2 added new "
         "tools (search_properties, summary mode) and improved prompts. Round 3 validated "
         "across models (GPT-4.1 vs GPT-5 Auto). Subsequent rounds focused on specific "
-        "agents (Triage took 5 rounds alone). Total: 313 test runs across 19 agent "
+        "agents (Triage took 5 rounds alone). Total: 380 test runs across 19 agent "
         "configurations."
     )
 

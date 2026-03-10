@@ -265,7 +265,7 @@ def build_pdf():
     pdf.set_y(145)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  313 test runs",
+    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  380 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -285,7 +285,7 @@ def build_pdf():
     pdf.section_title("At a Glance")
 
     pdf.body_text(
-        "313 test runs across 19 agent configurations. Here is what the data says."
+        "380 test runs across 19 agent configurations. Here is what the data says."
     )
 
     # ── Colored tiles for levels 1-2, 3, 4 ──
@@ -471,7 +471,7 @@ def build_pdf():
     pdf.body_text("Show the five-level spectrum slide.", bold_lead="Show the five-level spectrum slide.")
 
     pdf.blockquote(
-        '"We developed this framework after running 313 test evaluations across '
+        '"We developed this framework after running 380 test evaluations across '
         "two government use cases and 19 different agent configurations. Not all "
         "AI use cases need the same level of accuracy, and not all agent "
         'architectures deliver it."'

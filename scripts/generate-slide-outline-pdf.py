@@ -254,7 +254,7 @@ def build_pdf():
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("313 test runs  |  19 agents  |  21 slides  |  2 use cases"),
+    pdf.cell(0, 7, sanitize_text("380 test runs  |  19 agents  |  21 slides  |  2 use cases"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -264,7 +264,7 @@ def build_pdf():
     pdf.section_title("At a Glance")
 
     pdf.body_text(
-        "313 test runs across 19 agent configurations. Here is what the data says."
+        "380 test runs across 19 agent configurations. Here is what the data says."
     )
 
     # ── Colored tiles for levels 1-2, 3, 4 ──
@@ -334,7 +334,7 @@ def build_pdf():
     pdf.headline("AI Agent Accuracy for Government: A Five-Level Framework")
 
     pdf.body_text(
-        "Subtitle: Findings from 313 Test Runs Across 19 Agent Configurations"
+        "Subtitle: Findings from 380 Test Runs Across 19 Agent Configurations"
     )
 
     pdf.visual_note("Clean title slide with agency-appropriate branding")
@@ -580,7 +580,7 @@ def build_pdf():
     pdf.visual_note("Severity ladder or risk matrix, color-coded red to yellow")
 
     pdf.talking_point(
-        "These are not hypothetical. We documented each one across 313 test runs."
+        "These are not hypothetical. We documented each one across 380 test runs."
     )
 
     # ====================================================================

@@ -258,6 +258,74 @@ def build_pdf():
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
+    # AT A GLANCE
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("At a Glance")
+
+    pdf.body_text(
+        "313 test runs across 19 agent configurations. Here is what the data says."
+    )
+
+    # ── Colored tiles for levels 1-2, 3, 4 ──
+    tiles = [
+        (LVL2_COLOR, "Levels 1-2", "Just works",
+         "8/10 with zero customization. Model choice irrelevant."),
+        (LVL3_COLOR, "Level 3", "Data over documents",
+         "MCP agents outperformed document search on every aggregate query."),
+        (LVL4_COLOR, "Level 4", "The inflection point",
+         "Three gaps emerged: tools, data, and model. All fixable."),
+    ]
+    tile_gap = 4
+    tile_count = len(tiles)
+    total_w = pdf.w - pdf.l_margin - pdf.r_margin
+    tile_w = (total_w - tile_gap * (tile_count - 1)) / tile_count
+    pad = 5
+    stripe_w = 3
+    inner_w = tile_w - stripe_w - pad * 2
+
+    tile_heights = []
+    for _, label, title, body in tiles:
+        pdf.set_font("Helvetica", "B", 8)
+        lh = pdf.multi_cell(inner_w, 4.5, sanitize_text(label), dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "B", 11)
+        th = pdf.multi_cell(inner_w, 6, sanitize_text(title), dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "", 9)
+        bh = pdf.multi_cell(inner_w, 5, sanitize_text(body), dry_run=True, output="HEIGHT")
+        tile_heights.append(pad + lh + 1 + th + 2 + bh + pad)
+    row_h = max(tile_heights)
+
+    y_start = pdf.get_y()
+    for i, (color, label, title, body) in enumerate(tiles):
+        x = pdf.l_margin + i * (tile_w + tile_gap)
+        bg = tuple(int(c * 0.12 + 255 * 0.88) for c in color)
+        pdf.set_fill_color(*bg)
+        pdf.rect(x, y_start, tile_w, row_h, "F")
+        pdf.set_fill_color(*color)
+        pdf.rect(x, y_start, stripe_w, row_h, "F")
+        pdf.set_xy(x + stripe_w + pad, y_start + pad)
+        pdf.set_font("Helvetica", "B", 8)
+        pdf.set_text_color(*color)
+        pdf.multi_cell(inner_w, 4.5, sanitize_text(label))
+        label_bottom = pdf.get_y()
+        pdf.set_xy(x + stripe_w + pad, label_bottom + 1)
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.set_text_color(*DARK)
+        pdf.multi_cell(inner_w, 6, sanitize_text(title))
+        title_bottom = pdf.get_y()
+        pdf.set_xy(x + stripe_w + pad, title_bottom + 2)
+        pdf.set_font("Helvetica", "", 9)
+        pdf.set_text_color(*MED)
+        pdf.multi_cell(inner_w, 5, sanitize_text(body))
+
+    pdf.set_y(y_start + row_h + 6)
+
+    pdf.bullet(
+        "One new tool, cleaner data, and cross-referenced documents.",
+        bold_lead="Every gap was fixable, and none required AI expertise."
+    )
+
+    # ====================================================================
     # SLIDE 1: Title
     # ====================================================================
     pdf.add_page()
@@ -461,7 +529,7 @@ def build_pdf():
         bold_lead="Document improvement:"
     )
     pdf.bullet(
-        "Commercial agent: 0/2 to 2/2 -- pulled Medical Records as primary source"
+        "Commercial agent: 8/10 to 10/10 -- pulled Medical Records as primary source"
     )
     pdf.bullet(
         "GCC agent: 3/10 to 9/10 across all 10 prompts with document hygiene alone"
@@ -813,7 +881,7 @@ def build_pdf():
         "the framework."
     )
 
-    pdf.visual_note("Contact information, QR code to summary PDF")
+    pdf.visual_note("Contact information, QR code to whitepaper")
 
     pdf.talking_point(
         "I'm not here to sell you a product. I'm here to help you make the right "

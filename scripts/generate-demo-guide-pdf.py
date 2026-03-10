@@ -279,9 +279,78 @@ def build_pdf():
     ), align="C")
 
     # ====================================================================
-    # THE FRAMEWORK
+    # AT A GLANCE
     # ====================================================================
     pdf.add_page()
+    pdf.section_title("At a Glance")
+
+    pdf.body_text(
+        "313 test runs across 19 agent configurations. Here is what the data says."
+    )
+
+    # ── Colored tiles for levels 1-2, 3, 4 ──
+    tiles = [
+        (LVL2_COLOR, "Levels 1-2", "Just works",
+         "8/10 with zero customization. Model choice irrelevant."),
+        (LVL3_COLOR, "Level 3", "Data over documents",
+         "MCP agents outperformed document search on every aggregate query."),
+        (LVL4_COLOR, "Level 4", "The inflection point",
+         "Three gaps emerged: tools, data, and model. All fixable."),
+    ]
+    tile_gap = 4
+    tile_count = len(tiles)
+    total_w = pdf.w - pdf.l_margin - pdf.r_margin
+    tile_w = (total_w - tile_gap * (tile_count - 1)) / tile_count
+    pad = 5
+    stripe_w = 3
+    inner_w = tile_w - stripe_w - pad * 2
+
+    tile_heights = []
+    for _, label, title, body in tiles:
+        pdf.set_font("Helvetica", "B", 8)
+        lh = pdf.multi_cell(inner_w, 4.5, sanitize_text(label), dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "B", 11)
+        th = pdf.multi_cell(inner_w, 6, sanitize_text(title), dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "", 9)
+        bh = pdf.multi_cell(inner_w, 5, sanitize_text(body), dry_run=True, output="HEIGHT")
+        tile_heights.append(pad + lh + 1 + th + 2 + bh + pad)
+    row_h = max(tile_heights)
+
+    y_start = pdf.get_y()
+    for i, (color, label, title, body) in enumerate(tiles):
+        x = pdf.l_margin + i * (tile_w + tile_gap)
+        bg = tuple(int(c * 0.12 + 255 * 0.88) for c in color)
+        pdf.set_fill_color(*bg)
+        pdf.rect(x, y_start, tile_w, row_h, "F")
+        pdf.set_fill_color(*color)
+        pdf.rect(x, y_start, stripe_w, row_h, "F")
+        pdf.set_xy(x + stripe_w + pad, y_start + pad)
+        pdf.set_font("Helvetica", "B", 8)
+        pdf.set_text_color(*color)
+        pdf.multi_cell(inner_w, 4.5, sanitize_text(label))
+        label_bottom = pdf.get_y()
+        pdf.set_xy(x + stripe_w + pad, label_bottom + 1)
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.set_text_color(*DARK)
+        pdf.multi_cell(inner_w, 6, sanitize_text(title))
+        title_bottom = pdf.get_y()
+        pdf.set_xy(x + stripe_w + pad, title_bottom + 2)
+        pdf.set_font("Helvetica", "", 9)
+        pdf.set_text_color(*MED)
+        pdf.multi_cell(inner_w, 5, sanitize_text(body))
+
+    pdf.set_y(y_start + row_h + 6)
+
+    pdf.bullet(
+        "One new tool, cleaner data, and cross-referenced documents.",
+        bold_lead="Every gap was fixable, and none required AI expertise."
+    )
+
+    pdf.horizontal_rule()
+
+    # ====================================================================
+    # THE FRAMEWORK
+    # ====================================================================
     pdf.section_title("The Framework")
 
     pdf.body_text(
@@ -362,7 +431,7 @@ def build_pdf():
         ["M365 Copilot Com (platform model)", "2/10 (20% pass rate)"],
         ["One fuzzy search tool", "13% to 100% accuracy"],
         ["Document agents on skeletal survey", "7 of 8 reproduced a misleading finding"],
-        ["Document hygiene (zero code)", "GCC: 3/10 to 9/10; Com: 0/2 to 2/2"],
+        ["Document hygiene (zero code)", "GCC: 3/10 to 9/10; Com: 8/10 to 10/10"],
         ["Iterative improvement", "0-1/10 to perfect 10/10 (3-5 rounds)"],
     ]
     pdf.styled_table(stats_headers, stats_rows, stats_widths, font_size=8)
@@ -1075,7 +1144,7 @@ def build_pdf():
     doc_imp_headers = ["Agent", "Before", "After", "Change"]
     doc_imp_widths = [60, 28, 28, 54]
     doc_imp_rows = [
-        ["Commercial doc agent", "0/2", "2/2", "Cross-ref headers"],
+        ["Commercial doc agent", "8/10", "10/10", "Cross-ref headers"],
         ["GCC SP/PDF agent", "3/10", "9/10", "Cross-ref headers + metadata tags"],
     ]
     pdf.styled_table(doc_imp_headers, doc_imp_rows, doc_imp_widths, font_size=8)
@@ -1083,7 +1152,7 @@ def build_pdf():
     pdf.ln(4)
     pdf.body_text(
         "The pattern for organizations: ground truth first, then data, then tools, "
-        "then model validation. Budget 3+ rounds for Level 4 use cases.",
+        "then documents, then model validation. Budget 3+ rounds for Level 4 use cases.",
         bold_lead="The pattern:"
     )
 

@@ -8,11 +8,13 @@ dist/
 local.settings.json
 .azure/
 __azurite*
+__pycache__/
 .claude/
+
+# Local-only files
+images/
 
 # Source documents containing real case data — never commit
 docs/*.docx
 docs/*.msg
 docs/*.pdf
-!docs/summary.pdf
-!docs/demo-guide.pdf

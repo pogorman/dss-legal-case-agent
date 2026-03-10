@@ -7,7 +7,7 @@ To update content, edit the script in `scripts/` and regenerate.
 
 | File | Generator | Description |
 |---|---|---|
-| [pdf/summary.pdf](pdf/summary.pdf) | `scripts/generate-executive-pdf.py` | Summary -- five-level accuracy framework, 313 test runs |
+| [pdf/improving-agents-whitepaper-v1.pdf](pdf/improving-agents-whitepaper-v1.pdf) | `scripts/generate-executive-pdf.py` | Whitepaper -- five-level accuracy framework, 313 test runs |
 | [pdf/demo-guide.pdf](pdf/demo-guide.pdf) | `scripts/generate-demo-guide-pdf.py` | Presenter guide -- demo script, talking points, Q&A handling |
 | [pdf/slide-outline.pdf](pdf/slide-outline.pdf) | `scripts/generate-slide-outline-pdf.py` | 21-slide deck outline with key messages and visual suggestions |
 | [pdf/architecture.pdf](pdf/architecture.pdf) | `scripts/generate-architecture-pdf.py` | System architecture, data flow, networking, data provenance |

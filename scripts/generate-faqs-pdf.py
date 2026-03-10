@@ -481,15 +481,15 @@ def build_pdf():
     )
 
     # ====================================================================
-    # SUMMARY PDF
+    # WHITEPAPER
     # ====================================================================
-    pdf.section_title("Summary PDF")
+    pdf.section_title("Whitepaper")
 
     pdf.qa_pair(
-        "Why is the PDF called \"Copilot Studio Evaluation\" and not \"AI Agent Evaluation\"?",
+        "Why is the whitepaper called \"Improving Copilot Studio Agents\" and not \"AI Agent Evaluation\"?",
         "The evaluation is specifically testing Copilot Studio agent configurations. "
-        "The PDF is framed as a Copilot Studio evaluation across multiple government "
-        "use cases."
+        "The whitepaper is framed as a practical guide for improving Copilot Studio agents "
+        "across multiple government use cases."
     )
 
     pdf.qa_pair(

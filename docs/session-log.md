@@ -1571,3 +1571,86 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 1. **Update all PDFs and slide deck**: 8/10 → 9/10 for GCC SP/PDF across all generators
 2. **KB agent retests**: Full 10-prompt battery on KB/PDF and KB/DOCX agents with cross-referenced documents (both Case 1 and Case 2)
 3. **SP/PDF-Com full retest**: Run all 10 prompts on Commercial with both cross-referenced doc sets to see if it also improves past 8/10
+
+## Session 33 — 2026-03-09
+
+### What was done
+- **Summary PDF major restructure** — reorganized from 9 TOC sections to 7, telling a linear narrative
+  - "The Danger Taxonomy" absorbed into Round 0 as the "oh crap" moment after baseline scores
+  - "The Evidence" absorbed into The Iterative Process as a subsection with NO scores (pure scene-setter)
+  - The Iterative Process is now a mega-section: Evidence → Round 0 → Round 1 → Round 2 → Pattern
+  - Rounds unified across doc and data agents (previously separate improvement tracks)
+  - Score progression tables build through rounds: R0 (1 col) → R1 (2 cols) → R2 (3 cols)
+  - Cross-use-case results table removed (replaced by progressive round tables)
+  - Pattern for Organizations expanded from 4 steps to 5 (added "Fix the documents")
+- **Document improvement tables normalized to /10** across all PDFs
+  - Commercial SP/PDF: 0/2 → 2/2 changed to 8/10 → 10/10 (demo guide, slide outline, summary)
+  - GCC SP/PDF shown per-round: 3/10 → 7/10 → 9/10
+- **Agent naming consistency**: "SharePoint/PDF" → "Copilot Studio SharePoint/PDF" in all summary tables
+- **Added `sub_subsection_title` helper** to ExecutivePDF class (10pt bold, DARK color) for 3rd-level headings
+- **Danger taxonomy table tightened**: font 7.5→7, line height 4→3.5, padding 2→1, shorter cell text
+- **Demo guide updated**: Pattern text now includes "then documents" step
+- **Slide outline updated**: Commercial doc agent normalized to 8/10 → 10/10
+- Regenerated all 3 affected PDFs (summary, demo-guide, slide-outline)
+
+### Score progression (unified rounds for summary PDF)
+| Agent | R0 | R1 | R2 |
+|---|---|---|---|
+| Web SPA | 10 | 10 | 10 |
+| COM MCP | 8 | 10 | 10 |
+| COM SP/PDF | 8 | 10 | 10 |
+| IA | 1 | 8 | 10 |
+| Triage | 0 | 1 | 10 |
+| GCC SP/PDF | 3 | 7 | 9 |
+| FA | 4 | 8 | 9 |
+| GCC MCP | 2 | 4 | 4 |
+| M365 | 2 | -- | -- |
+
+### Decisions made
+- Danger Taxonomy has more emotional weight inside Round 0 than as a standalone section
+- Evidence subsection without scores removes the baseline-vs-final confusion
+- Doc agent improvement rounds mapped to data agent rounds: R1 = cross-refs (like data fixes), R2 = metadata (like tool refinements)
+- SP/PDF (Gov Cloud) shown once in baseline table (UC1 score of 3/10, which progresses through rounds) with footnote about stable 8/10 UC2 score
+
+### Next session priorities
+1. **KB agent retests**: Full 10-prompt battery on KB/PDF and KB/DOCX agents with cross-referenced documents
+2. **SP/PDF-Com full retest**: Run all 10 prompts on Commercial with both cross-referenced doc sets
+3. **Review summary PDF layout**: Check page breaks and table rendering in the new structure
+
+## Session 34 — 2026-03-09
+
+### What was done
+- **Whitepaper content edits**
+  - M365 Copilot moved from Round 0 to Round 1 (it was tested after R0 improvements were in place); removed from baseline table, R1 shows `--`/`2/10`, R2 shows `--`/`2/10`/`--`
+  - Removed Triage Agent sub-rounds detail from Round 2 Data Agents "What changed"
+  - Code Investment Spectrum: "Zero" → "Config only" for low/no-code agents; added paragraph explaining MCP server/API is a separate pro-code investment
+  - Conclusion: "existing Copilot and Copilot Studio licenses, plus SharePoint document libraries"
+  - Danger taxonomy Agent(s) column simplified: specific agent names → "Document Agent", "Data Agent", or "Both"
+  - Fixed fpdf2 strikethrough bug in test prompts appendix (`--` → parentheses)
+  - Level 3: removed "(prior to improvements)", cleaned up Copilot Studio references
+  - Model Gap: removed GCC locked-to-4o sentence, reordered for clarity
+  - "30 minutes of engineering" → "simple engineering"
+  - "every gap was fixable" changed from bullet to body text
+  - Renamed "Web SPA" / "Custom Web App" → "Case Analyst Agent" globally
+  - Added clarifying italic note under danger taxonomy about high-scoring agent failures
+
+- **Whitepaper structural changes**
+  - **New "Meet Your Agents" section** between At a Glance and The Five Levels — UC1 (11 agents) and UC2 (8 agents) tables with key box, replaces Appendix: Agent Configurations
+  - **Removed Appendix: Agent Configurations** (content moved to Meet Your Agents)
+  - **Removed Appendix: Data Extraction Options**
+  - TOC reduced from 9 to 8 entries: At a Glance, Meet Your Agents, The Five Levels, The Iterative Process, GCC Options, Five Findings, Conclusion, Appendix: Test Prompts
+
+- **At a Glance visual redesign**
+  - Summary tile (full width): intro text on left with "Summary" label, Five Levels legend with colored badges on right
+  - Three level tiles (L1-2, L3, L4) with title-cased headings
+  - Combined use case tile (full width): UC1 left / UC2 right with faded vertical divider, stat chips (bold numbers in accent color), agent counts
+  - Use case descriptions, data stats, and agent counts all in one cohesive card
+
+- **Test prompt tables**: added `wrap=True` mode to `styled_table` with `multi_cell` wrapping and page-break protection for rows that would split across pages
+
+### Decisions made
+- M365 Copilot belongs in Round 1 (tested after R0 improvements were in place)
+- "Case Analyst Agent" naming convention matches other agents (Investigative Agent, Triage Agent, Foundry Agent)
+- Agent config tables belong early in the doc (Meet Your Agents) not buried in an appendix
+- Data Extraction appendix cut — not core to the narrative
+- "Config only" more honest than "Zero code" for agents that assume an existing MCP server

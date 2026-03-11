@@ -1,0 +1,471 @@
+kind: BotDefinition
+entity:
+  accessControlPolicy: GroupMembership
+  authenticationMode: Integrated
+  authenticationTrigger: Always
+  configuration:
+    settings:
+      GenerativeActionsEnabled: true
+
+  template: legalCaseAgentTemplate-1.0.0
+
+  description: "An AI-powered legal case analyst that queries structured case data in Dataverse to build timelines, cross-reference witness statements, identify discrepancies between accounts, and prepare case summaries for attorneys. Covers 50 cases across 6 case types and 16 judicial circuits."
+
+  instructions: "You are a Legal Case Analyst for the Office of Legal Services. You help attorneys, caseworkers, and investigators analyze legal case data stored in Dataverse. You have access to five interconnected tables:\n\n1. Legal Cases - 50 cases with case number, case type (CPS, TPR, APS, etc.), county, circuit, filed date, status, plaintiff, and summary.\n\n2. People - 277 individuals linked to cases, including their role (Mother, Father, Child, Caseworker, etc.), relationship to the case, date of birth, and notes.\n\n3. Timeline Events - 333 chronological events tied to cases, each with a date, time, event type (Incident, Investigation, Court Hearing, Home Visit, etc.), description, source document, and parties involved.\n\n4. Statements - 338 recorded statements from people, including statement date, who the statement was made to, the full statement text, source document, and page reference.\n\n5. Discrepancies - 151 contradictions between accounts from different people on the same case. Each discrepancy captures Person A's account, Person B's account, what evidence contradicts them, and the source document.\n\nHow you should respond:\n\n- When asked about a case, always start by identifying it clearly by case number and case type.\n- When building timelines, present events in strict chronological order with dates and times. Flag any gaps longer than 24 hours between related events.\n- When analyzing statements, group them by person and highlight where accounts diverge from one another. Reference specific statement dates and source documents.\n- When identifying discrepancies, present both sides neutrally. Never characterize a person as lying -- instead say accounts differ or statements are inconsistent.\n- When summarizing a case, cover: (1) case overview, (2) key parties and their roles, (3) critical timeline events, (4) notable discrepancies, and (5) any patterns worth investigating.\n- Use professional, objective language appropriate for legal proceedings. Avoid speculation or conclusions about guilt, innocence, or credibility.\n- If asked about medical records, home studies, or court orders, note that you have structured data about events and statements referencing those documents, but you do not have the original document text.\n- Always cite the source document and page reference when available.\n- If a question cannot be answered from the available data, say so clearly rather than guessing."
+
+components:
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Conversation Start
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.ConversationStart
+    dialog:
+      beginDialog:
+        kind: OnConversationStart
+        id: main
+        actions:
+          - kind: SendActivity
+            id: sendMessage_welcome
+            activity:
+              text:
+                - "Welcome. I'm the Legal Case Analyst -- I can help you analyze case data across 50 legal cases in the system. I can build timelines, cross-reference witness statements, identify discrepancies between accounts, and summarize case details. What case would you like to look into?"
+              speak:
+                - "Welcome. I'm the Legal Case Analyst. I can help you analyze case data, build timelines, cross-reference witness statements, and identify discrepancies. What case would you like to look into?"
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Greeting
+    description: This topic triggers when the user greets the agent.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Greeting
+    dialog:
+      beginDialog:
+        kind: OnRecognizedIntent
+        id: main
+        intent:
+          displayName: Greeting
+          includeInOnSelectIntent: false
+          triggerQueries:
+            - Good afternoon
+            - Good morning
+            - Hello
+            - Hey
+            - Hi
+        actions:
+          - kind: SendActivity
+            id: sendMessage_greeting
+            activity:
+              text:
+                - "Hello. I'm ready to help you analyze case data. You can ask me to build a timeline, find discrepancies, cross-reference statements, or summarize any of the 50 cases in the system. Which case would you like to start with?"
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Conversational boosting
+    description: Create generative answers from Dataverse knowledge.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Conversationalboosting
+    dialog:
+      beginDialog:
+        kind: OnUnknownIntent
+        id: main
+        priority: -1
+        actions:
+          - kind: SearchAndSummarizeContent
+            id: search-content
+            variable: Topic.Answer
+            userInput: =System.Activity.Text
+          - kind: ConditionGroup
+            id: has-answer-conditions
+            conditions:
+              - id: has-answer
+                condition: =!IsBlank(Topic.Answer)
+                actions:
+                  - kind: EndDialog
+                    id: end-topic
+                    clearTopicQueue: true
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Fallback
+    description: This topic triggers when the query does not match existing topics.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Fallback
+    dialog:
+      beginDialog:
+        kind: OnUnknownIntent
+        id: main
+        actions:
+          - kind: ConditionGroup
+            id: conditionGroup_fallback
+            conditions:
+              - id: conditionItem_retry
+                condition: =System.FallbackCount < 3
+                actions:
+                  - kind: SendActivity
+                    id: sendMessage_retry
+                    activity: "I wasn't able to find relevant case data for that question. Try asking about a specific case number (e.g., 2024-DR-42-0892), or ask me to list cases by type, county, or circuit."
+            elseActions:
+              - kind: BeginDialog
+                id: escalate_fallback
+                dialog: template-content.topic.Escalate
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Escalate
+    description: Triggered when the user asks to speak with a person.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Escalate
+    dialog:
+      startBehavior: CancelOtherTopics
+      beginDialog:
+        kind: OnEscalate
+        id: main
+        intent:
+          displayName: Escalate
+          includeInOnSelectIntent: false
+          triggerQueries:
+            - Talk to agent
+            - Talk to a person
+            - I need a real person
+            - Connect me to someone
+            - I need help from a human
+        actions:
+          - kind: SendActivity
+            id: sendMessage_escalate
+            conversationOutcome: Escalated
+            activity: "I understand you'd like to speak with someone directly. Please contact your assigned attorney or the Office of Legal Services for assistance beyond what I can provide from the case data. Is there anything else I can help you with in the meantime?"
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: End of Conversation
+    description: Guides the user through ending the conversation.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.EndofConversation
+    dialog:
+      startBehavior: CancelOtherTopics
+      beginDialog:
+        kind: OnSystemRedirect
+        id: main
+        actions:
+          - kind: Question
+            id: question_resolved
+            conversationOutcome: ResolvedImplied
+            alwaysPrompt: true
+            variable: init:Topic.SurveyResponse
+            prompt: Did that answer your question?
+            entity: BooleanPrebuiltEntity
+          - kind: ConditionGroup
+            id: condition_survey
+            conditions:
+              - id: condition_yes
+                condition: =Topic.SurveyResponse = true
+                actions:
+                  - kind: SendActivity
+                    id: sendMessage_thanks
+                    activity: Glad I could help. Good luck with the case.
+                  - kind: Question
+                    id: question_continue
+                    alwaysPrompt: true
+                    variable: init:Topic.Continue
+                    prompt: Can I help with anything else?
+                    entity: BooleanPrebuiltEntity
+                  - kind: ConditionGroup
+                    id: condition_continue
+                    conditions:
+                      - id: condition_continue_yes
+                        condition: =Topic.Continue = true
+                        actions:
+                          - kind: SendActivity
+                            id: sendMessage_listening
+                            activity: "Go ahead -- what case or question would you like to look at next?"
+                    elseActions:
+                      - kind: SendActivity
+                        id: sendMessage_bye
+                        activity: Take care.
+                      - kind: EndConversation
+                        id: endConversation_final
+            elseActions:
+              - kind: Question
+                id: question_tryagain
+                alwaysPrompt: true
+                variable: init:Topic.TryAgain
+                prompt: Sorry I wasn't able to help. Would you like to try a different question?
+                entity: BooleanPrebuiltEntity
+              - kind: ConditionGroup
+                id: condition_tryagain
+                conditions:
+                  - id: condition_tryagain_no
+                    condition: =Topic.TryAgain = false
+                    actions:
+                      - kind: BeginDialog
+                        id: escalate_from_end
+                        dialog: template-content.topic.Escalate
+                elseActions:
+                  - kind: SendActivity
+                    id: sendMessage_goahead
+                    activity: "Go ahead -- I'm listening."
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Goodbye
+    description: Triggered when the user says goodbye.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Goodbye
+    dialog:
+      startBehavior: CancelOtherTopics
+      beginDialog:
+        kind: OnRecognizedIntent
+        id: main
+        intent:
+          displayName: Goodbye
+          includeInOnSelectIntent: false
+          triggerQueries:
+            - Bye
+            - Goodbye
+            - See you later
+            - "That's all"
+            - "I'm done"
+        actions:
+          - kind: Question
+            id: question_end
+            variable: Topic.EndConversation
+            prompt: Would you like to end our conversation?
+            entity: BooleanPrebuiltEntity
+          - kind: ConditionGroup
+            id: condition_end
+            conditions:
+              - id: condition_end_yes
+                condition: =Topic.EndConversation = true
+                actions:
+                  - kind: BeginDialog
+                    id: go_to_end
+                    dialog: template-content.topic.EndofConversation
+              - id: condition_end_no
+                condition: =Topic.EndConversation = false
+                actions:
+                  - kind: SendActivity
+                    id: sendMessage_continue
+                    activity: "No problem -- what else can I help you with?"
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Thank you
+    description: Triggered when the user says thank you.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Thankyou
+    dialog:
+      beginDialog:
+        kind: OnRecognizedIntent
+        id: main
+        intent:
+          displayName: Thank you
+          includeInOnSelectIntent: false
+          triggerQueries:
+            - thanks
+            - thank you
+            - thanks so much
+            - appreciate it
+        actions:
+          - kind: SendActivity
+            id: sendMessage_yw
+            activity: "You're welcome. Let me know if you need anything else on this case or another."
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: On Error
+    description: Triggered when the agent encounters an error.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.OnError
+    dialog:
+      startBehavior: UseLatestPublishedContentAndCancelOtherTopics
+      beginDialog:
+        kind: OnError
+        id: main
+        actions:
+          - kind: SetVariable
+            id: setVariable_timestamp
+            variable: init:Topic.CurrentTime
+            value: =Text(Now(), DateTimeFormat.UTC)
+          - kind: ConditionGroup
+            id: condition_testmode
+            conditions:
+              - id: condition_istest
+                condition: =System.Conversation.InTestMode = true
+                actions:
+                  - kind: SendActivity
+                    id: sendMessage_debug
+                    activity: "Error: {System.Error.Message}\nCode: {System.Error.Code}\nConversation: {System.Conversation.Id}\nTime (UTC): {Topic.CurrentTime}"
+            elseActions:
+              - kind: SendActivity
+                id: sendMessage_usererror
+                activity: "Something went wrong while retrieving case data. Error code: {System.Error.Code}. Please try your question again."
+          - kind: CancelAllDialogs
+            id: cancelDialogs_error
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Start Over
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.StartOver
+    dialog:
+      beginDialog:
+        kind: OnRecognizedIntent
+        id: main
+        intent:
+          displayName: Start Over
+          includeInOnSelectIntent: false
+          triggerQueries:
+            - start over
+            - start again
+            - restart
+            - new case
+            - different case
+        actions:
+          - kind: Question
+            id: question_confirm
+            alwaysPrompt: false
+            variable: init:Topic.Confirm
+            prompt: Start a fresh conversation? Any current case context will be cleared.
+            entity: BooleanPrebuiltEntity
+          - kind: ConditionGroup
+            id: condition_confirm
+            conditions:
+              - id: condition_yes
+                condition: =Topic.Confirm = true
+                actions:
+                  - kind: BeginDialog
+                    id: go_to_reset
+                    dialog: template-content.topic.ResetConversation
+            elseActions:
+              - kind: SendActivity
+                id: sendMessage_stay
+                activity: Ok, let's continue. What would you like to know?
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Reset Conversation
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.ResetConversation
+    dialog:
+      startBehavior: UseLatestPublishedContentAndCancelOtherTopics
+      beginDialog:
+        kind: OnSystemRedirect
+        id: main
+        actions:
+          - kind: SendActivity
+            id: sendMessage_reset
+            activity: "Fresh start. Which case would you like to analyze? You can give me a case number, case type, county, or just describe what you're looking for."
+          - kind: ClearAllVariables
+            id: clearVars
+            variables: ConversationScopedVariables
+          - kind: CancelAllDialogs
+            id: cancelDialogs_reset
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: Multiple Topics Matched
+    description: Triggered when the agent matches multiple topics and needs clarification.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.MultipleTopicsMatched
+    dialog:
+      beginDialog:
+        kind: OnSelectIntent
+        id: main
+        triggerBehavior: Always
+        actions:
+          - kind: SetVariable
+            id: setVariable_options
+            variable: init:Topic.IntentOptions
+            value: =System.Recognizer.IntentOptions
+          - kind: SetTextVariable
+            id: setTextVariable_none
+            variable: Topic.NoneOfTheseDisplayName
+            value: None of these
+          - kind: EditTable
+            id: addNoneOption
+            changeType: Add
+            itemsVariable: Topic.IntentOptions
+            value: "={ DisplayName: Topic.NoneOfTheseDisplayName, TopicId: \"NoTopic\", TriggerId: \"NoTrigger\", Score: 1.0 }"
+          - kind: Question
+            id: question_clarify
+            interruptionPolicy:
+              allowInterruption: false
+            alwaysPrompt: true
+            variable: System.Recognizer.SelectedIntent
+            prompt: "To clarify, did you mean:"
+            entity:
+              kind: DynamicClosedListEntity
+              items: =Topic.IntentOptions
+          - kind: ConditionGroup
+            id: condition_notopic
+            conditions:
+              - id: condition_notopic_yes
+                condition: =System.Recognizer.SelectedIntent.TopicId = "NoTopic"
+                actions:
+                  - kind: ReplaceDialog
+                    id: go_to_fallback
+                    dialog: template-content.topic.Fallback
+
+  - kind: DialogComponent
+    managedProperties:
+      isCustomizable: false
+    displayName: "Sign in "
+    description: Triggered when authentication is required.
+    shareContext: {}
+    state: Active
+    status: Active
+    schemaName: template-content.topic.Signin
+    dialog:
+      beginDialog:
+        kind: OnSignIn
+        id: main
+        actions:
+          - kind: ConditionGroup
+            id: condition_signin
+            conditions:
+              - id: condition_required
+                condition: =System.SignInReason = SignInReason.SignInRequired
+                actions:
+                  - kind: SendActivity
+                    id: sendMessage_signin
+                    activity: To access case data, I'll need you to sign in first.
+          - kind: OAuthInput
+            id: oauth_login
+            title: Sign In
+            text: Please sign in to continue

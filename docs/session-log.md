@@ -1786,3 +1786,194 @@ Developed and documented a five-level accuracy spectrum for government AI use ca
 ### Decisions made
 - Whitepaper v1.0 is complete — no further content changes planned
 - M365 Copilot stays at 2/10 (R1 only, no R2 retest)
+
+## Session 39 — 2026-03-11
+
+### What was done
+- **Dataverse MCP agent testing (CS/DV/GCC)** — Configured Copilot Studio agent with native Dataverse MCP server connector, loaded all 1,149 records into 5 Dataverse tables
+- **Round 0 (baseline, no instructions/description):** 1/10 — only prompt 9 (TPR cases) returned correct results; most prompts hit MCP SQL errors (`uniqueidentifier` conversion, subquery errors) or returned "no records found"
+- **Round 1 (added agent instructions + description + query pattern hints):** 1/10 — prompt 5 (timeline) now worked perfectly (10/10), but prompt 9 (TPR) broke; net score unchanged
+- **Patched Dataverse metadata descriptions** via `database/patch-dataverse-descriptions.js` — enriched all 5 table descriptions and 30 column descriptions so the MCP server exposes better tool metadata
+
+### Dataverse description patches applied
+Tables and columns received rich descriptions including valid values, query hints, and relationship explanations. Script: `database/patch-dataverse-descriptions.js`
+
+**Table descriptions:**
+
+| Table | Description |
+|-------|-------------|
+| legal_legalcase | 50 legal cases. Primary identifier is legal_caseid (text, e.g. '2024-DR-42-0892'), NOT the Dataverse GUID. Filter by legal_casetype (CPS, TPR, APS, Adoption, Guardianship, ICPC), legal_county, legal_circuit, legal_status (Active, Closed, Pending Review, Dismissed). To find related records, first query this table to get the GUID, then filter related tables. |
+| legal_person | 277 people linked to cases via legal_LegalCaseId lookup. Query by legal_fullname, legal_role. To find statements, first get person record ID, then filter legal_statement by legal_PersonId. |
+| legal_timelineevent | 333 chronological events linked via legal_LegalCaseId. Filter by legal_eventtype. Sort by legal_eventdate + legal_eventtime. |
+| legal_statement | 338 recorded statements linked to cases (legal_LegalCaseId) and people (legal_PersonId). Contains legal_statementtext (full verbatim text), legal_madeto, legal_sourcedocument, legal_pagereference. |
+| legal_discrepancy | 151 contradictions linked to cases (legal_LegalCaseId), Person A (legal_PersonAId), Person B (legal_PersonBId). Contains legal_topic, legal_personaaccount, legal_personbaccount, legal_contradictedby. |
+
+**Column descriptions (key examples):**
+
+| Column | Description |
+|--------|-------------|
+| legal_caseid | Human-readable case number (e.g. '2024-DR-42-0892'). NOT the Dataverse record GUID. |
+| legal_casetype | Values: CPS, TPR, APS, Adoption, Guardianship, ICPC |
+| legal_status | Values: Active, Closed, Pending Review, Dismissed |
+| legal_role | Values: Mother, Father, Child, Caseworker, Attorney, Guardian ad Litem, Therapist, Physician, Teacher, Neighbor, Relative, Foster Parent, Law Enforcement, Judge |
+| legal_eventtype | Values: Incident, Investigation, Court Hearing, Home Visit, Medical Exam, Interview, Placement, Service Referral, Report Filed, Emergency Action, Family, Medical, Law Enforcement, DSS Action, Court |
+| legal_statementtext | Full verbatim text of what the person said — primary content field for analysis |
+| legal_topic | What the discrepancy contradiction is about (e.g. 'Timeline of injury discovery', 'Bedtime routine') |
+| legal_fullname | Person's full name (e.g. 'Marcus Webb', 'Dena Holloway') — use for person lookups |
+
+### Agent instructions added to Copilot Studio
+- Full schema description with all 5 tables, column names, valid values, and relationship explanations
+- Two-step query pattern: always look up case/person by text field first to get GUID, then filter related tables by lookup
+- Break complex queries into multiple simple queries rather than subqueries
+
+### CS/DV/GCC test scores
+
+| # | Prompt | R0 | R1 | R2 |
+|---|--------|----|----|-----|
+| 1 | Jaylen Webb ER admission | 0 | 0 | 0 |
+| 2 | Marcus Webb statements | 0 | 0 | ~1 (1/5 tries; found LE statements, missed Medical Staff) |
+| 3 | Crystal Price drug tests | 0 | 0 | 0 |
+| 3.2 | Crystal Price transportation | 1 | 1 | 0 |
+| 4 | Skeletal survey fractures | 0 | 0 | 0 |
+| 5 | Timeline for case | 0 | 10 | 10 |
+| 6 | People in Price TPR | 0 | 0 | 0 |
+| 7 | Dena Holloway statements | 0 | 0 | 0 |
+| 8 | Statements to law enforcement | 0 | 0 | 0 |
+| 9 | TPR cases | 10 | 0 | 0 |
+| 10 | Time gap thump to hospital | 0 | 0 | 0 |
+| **Total** | | **1/10** | **1/10** | **2/10** |
+
+**R2 notes:**
+- P2 improvement: metadata descriptions enabled the two-step lookup (person → GUID → statements) — worked 1/5 attempts. Found 2 law enforcement statements but missed `Medical Staff` statement because `legal_madeto` value is `'Medical Staff'` not `'Hospital Staff'`. Fix: add valid `legal_madeto` values to column description in future round.
+- P5 (timeline): stable at 10 across R1 and R2
+- P3.2 (transportation): regressed from 1 to 0
+- P9 (TPR cases): still broken since R1 (worked in R0 baseline only)
+- MCP SQL generation remains non-deterministic — same prompt produces different SQL on each attempt
+
+### MCP errors observed
+- `Subquery returned more than 1 value` — agent writes SQL with scalar subqueries returning multiple rows
+- `Conversion failed when converting from a character string to uniqueidentifier` — agent uses case number string where GUID is expected
+- Both errors are in the Dataverse MCP server's SQL generation, not in our data
+
+### Decisions made
+- Dataverse MCP server's SQL generation is the bottleneck, not schema or instructions
+- Rich metadata descriptions helped marginally (P2 partial success) but fundamental SQL generation quality is too low
+- CS/DV/GCC final score: **R0=1, R1=1, R2=2** — to be added to whitepaper agent matrix
+- Model-driven app (Steps 6-7 in deploy-dataverse.js) still needs debugging (views: POST savedqueries 400, app: POST appmodules 400)
+
+---
+
+## Session 40 — 2026-03-11
+
+### What was done
+- **CS/DV/GCC Round 3 testing** — Tested denormalized text columns + updated descriptions
+- **Denormalized columns added (R3):** Created `database/patch-dataverse-denormalize.js` — added 7 text columns across 4 child tables (`legal_caseidtext`, `legal_personname`, `legal_personaname`, `legal_personbname`) and populated all 3,297 records with resolved values
+- **Case type description fix:** Discovered `legal_casetype` stores full text ('Termination of Parental Rights') but descriptions listed abbreviations ('TPR'). Updated both table and column descriptions to list full text values with "never use abbreviations" instruction. Re-patched and retested — agent still generated `WHERE legal_casetype = 'TPR'`.
+- **R3 result: 1/10** (regression from R2's 2/10) — P2 stopped working, P6 timeline still stable. Denormalized columns were never used by the MCP SQL generator in any observed query.
+- **Created `docs/dataverse-mcp-server-testing.md`** — comprehensive test log with actual SQL queries, MCP errors, improvement narrative, key findings, and recommendations for the product team
+- **Added Commercial replication instructions** to testing doc with step-by-step setup for deploying to a Commercial Dataverse environment
+
+### CS/DV/GCC R3 test scores
+
+| # | Prompt | R0 | R1 | R2 | R3 |
+|---|--------|----|----|----|----|
+| 1 | Jaylen Webb ER admission | 0 | 0 | 0 | 0 |
+| 2 | Marcus Webb statements | 0 | 0 | ~1 | 0 |
+| 3 | Crystal Price drug tests | 0 | 0 | 0 | 0 |
+| 3.2 | Crystal Price transportation | 1 | 1 | 0 | 0 |
+| 4 | Skeletal survey fractures | 0 | 0 | 0 | 0 |
+| 5 | Timeline for case | 0 | 10 | 10 | 10 |
+| 6 | People in Price TPR | 0 | 0 | 0 | 0 |
+| 7 | Dena Holloway statements | 0 | 0 | 0 | 0 |
+| 8 | Statements to law enforcement | 0 | 0 | 0 | 0 |
+| 9 | TPR cases | 10 | 0 | 0 | 0 |
+| 10 | Time gap thump to hospital | 0 | 0 | 0 | 0 |
+| **Total** | | **1/10** | **1/10** | **2/10** | **1/10** |
+
+### Key findings from R3
+1. **Denormalized columns completely ignored** — MCP SQL generator used lookup/relationship columns in every cross-table query, never the text columns
+2. **Descriptions don't influence SQL generation** — "never use abbreviations" instruction ignored; "use this column to filter directly" ignored. Descriptions appear to affect tool discovery only, not SQL generation
+3. **Score regression** — P2 (Marcus Webb statements) worked 1/5 times in R2 but 0/5 in R3, suggesting adding more columns/descriptions may have made things worse
+4. **P9 case type mismatch** — data stores 'Termination of Parental Rights' but MCP generates `'TPR'` despite descriptions explicitly mapping abbreviations to full text
+
+### Decisions made
+- Denormalized columns and description enrichment have hit their ceiling — no further improvements possible without platform changes
+- Created comprehensive testing doc (`docs/dataverse-mcp-server-testing.md`) to share with Dataverse MCP product team
+- Next step: replicate in Commercial Dataverse environment to test whether a different model (GPT-4.1/GPT-5 Auto) changes SQL generation quality
+- Testing doc will become a PDF eventually (generator not yet created)
+
+---
+
+## Session 41 — 2026-03-11
+**Focus:** Dataverse MCP — Commercial environment deployment and testing
+
+### What happened
+- Updated all 3 Dataverse scripts (deploy-dataverse.js, patch-dataverse-descriptions.js, patch-dataverse-denormalize.js) to target Commercial environment (og-dv.crm.dynamics.com)
+- Deployed full schema (5 tables, 7 relationships, 7 denormalized columns) + 1,149 records to Commercial Dataverse
+- Patched all table/column descriptions and populated denormalized text columns
+- Created Copilot Studio agent with Dataverse MCP connector in Commercial
+- Ran all 11 test prompts — scored 5/11 (vs GCC best of 2/11)
+
+### Key finding
+**The model matters.** Commercial scored 5/11 vs GCC's 1/11 (R3) with identical schema, descriptions, and instructions. Multi-step lookups (person → case → statements) that GCC could never do, Commercial handles reliably. Remaining failures are shared: person-to-case resolution when person isn't plaintiff, description adherence (TPR abbreviation), wrong event type guesses.
+
+### Scores
+| Prompt | GCC R3 | Com R0 |
+|--------|--------|--------|
+| P1 Jaylen ER | 0 | 0 |
+| P2 Marcus statements | 0 | 9 |
+| P3 Crystal drugs | 0 | 0 |
+| P4 Crystal transport | 0 | 0 |
+| P5 Skeletal survey | 0 | 0 |
+| P6 Full timeline | 10 | 10 |
+| P7 LE statements | 0 | 9 |
+| P8 Price people | 0 | 0 |
+| P9 TPR cases | 0 | 0 |
+| P10 Dena comparison | 0 | 9 |
+| P11 Time gap | 0 | 10 |
+
+### Files changed
+- `database/deploy-dataverse.js` — ENV_URL, TENANT_ID updated to Commercial
+- `database/patch-dataverse-descriptions.js` — same
+- `database/patch-dataverse-denormalize.js` — same
+- `docs/dataverse-mcp-server-testing.md` — Commercial results added
+
+---
+
+## Session 42 — 2026-03-11
+**Focus:** Dataverse MCP — Multi-model comparison (GPT-5 Auto + Sonnet 4.6)
+
+### What happened
+- Discovered Copilot Studio Commercial now offers Anthropic models (Sonnet 4.6) via model picker alongside OpenAI models
+- Tested same 11 UC1 prompts on same Commercial Dataverse MCP agent with two additional models:
+  - **Sonnet 4.6: 11/11 — perfect score.** Every prompt answered correctly, including all 6 prompts that every OpenAI model failed.
+  - **GPT-5 Auto: 4/11 — worse than GPT-4.1 (6/11).** Lost Q2 (hospital staff statement) and Q11 (time gap), gained nothing new.
+- Corrected GPT-4.1 score from 5/11 to 6/11 (renumbered prompts to match actual prompt list)
+
+### Final multi-model scorecard
+| # | Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | Sonnet 4.6 (Com) |
+|---|--------|:------:|:-------:|:----------:|:----------:|
+| Q1 | ER admission | 0 | 0 | 0 | 10 |
+| Q2 | Marcus bedtime | 0 | 9 | 5 | 10 |
+| Q3 | Crystal "clean now" | 0 | 0 | 0 | 10 |
+| Q4 | Crystal transportation | 0 | 0 | 0 | 10 |
+| Q5 | Skeletal survey | 0 | 0 | 0 | 10 |
+| Q6 | Full timeline | 10 | 10 | 10 | 10 |
+| Q7 | Price TPR people | 0 | 9 | 8 | 10 |
+| Q8 | Dena statement comparison | 0 | 9 | 9 | 10 |
+| Q9 | Law enforcement statements | 0 | 9 | 9 | 10 |
+| Q10 | TPR cases | 0 | 0 | 0 | 10 |
+| Q11 | Time gap | 0 | 10 | 0 | 10 |
+| **Passing** | | **1/11** | **6/11** | **4/11** | **11/11** |
+
+### Key findings
+1. **The model is everything.** Same connector, same data, same schema — scores range from 1/11 to 11/11 based solely on model selection.
+2. **Newer doesn't mean better.** GPT-5 Auto scored worse than GPT-4.1 on structured data retrieval.
+3. **Copilot Studio now supports Anthropic models** in Commercial — first confirmed test of Sonnet 4.6 with Dataverse MCP connector.
+4. **Sonnet solved every shared OpenAI failure:** P1 (ER admission), P3 (drug tests), P4 (transportation), P5 (skeletal survey), P10 (TPR case type filtering) — all zero across every OpenAI model, all perfect with Sonnet.
+
+### Files changed
+- `docs/dataverse-mcp-server-testing.md` — GPT-5 Auto + Sonnet 4.6 results, multi-model comparison section, findings 8-10
+- `scripts/generate-executive-pdf.py` — 15 agent configs, 462 test runs, 21 agents, Sonnet/GPT-5 Auto in R2 table + Meet Your Agents
+- `docs/session-log.md` — Session 42
+- `MEMORY.md` — Updated scores, milestones, open items

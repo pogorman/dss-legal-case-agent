@@ -67,7 +67,7 @@ class DemoGuidePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio -- Demo Guide"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Fidelity Spectrum for Copilot Studio -- Demo Guide"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -235,7 +235,7 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 26)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 12, "Agent Accuracy Spectrum for Copilot Studio", align="C",
+    pdf.cell(0, 12, "Agent Fidelity Spectrum for Copilot Studio", align="C",
              new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 16)
     pdf.set_text_color(180, 200, 220)
@@ -354,7 +354,7 @@ def build_pdf():
     pdf.section_title("The Framework")
 
     pdf.body_text(
-        "This demo is built around a five-level accuracy spectrum that helps "
+        "This demo is built around a five-level fidelity spectrum that helps "
         "government leaders decide where AI agents are safe to deploy aggressively, "
         "where they need guardrails, and where human review is non-negotiable."
     )
@@ -1304,11 +1304,11 @@ def build_pdf():
 
     pdf.body_text('"What about Government Cloud?"', bold_lead='"What about Government Cloud?"')
     pdf.blockquote(
-        "Government Cloud Copilot Studio is currently locked to GPT-4o, which "
+        "Government Cloud Copilot Studio currently defaults to GPT-4o, which "
         "scored 4 out of 10 on investigative queries in our testing. For Levels 1 "
         "through 3, GPT-4o is adequate. For Levels 4 and 5, deploy pro-code agents "
         "using Azure OpenAI GPT-4.1 directly. When Government Cloud upgrades to a "
-        "more capable model, Copilot Studio agents will benefit immediately."
+        "a model with stronger multi-step reasoning, Copilot Studio agents will benefit immediately."
     )
 
     # ====================================================================

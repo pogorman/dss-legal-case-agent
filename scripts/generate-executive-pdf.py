@@ -1,5 +1,5 @@
 """
-Generate the Improving Agents whitepaper PDF using the five-level accuracy framework.
+Generate the Improving Agents whitepaper PDF using the five-level response fidelity framework.
 Uses fpdf2 -- no external dependencies beyond what's already installed.
 
 Usage: python scripts/generate-executive-pdf.py
@@ -62,7 +62,7 @@ class ExecutivePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Government AI  |  Whitepaper"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Fidelity Spectrum for Government AI  |  Whitepaper"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -229,6 +229,51 @@ class ExecutivePDF(FPDF):
         self.cell(0, badge_h, sanitize_text(name))
         self.set_xy(x, y + badge_h + 2)
 
+    def numbered_step(self, num, title, text):
+        """Render a numbered step with an ACCENT circle badge + bold title + body."""
+        text = sanitize_text(text)
+        title = sanitize_text(title)
+        circle_r = 4
+        circle_d = circle_r * 2
+        gap = 3
+        indent = self.l_margin + 4
+        content_x = indent + circle_d + gap
+        content_w = self.w - self.r_margin - content_x
+
+        # Measure total height to check for page break
+        self.set_font("Helvetica", "B", 9.5)
+        title_h = 5.5
+        self.set_font("Helvetica", "", 9.5)
+        body_h = self.multi_cell(content_w, 5, text, dry_run=True, output="HEIGHT")
+        total_h = max(circle_d, title_h + body_h) + 3  # 3mm bottom spacing
+        if self.get_y() + total_h > self.h - self.b_margin:
+            self.add_page()
+
+        top_y = self.get_y()
+        # Draw number circle
+        cx = indent + circle_r
+        cy = top_y + circle_r
+        self.set_fill_color(*ACCENT)
+        self.ellipse(cx - circle_r, cy - circle_r, circle_d, circle_d, "F")
+        self.set_font("Helvetica", "B", 9)
+        self.set_text_color(*WHITE)
+        self.set_xy(indent, top_y)
+        self.cell(circle_d, circle_d, str(num), align="C")
+        # Draw title
+        self.set_xy(content_x, top_y + 0.5)
+        self.set_font("Helvetica", "B", 9.5)
+        self.set_text_color(*NAVY)
+        self.cell(content_w, title_h, title)
+        # Draw body text
+        self.set_xy(content_x, top_y + title_h + 1)
+        self.set_font("Helvetica", "", 9.5)
+        self.set_text_color(*DARK)
+        old_l_margin = self.l_margin
+        self.l_margin = content_x
+        self.multi_cell(content_w, 5, text)
+        self.l_margin = old_l_margin
+        self.ln(1)
+
     def callout_box(self, title, text, height=None):
         pad = 5
         box_w = self.w - self.l_margin - self.r_margin
@@ -272,12 +317,12 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Agent Fidelity Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 14, "for Government AI", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 13)
     pdf.set_text_color(180, 200, 220)
-    pdf.cell(0, 9, "A five-level framework for measuring AI agent accuracy", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 9, "A five-level framework for measuring AI agent response fidelity", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "I", 12)
     pdf.set_text_color(160, 185, 210)
     pdf.cell(0, 8, "across Copilot Studio, Foundry, and pro-code architectures", align="C", new_x="LMARGIN", new_y="NEXT")
@@ -317,15 +362,15 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
     pdf.multi_cell(0, 6.5, sanitize_text(
-        "Not all AI use cases require the same level of accuracy, and not all agent "
+        "Not all AI use cases require the same level of response fidelity, and not all agent "
         "architectures deliver it. This report presents a five-level framework based on "
-        "313 empirical test runs across 19 agent configurations and two government use cases."
+        "313 empirical test runs across 21 agent configurations and two government use cases."
     ), align="C")
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("380 test runs  |  19 agents  |  20 prompts  |  2 use cases  |  7 testing rounds"),
+    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  20 prompts  |  2 use cases  |  7 testing rounds"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -347,6 +392,7 @@ def build_pdf():
 
     toc_entries = [
         "At a Glance",
+        "How This Was Built",
         "The Five Levels",
         "The Iterative Process",
         "Government Cloud (GCC) Options",
@@ -379,7 +425,7 @@ def build_pdf():
     sum_text_w = total_w - sum_stripe - sum_pad * 2
 
     intro_text = sanitize_text(
-        "This framework is grounded in 380 test runs across 19 agent configurations, "
+        "This framework is grounded in 462 test runs across 21 agent configurations, "
         "2 government use cases, and 7 testing rounds. Three gaps emerged at "
         "the higher levels: tools, data, and model. Every gap was fixable, and none "
         "required AI expertise. One new tool, cleaner data, and cross-referenced "
@@ -425,7 +471,7 @@ def build_pdf():
         [(LVL4_COLOR, "Level 4", "The Inflection Point",
           "Three gaps emerged: tools, data, and model. All fixable."),
          (LVL5_COLOR, "Level 5", "Human in the Loop",
-          "Full accuracy at L4 means humans review conclusions, not raw data.")],
+          "High fidelity at L4 means humans review conclusions, not raw data.")],
     ]
     legend_items = [
         (LVL1_COLOR, "L1", "Discovery"),
@@ -548,7 +594,7 @@ def build_pdf():
          "reconstructing timelines, identifying conflicting witness "
          "statements, and flagging discrepancies across case files.",
          [("50", "cases"), ("277", "people"), ("333", "events"), ("151", "discrepancies")],
-         "11 agent configurations"),
+         "15 agent configurations"),
         (ACCENT, "Use Case 2", "Investigative Analytics",
          "A municipal investigative unit cross-references property "
          "ownership, code violations, and business registrations to "
@@ -693,6 +739,35 @@ def build_pdf():
     pdf.set_y(uc_grid_y + uc_grid_h + 4)
 
     # ====================================================================
+    # HOW THIS WAS BUILT
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("How This Was Built", link=toc_links["How This Was Built"])
+
+    pdf.body_text(
+        "This project - the code, the data, and the documentation you are reading - "
+        "was AI-accelerated. One solution engineer. One AI coding assistant. Four weeks."
+    )
+
+    pdf.body_text(
+        "Architecture decisions, Azure service selection, schema design, security posture, "
+        "and the five-level fidelity framework came from domain expertise and customer conversations.",
+        bold_lead="Human-directed."
+    )
+    pdf.body_text(
+        "TypeScript Functions, MCP server, SQL schema, 50 synthetic cases (277 people, "
+        "333 timeline events), web UI, six PDF generators, and a 21-slide deck were "
+        "generated by AI and reviewed by a human.",
+        bold_lead="AI-accelerated."
+    )
+    pdf.body_text(
+        "462 test runs across 21 agent configurations, scored by hand. Every dangerous "
+        "response - hallucinated facts, missed fractures, invented timelines - was caught "
+        "through manual review. That is exactly the point of Level 5.",
+        bold_lead="Human-verified."
+    )
+
+    # ====================================================================
     # THE FIVE LEVELS
     # ====================================================================
     pdf.add_page()
@@ -700,7 +775,7 @@ def build_pdf():
 
     pdf.body_text(
         "Government agencies deploy AI agents across a spectrum of use cases. "
-        "Each level has different accuracy requirements, different failure consequences, "
+        "Each level has different fidelity requirements, different failure consequences, "
         "and different engineering investments. This framework helps leaders match their "
         "investment to their risk."
     )
@@ -731,7 +806,7 @@ def build_pdf():
     pdf.body_text(
         "Document-based agents (Copilot Studio with SharePoint grounding) scored 8 out of "
         "10 on both use cases with zero customization. **GPT-4o (Government Cloud) and GPT-4.1 (Commercial) performed "
-        "identically at this level.** Model choice does not matter here. "
+        "identically at this level.** Model choice had no measurable impact at these levels. "
         "Invest in document hygiene (cross-reference headers that point "
         "reviewers to related documents, consistent formatting, meaningful "
         "filenames, metadata tags) rather than custom engineering.",
@@ -775,14 +850,14 @@ def build_pdf():
     pdf.body_text(
         "Timeline reconstruction, discrepancy detection, entity resolution across multiple "
         "data sources. Wrong answers mean missed evidence, false leads, and misdirected "
-        "investigations. This is where accuracy diverges dramatically."
+        "investigations. This is where response fidelity diverges dramatically."
     )
 
     pdf.subsection_title("The Model Gap")
     pdf.body_text(
         "Among agents with structured data access, GPT-4.1 agents averaged 9.5 out of 10. "
         "The GPT-4o agent scored 4 out of 10. Same tools, same data, same backend. "
-        "No amount of tool or prompt engineering closed this gap. "
+        "Tool and prompt engineering alone did not close this gap at Level 4."
         "Document agents showed no model gap (8 out of 10 on both GPT-4o and GPT-4.1)."
     )
 
@@ -845,7 +920,7 @@ def build_pdf():
 
     pdf.ln(2)
     pdf.body_text(
-        "Purpose-built tools for entity resolution. GPT-4.1 minimum. "
+        "Purpose-built tools for entity resolution. Models with strong multi-step reasoning (GPT-4.1 in our testing)."
         "Explicit workflow guidance in system prompts. Ground truth test suites with "
         "known answers.",
         bold_lead="Recommendation:"
@@ -962,9 +1037,9 @@ def build_pdf():
     pdf.sub_subsection_title("What We Found")
     pdf.body_text(
         "Testing revealed five categories of AI failure, ranked by severity. These are "
-        "not hypothetical. Each was documented across 380 test runs. **Every failure "
+        "not hypothetical. Each was documented across 462 test runs. **Every failure "
         "below occurred in agents that ultimately scored 9 or 10 out of 10** - which "
-        "is why human review remains essential regardless of final accuracy scores."
+        "is why human review remains essential regardless of final scores."
     )
 
     danger_headers = ["Severity", "Failure Mode", "Description", "Example", "Agent(s)"]
@@ -1050,6 +1125,7 @@ def build_pdf():
         ["Copilot Studio SharePoint/PDF (Gov Cloud)", "3/10"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10"],
         ["Investigative Agent (pro-code / OpenAI SDK)", "1/10"],
+        ["Copilot Studio Dataverse MCP (Gov Cloud)", "1/10"],
         ["Triage Agent (pro-code / Semantic Kernel)", "0/10"],
     ]
     pdf.styled_table(r0_headers, r0_rows, r0_widths, font_size=7.5)
@@ -1096,6 +1172,7 @@ def build_pdf():
         ["Foundry Agent (Foundry Agent Service)", "4/10", "8/10"],
         ["Copilot Studio SharePoint/PDF (Gov Cloud)", "3/10", "7/10"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10"],
+        ["Copilot Studio Dataverse MCP (Gov Cloud)", "1/10", "1/10"],
         ["Triage Agent (pro-code / Semantic Kernel)", "0/10", "1/10"],
         ["M365 Copilot MCP (Commercial)", "--", "2/10"],
     ]
@@ -1131,7 +1208,7 @@ def build_pdf():
         "refinement, climbing from 1/10 to 10/10. Investigative Agent reached 10/10 "
         "with minor tool description adjustments. Foundry Agent improved to 9/10 but its managed orchestration "
         "layer limited tool sequencing on the hardest prompt. GCC MCP remained at 4/10 - the same improvements "
-        "that lifted other agents had no effect on GPT-4o, confirming a model gap.",
+        "that lifted other agents had no effect with GPT-4o at this level, confirming a model-level ceiling for Level 4 workloads.",
         bold_lead="What changed:"
     )
 
@@ -1164,7 +1241,11 @@ def build_pdf():
         ["Copilot Studio SharePoint/PDF (Commercial)", "8/10", "10/10", "10/10"],
         ["Copilot Studio SharePoint/PDF (Gov Cloud)", "3/10", "7/10", "9/10"],
         ["Foundry Agent (Foundry Agent Service)", "4/10", "8/10", "9/10"],
+        ["Copilot Studio DV MCP / Sonnet 4.6 (Commercial)", "--", "--", "10/10"],
+        ["Copilot Studio Dataverse MCP / GPT-4.1 (Commercial)", "--", "--", "6/10"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10", "4/10"],
+        ["Copilot Studio DV MCP / GPT-5 Auto (Commercial)", "--", "--", "4/10"],
+        ["Copilot Studio Dataverse MCP (Gov Cloud)", "1/10", "1/10", "2/10"],
         ["M365 Copilot MCP (Commercial)", "--", "2/10", "--"],
     ]
     pdf.sub_subsection_title("Round 2 Scores")
@@ -1174,7 +1255,8 @@ def build_pdf():
     pdf.set_text_color(*LIGHT)
     pdf.cell(0, 4, sanitize_text(
         "* Ranked by Round 2 score. M365 Copilot not retested (platform constraints "
-        "prevent iterative improvement). UC2 scores for data agents; UC1 scores for document agents."
+        "prevent iterative improvement). Dataverse MCP agents scored on UC1 prompts against "
+        "structured Dataverse data; Sonnet 4.6 achieved 11/11 (perfect). UC2 scores for data agents; UC1 scores for document agents."
     ), new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(2)
@@ -1185,7 +1267,11 @@ def build_pdf():
         "The Triage Agent climbed from 0/10 to 10/10 "
         "across five sub-rounds of prompt and tool refinement. Copilot Studio MCP/GCC "
         "plateaued at 4/10 despite receiving every improvement the other agents received, "
-        "confirming a model-level ceiling with GPT-4o.",
+        "confirming a model-level ceiling for these workloads with GPT-4o. "
+        "A multi-model test of the native Dataverse MCP connector proved the model is everything: "
+        "GPT-4o scored 1/10, GPT-5 Auto 4/10, GPT-4.1 6/10, and Sonnet 4.6 achieved a perfect "
+        "11/11 on identical schema and data. Newer does not mean better - GPT-5 Auto "
+        "performed worse than GPT-4.1.",
         bold_lead="Combined result:"
     )
 
@@ -1196,22 +1282,22 @@ def build_pdf():
         "Every organization that deploys AI agents should follow this sequence. "
         "Skipping steps does not save time - it hides failures until production."
     )
-    pdf.bullet("Without ground truth, you cannot measure improvement. Build a test suite "
-               "before you build the agent.",
-               bold_lead="Step 1: Test with known answers.")
-    pdf.bullet("If the answer is not in the data, no model will find it. Make facts "
-               "discrete and queryable.",
-               bold_lead="Step 2: Fix the data.")
-    pdf.bullet("If the model cannot reach the data, add tools. If it does not know "
-               "which tool to use, improve descriptions.",
-               bold_lead="Step 3: Fix the tools.")
-    pdf.bullet("Invest in document hygiene before custom engineering. Cross-reference "
-               "headers, metadata tags, and consistent formatting compound across every "
-               "document agent.",
-               bold_lead="Step 4: Fix the documents.")
-    pdf.bullet("Each fix can introduce new failure modes. Run the full test suite after "
-               "every change.",
-               bold_lead="Step 5: Retest after every change.")
+    pdf.numbered_step(1, "Test with known answers",
+        "Without ground truth, you cannot measure improvement. Build a test suite "
+        "before you build the agent.")
+    pdf.numbered_step(2, "Fix the data",
+        "If the answer is not in the data, no model will find it. Make facts "
+        "discrete and queryable.")
+    pdf.numbered_step(3, "Fix the tools",
+        "If the model cannot reach the data, add tools. If it does not know "
+        "which tool to use, improve descriptions.")
+    pdf.numbered_step(4, "Fix the documents",
+        "Invest in document hygiene before custom engineering. Cross-reference "
+        "headers, metadata tags, and consistent formatting compound across every "
+        "document agent.")
+    pdf.numbered_step(5, "Retest after every change",
+        "Each fix can introduce new failure modes. Run the full test suite after "
+        "every change.")
 
     # ====================================================================
     # WHAT GCC CUSTOMERS SHOULD DO
@@ -1221,37 +1307,35 @@ def build_pdf():
 
     pdf.subsection_title("The Model Gap")
     pdf.body_text(
-        "Government Community Cloud is currently locked to GPT-4o for Copilot Studio. "
+        "Government Community Cloud currently defaults to GPT-4o for Copilot Studio. "
         "For agents with structured data access, this model scored 4 out of 10 on "
-        "investigative queries where GPT-4.1 scored 9.5 out of 10. Document agents "
-        "were unaffected (8 out of 10 on both models). No amount of tool or prompt "
-        "engineering closed the structured data gap."
+        "Level 4 investigative queries where GPT-4.1 scored 9.5 out of 10. Document agents "
+        "were unaffected (8 out of 10 on both models). Tool and prompt "
+        "engineering alone did not close the structured data gap at Level 4."
     )
 
     pdf.body_text(
         "Organizations on Government Cloud have six practical paths forward today:"
     )
 
-    pdf.bullet("Improve document quality now. Cross-reference headers and SharePoint "
-               "metadata tags improved the Government Cloud document agent from 3 out "
-               "of 10 to 9 out of 10, surpassing the Commercial agent. Zero code, zero "
-               "model dependency",
-               bold_lead="Option 1:")
-    pdf.bullet("Use Copilot Studio document agents for Levels 1 through 3 (GPT-4o is "
-               "adequate for retrieval and summarization)",
-               bold_lead="Option 2:")
-    pdf.bullet("Deploy a Foundry Agent (zero to low code, portal or SDK) using Azure OpenAI "
-               "GPT-4.1 for Level 4 and 5 workloads",
-               bold_lead="Option 3:")
-    pdf.bullet("Build a fully custom agent using Azure OpenAI GPT-4.1 directly for maximum "
-               "control over orchestration, tools, and evaluation",
-               bold_lead="Option 4:")
-    pdf.bullet("If case data lives in Dataverse, use the Dataverse MCP connector to give "
-               "Copilot Studio agents structured data access without building custom APIs",
-               bold_lead="Option 5:")
-    pdf.bullet("Monitor Government Cloud model updates. When GPT-4.1 becomes available, "
-               "Copilot Studio agents will benefit immediately",
-               bold_lead="Option 6:")
+    pdf.numbered_step(1, "Improve document quality",
+        "Cross-reference headers and SharePoint metadata tags improved the Government "
+        "Cloud document agent from 3 out of 10 to 9 out of 10, surpassing the Commercial "
+        "agent. Zero code, zero model dependency.")
+    pdf.numbered_step(2, "Use Copilot Studio document agents for Levels 1-3",
+        "GPT-4o is adequate for retrieval and summarization.")
+    pdf.numbered_step(3, "Deploy a Foundry Agent",
+        "Zero to low code (portal or SDK) using Azure OpenAI GPT-4.1 for Level 4 "
+        "and 5 workloads.")
+    pdf.numbered_step(4, "Build a fully custom agent",
+        "Use Azure OpenAI GPT-4.1 directly for maximum control over orchestration, "
+        "tools, and evaluation.")
+    pdf.numbered_step(5, "Use the Dataverse MCP connector",
+        "If case data lives in Dataverse, give Copilot Studio agents structured data "
+        "access without building custom APIs.")
+    pdf.numbered_step(6, "Monitor GCC model updates",
+        "When GPT-4.1 becomes available in Government Cloud, Copilot Studio agents "
+        "will benefit immediately.")
 
     pdf.ln(2)
     pdf.body_text(
@@ -1299,7 +1383,7 @@ def build_pdf():
         "data access. Model flexibility is the headline: "
         "the same Copilot Studio agent configuration scored 4 out of 10 with GPT-4o and "
         "10 out of 10 with GPT-4.1 with no configuration changes required. **When Government "
-        "Cloud gains access to more capable models, every Copilot Studio agent improves "
+        "Cloud gains access to models with stronger multi-step reasoning, every Copilot Studio agent improves "
         "overnight.** Enterprise governance (data loss prevention, audit logging, admin "
         "pre-approval for tool calls) and M365 distribution (agents appear in Teams and "
         "Copilot chat) are built into the platform, not bolted on after the fact."
@@ -1311,7 +1395,7 @@ def build_pdf():
     pdf.add_page()
     pdf.section_title("Five Findings That Surprised Us", link=toc_links["Five Findings That Surprised Us"])
 
-    pdf.subsection_title("1. The most dangerous agent was the most accurate quoting its source")
+    pdf.subsection_title("1. The most dangerous agent was the most faithful to its source")
     pdf.body_text(
         "Seven of eight document agents faithfully reproduced a sheriff's report statement "
         "about fracture findings while the medical records told a different story. The agents "
@@ -1357,11 +1441,11 @@ def build_pdf():
 
     pdf.body_text(
         "Not all AI use cases require the same investment. Levels 1 and 2 work with "
-        "existing Copilot and Copilot Studio licenses, plus SharePoint document libraries. Level 3 benefits "
-        "from structured data connections via Model Context Protocol - including "
-        "Dataverse's built-in MCP connector for agencies whose data already lives there. Levels 4 and 5 "
-        "require purpose-built tools, capable models (GPT-4.1 minimum), iterative "
-        "testing, and human review workflows."
+        "existing Copilot and Copilot Studio licenses, plus SharePoint document libraries. "
+        "From Level 3 onward, structured data connections via MCP dramatically improve fidelity "
+        "- whether through Dataverse's built-in MCP connector, a custom MCP server, or both. "
+        "The higher the level, the more you also need models with strong multi-step reasoning "
+        "(GPT-4.1 in our testing), iterative testing, and human review workflows."
     )
 
     pdf.body_text(
@@ -1370,33 +1454,34 @@ def build_pdf():
         "The licensing cost scales with the level of investment, not the number of agents."
     )
 
+    pdf.ln(6)
     pdf.callout_box(
         "The Bottom Line",
         "The agent is a research assistant, never the decision-maker. At Level 5, "
-        "where legal outcomes depend on accuracy, trust but verify is not a suggestion "
+        "where legal outcomes depend on response fidelity, trust but verify is not a suggestion "
         "-- it is the only responsible operating model."
     )
+    pdf.ln(2)
 
     # -- Next Steps --
-    pdf.ln(4)
     pdf.subsection_title("Next Steps")
-    pdf.bullet("Deploy a Copilot Studio agent with SharePoint grounding on a real document "
-               "library. Measure it against known answers before customizing anything.",
-               bold_lead="Start simple.")
-    pdf.bullet("Build a 10-prompt test suite with verified answers for your use case. "
-               "You cannot improve what you cannot measure.",
-               bold_lead="Build your ground truth.")
-    pdf.bullet("If your accuracy target exceeds what document agents deliver, connect "
-               "structured data via MCP and follow the Improvement Playbook.",
-               bold_lead="Scale when ready.")
-    pdf.bullet("Contact your Microsoft account team to scope a pilot.",
-               bold_lead="Get started.")
+    pdf.numbered_step(1, "Start simple",
+        "Deploy a Copilot Studio agent with SharePoint grounding on a real document "
+        "library. Measure it against known answers before customizing anything.")
+    pdf.numbered_step(2, "Build your ground truth",
+        "Build a 10-prompt test suite with verified answers for your use case. "
+        "You cannot improve what you cannot measure.")
+    pdf.numbered_step(3, "Scale when ready",
+        "If your fidelity target exceeds what document agents deliver, connect "
+        "structured data via MCP and follow the Improvement Playbook.")
+    pdf.numbered_step(4, "Get started",
+        "Contact your Microsoft account team to scope a pilot.")
 
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5, sanitize_text(
-        "Based on 380 test runs across 2 government use cases, 19 agent configurations, "
+        "Based on 462 test runs across 2 government use cases, 21 agent configurations, "
         "7 testing rounds, and 4 rounds of iterative improvement."
     ), align="C")
 
@@ -1412,7 +1497,7 @@ def build_pdf():
     )
 
     # -- UC1 Table --
-    pdf.subsection_title("Use Case 1: Legal Case Analysis (11 Agents)")
+    pdf.subsection_title("Use Case 1: Legal Case Analysis (15 Agents)")
 
     uc1a_headers = ["Agent", "Data Source", "Model", "Final Score"]
     uc1a_widths = [62, 42, 28, 38]
@@ -1428,6 +1513,10 @@ def build_pdf():
         ["Copilot Studio KB/PDF/Com", "Uploaded PDFs", "GPT-4.1", "8/10"],
         ["Copilot Studio KB/DOCX/GCC", "Uploaded DOCXs", "GPT-4o", "8/10"],
         ["Copilot Studio SP/DOCX/GCC", "SharePoint DOCXs", "GPT-4o", "7/10"],
+        ["Copilot Studio DV/Com (Sonnet)", "Dataverse MCP", "Sonnet 4.6", "10/10"],
+        ["Copilot Studio DV/Com (4.1)", "Dataverse MCP", "GPT-4.1", "6/10"],
+        ["Copilot Studio DV/Com (5 Auto)", "Dataverse MCP", "GPT-5 Auto", "4/10"],
+        ["Copilot Studio DV/GCC", "Dataverse MCP", "GPT-4o", "2/10"],
     ]
     pdf.styled_table(uc1a_headers, uc1a_rows, uc1a_widths, font_size=7)
     pdf.ln(1)
@@ -1436,7 +1525,8 @@ def build_pdf():
     pdf.multi_cell(0, 4, sanitize_text(
         "Ranked by final score. All agents retested with cross-referenced "
         "documents. PDF outperformed DOCX in 3 of 4 matchups; KB/DOCX/Com "
-        "was the exception (10/10)."
+        "was the exception (10/10). Dataverse MCP tested across 4 models: "
+        "Sonnet 4.6 achieved 10/10 (perfect); GPT-5 Auto scored worse than GPT-4.1."
     ))
 
     # -- UC2 Table --

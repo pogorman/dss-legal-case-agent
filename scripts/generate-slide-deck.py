@@ -1,6 +1,6 @@
 """
 Generate PowerPoint deck from slide outline.
-Output: decks/agent-accuracy-spectrum.pptx
+Output: decks/agent-fidelity-spectrum.pptx
 """
 
 from pptx import Presentation
@@ -232,7 +232,7 @@ def slide_01_title(prs):
     add_rect(slide, 0, 0, 13.333, 4.5, DARK_NAVY)
     # Title
     add_textbox(slide, 1.5, 0.8, 10.3, 1.5,
-                "AI Agent Accuracy\nfor Government",
+                "AI Agent Fidelity\nfor Government",
                 font_size=44, bold=True, color=WHITE,
                 alignment=PP_ALIGN.CENTER)
     # Subtitle line
@@ -511,7 +511,7 @@ def slide_07_model_gap(prs):
                     f"{score}/10", font_size=18, bold=True, color=color)
 
     add_bullet_list(slide, 1.5, 5.2, 10.3, 1.5, [
-        "Government Cloud Copilot Studio is locked to GPT-4o today",
+        "Government Cloud Copilot Studio currently defaults to GPT-4o",
         "No amount of prompt engineering closed this gap",
         "Pro-code agents can use GPT-4.1 in Government Cloud via Azure OpenAI directly",
     ], font_size=16)
@@ -843,7 +843,7 @@ def slide_15_what_to_do(prs):
     rows = [
         ["1-2", "Deploy Copilot with SharePoint. Clean up document metadata. Done."],
         ["3", "Connect to structured data via MCP. Clear tool descriptions. Summary modes."],
-        ["4", "Purpose-built tools. GPT-4.1 minimum. Ground truth test suite. Budget 3+ rounds."],
+        ["4", "Purpose-built tools. Models with strong multi-step reasoning (GPT-4.1 in our testing). Ground truth test suite. Budget 3+ rounds."],
         ["5", "Level 4 + human review workflows + audit logging + citation linking."],
     ]
     tbl = add_table(slide, 1.2, 1.6, 10.9, [1.5, 9.0], headers, rows, font_size=16)
@@ -881,7 +881,7 @@ def slide_16_gcc(prs):
                 font_size=22, bold=True, color=DARK_TEXT)
 
     add_bullet_list(slide, 1.2, 2.2, 10.9, 1.5, [
-        "Copilot Studio locked to GPT-4o (adequate for Levels 1-3)",
+        "Copilot Studio defaults to GPT-4o (adequate for Levels 1-3)",
         "Pro-code agents can use GPT-4.1 via Azure OpenAI (Levels 4-5)",
         "Monitor model updates -- GCC parity will improve over time",
     ], font_size=17)
@@ -1141,7 +1141,7 @@ def main():
 
     out_dir = os.path.join(os.path.dirname(__file__), "..", "decks")
     os.makedirs(out_dir, exist_ok=True)
-    out_path = os.path.join(out_dir, "agent-accuracy-spectrum.pptx")
+    out_path = os.path.join(out_dir, "agent-fidelity-spectrum.pptx")
     prs.save(out_path)
     print(f"Saved: {out_path}")
     print(f"Slides: {len(prs.slides)}")

@@ -62,7 +62,7 @@ class SlideOutlinePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*LIGHT)
-        self.cell(0, 6, sanitize_text("Agent Accuracy Spectrum for Copilot Studio -- Slide Outline"), align="L")
+        self.cell(0, 6, sanitize_text("Agent Fidelity Spectrum for Copilot Studio -- Slide Outline"), align="L")
         self.cell(0, 6, f"Page {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*DIVIDER)
         self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
@@ -207,7 +207,7 @@ def build_pdf():
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
     pdf.set_text_color(*WHITE)
-    pdf.cell(0, 14, "Agent Accuracy Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Agent Fidelity Spectrum", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 14, "for Copilot Studio", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_font("Helvetica", "", 14)
@@ -331,7 +331,7 @@ def build_pdf():
     pdf.add_page()
     pdf.slide_heading(1, "Title")
 
-    pdf.headline("AI Agent Accuracy for Government: A Five-Level Framework")
+    pdf.headline("AI Agent Fidelity for Government: A Five-Level Framework")
 
     pdf.body_text(
         "Subtitle: Findings from 380 Test Runs Across 19 Agent Configurations"
@@ -471,7 +471,7 @@ def build_pdf():
     pdf.styled_table(model_headers, model_rows, model_widths, font_size=8)
 
     pdf.ln(2)
-    pdf.bullet("Government Cloud Copilot Studio is locked to GPT-4o today")
+    pdf.bullet("Government Cloud Copilot Studio currently defaults to GPT-4o")
     pdf.bullet("No amount of prompt engineering closed this gap")
     pdf.bullet(
         "Pro-code agents can use GPT-4.1 in Government Cloud via Azure OpenAI directly"
@@ -720,7 +720,7 @@ def build_pdf():
     action_rows = [
         ["1-2", "Deploy Copilot with SharePoint. Clean up document metadata. Done."],
         ["3", "Connect to structured data via MCP. Clear tool descriptions. Summary modes."],
-        ["4", "Purpose-built tools. GPT-4.1 minimum. Ground truth test suite. Budget 3+ rounds."],
+        ["4", "Purpose-built tools. Models with strong multi-step reasoning (GPT-4.1 in our testing). Ground truth test suite. Budget 3+ rounds."],
         ["5", "Level 4 + human review workflows + audit logging + citation linking."],
     ]
     pdf.styled_table(action_headers, action_rows, action_widths, font_size=8)
@@ -739,7 +739,7 @@ def build_pdf():
 
     pdf.headline("The GCC reality today")
 
-    pdf.bullet("Copilot Studio locked to GPT-4o (adequate for Levels 1-3)")
+    pdf.bullet("Copilot Studio defaults to GPT-4o (adequate for Levels 1-3)")
     pdf.bullet("Pro-code agents can use GPT-4.1 via Azure OpenAI (Levels 4-5)")
     pdf.bullet("Monitor model updates -- GCC parity will improve over time")
 

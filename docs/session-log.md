@@ -1977,3 +1977,26 @@ Tables and columns received rich descriptions including valid values, query hint
 - `scripts/generate-executive-pdf.py` — 15 agent configs, 462 test runs, 21 agents, Sonnet/GPT-5 Auto in R2 table + Meet Your Agents
 - `docs/session-log.md` — Session 42
 - `MEMORY.md` — Updated scores, milestones, open items
+
+## Session 43 — 2026-03-11
+**Focus:** Slide outline refinement — content accuracy, layout fixes, speaker notes
+
+### What happened
+- **S1 (Title):** Rewrote speaker note — references delegation demo and ALM demos
+- **S2 (At a Glance):** Added talking point: "This is the whole story on one slide. Everything that follows is how we got here."
+- **S5 (The Question):** Replaced speaker note entirely — old note was about what the demo is/isn't, new note ties to slide's "not all use cases are created equal" theme with concrete examples (policy chatbot vs legal case prep)
+- **S8 (Level 3):** Fixed inaccurate claim "they only see individual files" → "they can't count, sum, or filter across a full dataset" (doc agents can cite multiple files)
+- **S12 (Level 5):** Fixed page break issue — speaker note was orphaned on next page. Forced page break before S12 so all content stays together. Also moved speaker note earlier (before document improvement bullets) to keep it closer to slide heading
+- **Speaker note method:** Added dry_run height measurement to prevent future orphaning across page breaks
+- **Cover page:** Centered horizontal rule between "Slide Outline" and "25 Slides | March 2026" (moved from y=65 to y=71.5)
+
+### Files changed
+- `scripts/generate-slide-outline-pdf.py` — All slide outline edits above
+- `docs/pdf/slide-outline.pdf` — Regenerated
+- `docs/pdf/improving-agents-whitepaper-v1.pdf` — Regenerated
+- `docs/pdf/demo-guide.pdf` — Regenerated
+- `docs/pdf/faqs.pdf` — Regenerated
+- `docs/pdf/user-guide.pdf` — Regenerated
+- `docs/pdf/architecture.pdf` — Regenerated
+- `decks/agent-fidelity-spectrum.pptx` — Regenerated
+- `docs/session-log.md` — Session 43

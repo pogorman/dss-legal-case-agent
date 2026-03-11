@@ -265,7 +265,7 @@ def build_pdf():
     pdf.set_y(145)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  380 test runs",
+    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  462 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -285,7 +285,7 @@ def build_pdf():
     pdf.section_title("At a Glance")
 
     pdf.body_text(
-        "380 test runs across 19 agent configurations. Here is what the data says."
+        "462 test runs across 21 agent configurations. Here is what the data says."
     )
 
     # ── Colored tiles for levels 1-2, 3, 4 ──
@@ -424,7 +424,7 @@ def build_pdf():
     stats_headers = ["Stat", "Value"]
     stats_widths = [100, 70]
     stats_rows = [
-        ["Total test runs", "313 across 19 agents, 7 rounds"],
+        ["Total test runs", "462 across 21 agents, 7 rounds"],
         ["Document agents (Levels 1-2)", "8/10 with zero engineering"],
         ["GPT-4.1 agents (structured data)", "9.5/10 average"],
         ["GPT-4o agents (GCC model gap)", "4/10 average"],
@@ -471,8 +471,8 @@ def build_pdf():
     pdf.body_text("Show the five-level spectrum slide.", bold_lead="Show the five-level spectrum slide.")
 
     pdf.blockquote(
-        '"We developed this framework after running 380 test evaluations across '
-        "two government use cases and 19 different agent configurations. Not all "
+        '"We developed this framework after running 462 test evaluations across '
+        "two government use cases and 21 different agent configurations. Not all "
         "AI use cases need the same level of accuracy, and not all agent "
         'architectures deliver it."'
     )
@@ -792,7 +792,7 @@ def build_pdf():
     pdf.body_text(
         "Score: 3 out of 10 across our full 10-prompt test battery. "
         "Six outright failures, one partial pass. This was the worst-performing "
-        "agent in our entire evaluation of 19 agents.",
+        "agent in our entire evaluation of 21 agents.",
         bold_lead="Result:"
     )
 
@@ -981,7 +981,7 @@ def build_pdf():
     pdf.blockquote(
         '"Let me recap what just happened. The Government Cloud document agent '
         "started at 3 out of 10. The worst performer in our entire evaluation "
-        "of 19 agents. Worse than M365 Copilot. Four steps later, it is at 9 "
+        "of 21 agents. Worse than M365 Copilot. Four steps later, it is at 9 "
         "out of 10, surpassing the Commercial agent that has access to a better "
         'model."'
     )

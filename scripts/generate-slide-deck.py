@@ -242,7 +242,7 @@ def slide_01_title(prs):
                 alignment=PP_ALIGN.CENTER)
     # Findings line
     add_textbox(slide, 2, 3.3, 9.3, 0.5,
-                "Findings from 380 Test Runs Across 19 Agent Configurations",
+                "Findings from 462 Test Runs Across 21 Agent Configurations",
                 font_size=16, color=RGBColor(0x88, 0xAA, 0xCC),
                 alignment=PP_ALIGN.CENTER)
     # Slide count + date
@@ -254,7 +254,7 @@ def slide_01_title(prs):
     add_level_bar(slide, top=5.6)
     # Stats line
     add_textbox(slide, 2, 6.3, 9.3, 0.4,
-                "380 test runs  |  19 agents  |  21 slides  |  2 use cases",
+                "462 test runs  |  21 agents  |  25 slides  |  2 use cases",
                 font_size=14, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
     add_speaker_notes(slide,
@@ -673,7 +673,7 @@ def slide_10_danger_taxonomy(prs):
                     font_size=15, color=MEDIUM_TEXT)
 
     add_textbox(slide, 1.2, 6.0, 10.9, 0.4,
-                "These are not hypothetical. We documented each one across 380 test runs.",
+                "These are not hypothetical. We documented each one across 462 test runs.",
                 font_size=16, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
 

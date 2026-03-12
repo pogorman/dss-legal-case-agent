@@ -712,7 +712,7 @@ def build_pdf():
         ["GPT-4.1", "Copilot Studio + Dataverse MCP", "6/11"],
         ["GPT-5 Auto", "Copilot Studio + Dataverse MCP", "4/11"],
         ["GPT-4o (GCC default)", "Pro-code + custom MCP", "4/10"],
-        ["GPT-4o (GCC default)", "Copilot Studio + Dataverse MCP", "1/11"],
+        ["GPT-4o (GCC default)", "Copilot Studio + Dataverse MCP", "3.2/11"],
         ["Platform-assigned", "M365 Copilot", "2/10"],
     ]
     pdf.styled_table(model_headers, model_rows, model_widths, font_size=8)
@@ -1044,7 +1044,7 @@ def build_pdf():
     pdf.bullet('Prompt 1: "Which cases involve Termination of Parental Rights?" (0 -> 10)')
     pdf.bullet('Prompt 2: "What did Marcus Webb tell hospital staff?" (0 -> 10)')
     pdf.bullet('Prompt 3: "Time gap between thump and hospital?" (0 -> 10)')
-    pdf.bullet("Full battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11")
+    pdf.bullet("Full battery (5 models): GPT-4o = 3.2/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11")
 
     pdf.visual_note("Two-part layout: document quality levers on left, model selection on right")
 
@@ -1160,7 +1160,7 @@ def build_pdf():
         ["Copilot Studio SP/DOCX/GCC", "GPT-4o", "7/10"],
         ["Copilot Studio DV/Com", "GPT-4.1", "6/10"],
         ["Copilot Studio DV/Com", "GPT-5 Auto", "4/10"],
-        ["Copilot Studio DV/GCC", "GPT-4o", "2/10"],
+        ["Copilot Studio DV/GCC", "GPT-4o", "3.2/10"],
     ]
     pdf.styled_table(sc1_headers, sc1_rows, sc1_widths, font_size=7)
 
@@ -1185,7 +1185,7 @@ def build_pdf():
     pdf.body_text(
         "Ranked by final score. Dataverse MCP tested across 5 models on identical "
         "infrastructure: Sonnet 4.6 (10/10), GPT-5 Reasoning (10/10), GPT-4.1 (6/10), "
-        "GPT-5 Auto (4/10), GPT-4o (2/10). Newer models are not always better."
+        "GPT-5 Auto (4/10), GPT-4o (3.2/10). Newer models are not always better."
     )
 
     pdf.talking_point(

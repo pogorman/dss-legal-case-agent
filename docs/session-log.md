@@ -2140,3 +2140,39 @@ Tables and columns received rich descriptions including valid values, query hint
 - `docs/demo-cheat-sheet.md` — Model count stat, model gap stat
 - `docs/live-demo-script.md` — Model tables, GCC Reality section, proven results table, talking points
 - `docs/session-log.md` — Session 47
+
+## Session 49 — 2026-03-12
+
+### What was done
+- **Demo Day Test Run 1** — full validation of all demo agents after SharePoint libraries and Copilot Studio agents configured
+- **Part 1: Document Quality Demo** — 3 SharePoint agents (Raw, Cross-Ref, Enriched) in GCC, 3 prompts each
+  - P1 (skeletal survey): Raw=FAIL, Cross-Ref=PASS, Enriched=PASS (as expected)
+  - P2 (Marcus Webb statements): Raw=FAIL, Cross-Ref=PARTIAL, Enriched=PARTIAL (Enriched metadata didn't bridge hospital staff retrieval gap)
+  - P3 (complete timeline): Raw=FAIL (case contamination — returned Case 2 data), Cross-Ref=PASS, Enriched=PASS
+- **Part 2: Model Selection Demo** (Commercial Dataverse MCP, 4 models, 2 of 3 prompts completed)
+  - P1 (TPR cases): GPT-4.1=FAIL, GPT-5 Auto=FAIL, GPT-5 Reasoning=PASS (new!), Sonnet 4.6=PASS
+  - P2 (Marcus Webb): GPT-4.1=PASS, GPT-5 Auto=PARTIAL, GPT-5 Reasoning=PASS, Sonnet 4.6=PASS
+- **GCC Dataverse MCP Retest (R4)** — all 11 UC1 prompts with fresh agent instructions
+  - **R4 = 3.2/10** — best GCC round yet (prior best R2 = 2/10)
+  - New passes: P7 (LE statements, 0→10), P9 (TPR cases, 0→10), P2 (Marcus Webb, 0→5)
+  - Timeline (P6) stable at 10. Complex cross-table prompts still fail.
+  - Instructions are the most effective single lever for GPT-4o, but model ceiling is binding constraint
+- **Updated all score tables** across whitepaper, slide outline, slide deck, cheat sheet — GCC DV MCP from 2/10 to 3.2/10, GPT-4o from 1/11 to 3.2/11
+- **All tables verified score-ranked** (descending order)
+- **Regenerated all PDFs + PPTX**, updated OneDrive copy
+
+### Key findings
+- GPT-5 Reasoning now passes TPR abbreviation prompt (was 0 in prior testing) — significant model improvement
+- Agent instructions recovered P7 and P9 in GCC from 0 to 10 — first time these passed in any GCC round
+- 5 rounds of GCC DV MCP optimization (R0-R4): instructions > metadata > denormalization, but model is everything
+- Part 1 Enriched agent didn't outperform Cross-Ref on P2 — metadata keywords insufficient for hospital staff retrieval gap
+
+### Files changed
+- `docs/demo-day-test-run-1.md` — new file, full test run results
+- `docs/dataverse-mcp-server-testing.md` — R4 section, score summary, What We Tried narrative, Key Findings, multi-model table
+- `docs/demo-cheat-sheet.md` — model gap stat, GCC rounds count
+- `scripts/generate-executive-pdf.py` — DV/GCC scores, model battery, appendix
+- `scripts/generate-slide-deck.py` — scorecard, model battery, DV/GCC score
+- `scripts/generate-slide-outline-pdf.py` — model gap table, scorecard, battery line
+- `scripts/generate-cheat-sheet-pdf.py` — model gap stat, UC2 card text
+- All PDFs regenerated, slide deck regenerated

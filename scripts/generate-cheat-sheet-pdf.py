@@ -268,7 +268,7 @@ def build_pdf():
         ("Best pro-code", "10/10 (Case Analyst, IA, Triage)"),
         ("Worst-to-best", "Triage: 0/10 -> 10/10 in 5 rounds"),
         ("Models tested", "5 (GPT-4o, 4.1, 5 Auto, 5 Reasoning, Sonnet)"),
-        ("Model gap", "Sonnet 11/11, GPT-5 Reasoning 10/11, GPT-4o 1/11"),
+        ("Model gap", "Sonnet 11/11, GPT-5 Reasoning 10/11, GPT-4o 3.2/11"),
     ]
 
     stat_col1 = 30
@@ -541,7 +541,7 @@ def build_pdf():
         stakes=(
             "Every MCP-backed agent can count the properties, pull the violations, "
             "and trace the ownership chain -- but only with the right model. GPT-4o "
-            "scores 1/11 on the same Dataverse MCP infrastructure where Sonnet 4.6 "
+            "scores 3.2/11 on the same Dataverse MCP infrastructure where Sonnet 4.6 "
             "scores 11/11 and GPT-5 Reasoning scores 10/11. Same data, same tools, same "
             "agent -- different model, completely different outcome. And every SQL-backed agent struggles with "
             "address resolution: 15 attempts across three prompts, only 2 correct "

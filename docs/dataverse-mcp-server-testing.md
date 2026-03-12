@@ -353,6 +353,63 @@ WHERE legal_casetype = 'TPR'
 
 ---
 
+### Round 4 — Fresh agent instructions (2026-03-12)
+
+**Changes:** Pasted comprehensive agent instructions into GCC Copilot Studio agent (same as Commercial agent template + query guidance hints). This was the first time the GCC agent had instructions since R1 — R2 and R3 focused on metadata enrichment without instructions.
+
+#### P1: Jaylen Webb ER admission
+- **Result:** Failed — invalid table/column names, never retrieved data.
+- **Score:** 0
+
+#### P2: Marcus Webb statements
+- **Result:** Partial. Found both LE statements with direct quotes on second attempt. Missed hospital staff statement (same `Medical Staff` vs `Hospital Staff` mapping gap).
+- **Score:** 5
+
+#### P3: Crystal Price drug tests
+- **Result:** "No statements recorded for Crystal Price made to the court in November 2023."
+- **Score:** 0
+
+#### P4: Crystal Price transportation
+- **Result:** "No statements indicating Crystal Price mentioned transportation issues."
+- **Score:** 0
+
+#### P5: Skeletal survey fractures
+- **Result:** "Did not find any fractures." Dangerous false negative — data contains bilateral fractures.
+- **Score:** 0
+
+#### P6: Full timeline for case
+- **Result:** Complete 7-event timeline with full detail, source docs, page citations. Chronological order.
+- **Score:** 10
+
+#### P7: Statements to law enforcement
+- **Result:** All 4 LE statements (Marcus x2, Dena x2) with direct quotes, dates, page citations.
+- **Notes:** First time this prompt passed in any GCC round. Instructions made the difference.
+- **Score:** 10
+
+#### P8: People in Price TPR case
+- **Result:** "I'm sorry, I'm not sure how to help with that."
+- **Score:** 0
+
+#### P9: TPR cases
+- **Result:** All 9 TPR cases with full summaries, statuses, counties, circuits.
+- **Notes:** Instructions helped the agent use full text "Termination of Parental Rights" instead of abbreviation. Back to R0 performance after R1-R3 regression.
+- **Score:** 10
+
+#### P10: Dena Holloway statements comparison
+- **Result:** "No statements from Dena Holloway made to either Hospital Staff or Lt. Odom."
+- **Notes:** Same value mapping failure — `Medical Staff` not `Hospital Staff`, `Law Enforcement` not `Lt. Odom`.
+- **Score:** 0
+
+#### P11: Time gap thump to hospital
+- **Result:** Query returned null. Searched for exact event type "Thump Heard" instead of using LIKE on description text.
+- **Score:** 0
+
+**R4 Total: 3.2/10** (scaled from 35/110). Best GCC round yet — instructions recovered P7 (0→10) and P9 (0→10), improved P2 (0→5). Timeline stable at 10. Complex cross-table prompts still fail.
+
+**R4 vs prior rounds:** Instructions are the most effective single lever for GCC GPT-4o. They helped with direct filter queries (LE statements, TPR cases) but couldn't overcome the model's limitations on cross-table reasoning, value mapping, or fuzzy text matching.
+
+---
+
 ## Commercial Testing
 
 ### Round 0 — Fully enriched state (descriptions + denormalized columns)
@@ -611,6 +668,23 @@ Each round attempted a different strategy to improve MCP SQL generation quality.
 
 **Conclusion:** Denormalized columns and enriched descriptions do not influence the MCP SQL generator's query strategy. The SQL generation appears to be driven by the Dataverse relationship graph metadata (lookup columns, foreign keys), not by column/table descriptions. Descriptions may influence tool discovery and the agent's conversational understanding, but they do not flow into the actual SQL generation step.
 
+### Round 3 -> Round 4: Fresh Agent Instructions (2026-03-12)
+**Hypothesis:** R1 instructions were added alongside no metadata enrichment. Now that metadata is enriched (R2-R3), re-adding comprehensive instructions might produce better results because the agent has both metadata context and behavioral guidance.
+
+**What we did:**
+- Pasted comprehensive instructions into the GCC Copilot Studio agent (based on the Commercial agent template from `database/legal-case-agent-template.yaml`)
+- Instructions include schema documentation, valid column values, query patterns, and explicit guidance on two-step lookups
+- This was the first time instructions were combined with fully enriched metadata (descriptions + denormalized columns)
+
+**Result: 3.2/10** — best GCC round yet. Three prompts improved:
+- P7 (LE statements): 0 → 10. First time this prompt passed in any GCC round. The instructions helped the agent filter statements by `made_to = 'Law Enforcement'` and case ID.
+- P9 (TPR cases): 0 → 10. Recovered from R1-R3 regression. Instructions helped the agent use full text "Termination of Parental Rights" instead of the abbreviation.
+- P2 (Marcus Webb): 0 → 5. Found both LE statements on second attempt but still missed the hospital staff statement due to `Medical Staff` vs `Hospital Staff` value mapping.
+
+**What didn't improve:** P1, P3, P4, P5, P8, P10, P11 (all 0). These prompts require cross-table reasoning, indirect entity resolution, value mapping, or fuzzy text matching — capabilities that GPT-4o lacks regardless of instructions or metadata. The model ceiling is the binding constraint.
+
+**Conclusion:** Instructions are the most effective single lever for GCC GPT-4o, outperforming metadata enrichment (R2) and denormalization (R3) alone. However, instructions + metadata still only reach 3.2/10 — well below what better models achieve on identical infrastructure (GPT-5 Reasoning 10/11, Sonnet 4.6 11/11). **The improvement narrative across 5 rounds (R0-R4) confirms: the model is the primary driver, and no amount of zero-code configuration can close the gap between GPT-4o and a reasoning-capable model.**
+
 ---
 
 ## Key Findings
@@ -633,8 +707,8 @@ The agent appears to guess filter values rather than using the valid values list
 - `'Hospital Staff'` instead of `'Medical Staff'` for madeto
 - `LIKE '%put Jaylen to bed%'` instead of broader text search
 
-### 5. Simple single-table queries are fragile
-P9 (list TPR cases) is a simple `WHERE legal_casetype = 'TPR'` query with no joins. It worked in R0 but regressed in R1 after instructions were added. In R3, even after updating descriptions to list the actual stored values ('Termination of Parental Rights') with explicit "never use abbreviations" instructions, the agent still generated `WHERE legal_casetype = 'TPR'`. This confirms that descriptions do not influence SQL generation.
+### 5. Simple single-table queries are fragile but recoverable
+P9 (list TPR cases) is a simple `WHERE legal_casetype = 'TPR'` query with no joins. It worked in R0 but regressed in R1-R3 after instructions/descriptions were added. In R4, fresh comprehensive instructions recovered P9 (10/10) — the agent used full text 'Termination of Parental Rights'. This suggests that agent instructions can influence value selection for simple queries, even though metadata descriptions alone cannot.
 
 ### 6. Timeline query is reliable
 P6 (full timeline for a case) works reliably since R1. This is the most complex successful query — it filters timeline events by case, which the agent can do via the lookup column when it knows the case ID pattern.
@@ -662,13 +736,13 @@ Every OpenAI model — including GPT-5 Reasoning — generates `WHERE legal_case
 
 ## Score Summary
 
-| Agent | Model | R0 | R1 | R2 | R3 |
-|-------|-------|----|----|----|----|
-| CS/DV/GCC | GPT-4o | 1 | 1 | 2 | 1 |
-| CS/DV/Com (GPT-4.1) | GPT-4.1 | 6 | -- | -- | -- |
-| CS/DV/Com (GPT-5 Auto) | GPT-5 Auto | 4 | -- | -- | -- |
-| CS/DV/Com (GPT-5 Reasoning) | GPT-5 Reasoning | 10 | -- | -- | -- |
-| CS/DV/Com (Sonnet 4.6) | Sonnet 4.6 | 11 | -- | -- | -- |
+| Agent | Model | R0 | R1 | R2 | R3 | R4 |
+|-------|-------|----|----|----|----|-----|
+| CS/DV/GCC | GPT-4o | 1 | 1 | 2 | 1 | 3.2 |
+| CS/DV/Com (GPT-4.1) | GPT-4.1 | 6 | -- | -- | -- | -- |
+| CS/DV/Com (GPT-5 Auto) | GPT-5 Auto | 4 | -- | -- | -- | -- |
+| CS/DV/Com (GPT-5 Reasoning) | GPT-5 Reasoning | 10 | -- | -- | -- | -- |
+| CS/DV/Com (Sonnet 4.6) | Sonnet 4.6 | 11 | -- | -- | -- | -- |
 
 ---
 
@@ -678,20 +752,20 @@ Five models were tested on the same Commercial Dataverse environment with identi
 
 ### Per-Prompt Results
 
-| # | Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
+| # | Prompt | GPT-4o R4 (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
 |---|--------|:------:|:-------:|:----------:|:----------:|:----------:|
 | Q1 | ER admission | 0 | 0 | 0 | 10 | 10 |
-| Q2 | Marcus bedtime | 0 | 9 | 5 | 9 | 10 |
+| Q2 | Marcus bedtime | 5 | 9 | 5 | 9 | 10 |
 | Q3 | Crystal "clean now" | 0 | 0 | 0 | 10 | 10 |
 | Q4 | Crystal transportation | 0 | 0 | 0 | 10 | 10 |
 | Q5 | Skeletal survey | 0 | 0 | 0 | 10 | 10 |
 | Q6 | Full timeline | 10 | 10 | 10 | 10 | 10 |
 | Q7 | Price TPR people | 0 | 9 | 8 | 8 | 10 |
 | Q8 | Dena statement comparison | 0 | 9 | 9 | 10 | 10 |
-| Q9 | Law enforcement statements | 0 | 9 | 9 | 9 | 10 |
-| Q10 | TPR cases | 0 | 0 | 0 | 0 | 10 |
+| Q9 | Law enforcement statements | 10 | 9 | 9 | 9 | 10 |
+| Q10 | TPR cases | 10 | 0 | 0 | 0 | 10 |
 | Q11 | Time gap | 0 | 10 | 0 | 10 | 10 |
-| **Passing** | | **1/11** | **6/11** | **4/11** | **10/11** | **11/11** |
+| **Passing** | | **3.2/11** | **6/11** | **4/11** | **10/11** | **11/11** |
 
 ### Key Observations
 
@@ -700,8 +774,9 @@ Five models were tested on the same Commercial Dataverse environment with identi
 - **GPT-5 Auto (4/11) performed worse than GPT-4.1 (6/11)** — "auto" routing does not optimize for structured data retrieval. Dedicated reasoning capability does.
 - **Q10 (TPR filtering) is a connector-level bug** — every OpenAI model generates the abbreviation `'TPR'` instead of full text `'Termination of Parental Rights'`. Only Sonnet generates the correct filter. This is the sole difference between 10/11 and 11/11.
 - **P6 (timeline) is the only universal pass** — all five models handle it.
-- **The model is everything.** The connector, schema, descriptions, and denormalized columns are identical across all tests. The only variable is the model, and it drives a range from 1/11 to 11/11.
-- **Customers have options today.** Both Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11) are available in the Commercial Copilot Studio model picker. GCC currently defaults to GPT-4o (1/11), with expanded model availability on the roadmap.
+- **The model is everything.** The connector, schema, descriptions, and denormalized columns are identical across all tests. The only variable is the model, and it drives a range from 1/11 to 11/11. GPT-4o with instructions (R4) reaches 3.2/11 — a 3x improvement over baseline but still far below reasoning-capable models.
+- **Instructions are the best zero-code lever for GPT-4o.** R4 showed that comprehensive agent instructions outperform metadata enrichment and denormalization alone, recovering P7 (LE statements) and P9 (TPR cases) from 0 to 10.
+- **Customers have options today.** Both Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11) are available in the Commercial Copilot Studio model picker. GCC currently defaults to GPT-4o (3.2/11 with instructions), with expanded model availability on the roadmap.
 
 ---
 

@@ -1238,7 +1238,7 @@ def slide_17_demo(prs):
         "TPR case filter: 0 -> 10",
         "Cross-doc reasoning: 0 -> 10",
         "Time gap calculation: 0 -> 10",
-        "Full battery: 1/11 -> 6/11 -> 11/11",
+        "Full battery: 3.2/11 -> 6/11 -> 11/11",
     ]
     for i, item in enumerate(part2_items):
         add_textbox(slide, part2_x + 0.3, 3.2 + i * 0.55, 5.2, 0.5,
@@ -1514,7 +1514,7 @@ def slide_24_scorecard(prs):
         ["CS SP/DOCX/GCC", "GPT-4o", "7/10"],
         ["CS DV/Com", "GPT-4.1", "6/10"],
         ["CS DV/Com", "GPT-5 Auto", "4/10"],
-        ["CS DV/GCC", "GPT-4o", "2/10"],
+        ["CS DV/GCC", "GPT-4o", "3.2/10"],
     ]
     add_table(slide, 0.8, 2.25, 4.7, uc1_widths, uc1_headers, uc1_rows,
               font_size=9)
@@ -1540,7 +1540,7 @@ def slide_24_scorecard(prs):
 
     add_textbox(slide, 1.2, 6.6, 10.9, 0.4,
                 "Dataverse MCP (5 models): Sonnet 4.6 (10/10), GPT-5 Reasoning (10/10), GPT-4.1 (6/10), "
-                "GPT-5 Auto (4/10), GPT-4o (2/10). Reasoning models close the gap.",
+                "GPT-5 Auto (4/10), GPT-4o (3.2/10). Reasoning models close the gap.",
                 font_size=12, bold=True, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
 

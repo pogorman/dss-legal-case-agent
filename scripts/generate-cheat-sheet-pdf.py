@@ -1,0 +1,363 @@
+"""
+Generate a one-page demo cheat sheet PDF from docs/demo-cheat-sheet.md.
+Designed to be compact and printable on a single sheet.
+
+Usage: python scripts/generate-cheat-sheet-pdf.py
+Output: docs/pdf/demo-cheat-sheet.pdf
+"""
+
+from fpdf import FPDF
+import os
+
+
+def sanitize_text(text):
+    """Replace Unicode characters that Helvetica cannot render."""
+    return (
+        text
+        .replace("\u2014", "--")
+        .replace("\u2013", "-")
+        .replace("\u2018", "'")
+        .replace("\u2019", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u2026", "...")
+        .replace("\u2192", "->")
+        .replace("\u2022", "-")
+        .replace("\u2003", " ")
+        .replace("\u00a0", " ")
+    )
+
+
+# -- Colors ------------------------------------------------------------------
+NAVY = (22, 48, 82)
+ACCENT = (41, 98, 163)
+DARK = (40, 40, 40)
+MED = (90, 90, 90)
+LIGHT = (140, 140, 140)
+WHITE = (255, 255, 255)
+TABLE_HEADER_BG = (22, 48, 82)
+TABLE_HEADER_FG = (255, 255, 255)
+ROW_ALT = (243, 246, 250)
+ROW_WHT = (255, 255, 255)
+
+# Level colors
+L2_COLOR = (139, 195, 74)
+L3_COLOR = (255, 193, 7)
+L4_COLOR = (255, 87, 34)
+L5_COLOR = (211, 47, 47)
+
+WARN_BG = (255, 248, 235)
+WARN_BORDER = (230, 170, 50)
+GREEN_BG = (232, 245, 233)
+GREEN_BORDER = (76, 175, 80)
+
+
+class CheatSheetPDF(FPDF):
+    def __init__(self):
+        super().__init__(orientation="P", unit="mm", format="Letter")
+        self.set_auto_page_break(auto=False)
+
+
+def build_pdf():
+    pdf = CheatSheetPDF()
+    pdf.set_margins(12, 10, 12)
+    pdf.add_page()
+
+    usable_w = pdf.w - pdf.l_margin - pdf.r_margin
+    col_gap = 6
+    col_w = (usable_w - col_gap) / 2
+
+    # ── Title bar ──
+    pdf.set_fill_color(*NAVY)
+    pdf.rect(0, 0, pdf.w, 14, "F")
+    pdf.set_xy(pdf.l_margin, 3)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_text_color(*WHITE)
+    pdf.cell(usable_w, 8, sanitize_text("Demo Cheat Sheet -- Agent Fidelity Spectrum"),
+             align="C")
+
+    # ── Left column ──
+    lx = pdf.l_margin
+    y = 18
+
+    # Pre-Demo section
+    pdf.set_xy(lx, y)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w, 5, "PRE-DEMO (10 min before)")
+    pdf.set_draw_color(*ACCENT)
+    pdf.set_line_width(0.4)
+    pdf.line(lx, y + 5, lx + col_w, y + 5)
+    pdf.set_line_width(0.2)
+    y += 7
+
+    pre_demo = [
+        ("1.", "Open SWA: happy-wave-016cd330f.1.azurestaticapps.net"),
+        ("2.", "Click Warm Up -- wait for green checkmarks"),
+        ("3.", "Open CS SP/PDF/Com agent -- send throwaway prompt"),
+        ("4.", "Open CS MCP/Com agent -- send throwaway prompt"),
+        ("5.", "Pre-stage browser tabs: SWA, both CS agents, deck"),
+    ]
+    pdf.set_font("Helvetica", "", 7)
+    for num, text in pre_demo:
+        pdf.set_xy(lx, y)
+        pdf.set_text_color(*ACCENT)
+        pdf.set_font("Helvetica", "B", 7)
+        pdf.cell(5, 3.8, num)
+        pdf.set_text_color(*DARK)
+        pdf.set_font("Helvetica", "", 7)
+        pdf.cell(col_w - 5, 3.8, sanitize_text(text))
+        y += 4.2
+
+    y += 3
+
+    # Demo Flow section
+    pdf.set_xy(lx, y)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w, 5, "DEMO FLOW (S21 -- ~12 min)")
+    pdf.set_draw_color(*ACCENT)
+    pdf.set_line_width(0.4)
+    pdf.line(lx, y + 5, lx + col_w, y + 5)
+    pdf.set_line_width(0.2)
+    y += 8
+
+    # Level cards
+    levels = [
+        (L2_COLOR, "L2", "SharePoint Summarization", "2 min", "CS SP/PDF/Com",
+         "Summarize the medical records for case 2024-DR-42-0892",
+         "This is where most agencies should start."),
+        (L3_COLOR, "L3", "Aggregate Query", "2 min", "Web UI (Case Analyst)",
+         "How many active cases does DSS have by case type?",
+         "The moment you need to count across cases, you need structured data."),
+        (L4_COLOR, "L4", "The Money Prompt", "5 min", "Web UI (Case Analyst)",
+         "Build a complete timeline for case 2024-DR-42-0892. Include all discrepancies between Marcus Webb's and Dena Holloway's accounts.",
+         "This is what a paralegal spends hours doing."),
+        (L5_COLOR, "L5", "Skeletal Survey Trap", "3 min", "Talk through / screenshot",
+         "What did the skeletal survey show for Jaylen Webb?",
+         "The citation was real. The conclusion was dangerous."),
+    ]
+
+    for color, label, title, time, agent, prompt, talking_pt in levels:
+        # Measure prompt height
+        pdf.set_font("Helvetica", "I", 6.5)
+        prompt_h = pdf.multi_cell(col_w - 14, 3.2, sanitize_text(prompt),
+                                  dry_run=True, output="HEIGHT")
+        card_h = max(21, 10 + prompt_h + 6)
+
+        # Card background
+        tint = tuple(int(c * 0.12 + 255 * 0.88) for c in color)
+        pdf.set_fill_color(*tint)
+        pdf.rect(lx, y, col_w, card_h, "F")
+        # Color stripe
+        pdf.set_fill_color(*color)
+        pdf.rect(lx, y, 2.5, card_h, "F")
+
+        # Label + title + time
+        pdf.set_xy(lx + 4, y + 1)
+        pdf.set_font("Helvetica", "B", 7.5)
+        pdf.set_text_color(*color)
+        pdf.cell(8, 4, label)
+        pdf.set_text_color(*DARK)
+        pdf.cell(col_w - 30, 4, sanitize_text(title))
+        pdf.set_font("Helvetica", "", 6.5)
+        pdf.set_text_color(*MED)
+        pdf.cell(16, 4, sanitize_text(time + " | " + agent), align="R")
+
+        # Prompt
+        pdf.set_xy(lx + 4, y + 6)
+        pdf.set_font("Helvetica", "I", 6.5)
+        pdf.set_text_color(80, 80, 80)
+        pdf.multi_cell(col_w - 6, 3.2, sanitize_text(prompt))
+
+        # Talking point
+        tp_y = y + card_h - 5
+        pdf.set_xy(lx + 4, tp_y)
+        pdf.set_font("Helvetica", "B", 6)
+        pdf.set_text_color(*color)
+        pdf.cell(col_w - 6, 3.5, sanitize_text(talking_pt))
+
+        y += card_h + 2
+
+    # ── Right column ──
+    rx = pdf.l_margin + col_w + col_gap
+    y_r = 18
+
+    # Fallback Plan
+    pdf.set_xy(rx, y_r)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w, 5, "FALLBACK PLAN")
+    pdf.set_draw_color(*ACCENT)
+    pdf.set_line_width(0.4)
+    pdf.line(rx, y_r + 5, rx + col_w, y_r + 5)
+    pdf.set_line_width(0.2)
+    y_r += 8
+
+    fallbacks = [
+        ("SWA won't load", "Show architecture slide and talk through it"),
+        ("Container App times out", "Re-click Warm Up, fill with skeletal survey story"),
+        ("CS agent is slow", '"Cold start -- in production you\'d pin these"'),
+        ("Agent gives wrong answer", '"Exactly the point -- here\'s what it should say"'),
+    ]
+
+    fb_col1 = 28
+    fb_col2 = col_w - fb_col1
+    # Header
+    pdf.set_xy(rx, y_r)
+    pdf.set_font("Helvetica", "B", 6.5)
+    pdf.set_fill_color(*TABLE_HEADER_BG)
+    pdf.set_text_color(*TABLE_HEADER_FG)
+    pdf.cell(fb_col1, 5, "  If...", fill=True)
+    pdf.cell(fb_col2, 5, "  Then...", fill=True)
+    y_r += 5.5
+
+    pdf.set_font("Helvetica", "", 6.5)
+    for i, (cond, action) in enumerate(fallbacks):
+        bg = ROW_ALT if i % 2 == 0 else ROW_WHT
+        pdf.set_fill_color(*bg)
+        pdf.set_text_color(*DARK)
+
+        # Measure heights
+        pdf.set_font("Helvetica", "B", 6.5)
+        h1 = pdf.multi_cell(fb_col1 - 2, 3.5, sanitize_text(cond),
+                             dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "", 6.5)
+        h2 = pdf.multi_cell(fb_col2 - 2, 3.5, sanitize_text(action),
+                             dry_run=True, output="HEIGHT")
+        row_h = max(h1, h2) + 2
+
+        # Background
+        pdf.set_fill_color(*bg)
+        pdf.rect(rx, y_r, fb_col1, row_h, "F")
+        pdf.rect(rx + fb_col1, y_r, fb_col2, row_h, "F")
+
+        # Text
+        pdf.set_xy(rx + 1, y_r + 1)
+        pdf.set_font("Helvetica", "B", 6.5)
+        pdf.set_text_color(*DARK)
+        pdf.multi_cell(fb_col1 - 2, 3.5, sanitize_text(cond))
+
+        pdf.set_xy(rx + fb_col1 + 1, y_r + 1)
+        pdf.set_font("Helvetica", "", 6.5)
+        pdf.set_text_color(*MED)
+        pdf.multi_cell(fb_col2 - 2, 3.5, sanitize_text(action))
+
+        y_r += row_h
+
+    y_r += 5
+
+    # Key Numbers
+    pdf.set_xy(rx, y_r)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w, 5, "KEY NUMBERS")
+    pdf.set_draw_color(*ACCENT)
+    pdf.set_line_width(0.4)
+    pdf.line(rx, y_r + 5, rx + col_w, y_r + 5)
+    pdf.set_line_width(0.2)
+    y_r += 8
+
+    stats = [
+        ("Test runs", "462"),
+        ("Agent configs", "21"),
+        ("Cases in DB", "50"),
+        ("Primary demo case", "2024-DR-42-0892"),
+        ("Secondary demo case", "2024-DR-15-0341"),
+        ("Best zero-code", "10/10 (SP/PDF/Com)"),
+        ("Best pro-code", "10/10 (Case Analyst, IA, Triage)"),
+        ("Worst-to-best", "Triage: 0/10 -> 10/10 in 5 rounds"),
+        ("Model gap", "Sonnet 11/11, GPT-4o 1/11 (same infra)"),
+    ]
+
+    stat_col1 = 30
+    stat_col2 = col_w - stat_col1
+
+    pdf.set_font("Helvetica", "B", 6.5)
+    pdf.set_fill_color(*TABLE_HEADER_BG)
+    pdf.set_text_color(*TABLE_HEADER_FG)
+    pdf.set_xy(rx, y_r)
+    pdf.cell(stat_col1, 5, "  Stat", fill=True)
+    pdf.cell(stat_col2, 5, "  Value", fill=True)
+    y_r += 5.5
+
+    for i, (stat, val) in enumerate(stats):
+        bg = ROW_ALT if i % 2 == 0 else ROW_WHT
+        pdf.set_fill_color(*bg)
+        pdf.set_xy(rx, y_r)
+        pdf.set_font("Helvetica", "B", 6.5)
+        pdf.set_text_color(*DARK)
+        pdf.cell(stat_col1, 4.5, sanitize_text("  " + stat), fill=True)
+        pdf.set_font("Helvetica", "", 6.5)
+        pdf.set_text_color(*MED)
+        pdf.cell(stat_col2, 4.5, sanitize_text("  " + val), fill=True)
+        y_r += 4.5
+
+    y_r += 5
+
+    # Three Numbers callout
+    pdf.set_fill_color(*GREEN_BG)
+    pdf.set_draw_color(*GREEN_BORDER)
+    box_h = 20
+    pdf.rect(rx, y_r, col_w, box_h, "FD")
+    pdf.set_xy(rx + 3, y_r + 2)
+    pdf.set_font("Helvetica", "B", 7.5)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w - 6, 4, "THE BOTTOM LINE")
+    pdf.set_xy(rx + 3, y_r + 6.5)
+    pdf.set_font("Helvetica", "", 6.5)
+    pdf.set_text_color(*DARK)
+    pdf.cell(10, 3.5, "8/10")
+    pdf.set_font("Helvetica", "", 6.5)
+    pdf.set_text_color(*MED)
+    pdf.cell(col_w - 16, 3.5, sanitize_text("-- zero engineering (Levels 1-2)"))
+    pdf.set_xy(rx + 3, y_r + 10.5)
+    pdf.set_font("Helvetica", "B", 6.5)
+    pdf.set_text_color(*DARK)
+    pdf.cell(10, 3.5, "9.5/10")
+    pdf.set_font("Helvetica", "", 6.5)
+    pdf.set_text_color(*MED)
+    pdf.cell(col_w - 16, 3.5, sanitize_text("-- purpose-built tools + GPT-4.1 (Levels 3-4)"))
+    pdf.set_xy(rx + 3, y_r + 14.5)
+    pdf.set_font("Helvetica", "B", 6.5)
+    pdf.set_text_color(*DARK)
+    pdf.cell(18, 3.5, "Trust but verify")
+    pdf.set_font("Helvetica", "", 6.5)
+    pdf.set_text_color(*MED)
+    pdf.cell(col_w - 24, 3.5, sanitize_text("-- no score skips human review (Level 5)"))
+
+    y_r += box_h + 4
+
+    # URLs callout
+    pdf.set_fill_color(*WARN_BG)
+    pdf.set_draw_color(*WARN_BORDER)
+    url_h = 14
+    pdf.rect(rx, y_r, col_w, url_h, "FD")
+    pdf.set_xy(rx + 3, y_r + 2)
+    pdf.set_font("Helvetica", "B", 7.5)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(col_w - 6, 4, "URLS")
+    pdf.set_xy(rx + 3, y_r + 6.5)
+    pdf.set_font("Courier", "", 5.5)
+    pdf.set_text_color(*DARK)
+    pdf.cell(col_w - 6, 3.5, "SWA: happy-wave-016cd330f.1.azurestaticapps.net")
+    pdf.set_xy(rx + 3, y_r + 10)
+    pdf.cell(col_w - 6, 3.5, "API: dss-case-agent.victoriouspond-48a6f41b.eastus2.azurecontainerapps.io")
+
+    # Footer
+    pdf.set_xy(pdf.l_margin, pdf.h - 8)
+    pdf.set_font("Helvetica", "I", 6)
+    pdf.set_text_color(*LIGHT)
+    pdf.cell(usable_w, 4, sanitize_text("Agent Fidelity Spectrum for Copilot Studio | March 2026 | Confidential"),
+             align="C")
+
+    # Save
+    out_dir = os.path.join(os.path.dirname(__file__), "..", "docs", "pdf")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, "demo-cheat-sheet.pdf")
+    pdf.output(out_path)
+    print(f"PDF generated: {os.path.abspath(out_path)}")
+
+
+if __name__ == "__main__":
+    build_pdf()

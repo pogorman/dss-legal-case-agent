@@ -2000,3 +2000,34 @@ Tables and columns received rich descriptions including valid values, query hint
 - `docs/pdf/architecture.pdf` — Regenerated
 - `decks/agent-fidelity-spectrum.pptx` — Regenerated
 - `docs/session-log.md` — Session 43
+
+## Session 44 — 2026-03-11
+**Focus:** Final pre-demo review — slide outline audit, demo artifact inventory, cheat sheet
+
+### What happened
+- **Full 26-slide outline review** with actionable recommendations (written to `docs/final-analysis.md`)
+- **S9 (Level 3):** Qualified "answer every aggregate query correctly" → added "when paired with a capable model" (both PDF and PPTX)
+- **S16 (Results After Iteration):** Expanded from 4 rows to 6 — added SP/PDF/GCC (3→9) and KB/DOCX/Com (6→10) to show the zero-code document improvement story. Changed column headers from "Round 1/Final/Rounds" to "Round 0/Final/Fix" to highlight what fixed each agent
+- **S17 (Code Spectrum):** Changed headline from "same accuracy with GPT-4.1" → "same fidelity when you control the model" (both PDF and PPTX). Also fixed "accuracy" → "fidelity" in the PPTX subtitle text
+- **Cover page:** Fixed "Target: 25 slides" → "Target: 26 slides"
+- **PPTX main():** Fixed all slide number comments (were wrong from S6 onward)
+- **Demo cheat sheet:** Created `docs/demo-cheat-sheet.md` — one-page reference with warm-up sequence, 4 demo prompts mapped to levels, fallback plan, key numbers
+- **Demo guide decision:** Kept the existing demo guide as-is (still useful as reference) but replaced it functionally with the cheat sheet for demo day
+
+- **DV testing PDF generator:** Created `scripts/generate-dv-testing-pdf.py` — reads `docs/dataverse-mcp-server-testing.md` and renders a styled 22-page PDF. Unlike the other generators (hardcoded content), this one parses the MD directly so edits to the MD regenerate the PDF. Handles headers, tables, code blocks, bullets, numbered lists, inline bold/code, and callout boxes.
+- **Demo cheat sheet PDF:** Created `scripts/generate-cheat-sheet-pdf.py` — hardcoded one-page two-column layout with pre-demo steps, four color-coded level cards, fallback plan, key numbers, and URLs
+- **CLAUDE.md:** Updated to reflect 8 PDF generators
+
+### Files changed
+- `scripts/generate-slide-outline-pdf.py` — S9, S16, S17, cover page fixes
+- `scripts/generate-slide-deck.py` — S9, S16, S17 fixes + main() comment numbering
+- `scripts/generate-dv-testing-pdf.py` — New (MD-parsing PDF generator)
+- `scripts/generate-cheat-sheet-pdf.py` — New (one-page demo cheat sheet)
+- `docs/pdf/slide-outline.pdf` — Regenerated
+- `docs/pdf/dataverse-mcp-server-testing.pdf` — New (22 pages)
+- `docs/pdf/demo-cheat-sheet.pdf` — New (1 page)
+- `decks/agent-fidelity-spectrum.pptx` — Regenerated (26 slides)
+- `docs/demo-cheat-sheet.md` — New (source for cheat sheet)
+- `docs/final-analysis.md` — New (full pre-demo audit)
+- `CLAUDE.md` — Updated documentation requirements + key file paths
+- `docs/session-log.md` — Session 44

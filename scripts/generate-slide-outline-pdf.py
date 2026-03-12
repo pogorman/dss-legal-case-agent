@@ -1,5 +1,5 @@
 """
-Generate a slide-outline PDF from the 25-slide presentation outline.
+Generate a slide-outline PDF from the 26-slide presentation outline.
 Uses fpdf2 -- no external dependencies beyond what's already installed.
 
 Usage: python scripts/generate-slide-outline-pdf.py
@@ -224,14 +224,14 @@ def build_pdf():
 
     pdf.set_draw_color(80, 140, 200)
     pdf.set_line_width(0.4)
-    line_y = 71.5  # centered between "Slide Outline" (bottom ~68) and "25 Slides" (top 75)
+    line_y = 71.5  # centered between "Slide Outline" (bottom ~68) and "26 Slides" (top 75)
     pdf.line(pdf.w * 0.3, line_y, pdf.w * 0.7, line_y)
     pdf.set_line_width(0.2)
 
     pdf.set_y(75)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "25 Slides  |  March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "26 Slides  |  March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # Five colored level indicators on cover
     pdf.set_y(130)
@@ -256,13 +256,13 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
     pdf.multi_cell(0, 6.5, sanitize_text(
-        "Target: 25 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)"
+        "Target: 26 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)"
     ), align="C")
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  25 slides  |  2 use cases"),
+    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  26 slides  |  2 use cases"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -541,9 +541,49 @@ def build_pdf():
     )
 
     # ====================================================================
-    # SLIDE 4: The Question
+    # SLIDE 5: Meet the Agents
     # ====================================================================
-    pdf.slide_heading(5, "The Question")
+    pdf.slide_heading(5, "Meet the Agents")
+
+    pdf.headline("21 configurations, 3 approaches, 1 set of test prompts")
+
+    pdf.bullet(
+        "M365 Copilot -- three JSON manifest files pointing at the MCP server, "
+        "zero code, platform picks the model.",
+        bold_lead="Zero Code."
+    )
+    pdf.bullet(
+        "Copilot Studio -- SharePoint docs, knowledge base, MCP server, or Dataverse. "
+        "Same platform, different data sources. 12 configurations across Commercial and GCC.",
+        bold_lead="Configure It."
+    )
+    pdf.bullet(
+        "Case Analyst (TypeScript), Investigative Agent (OpenAI SDK), "
+        "Triage Agent (Semantic Kernel), Foundry Agent (Agent Service). "
+        "Full control over orchestration, tools, and model selection. 8 configurations.",
+        bold_lead="Build It Yourself."
+    )
+
+    pdf.visual_note(
+        "Three-column layout: green (Zero Code), amber (Configure It), "
+        "blue (Build It Yourself) with agent names and config counts"
+    )
+
+    pdf.talking_point(
+        "Same prompts. Same ground truth. The only variable is how you build it."
+    )
+
+    pdf.speaker_note(
+        "You'll see these names on every chart going forward. The important thing "
+        "is the spectrum: on the left, you're up and running in an afternoon. On the "
+        "right, you have full control. The question is which level of fidelity "
+        "you need -- and that's what the rest of this talk is about."
+    )
+
+    # ====================================================================
+    # SLIDE 6: The Question
+    # ====================================================================
+    pdf.slide_heading(6, "The Question")
 
     pdf.headline('"Not all AI use cases are created equal."')
 
@@ -569,7 +609,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 3: The Five Levels (Overview)
     # ====================================================================
-    pdf.slide_heading(6, "The Five Levels (Overview)")
+    pdf.slide_heading(7, "The Five Levels (Overview)")
 
     lvl_headers = ["Level", "Name", "Stakes", "Example"]
     lvl_widths = [14, 34, 48, 74]
@@ -590,7 +630,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 4: Levels 1-2 -- The Quick Win
     # ====================================================================
-    pdf.slide_heading(7, "Levels 1-2 -- The Quick Win")
+    pdf.slide_heading(8, "Levels 1-2 -- The Quick Win")
 
     pdf.headline("Document agents start strong and improve quickly")
 
@@ -606,7 +646,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 5: Level 3 -- Structured Data Starts Winning
     # ====================================================================
-    pdf.slide_heading(8, "Level 3 -- Structured Data Starts Winning")
+    pdf.slide_heading(9, "Level 3 -- Structured Data Starts Winning")
 
     pdf.headline("Structured data agents outperform documents on every aggregate query")
 
@@ -620,7 +660,7 @@ def build_pdf():
     )
     pdf.bullet(
         "Agents with structured data access -- both Copilot Studio MCP and pro-code -- "
-        "answer every aggregate query correctly"
+        "answer every aggregate query correctly when paired with a capable model"
     )
 
     pdf.visual_note(
@@ -635,7 +675,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 6: Level 4 -- The Inflection Point
     # ====================================================================
-    pdf.slide_heading(9, "Level 4 -- The Inflection Point")
+    pdf.slide_heading(10, "Level 4 -- The Inflection Point")
 
     pdf.headline("This is where engineering decisions determine success or failure")
 
@@ -659,7 +699,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 7: The Model Gap (Detail)
     # ====================================================================
-    pdf.slide_heading(10, "The Model Gap (Detail)")
+    pdf.slide_heading(11, "The Model Gap (Detail)")
 
     pdf.headline("Same tools, same data, same backend -- only the model changed")
 
@@ -688,7 +728,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 8: The Tool Gap (Detail)
     # ====================================================================
-    pdf.slide_heading(11, "The Tool Gap (Detail)")
+    pdf.slide_heading(12, "The Tool Gap (Detail)")
 
     pdf.headline("87% failure rate from one missing tool")
 
@@ -707,7 +747,7 @@ def build_pdf():
     # SLIDE 9: Level 5 -- Trust But Verify
     # ====================================================================
     pdf.add_page()
-    pdf.slide_heading(12, "Level 5 -- Trust But Verify")
+    pdf.slide_heading(13, "Level 5 -- Trust But Verify")
 
     pdf.headline("Even our best agent reproduced a dangerous error")
 
@@ -757,7 +797,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 10: The Danger Taxonomy
     # ====================================================================
-    pdf.slide_heading(13, "The Danger Taxonomy")
+    pdf.slide_heading(14, "The Danger Taxonomy")
 
     pdf.headline("Five categories of AI failure, ranked by severity")
 
@@ -791,7 +831,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 11: The Iterative Process
     # ====================================================================
-    pdf.slide_heading(14, "The Iterative Process")
+    pdf.slide_heading(15, "The Iterative Process")
 
     pdf.headline("Deploying an agent is not a one-time event")
 
@@ -821,37 +861,38 @@ def build_pdf():
     # ====================================================================
     # SLIDE 12: Results After Iteration
     # ====================================================================
-    pdf.slide_heading(15, "Results After Iteration")
+    pdf.slide_heading(16, "Results After Iteration")
 
     pdf.headline(
-        "Four agents reached 9-10 out of 10 after iterative improvement "
-        "(three at perfect 10)"
+        "Six agents reached 9-10 out of 10 after iterative improvement"
     )
 
-    iter_headers = ["Agent", "Round 1", "Final", "Rounds"]
-    iter_widths = [60, 28, 28, 54]
+    iter_headers = ["Agent", "Round 0", "Final", "Fix"]
+    iter_widths = [60, 22, 22, 66]
     iter_rows = [
-        ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "2"],
-        ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "2"],
-        ["Foundry Agent", "4/10", "9/10", "2"],
-        ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5"],
+        ["SP/PDF/GCC (Copilot Studio)", "3/10", "9/10", "Cross-referenced documents (zero code)"],
+        ["KB/DOCX/Com (Copilot Studio)", "6/10", "10/10", "Cross-referenced documents (zero code)"],
+        ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "Tool descriptions + data cleanup"],
+        ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "One fuzzy-match tool added"],
+        ["Foundry Agent", "4/10", "9/10", "Tool descriptions + data cleanup"],
+        ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5 rounds: tools, data, model"],
     ]
-    pdf.styled_table(iter_headers, iter_rows, iter_widths, font_size=8)
+    pdf.styled_table(iter_headers, iter_rows, iter_widths, font_size=7.5)
 
     pdf.ln(2)
-    pdf.visual_note("Improvement arc showing Round 1 baseline to final score")
+    pdf.visual_note("Improvement arc showing Round 0 baseline to final score")
 
     pdf.talking_point(
-        "The Triage Agent took five rounds to reach a perfect score. "
-        "The investment is real -- but so are the results."
+        "The first two rows required zero engineering -- just document hygiene "
+        "that any paralegal can implement. The rest required iterative tool and data work."
     )
 
     # ====================================================================
     # SLIDE 13: The Code Spectrum
     # ====================================================================
-    pdf.slide_heading(16, "The Code Spectrum")
+    pdf.slide_heading(17, "The Code Spectrum")
 
-    pdf.headline("Zero code to full code -- same fidelity with GPT-4.1")
+    pdf.headline("Zero code to full code -- same fidelity when you control the model")
 
     code_headers = ["Approach", "Code", "Best For"]
     code_widths = [60, 52, 58]
@@ -876,7 +917,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 14: Why Copilot Studio (Tech Series)
     # ====================================================================
-    pdf.slide_heading(17, "Why Copilot Studio (Tech Series)")
+    pdf.slide_heading(18, "Why Copilot Studio (Tech Series)")
 
     pdf.headline("One platform, declarative to pro-code")
 
@@ -923,7 +964,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 15: What to Do at Each Level
     # ====================================================================
-    pdf.slide_heading(18, "What to Do at Each Level")
+    pdf.slide_heading(19, "What to Do at Each Level")
 
     action_headers = ["Level", "Action"]
     action_widths = [20, 150]
@@ -945,7 +986,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 16: Government Cloud Customers
     # ====================================================================
-    pdf.slide_heading(19, "Government Cloud Customers")
+    pdf.slide_heading(20, "Government Cloud Customers")
 
     pdf.headline("The GCC reality today")
 
@@ -976,7 +1017,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 17: Live Demo Title Card
     # ====================================================================
-    pdf.slide_heading(20, "Live Demo Title Card")
+    pdf.slide_heading(21, "Live Demo Title Card")
 
     pdf.headline('"Let me show you the difference between Level 2 and Level 4."')
 
@@ -994,7 +1035,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 18: Surprising Finding -- Agent Challenged Its Own Premise
     # ====================================================================
-    pdf.slide_heading(21, "Surprising Finding -- Agent Challenged Its Own Premise")
+    pdf.slide_heading(22, "Surprising Finding -- Agent Challenged Its Own Premise")
 
     pdf.headline("A pro-code agent questioned the question -- and was right")
 
@@ -1018,7 +1059,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 19: Surprising Finding -- False Negative
     # ====================================================================
-    pdf.slide_heading(22, "Surprising Finding -- False Negative")
+    pdf.slide_heading(23, "Surprising Finding -- False Negative")
 
     pdf.headline("The model retrieved the answer and didn't recognize it")
 
@@ -1044,7 +1085,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 20: The Bottom Line
     # ====================================================================
-    pdf.slide_heading(23, "The Bottom Line")
+    pdf.slide_heading(24, "The Bottom Line")
 
     pdf.headline("Three numbers to remember")
 
@@ -1079,7 +1120,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 21: Full Scorecard
     # ====================================================================
-    pdf.slide_heading(24, "Full Scorecard")
+    pdf.slide_heading(25, "Full Scorecard")
 
     pdf.headline("462 test runs, 21 agent configurations, 2 use cases")
 
@@ -1138,7 +1179,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 22: Next Steps
     # ====================================================================
-    pdf.slide_heading(25, "Next Steps")
+    pdf.slide_heading(26, "Next Steps")
 
     pdf.headline("Start the conversation")
 

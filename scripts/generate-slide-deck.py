@@ -247,24 +247,298 @@ def slide_01_title(prs):
                 alignment=PP_ALIGN.CENTER)
     # Slide count + date
     add_textbox(slide, 4, 4.8, 5.3, 0.5,
-                "21 Slides  |  March 2026",
+                "26 Slides  |  March 2026",
                 font_size=16, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
     # Level bar
     add_level_bar(slide, top=5.6)
     # Stats line
     add_textbox(slide, 2, 6.3, 9.3, 0.4,
-                "462 test runs  |  21 agents  |  25 slides  |  2 use cases",
+                "462 test runs  |  21 agents  |  26 slides  |  2 use cases",
                 font_size=14, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
     add_speaker_notes(slide,
-        "Some of you may remember me from such demos as the delegation demo. "
-        "Those demos and this one have something in common: I like to build test "
-        "harnesses for real-world use cases my customers care about. And both this "
-        "demo and the delegation demo deal with the same fundamental topic: accuracy.")
+        "Some of you may remember me from such demos as the delegation demo, "
+        "or one of my many ALM demos. Those demos and this one have something "
+        "in common: I like to build test harnesses for real-world use cases my "
+        "customers care about. And they all deal with the same fundamental "
+        "topic: accuracy.")
 
 
-def slide_02_the_question(prs):
+def slide_02_at_a_glance(prs):
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "At a Glance",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.3, 10.9, 0.8,
+                "462 test runs across 21 agent configurations, 2 government use cases, "
+                "and 7 testing rounds. Three gaps emerged at the higher levels: tools, "
+                "data, and model. Every gap was fixable, and none required AI expertise.",
+                font_size=16, color=DARK_TEXT)
+
+    # 2x2 level tiles
+    tiles = [
+        (L2_LIME, RGBColor(0xF1, 0xF8, 0xE9), "Levels 1-2", "Just Works",
+         "8/10 with zero customization.\nModel choice irrelevant."),
+        (L3_ORANGE, RGBColor(0xFF, 0xF3, 0xE0), "Level 3", "Data Over Documents",
+         "MCP outperformed document search\non every aggregate query."),
+        (L4_DEEP_ORANGE, RGBColor(0xFB, 0xE9, 0xE7), "Level 4", "The Inflection Point",
+         "Three gaps emerged: tools, data,\nand model. All fixable."),
+        (L5_RED, RGBColor(0xFC, 0xE4, 0xEC), "Level 5", "Human in the Loop",
+         "High fidelity at L4 means humans\nreview conclusions, not raw data."),
+    ]
+
+    for i, (color, tint, label, title, body) in enumerate(tiles):
+        col = i % 2
+        row = i // 2
+        x = 1.2 + col * 4.1
+        y = 2.4 + row * 1.65
+        add_rounded_rect(slide, x, y, 3.8, 1.4, tint)
+        # Color stripe
+        add_rect(slide, x, y, 0.15, 1.4, color)
+        # Label
+        add_textbox(slide, x + 0.3, y + 0.1, 3.3, 0.3, label,
+                    font_size=10, bold=True, color=color)
+        # Title
+        add_textbox(slide, x + 0.3, y + 0.35, 3.3, 0.35, title,
+                    font_size=15, bold=True, color=DARK_TEXT)
+        # Body
+        add_textbox(slide, x + 0.3, y + 0.7, 3.3, 0.6, body,
+                    font_size=12, color=MEDIUM_TEXT)
+
+    # Legend on right side
+    legend_x = 9.6
+    legend_y = 2.4
+    add_rounded_rect(slide, legend_x, legend_y, 2.8, 3.3,
+                     RGBColor(0xF0, 0xF4, 0xF8))
+    add_rect(slide, legend_x, legend_y, 0.1, 3.3, DARK_NAVY)
+    add_textbox(slide, legend_x + 0.25, legend_y + 0.15, 2.3, 0.3,
+                "The Five Levels", font_size=11, bold=True, color=DARK_NAVY)
+    legend_colors = [L1_GREEN, L2_LIME, L3_ORANGE, L4_DEEP_ORANGE, L5_RED]
+    legend_names = ["Discovery", "Summarization", "Operational",
+                    "Investigative", "Adjudicative"]
+    for i, (lc, ln) in enumerate(zip(legend_colors, legend_names)):
+        by = legend_y + 0.6 + i * 0.5
+        dot = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE,
+            Inches(legend_x + 0.25), Inches(by), Inches(0.35), Inches(0.35))
+        dot.fill.solid()
+        dot.fill.fore_color.rgb = lc
+        dot.line.fill.background()
+        tf = dot.text_frame
+        p = tf.paragraphs[0]
+        p.text = f"L{i+1}"
+        p.font.size = Pt(9)
+        p.font.bold = True
+        p.font.color.rgb = WHITE
+        p.font.name = "Calibri"
+        p.alignment = PP_ALIGN.CENTER
+        add_textbox(slide, legend_x + 0.7, by, 1.8, 0.35, ln,
+                    font_size=12, color=DARK_TEXT)
+
+    # Use case tiles at bottom
+    uc_data = [
+        (ACCENT_BLUE, "Use Case 1", "Legal Case Analysis",
+         "50 cases, 277 people, 333 events", "15 agent configurations"),
+        (ACCENT_BLUE, "Use Case 2", "Investigative Analytics",
+         "34M rows, 584K properties, 1.6M violations", "8 agent configurations"),
+    ]
+    for i, (color, label, title, stats, agents) in enumerate(uc_data):
+        x = 1.2 + i * 5.6
+        y = 5.85
+        tint = RGBColor(0xE8, 0xF0, 0xF8)
+        add_rounded_rect(slide, x, y, 5.2, 0.95, tint)
+        add_rect(slide, x, y, 0.15, 0.95, color)
+        add_textbox(slide, x + 0.3, y + 0.05, 2, 0.25, label,
+                    font_size=9, bold=True, color=color)
+        add_textbox(slide, x + 0.3, y + 0.27, 4.6, 0.3, title,
+                    font_size=14, bold=True, color=DARK_TEXT)
+        add_textbox(slide, x + 0.3, y + 0.55, 4.6, 0.2, stats,
+                    font_size=10, color=MEDIUM_TEXT)
+        add_textbox(slide, x + 0.3, y + 0.72, 4.6, 0.2, agents,
+                    font_size=10, bold=True, color=DARK_TEXT)
+
+    add_confidential_footer(slide)
+    add_speaker_notes(slide,
+        "This is the whole story on one slide. Everything that follows is how we got here.")
+
+
+def slide_03_two_use_cases(prs):
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "The Two Use Cases",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.5, 10.9, 0.5,
+                "Two real government scenarios, twenty-one agent configurations",
+                font_size=22, bold=True, color=DARK_TEXT)
+
+    # Two-column layout
+    # UC1
+    add_rounded_rect(slide, 1.2, 2.3, 5.4, 3.5, RGBColor(0xE8, 0xF0, 0xF8))
+    add_rect(slide, 1.2, 2.3, 0.15, 3.5, ACCENT_BLUE)
+    add_textbox(slide, 1.5, 2.4, 4.8, 0.4, "Legal Case Analysis",
+                font_size=20, bold=True, color=DARK_NAVY)
+    add_bullet_list(slide, 1.5, 3.0, 4.8, 2.5, [
+        "50 synthetic legal cases",
+        "277 people, 333 timeline events",
+        "338 statements, 151 discrepancies",
+        "Can an AI agent prepare a case for an "
+        "attorney as well as a paralegal?",
+    ], font_size=14, color=DARK_TEXT)
+
+    # UC2
+    add_rounded_rect(slide, 6.9, 2.3, 5.4, 3.5, RGBColor(0xE8, 0xF0, 0xF8))
+    add_rect(slide, 6.9, 2.3, 0.15, 3.5, ACCENT_BLUE)
+    add_textbox(slide, 7.2, 2.4, 4.8, 0.4, "Investigative Analytics",
+                font_size=20, bold=True, color=DARK_NAVY)
+    add_bullet_list(slide, 7.2, 3.0, 4.8, 2.5, [
+        "34 million rows of property data",
+        "584K properties, 1.6M violations",
+        "Can an AI agent surface patterns "
+        "an investigator would otherwise miss?",
+    ], font_size=14, color=DARK_TEXT)
+
+    add_textbox(slide, 1.2, 6.0, 10.9, 0.4,
+                "Both use cases came from real customer conversations. "
+                "The data is synthetic but the structure mirrors production systems.",
+                font_size=15, bold=True, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
+
+    add_level_bar(slide)
+    add_confidential_footer(slide)
+
+
+def slide_04_how_built(prs):
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "How This Was Built",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.5, 10.9, 0.5,
+                "One solution engineer. One AI coding assistant. Four weeks.",
+                font_size=22, bold=True, color=DARK_TEXT)
+
+    # Three columns
+    cols = [
+        (MEDIUM_BLUE, "Human-Directed",
+         "Architecture decisions, Azure\nservice selection, schema design,\n"
+         "security posture, and the five-level\nfidelity framework came from\n"
+         "domain expertise and customer\nconversations."),
+        (ACCENT_BLUE, "AI-Accelerated",
+         "TypeScript Functions, MCP server,\nSQL schema, 50 synthetic cases,\n"
+         "web UI, six PDF generators, and\nthis deck were generated by AI\n"
+         "and reviewed by a human."),
+        (RGBColor(0x42, 0x95, 0x88), "Human-Verified",
+         "462 test runs across 21 agent\nconfigurations, scored by hand.\n"
+         "Every dangerous response was\ncaught through manual review.\n"
+         "That is exactly the point\nof Level 5."),
+    ]
+
+    for i, (color, title, desc) in enumerate(cols):
+        x = 1.2 + i * 3.9
+        add_rounded_rect(slide, x, 2.3, 3.5, 3.5, color)
+        add_textbox(slide, x + 0.2, 2.5, 3.1, 0.5, title,
+                    font_size=20, bold=True, color=WHITE,
+                    alignment=PP_ALIGN.CENTER)
+        add_textbox(slide, x + 0.2, 3.2, 3.1, 2.2, desc,
+                    font_size=14, color=WHITE,
+                    alignment=PP_ALIGN.CENTER)
+
+    add_textbox(slide, 1.2, 6.0, 10.9, 0.4,
+                "We practiced what we preach. This entire project is Level 5: "
+                "AI-accelerated, human-verified.",
+                font_size=15, bold=True, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
+
+    add_level_bar(slide)
+    add_confidential_footer(slide)
+
+
+def slide_05_meet_agents(prs):
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "Meet the Agents",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.3, 10.9, 0.6,
+                "21 configurations, 3 approaches, 1 set of test prompts",
+                font_size=22, bold=True, color=DARK_TEXT)
+
+    # Three approach columns
+    col_data = [
+        (L1_GREEN, "Zero Code",
+         "M365 Copilot",
+         "Three JSON manifest files\npointing at the MCP server.\nPlatform picks the model.",
+         "1 configuration"),
+        (L3_ORANGE, "Configure It",
+         "Copilot Studio",
+         "SharePoint docs, knowledge base,\nMCP server, or Dataverse --\n"
+         "same platform, different\ndata sources.",
+         "12 configurations"),
+        (ACCENT_BLUE, "Build It Yourself",
+         "Pro-Code Agents",
+         "Case Analyst (TypeScript)\nInvestigative Agent (OpenAI SDK)\n"
+         "Triage Agent (Semantic Kernel)\nFoundry Agent (Agent Service)",
+         "8 configurations"),
+    ]
+
+    for i, (color, approach, platform, desc, count) in enumerate(col_data):
+        x = 1.0 + i * 3.9
+        # Card background
+        add_rounded_rect(slide, x, 2.1, 3.6, 3.8, color)
+        # Approach label
+        add_textbox(slide, x + 0.2, 2.2, 3.2, 0.5, approach,
+                    font_size=20, bold=True, color=WHITE,
+                    alignment=PP_ALIGN.CENTER)
+        # Platform
+        add_textbox(slide, x + 0.2, 2.75, 3.2, 0.4, platform,
+                    font_size=16, color=RGBColor(0xDD, 0xEE, 0xFF),
+                    alignment=PP_ALIGN.CENTER)
+        # Description
+        add_textbox(slide, x + 0.2, 3.25, 3.2, 1.8, desc,
+                    font_size=13, color=WHITE,
+                    alignment=PP_ALIGN.CENTER)
+        # Config count pill
+        pill_w = 2.4
+        pill_x = x + (3.6 - pill_w) / 2
+        pill = add_rounded_rect(slide, pill_x, 5.2, pill_w, 0.45,
+                                RGBColor(0xFF, 0xFF, 0xFF))
+        tf = pill.text_frame
+        tf.word_wrap = False
+        p = tf.paragraphs[0]
+        p.text = count
+        p.font.size = Pt(13)
+        p.font.bold = True
+        p.font.color.rgb = color
+        p.font.name = "Calibri"
+        p.alignment = PP_ALIGN.CENTER
+
+    add_textbox(slide, 1.2, 6.05, 10.9, 0.4,
+                "Same prompts. Same ground truth. "
+                "The only variable is how you build it.",
+                font_size=15, bold=True, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
+
+    add_level_bar(slide)
+    add_confidential_footer(slide)
+    add_speaker_notes(slide,
+        "You'll see these names on every chart going forward. The important thing "
+        "is the spectrum: on the left, you're up and running in an afternoon. On the "
+        "right, you have full control. The question is which level of fidelity "
+        "you need -- and that's what the rest of this talk is about.")
+
+
+def slide_06_the_question(prs):
     slide = add_blank_slide(prs)
     set_slide_bg(slide, WHITE)
     add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
@@ -304,10 +578,11 @@ def slide_02_the_question(prs):
     add_level_bar(slide)
     add_confidential_footer(slide)
     add_speaker_notes(slide,
-        "What this demo is: a process and methods -- with real-world examples -- for "
-        "making your agents better. What it isn't: a data extraction demo, other than "
-        "to show ideas on tools and process when extraction is necessary. You'll "
-        "probably have more questions than answers when we're done. Let's get into it.")
+        "A policy lookup chatbot that hallucinates a deadline is annoying. A legal case "
+        "prep tool that misses a discrepancy can change an outcome. The framework we're "
+        "about to walk through helps you match your engineering investment to the stakes "
+        "of the use case -- so you know when 'good enough' really is good enough, and "
+        "when it isn't.")
 
 
 def slide_03_five_levels(prs):
@@ -406,9 +681,12 @@ def slide_05_level3(prs):
                 font_size=24, bold=True, color=DARK_TEXT)
 
     add_bullet_list(slide, 1.2, 2.4, 10.9, 1.8, [
-        '"How many active cases?" "What\'s the breakdown by county?" "Top 5 violators?"',
-        "Document agents cannot answer these -- they only have individual files",
-        "Agents with structured data access start outperforming document agents here",
+        "Document agents excel at single-case analysis (10/10) but can't count, "
+        "sum, or filter across a full dataset",
+        '"How many active cases?" "What\'s the breakdown by county?" "Top 5 violators?" '
+        "-- these require structured data",
+        "Agents with structured data access -- both Copilot Studio MCP and pro-code -- "
+        "answer every aggregate query correctly when paired with a capable model",
     ], font_size=18)
 
     # Side-by-side comparison boxes
@@ -615,8 +893,8 @@ def slide_09_level5(prs):
                 font_size=18, bold=True, color=DARK_NAVY)
     add_bullet_list(slide, 1.2, 5.4, 10.9, 1.5, [
         "Added cross-reference headers to each document (zero content changes)",
-        "Commercial agent: 0/2 to 2/2 -- pulled Medical Records as primary source",
-        "GCC agent: 3/10 to 9/10 -- same model, same platform, just better documents",
+        "Commercial agent: 8/10 to 10/10 -- pulled Medical Records as primary source",
+        "GCC agent: 3/10 to 9/10 across all 10 prompts with document hygiene alone",
         "Zero code, zero engineering -- document hygiene any paralegal can implement",
     ], font_size=14)
 
@@ -743,22 +1021,24 @@ def slide_12_results(prs):
     add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
 
     add_textbox(slide, 1.2, 1.5, 10.9, 0.5,
-                "Four agents reached 9-10 out of 10 (three at perfect 10)",
+                "Six agents reached 9-10 out of 10 after iterative improvement",
                 font_size=20, bold=True, color=DARK_TEXT)
 
-    headers = ["Agent", "Round 1", "Final", "Rounds"]
+    headers = ["Agent", "Round 0", "Final", "Fix"]
     rows = [
-        ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "2"],
-        ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "2"],
-        ["Foundry Agent", "4/10", "9/10", "2"],
-        ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5"],
+        ["SP/PDF/GCC (Copilot Studio)", "3/10", "9/10", "Cross-referenced docs"],
+        ["KB/DOCX/Com (Copilot Studio)", "6/10", "10/10", "Cross-referenced docs"],
+        ["Commercial MCP (Copilot Studio)", "8/10", "10/10", "Descriptions + data"],
+        ["Investigative Agent (OpenAI SDK)", "1/10", "10/10", "Fuzzy-match tool"],
+        ["Foundry Agent", "4/10", "9/10", "Descriptions + data"],
+        ["Triage Agent (Semantic Kernel)", "0/10", "10/10", "5 rounds: tools+data+model"],
     ]
-    add_table(slide, 1.5, 2.3, 10.3, [4.5, 1.8, 1.8, 1.5], headers, rows,
-              font_size=16)
+    add_table(slide, 1.5, 2.3, 10.3, [4.2, 1.5, 1.5, 3.1], headers, rows,
+              font_size=14)
 
-    add_textbox(slide, 1.2, 5.0, 10.9, 0.7,
-                "The Triage Agent took five rounds to reach a perfect score.\n"
-                "The investment is real -- but so are the results.",
+    add_textbox(slide, 1.2, 5.5, 10.9, 0.7,
+                "The first two rows required zero engineering -- just document hygiene.\n"
+                "The rest required iterative tool and data work.",
                 font_size=16, bold=True, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
 
@@ -775,7 +1055,7 @@ def slide_13_code_spectrum(prs):
     add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
 
     add_textbox(slide, 1.2, 1.5, 10.9, 0.5,
-                "Zero code to full code -- same accuracy with GPT-4.1",
+                "Zero code to full code -- same fidelity when you control the model",
                 font_size=20, bold=True, color=DARK_TEXT)
 
     headers = ["Approach", "Code", "Best For"]
@@ -789,8 +1069,8 @@ def slide_13_code_spectrum(prs):
               font_size=16)
 
     add_textbox(slide, 1.2, 5.0, 10.9, 0.7,
-                "The investment buys governance and customization, not accuracy.\n"
-                "Accuracy comes from the model and the data.",
+                "The investment buys governance and customization, not fidelity.\n"
+                "Fidelity comes from the model and the data.",
                 font_size=18, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
 
@@ -1075,7 +1355,76 @@ def slide_20_bottom_line(prs):
         "reviewing agentic results. The AI accelerates the team. The team validates the AI.")
 
 
-def slide_21_next_steps(prs):
+def slide_24_scorecard(prs):
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "Full Scorecard",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.3, 10.9, 0.5,
+                "462 test runs, 21 agent configurations, 2 use cases",
+                font_size=20, bold=True, color=DARK_TEXT)
+
+    # UC1 table
+    add_textbox(slide, 1.2, 1.9, 5.5, 0.35,
+                "Use Case 1: Legal Case Analysis (15 agents)",
+                font_size=13, bold=True, color=DARK_NAVY)
+    uc1_headers = ["Agent", "Model", "Score"]
+    uc1_widths = [2.6, 1.3, 0.8]
+    uc1_rows = [
+        ["Case Analyst (pro-code)", "GPT-4.1", "10/10"],
+        ["CS MCP/Com", "GPT-4.1", "10/10"],
+        ["CS SP/PDF/Com", "GPT-4.1", "10/10"],
+        ["CS KB/DOCX/Com", "GPT-4.1", "10/10"],
+        ["CS DV/Com", "Sonnet 4.6", "10/10"],
+        ["CS SP/DOCX/Com", "GPT-4.1", "9/10"],
+        ["CS MCP/GCC", "GPT-4o", "9/10"],
+        ["CS SP/PDF/GCC", "GPT-4o", "9/10"],
+        ["CS KB/PDF/GCC", "GPT-4o", "9/10"],
+        ["CS KB/PDF/Com", "GPT-4.1", "8/10"],
+        ["CS KB/DOCX/GCC", "GPT-4o", "8/10"],
+        ["CS SP/DOCX/GCC", "GPT-4o", "7/10"],
+        ["CS DV/Com", "GPT-4.1", "6/10"],
+        ["CS DV/Com", "GPT-5 Auto", "4/10"],
+        ["CS DV/GCC", "GPT-4o", "2/10"],
+    ]
+    add_table(slide, 0.8, 2.25, 4.7, uc1_widths, uc1_headers, uc1_rows,
+              font_size=9)
+
+    # UC2 table
+    add_textbox(slide, 7.0, 1.9, 5.5, 0.35,
+                "Use Case 2: Investigative Analytics (8 agents)",
+                font_size=13, bold=True, color=DARK_NAVY)
+    uc2_headers = ["Agent", "Model", "Score"]
+    uc2_widths = [2.6, 1.3, 0.8]
+    uc2_rows = [
+        ["CS MCP/Com", "GPT-4.1", "10/10"],
+        ["Investigative (OpenAI SDK)", "GPT-4.1", "10/10"],
+        ["Triage (Semantic Kernel)", "GPT-4.1", "10/10"],
+        ["Foundry Agent", "GPT-4.1", "9/10"],
+        ["CS SP/PDF/GCC", "GPT-4o", "9/10"],
+        ["CS SP/PDF/Com", "GPT-4.1", "8/10"],
+        ["CS MCP/GCC", "GPT-4o", "4/10"],
+        ["M365 Copilot MCP/Com", "Platform", "2/10"],
+    ]
+    add_table(slide, 6.6, 2.25, 4.7, uc2_widths, uc2_headers, uc2_rows,
+              font_size=9)
+
+    add_textbox(slide, 1.2, 6.6, 10.9, 0.4,
+                "Dataverse MCP: Sonnet 4.6 (10/10), GPT-4.1 (6/10), "
+                "GPT-5 Auto (4/10), GPT-4o (2/10). Newer models are not always better.",
+                font_size=12, bold=True, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
+
+    add_confidential_footer(slide)
+    add_speaker_notes(slide,
+        "This is 462 data points. The pattern is clear: "
+        "the model and the data matter more than the platform.")
+
+
+def slide_25_next_steps(prs):
     slide = add_blank_slide(prs)
     set_slide_bg(slide, DARK_NAVY)
 
@@ -1117,27 +1466,32 @@ def slide_21_next_steps(prs):
 def main():
     prs = new_prs()
 
-    slide_01_title(prs)
-    slide_02_the_question(prs)
-    slide_03_five_levels(prs)
-    slide_04_quick_win(prs)
-    slide_05_level3(prs)
-    slide_06_inflection(prs)
-    slide_07_model_gap(prs)
-    slide_08_tool_gap(prs)
-    slide_09_level5(prs)
-    slide_10_danger_taxonomy(prs)
-    slide_11_iterative_process(prs)
-    slide_12_results(prs)
-    slide_13_code_spectrum(prs)
-    slide_14_why_copilot_studio(prs)
-    slide_15_what_to_do(prs)
-    slide_16_gcc(prs)
-    slide_17_demo(prs)
-    slide_18_challenged_premise(prs)
-    slide_19_false_negative(prs)
-    slide_20_bottom_line(prs)
-    slide_21_next_steps(prs)
+    slide_01_title(prs)              # S1  Title
+    slide_02_at_a_glance(prs)        # S2  At a Glance
+    slide_03_two_use_cases(prs)      # S3  The Two Use Cases
+    slide_04_how_built(prs)          # S4  How This Was Built
+    slide_05_meet_agents(prs)        # S5  Meet the Agents
+    slide_06_the_question(prs)       # S6  The Question
+    slide_03_five_levels(prs)        # S7  The Five Levels
+    slide_04_quick_win(prs)          # S8  Levels 1-2
+    slide_05_level3(prs)             # S9  Level 3
+    slide_06_inflection(prs)         # S10 Level 4
+    slide_07_model_gap(prs)          # S11 Model Gap
+    slide_08_tool_gap(prs)           # S12 Tool Gap
+    slide_09_level5(prs)             # S13 Level 5
+    slide_10_danger_taxonomy(prs)    # S14 Danger Taxonomy
+    slide_11_iterative_process(prs)  # S15 Iterative Process
+    slide_12_results(prs)            # S16 Results After Iteration
+    slide_13_code_spectrum(prs)      # S17 Code Spectrum
+    slide_14_why_copilot_studio(prs) # S18 Why Copilot Studio
+    slide_15_what_to_do(prs)         # S19 What to Do
+    slide_16_gcc(prs)                # S20 GCC
+    slide_17_demo(prs)               # S21 Live Demo
+    slide_18_challenged_premise(prs) # S22 Surprising: Premise
+    slide_19_false_negative(prs)     # S23 Surprising: False Negative
+    slide_20_bottom_line(prs)        # S24 The Bottom Line
+    slide_24_scorecard(prs)          # S25 Full Scorecard
+    slide_25_next_steps(prs)         # S26 Next Steps
 
     out_dir = os.path.join(os.path.dirname(__file__), "..", "decks")
     os.makedirs(out_dir, exist_ok=True)

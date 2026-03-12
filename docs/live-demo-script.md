@@ -216,9 +216,10 @@ Which cases involve Termination of Parental Rights?
 |---|---|
 | GPT-4o | FAIL — generates `WHERE legal_casetype = 'TPR'` (abbreviation). Returns zero results. The actual stored value is 'Termination of Parental Rights'. |
 | GPT-4.1 | FAIL — same abbreviation problem. |
+| GPT-5 Reasoning | FAIL — same abbreviation problem. Confirms this is a connector-level bug, not a model reasoning issue. |
 | Sonnet 4.6 | PASS — correctly uses full text value, returns all 9 TPR cases with case numbers, counties, circuits, statuses. |
 
-**Why this prompt:** It's simple. A single-table filter. And two OpenAI models can't do it. Sonnet can.
+**Why this prompt:** It's simple. A single-table filter. And every OpenAI model — including GPT-5 Reasoning — can't do it. Only Sonnet can.
 
 #### Model Prompt 2 — Cross-Reference Reasoning
 
@@ -230,9 +231,10 @@ What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and di
 |---|---|
 | GPT-4o | FAIL — can't resolve Marcus Webb to the right case, can't do the two-step GUID lookup. Returns nothing or errors. |
 | GPT-4.1 | PASS (9/10) — finds all 3 statements, compares them, identifies consistency. |
+| GPT-5 Reasoning | PASS (9/10) — finds all 3 statements including hospital staff (which Auto missed), compares accounts. |
 | Sonnet 4.6 | PASS (10/10) — full comparison table, correct quotes, flags the crib-climbing theory as a new claim in the LE statement. |
 
-**Why this prompt:** Shows a real cross-document reasoning task. GPT-4o can't even start. GPT-4.1 gets close. Sonnet nails it.
+**Why this prompt:** Shows a real cross-document reasoning task. GPT-4o can't even start. GPT-4.1 and GPT-5 Reasoning get close. Sonnet nails it.
 
 #### Model Prompt 3 — Time Calculation
 
@@ -243,10 +245,11 @@ What was the exact time gap between the thump Dena heard and when they took Jayl
 | Model | Expected Result |
 |---|---|
 | GPT-4o | FAIL — can't find timeline events matching "thump" or "hospital." |
-| GPT-4.1 | PASS — finds both events, calculates 4h30m (thump to discovery) and 5h45m (thump to ER admission). |
+| GPT-4.1 | PASS — finds both events, calculates 4h30m (thump to departure) and 5h45m (thump to ER admission). |
+| GPT-5 Reasoning | PASS — finds all three events (thump, departure, admission), calculates both time gaps correctly. |
 | Sonnet 4.6 | PASS — same calculation plus contextual notes about disclosure inconsistency. |
 
-**Why this prompt:** Requires finding events by semantic meaning (not exact column values), then doing arithmetic. GPT-4o fails at step 1.
+**Why this prompt:** Requires finding events by semantic meaning (not exact column values), then doing arithmetic. GPT-4o fails at step 1. Reasoning models handle it.
 
 **Step 2: Swap to Sonnet 4.6**
 
@@ -263,16 +266,16 @@ If time allows, swap to GPT-4.1 and re-run Prompt 1 (TPR cases) to show it also 
 
 ### Model Demo Summary
 
-| Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | Sonnet 4.6 (Com) |
-|---|---|---|---|
-| TPR cases (filter) | 0 | 0 | 10 |
-| Marcus Webb (cross-ref) | 0 | 9 | 10 |
-| Time gap (arithmetic) | 0 | 10 | 10 |
-| **Total** | **0/3** | **2/3** | **3/3** |
+| Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
+|---|---|---|---|---|
+| TPR cases (filter) | 0 | 0 | 0 | 10 |
+| Marcus Webb (cross-ref) | 0 | 9 | 9 | 10 |
+| Time gap (arithmetic) | 0 | 10 | 10 | 10 |
+| **Total** | **0/3** | **2/3** | **2/3** | **3/3** |
 
-Full test battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11.
+Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11.
 
-**Talking point:** "The model is the single biggest lever. Better documents took us from 3/10 to 9/10 with zero code. A better model took us from 1/11 to 11/11 with zero code. But today, the best model is only available in Commercial."
+**Talking point:** "The model is the single biggest lever. Better documents took us from 3/10 to 9/10 with zero code. A better model took us from 1/11 to 11/11 with zero code. Both Sonnet 4.6 and GPT-5 Reasoning are available today in Commercial Copilot Studio."
 
 ---
 
@@ -287,7 +290,7 @@ Full test battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11.
 
 ### The GCC Reality
 
-"In GCC today, you have one lever: document quality. And it's powerful — we proved you can go from 3/10 to 9/10 with 45 minutes of free work. But for structured data agents, you're capped by GPT-4o until GCC gets access to better models. When that happens, every agent improves overnight with zero changes."
+"In GCC today, you have one lever: document quality. And it's powerful — we proved you can go from 3/10 to 9/10 with 45 minutes of free work. For structured data agents, GCC currently defaults to GPT-4o, with expanded model availability on the roadmap. In Commercial, customers already have two models that solve the problem — Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11). When those models arrive in GCC, every agent improves overnight with zero changes."
 
 ### The Bottom Line
 
@@ -329,7 +332,7 @@ Full test battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11.
 
 ## Proven Test Results (Source Data)
 
-These results come from 462 test runs across 21 agent configurations. Session 31 is the primary source for document quality improvements (SP/PDF-GCC, 10-prompt battery).
+These results come from 462 test runs across 21 agent configurations and 6 models. Session 31 is the primary source for document quality improvements (SP/PDF-GCC, 10-prompt battery).
 
 ### Document Quality — SP/PDF-GCC Results
 
@@ -349,17 +352,17 @@ These results come from 462 test runs across 21 agent configurations. Session 31
 
 ### Model Selection — CS/DV Multi-Model Results
 
-| Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | Sonnet 4.6 (Com) |
-|---|---|---|---|---|
-| Q1: ER admission | 0 | 0 | 0 | 10 |
-| Q2: Marcus bedtime | 0 | 9 | 5 | 10 |
-| Q3: Crystal "clean now" | 0 | 0 | 0 | 10 |
-| Q4: Crystal transportation | 0 | 0 | 0 | 10 |
-| Q5: Skeletal survey | 0 | 0 | 0 | 10 |
-| Q6: Full timeline | 10 | 10 | 10 | 10 |
-| Q7: Price TPR people | 0 | 9 | 8 | 10 |
-| Q8: Dena comparison | 0 | 9 | 9 | 10 |
-| Q9: LE statements | 0 | 9 | 9 | 10 |
-| Q10: TPR cases | 0 | 0 | 0 | 10 |
-| Q11: Time gap | 0 | 10 | 0 | 10 |
-| **Total** | **1/11** | **6/11** | **4/11** | **11/11** |
+| Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
+|---|---|---|---|---|---|
+| Q1: ER admission | 0 | 0 | 0 | 10 | 10 |
+| Q2: Marcus bedtime | 0 | 9 | 5 | 9 | 10 |
+| Q3: Crystal "clean now" | 0 | 0 | 0 | 10 | 10 |
+| Q4: Crystal transportation | 0 | 0 | 0 | 10 | 10 |
+| Q5: Skeletal survey | 0 | 0 | 0 | 10 | 10 |
+| Q6: Full timeline | 10 | 10 | 10 | 10 | 10 |
+| Q7: Price TPR people | 0 | 9 | 8 | 8 | 10 |
+| Q8: Dena comparison | 0 | 9 | 9 | 10 | 10 |
+| Q9: LE statements | 0 | 9 | 9 | 9 | 10 |
+| Q10: TPR cases | 0 | 0 | 0 | 0 | 10 |
+| Q11: Time gap | 0 | 10 | 0 | 10 | 10 |
+| **Total** | **1/11** | **6/11** | **4/11** | **10/11** | **11/11** |

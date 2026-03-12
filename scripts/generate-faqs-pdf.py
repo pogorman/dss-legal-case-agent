@@ -673,9 +673,10 @@ def build_pdf():
         "Seven testing rounds and four improvement rounds. Round 0 was the baseline. "
         "Round 1 added missing data (11 SQL rows, 1 tool filter). Round 2 added new "
         "tools (search_properties, summary mode) and improved prompts. Round 3 validated "
-        "across models (GPT-4.1 vs GPT-5 Auto). Subsequent rounds focused on specific "
+        "across models (GPT-4.1 vs GPT-5 Auto vs GPT-5 Reasoning vs Sonnet 4.6). "
+        "Subsequent rounds focused on specific "
         "agents (Triage took 5 rounds alone). Total: 462 test runs across 21 agent "
-        "configurations."
+        "configurations and 6 models."
     )
 
     pdf.qa_pair(

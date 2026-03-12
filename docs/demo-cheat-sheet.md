@@ -69,4 +69,5 @@
 | Best zero-code score | 10/10 (SP/PDF/Com after cross-referencing) |
 | Best pro-code score | 10/10 (Case Analyst, Investigative, Triage) |
 | Worst-to-best arc | Triage: 0/10 → 10/10 in 5 rounds |
-| Model gap | Sonnet 4.6 = 11/11, GPT-4o = 1/11 (same Dataverse MCP infra) |
+| Models tested | 5 (GPT-4o, 4.1, 5 Auto, 5 Reasoning, Sonnet 4.6) |
+| Model gap | Sonnet 11/11, GPT-5 Reasoning 10/11, GPT-4o 1/11 (same infra) |

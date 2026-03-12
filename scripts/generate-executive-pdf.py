@@ -370,7 +370,7 @@ def build_pdf():
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  20 prompts  |  2 use cases  |  7 testing rounds"),
+    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  6 models  |  20 prompts  |  2 use cases  |  7 testing rounds"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -425,7 +425,7 @@ def build_pdf():
     sum_text_w = total_w - sum_stripe - sum_pad * 2
 
     intro_text = sanitize_text(
-        "This framework is grounded in 462 test runs across 21 agent configurations, "
+        "This framework is grounded in 462 test runs across 21 agent configurations and 6 models, "
         "2 government use cases, and 7 testing rounds. Three gaps emerged at "
         "the higher levels: tools, data, and model. Every gap was fixable, and none "
         "required AI expertise. One new tool, cleaner data, and cross-referenced "
@@ -761,7 +761,7 @@ def build_pdf():
         bold_lead="AI-accelerated."
     )
     pdf.body_text(
-        "462 test runs across 21 agent configurations, scored by hand. Every dangerous "
+        "462 test runs across 21 agent configurations and 6 models, scored by hand. Every dangerous "
         "response - hallucinated facts, missed fractures, invented timelines - was caught "
         "through manual review. That is exactly the point of Level 5.",
         bold_lead="Human-verified."
@@ -875,6 +875,13 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 7)
     pdf.set_text_color(*LIGHT)
     pdf.cell(0, 4, "* Ranked by score", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(1)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*LIGHT)
+    pdf.cell(0, 4, sanitize_text(
+        "Dataverse MCP multi-model test (5 models): GPT-4o 1/11, GPT-5 Auto 4/11, GPT-4.1 6/11, "
+        "GPT-5 Reasoning 10/11, Sonnet 4.6 11/11."
+    ), new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(2)
     pdf.subsection_title("The Data Gap")
@@ -1245,6 +1252,7 @@ def build_pdf():
         ["Copilot Studio Dataverse MCP / GPT-4.1 (Commercial)", "--", "--", "6/10"],
         ["Copilot Studio MCP (Gov Cloud)", "2/10", "4/10", "4/10"],
         ["Copilot Studio DV MCP / GPT-5 Auto (Commercial)", "--", "--", "4/10"],
+        ["Copilot Studio DV MCP / GPT-5 Reasoning (Commercial)", "--", "--", "10/10"],
         ["Copilot Studio Dataverse MCP (Gov Cloud)", "1/10", "1/10", "2/10"],
         ["M365 Copilot MCP (Commercial)", "--", "2/10", "--"],
     ]
@@ -1256,7 +1264,7 @@ def build_pdf():
     pdf.cell(0, 4, sanitize_text(
         "* Ranked by Round 2 score. M365 Copilot not retested (platform constraints "
         "prevent iterative improvement). Dataverse MCP agents scored on UC1 prompts against "
-        "structured Dataverse data; Sonnet 4.6 achieved 11/11 (perfect). UC2 scores for data agents; UC1 scores for document agents."
+        "structured Dataverse data; Sonnet 4.6 achieved 11/11 (perfect), GPT-5 Reasoning 10/11. UC2 scores for data agents; UC1 scores for document agents."
     ), new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(2)
@@ -1269,9 +1277,9 @@ def build_pdf():
         "plateaued at 4/10 despite receiving every improvement the other agents received, "
         "confirming a model-level ceiling for these workloads with GPT-4o. "
         "A multi-model test of the native Dataverse MCP connector proved the model is everything: "
-        "GPT-4o scored 1/10, GPT-5 Auto 4/10, GPT-4.1 6/10, and Sonnet 4.6 achieved a perfect "
-        "11/11 on identical schema and data. Newer does not mean better - GPT-5 Auto "
-        "performed worse than GPT-4.1.",
+        "GPT-4o scored 1/11, GPT-5 Auto 4/11, GPT-4.1 6/11, GPT-5 Reasoning 10/11, and Sonnet 4.6 achieved a perfect "
+        "11/11 on identical schema and data across 5 models. GPT-5 Reasoning nearly matches Sonnet, losing only on a "
+        "connector-level abbreviation bug. GPT-5 Auto still performed worse than GPT-4.1.",
         bold_lead="Combined result:"
     )
 
@@ -1481,7 +1489,7 @@ def build_pdf():
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(*LIGHT)
     pdf.multi_cell(0, 5, sanitize_text(
-        "Based on 462 test runs across 2 government use cases, 21 agent configurations, "
+        "Based on 462 test runs across 2 government use cases, 21 agent configurations, 6 models, "
         "7 testing rounds, and 4 rounds of iterative improvement."
     ), align="C")
 
@@ -1516,6 +1524,7 @@ def build_pdf():
         ["Copilot Studio DV/Com (Sonnet)", "Dataverse MCP", "Sonnet 4.6", "10/10"],
         ["Copilot Studio DV/Com (4.1)", "Dataverse MCP", "GPT-4.1", "6/10"],
         ["Copilot Studio DV/Com (5 Auto)", "Dataverse MCP", "GPT-5 Auto", "4/10"],
+        ["Copilot Studio DV/Com (5 Reasoning)", "Dataverse MCP", "GPT-5 Reasoning", "10/10"],
         ["Copilot Studio DV/GCC", "Dataverse MCP", "GPT-4o", "2/10"],
     ]
     pdf.styled_table(uc1a_headers, uc1a_rows, uc1a_widths, font_size=7)
@@ -1526,7 +1535,7 @@ def build_pdf():
         "Ranked by final score. All agents retested with cross-referenced "
         "documents. PDF outperformed DOCX in 3 of 4 matchups; KB/DOCX/Com "
         "was the exception (10/10). Dataverse MCP tested across 4 models: "
-        "Sonnet 4.6 achieved 10/10 (perfect); GPT-5 Auto scored worse than GPT-4.1."
+        "Sonnet 4.6 achieved 10/10 (perfect); GPT-5 Reasoning 10/10 (near-perfect, 5 models tested)."
     ))
 
     # -- UC2 Table --

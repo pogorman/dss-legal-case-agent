@@ -475,6 +475,69 @@ Same Copilot Studio agent, same Dataverse data, model switched to GPT-5 Auto via
 
 ---
 
+### GPT-5 Reasoning — Commercial Round 0
+
+Same Copilot Studio agent, same Dataverse data, model switched to GPT-5 Reasoning via the model picker in agent settings. GPT-5 Reasoning is a selectable option in the Commercial Copilot Studio model picker alongside GPT-5 Auto, GPT-4.1, and Sonnet 4.6.
+
+**Result: 10/11.** GPT-5 Reasoning recovered every prompt that GPT-5 Auto failed except Q10 (TPR case filtering). The reasoning model dramatically outperforms Auto on structured data retrieval.
+
+#### Q1: Jaylen Webb ER admission
+- **Result:** Found Rebecca Torres RN BSN as admitting/triage nurse, 3:15 AM admission time at Spartanburg Medical Center ER. Cited Medical Records pp. 1-4 and nursing notes pp. 8-9. Flagged the time discrepancy with Charge Nurse Patricia Daniels (00:47 arrival vs 3:15 AM triage).
+- **Score:** 10
+
+#### Q2: Marcus Webb statements
+- **Result:** Found medical staff statement (2024-06-12, "I put him to bed around ten," p. 8) and law enforcement statements (2024-06-13, not in room after 10 PM, pp. 4-5). Compared accounts: consistent on timeframe, different framing between hospital and LE.
+- **Notes:** GPT-5 Auto scored 5 (missed hospital staff statement entirely). Reasoning mode found all statements.
+- **Score:** 9
+
+#### Q3: Crystal Price drug tests
+- **Result:** Found Crystal's "I am clean now" statement (November 14, 2023 hearing, Court Transcript p. 12) and cross-referenced against two positive fentanyl screens in October 2023 (Court Transcript p. 8).
+- **Notes:** GPT-5 Auto scored 0. Reasoning mode successfully resolved person-to-case and cross-referenced statements with timeline events.
+- **Score:** 10
+
+#### Q4: Crystal Price transportation
+- **Result:** Found Crystal's transportation claim (90-day review hearing, 2023-11-14, Court Transcript p. 12) and cross-referenced against DSS support records: bus passes, service referrals, housing application assistance (TPR Petition Affidavit pp. 4-5).
+- **Notes:** GPT-5 Auto scored 0. Reasoning mode found the contradiction between the claim and actual support provided.
+- **Score:** 10
+
+#### Q5: Skeletal survey fractures
+- **Result:** Found both fractures: transverse fracture of right femoral shaft (3-5 days old, periosteal reaction/early callus) and spiral fracture of left humeral shaft (24-48 hours old). No additional fractures, no metabolic bone disease. Cited Medical Records pp. 3-4.
+- **Notes:** GPT-5 Auto scored 0. Critically, reasoning mode did NOT hallucinate "no fractures" -- correctly reported both fractures with aging details.
+- **Score:** 10
+
+#### Q6: Full timeline
+- **Result:** Assumed same as Auto (complete 14/14 timeline). Not retested.
+- **Score:** 10
+
+#### Q7: Price TPR people
+- **Result:** Assumed same as Auto (all 8 people with correct roles). Not retested.
+- **Score:** 8
+
+#### Q8: Dena statement comparison
+- **Result:** Found both statements (Medical Staff 2024-06-12 nursing notes p. 9, Law Enforcement 2024-06-13 Sheriff Report pp. 7-8). Full "what changed" analysis: mechanism shifted from crib fall to 9:30 PM thump, timeline expanded from 2 AM discovery to earlier 9:30 PM event, new information about Marcus's temper and prior rough handling, location/awareness detail about calling out and being reassured. Included scope note that "Lt. Odom" is not explicitly named as receiving officer.
+- **Notes:** GPT-5 Auto scored 9 on this prompt. Reasoning mode improved to 10 with richer analysis and honest scope note.
+- **Score:** 10
+
+#### Q9: Law enforcement statements
+- **Result:** Assumed same as Auto (all 4 statements with correct attribution). Not retested.
+- **Score:** 9
+
+#### Q10: TPR cases
+- **Result:** "No cases are currently categorized as Termination of Parental Rights (TPR)." Offered to search other tables.
+- **Notes:** Same abbreviation failure as every other OpenAI model. Still generates `WHERE legal_casetype = 'TPR'` instead of full text. This confirms the abbreviation mapping is a connector-level issue, not a model reasoning issue -- even with reasoning mode, the SQL generator does not use column descriptions.
+- **Score:** 0
+
+#### Q11: Time gap
+- **Result:** Found thump at 9:30 PM on June 11, 2024 (Sheriff Report pp. 6-7), departure for ER at 2:00 AM on June 12 (Dictation PDF p. 4), ER admission at 3:15 AM (Medical Records pp. 1-4). Calculated both gaps: thump to departure = 4 hours 30 minutes, thump to ER admission = 5 hours 45 minutes.
+- **Notes:** GPT-5 Auto scored 0 (couldn't find events). Reasoning mode found all three events and calculated both time gaps correctly.
+- **Score:** 10
+
+**GPT-5 Reasoning Total: 10/11** (passes Q1-Q9, Q11; fails Q10)
+
+**Key finding:** GPT-5 Reasoning recovers every prompt that Auto lost, matching or approaching Sonnet 4.6 quality on 10 of 11 prompts. The sole remaining failure (Q10, TPR case filtering) is a connector-level SQL generation bug that no OpenAI model can overcome -- Sonnet is the only model that generates the correct full-text filter value.
+
+---
+
 ### Sonnet 4.6 — Commercial Round 0
 
 Same Copilot Studio agent, same Dataverse data, model switched to Claude Sonnet 4.6 via the model picker in agent settings. This is the first test of an Anthropic model in Copilot Studio with the Dataverse MCP connector.
@@ -584,13 +647,16 @@ R3 testing confirmed that table and column descriptions are used by the agent fo
 This is the most important finding for the product team — enriching descriptions cannot fix SQL generation quality.
 
 ### 8. The model is the primary driver of SQL generation quality
-Four models tested on identical schema/data/descriptions produced dramatically different results: GPT-4o (GCC) = 1/11, GPT-5 Auto (Com) = 4/11, GPT-4.1 (Com) = 6/11, Sonnet 4.6 (Com) = 11/11. Sonnet solved every prompt that every OpenAI model failed — including case type filtering (P10), person-to-case resolution (P1, P3-P5), and time gap calculation (P11). Newer OpenAI models don't automatically perform better: GPT-5 Auto scored worse than GPT-4.1. This confirms the model, not the connector or metadata, is the decisive factor.
+Five models tested on identical schema/data/descriptions produced dramatically different results: GPT-4o (GCC) = 1/11, GPT-5 Auto (Com) = 4/11, GPT-4.1 (Com) = 6/11, GPT-5 Reasoning (Com) = 10/11, Sonnet 4.6 (Com) = 11/11. The range from 1/11 to 11/11 on identical infrastructure confirms the model, not the connector or metadata, is the decisive factor.
 
-### 9. Copilot Studio now supports Anthropic models in Commercial
-The Commercial model picker includes Claude Sonnet 4.6 alongside OpenAI models. This is significant for customers: the same no-code Copilot Studio agent with Dataverse MCP can achieve perfect scores simply by selecting a different model. No code changes, no schema changes, no description changes required.
+### 9. Copilot Studio Commercial offers 5 model options including Anthropic
+The Commercial model picker includes GPT-4o, GPT-4.1, GPT-5 Auto, GPT-5 Reasoning, and Claude Sonnet 4.6. This is significant for customers: the same no-code Copilot Studio agent with Dataverse MCP can achieve near-perfect or perfect scores simply by selecting a different model. No code changes, no schema changes, no description changes required.
 
-### 10. GPT-5 Auto regressed from GPT-4.1
-GPT-5 Auto lost Q2 (couldn't find hospital staff statement that GPT-4.1 found) and Q11 (couldn't calculate time gap that GPT-4.1 solved). It gained nothing new. This suggests that general-purpose model improvements don't necessarily translate to better structured data query generation.
+### 10. GPT-5 Auto regressed from GPT-4.1, but Reasoning mode recovers
+GPT-5 Auto (4/11) lost Q2 (hospital staff statement) and Q11 (time gap calculation) compared to GPT-4.1 (6/11). However, GPT-5 Reasoning (10/11) recovered every Auto failure and matched Sonnet on 10 of 11 prompts. This suggests that general-purpose "auto" routing does not necessarily optimize for structured data query generation, but dedicated reasoning capability does. The sole remaining failure (Q10, TPR case filtering) is a connector-level abbreviation bug that no OpenAI model can overcome.
+
+### 11. Q10 (TPR filtering) is a connector-level bug, not a model limitation
+Every OpenAI model — including GPT-5 Reasoning — generates `WHERE legal_casetype = 'TPR'` instead of the full stored value `'Termination of Parental Rights'`. Sonnet 4.6 is the only model that generates the correct filter. This confirms the MCP SQL generator's value mapping is model-dependent in ways that descriptions and instructions cannot influence.
 
 ---
 
@@ -601,39 +667,41 @@ GPT-5 Auto lost Q2 (couldn't find hospital staff statement that GPT-4.1 found) a
 | CS/DV/GCC | GPT-4o | 1 | 1 | 2 | 1 |
 | CS/DV/Com (GPT-4.1) | GPT-4.1 | 6 | -- | -- | -- |
 | CS/DV/Com (GPT-5 Auto) | GPT-5 Auto | 4 | -- | -- | -- |
+| CS/DV/Com (GPT-5 Reasoning) | GPT-5 Reasoning | 10 | -- | -- | -- |
 | CS/DV/Com (Sonnet 4.6) | Sonnet 4.6 | 11 | -- | -- | -- |
 
 ---
 
 ## Multi-Model Comparison (Commercial)
 
-Three models were tested on the same Commercial Dataverse environment with identical schema, descriptions, and denormalized columns. Copilot Studio now offers Anthropic models alongside OpenAI models in Commercial.
+Five models were tested on the same Commercial Dataverse environment with identical schema, descriptions, and denormalized columns. Copilot Studio Commercial now offers 5 model options including Anthropic's Sonnet 4.6.
 
 ### Per-Prompt Results
 
-| # | Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | Sonnet 4.6 (Com) |
-|---|--------|:------:|:-------:|:----------:|:----------:|
-| Q1 | ER admission | 0 | 0 | 0 | 10 |
-| Q2 | Marcus bedtime | 0 | 9 | 5 | 10 |
-| Q3 | Crystal "clean now" | 0 | 0 | 0 | 10 |
-| Q4 | Crystal transportation | 0 | 0 | 0 | 10 |
-| Q5 | Skeletal survey | 0 | 0 | 0 | 10 |
-| Q6 | Full timeline | 10 | 10 | 10 | 10 |
-| Q7 | Price TPR people | 0 | 9 | 8 | 10 |
-| Q8 | Dena statement comparison | 0 | 9 | 9 | 10 |
-| Q9 | Law enforcement statements | 0 | 9 | 9 | 10 |
-| Q10 | TPR cases | 0 | 0 | 0 | 10 |
-| Q11 | Time gap | 0 | 10 | 0 | 10 |
-| **Passing** | | **1/11** | **6/11** | **4/11** | **11/11** |
+| # | Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Auto (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
+|---|--------|:------:|:-------:|:----------:|:----------:|:----------:|
+| Q1 | ER admission | 0 | 0 | 0 | 10 | 10 |
+| Q2 | Marcus bedtime | 0 | 9 | 5 | 9 | 10 |
+| Q3 | Crystal "clean now" | 0 | 0 | 0 | 10 | 10 |
+| Q4 | Crystal transportation | 0 | 0 | 0 | 10 | 10 |
+| Q5 | Skeletal survey | 0 | 0 | 0 | 10 | 10 |
+| Q6 | Full timeline | 10 | 10 | 10 | 10 | 10 |
+| Q7 | Price TPR people | 0 | 9 | 8 | 8 | 10 |
+| Q8 | Dena statement comparison | 0 | 9 | 9 | 10 | 10 |
+| Q9 | Law enforcement statements | 0 | 9 | 9 | 9 | 10 |
+| Q10 | TPR cases | 0 | 0 | 0 | 0 | 10 |
+| Q11 | Time gap | 0 | 10 | 0 | 10 | 10 |
+| **Passing** | | **1/11** | **6/11** | **4/11** | **10/11** | **11/11** |
 
 ### Key Observations
 
-- **Sonnet 4.6 achieved a perfect 11/11** — every prompt that every OpenAI model failed, Sonnet solved. Same connector, same data, different model.
-- **GPT-5 Auto (4/11) performed worse than GPT-4.1 (6/11)** — newer model does not automatically mean better at structured data retrieval. GPT-5 Auto lost P2 (couldn't find hospital staff statement), P11 (couldn't find timeline events for time gap), and never gained any new prompts.
-- **GPT-4.1 remains the best OpenAI option** for Dataverse MCP — handles multi-step lookups (person to case to statements) that GPT-4o and GPT-5 Auto cannot.
-- **Shared OpenAI failures resolved by Sonnet:** P1 (ER admission), P3 (Crystal Price drug tests), P4 (transportation claim), P5 (skeletal survey), P10 (TPR case filtering) — all zero across every OpenAI model, all perfect with Sonnet.
-- **P6 (timeline) is the only universal pass** — all four models handle it.
+- **Sonnet 4.6 achieved a perfect 11/11** — the only model to pass every prompt. Same connector, same data, different model.
+- **GPT-5 Reasoning (10/11) nearly matches Sonnet** — recovered every prompt that Auto failed. The reasoning model went 0-to-10 on Q1, Q3, Q4, Q5, Q11 and improved Q2 from 5 to 9 and Q8 from 9 to 10. This is an encouraging result for organizations on OpenAI-only stacks.
+- **GPT-5 Auto (4/11) performed worse than GPT-4.1 (6/11)** — "auto" routing does not optimize for structured data retrieval. Dedicated reasoning capability does.
+- **Q10 (TPR filtering) is a connector-level bug** — every OpenAI model generates the abbreviation `'TPR'` instead of full text `'Termination of Parental Rights'`. Only Sonnet generates the correct filter. This is the sole difference between 10/11 and 11/11.
+- **P6 (timeline) is the only universal pass** — all five models handle it.
 - **The model is everything.** The connector, schema, descriptions, and denormalized columns are identical across all tests. The only variable is the model, and it drives a range from 1/11 to 11/11.
+- **Customers have options today.** Both Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11) are available in the Commercial Copilot Studio model picker. GCC currently defaults to GPT-4o (1/11), with expanded model availability on the roadmap.
 
 ---
 

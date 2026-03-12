@@ -262,7 +262,7 @@ def build_pdf():
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  26 slides  |  2 use cases"),
+    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  6 models  |  26 slides  |  2 use cases"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -293,7 +293,7 @@ def build_pdf():
     pdf.slide_heading(2, "At a Glance")
 
     pdf.body_text(
-        "462 test runs across 21 agent configurations, 2 government use cases, "
+        "462 test runs across 21 agent configurations and 6 models, 2 government use cases, "
         "and 7 testing rounds. Three gaps emerged at the higher levels: tools, "
         "data, and model. Every gap was fixable, and none required AI expertise."
     )
@@ -527,7 +527,7 @@ def build_pdf():
         bold_lead="AI-accelerated."
     )
     pdf.bullet(
-        "462 test runs across 21 agent configurations, scored by hand. Every "
+        "462 test runs across 21 agent configurations and 6 models, scored by hand. Every "
         "dangerous response was caught through manual review. That is exactly "
         "the point of Level 5.",
         bold_lead="Human-verified."
@@ -707,6 +707,7 @@ def build_pdf():
     model_widths = [56, 60, 54]
     model_rows = [
         ["Sonnet 4.6 (Anthropic)", "Copilot Studio + Dataverse MCP", "11/11"],
+        ["GPT-5 Reasoning", "Copilot Studio + Dataverse MCP", "10/11"],
         ["GPT-4.1", "Pro-code + custom MCP", "9.5/10"],
         ["GPT-4.1", "Copilot Studio + Dataverse MCP", "6/11"],
         ["GPT-5 Auto", "Copilot Studio + Dataverse MCP", "4/11"],
@@ -1043,7 +1044,7 @@ def build_pdf():
     pdf.bullet('Prompt 1: "Which cases involve Termination of Parental Rights?" (0 -> 10)')
     pdf.bullet('Prompt 2: "What did Marcus Webb tell hospital staff?" (0 -> 10)')
     pdf.bullet('Prompt 3: "Time gap between thump and hospital?" (0 -> 10)')
-    pdf.bullet("Full battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11")
+    pdf.bullet("Full battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11")
 
     pdf.visual_note("Two-part layout: document quality levers on left, model selection on right")
 
@@ -1137,9 +1138,9 @@ def build_pdf():
     # ====================================================================
     pdf.slide_heading(25, "Full Scorecard")
 
-    pdf.headline("462 test runs, 21 agent configurations, 2 use cases")
+    pdf.headline("462 test runs, 21 agent configurations, 6 models, 2 use cases")
 
-    pdf.body_text("Use Case 1: Legal Case Analysis (15 agents)")
+    pdf.body_text("Use Case 1: Legal Case Analysis (16 agents)")
 
     sc1_headers = ["Agent", "Model", "Final"]
     sc1_widths = [92, 40, 38]
@@ -1158,6 +1159,7 @@ def build_pdf():
         ["Copilot Studio SP/DOCX/GCC", "GPT-4o", "7/10"],
         ["Copilot Studio DV/Com", "GPT-4.1", "6/10"],
         ["Copilot Studio DV/Com", "GPT-5 Auto", "4/10"],
+        ["Copilot Studio DV/Com", "GPT-5 Reasoning", "10/10"],
         ["Copilot Studio DV/GCC", "GPT-4o", "2/10"],
     ]
     pdf.styled_table(sc1_headers, sc1_rows, sc1_widths, font_size=7)

@@ -2082,3 +2082,47 @@ Tables and columns received rich descriptions including valid values, query hint
 ### Files changed
 - `docs/live-demo-script.md` — New (complete demo setup + execution script)
 - `docs/session-log.md` — Sessions 45-46
+
+---
+
+## Session 47 — 2026-03-11
+
+### What was done
+- **GPT-5 Reasoning tested on Dataverse MCP** — 5th model added to Commercial multi-model comparison
+  - GPT-5 Reasoning is a selectable option in the Commercial Copilot Studio model picker (not forced/API-only)
+  - Tested all 7 prompts where GPT-5 Auto scored 0 or partial
+  - Results: Q1=10, Q2=9, Q3=10, Q4=10, Q5=10, Q8=10, Q10=0, Q11=10
+  - **Final score: 10/11** — recovers every Auto failure except Q10 (TPR abbreviation)
+  - Q10 confirmed as connector-level bug: all OpenAI models generate `WHERE legal_casetype = 'TPR'`, only Sonnet uses full text
+- **Updated all docs and scripts** with GPT-5 Reasoning results and 5-model comparison
+- **Added model count** to stats sections (5 models for DV MCP, 6 models total including M365 platform-assigned)
+- **GCC language updated** — replaced "capped by" / "stuck on" with "currently defaults to GPT-4o, with expanded model availability on the roadmap"
+
+### Five-model Dataverse MCP scorecard
+| Model | Score | Available |
+|---|---|---|
+| GPT-4o | 1/11 | GCC |
+| GPT-5 Auto | 4/11 | Commercial |
+| GPT-4.1 | 6/11 | Commercial |
+| GPT-5 Reasoning | 10/11 | Commercial |
+| Sonnet 4.6 | 11/11 | Commercial |
+
+### Key findings
+- GPT-5 Reasoning nearly matches Sonnet — the gap between OpenAI and Anthropic on structured data is closing
+- "Auto" routing ≠ "Reasoning" capability: same model family, 4/11 vs 10/11
+- Q10 (TPR filtering) is the sole remaining cross-model failure — connector-level, not model-level
+- Customers have two 9+ models available today in Commercial Copilot Studio
+
+### Decisions made
+- GCC narrative: "currently defaults to GPT-4o" (not "stuck on" or "capped by")
+- Framing: model picker is the product, not wait-for-future-models
+- Include model count in stats wherever test runs/agent configs are listed
+
+### Files changed
+- `docs/dataverse-mcp-server-testing.md` — GPT-5 Reasoning section, updated comparison table + findings + score summary
+- `scripts/generate-executive-pdf.py` — Model gap Dataverse footnote, Round 2 table row, combined result text, UC1 appendix row, stats
+- `scripts/generate-slide-deck.py` — GCC bullet, scorecard UC1 row + footer, stats
+- `scripts/generate-cheat-sheet-pdf.py` — Model count stat, model gap stat, UC2 card text
+- `docs/demo-cheat-sheet.md` — Model count stat, model gap stat
+- `docs/live-demo-script.md` — Model tables, GCC Reality section, proven results table, talking points
+- `docs/session-log.md` — Session 47

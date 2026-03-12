@@ -265,7 +265,7 @@ def build_pdf():
     pdf.set_y(145)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  462 test runs",
+    pdf.cell(0, 7, "50-60 minutes  |  5 levels  |  2 use cases  |  6 models  |  462 test runs",
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(6)
@@ -285,7 +285,7 @@ def build_pdf():
     pdf.section_title("At a Glance")
 
     pdf.body_text(
-        "462 test runs across 21 agent configurations. Here is what the data says."
+        "462 test runs across 21 agent configurations and 6 models. Here is what the data says."
     )
 
     # ── Colored tiles for levels 1-2, 3, 4 ──
@@ -424,7 +424,7 @@ def build_pdf():
     stats_headers = ["Stat", "Value"]
     stats_widths = [100, 70]
     stats_rows = [
-        ["Total test runs", "462 across 21 agents, 7 rounds"],
+        ["Total test runs", "462 across 21 agents, 6 models, 7 rounds"],
         ["Document agents (Levels 1-2)", "8/10 with zero engineering"],
         ["GPT-4.1 agents (structured data)", "9.5/10 average"],
         ["GPT-4o agents (GCC model gap)", "4/10 average"],

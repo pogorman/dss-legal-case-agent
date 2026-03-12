@@ -1205,16 +1205,18 @@ def slide_16b_scoring(prs):
                 "Every grade is verifiable -- we wrote the data",
                 font_size=22, bold=True, color=DARK_TEXT)
 
-    # ── Left side: Rubric table ──
-    rubric_headers = ["Grade", "Criteria"]
-    rubric_rows = [
-        ("Pass (10)", "Correct, complete, properly sourced. No hallucinations."),
-        ("Partial (5)", "Key facts present but incomplete, or minor errors."),
-        ("Fail (0)", "Wrong answer, hallucination, or confident critical omission."),
+    # ── Left side: 0-10 scale table ──
+    scale_headers = ["Score", "Meaning", "Example"]
+    scale_rows = [
+        ("10", "Fully correct, complete, sourced", "All facts match, sources cited"),
+        ("8-9", "Correct, one minor detail missing", "All statements found, missed one page ref"),
+        ("5", "Partially correct or incomplete", "Found one of two sources, or wrong time"),
+        ("1-4", "Significant gaps", "Right case, missed key facts"),
+        ("0", "Wrong or dangerously confident", "Real citation, wrong conclusion"),
     ]
-    rubric_col_widths = [1.3, 4.5]
-    add_table(slide, 1.2, 2.2, 5.8, rubric_col_widths,
-              rubric_headers, rubric_rows, font_size=13)
+    scale_col_widths = [0.7, 2.5, 2.6]
+    add_table(slide, 1.2, 2.2, 5.8, scale_col_widths,
+              scale_headers, scale_rows, font_size=12)
 
     # ── Right side: Process steps ──
     add_textbox(slide, 7.5, 2.2, 5.0, 0.4,
@@ -1223,19 +1225,20 @@ def slide_16b_scoring(prs):
     add_rect(slide, 7.5, 2.6, 4.5, 0.04, ACCENT_BLUE)
 
     process_items = [
-        "10 prompts with known ground truth answers",
+        "Each prompt scored 0-10 against ground truth",
+        "One run per agent, per-prompt scores averaged",
         "Same prompt to every agent -- side by side",
         "Graded by Claude against ground truth (live)",
         "462 test runs, 21 agents, 6 models",
     ]
-    add_bullet_list(slide, 7.5, 2.8, 5.0, 2.5, process_items,
-                    font_size=15, color=DARK_TEXT, spacing=Pt(10))
+    add_bullet_list(slide, 7.5, 2.8, 5.0, 2.8, process_items,
+                    font_size=14, color=DARK_TEXT, spacing=Pt(8))
 
     # ── Bottom callout box ──
-    callout = add_rounded_rect(slide, 1.2, 5.0, 10.9, 1.2,
+    callout = add_rounded_rect(slide, 1.2, 5.4, 10.9, 1.0,
                                RGBColor(0xE8, 0xF0, 0xF8))
-    add_rect(slide, 1.2, 5.0, 0.15, 1.2, ACCENT_BLUE)
-    add_textbox(slide, 1.6, 5.1, 10.2, 1.0,
+    add_rect(slide, 1.2, 5.4, 0.15, 1.0, ACCENT_BLUE)
+    add_textbox(slide, 1.6, 5.5, 10.2, 0.8,
                 '"We grade against data we wrote. Every correct answer is '
                 'verifiable. Every wrong answer is provably wrong -- not a '
                 'matter of interpretation."',
@@ -1244,8 +1247,10 @@ def slide_16b_scoring(prs):
     add_confidential_footer(slide)
     add_speaker_notes(slide,
         "All 50 cases are synthetic -- we control the ground truth for every prompt. "
-        "During the live demo, I paste agent responses into Claude Code and it grades "
-        "them against the ground truth in real time. This is not opinion-based scoring.")
+        "The 0-10 scale distinguishes between an agent that found the right case but "
+        "missed one detail (8-9) versus one that got half the answer (5) versus one "
+        "that confidently gave the wrong answer (0). During the live demo, I paste "
+        "agent responses into Claude Code and it grades them in real time.")
 
 
 def slide_17_demo(prs):

@@ -1030,29 +1030,34 @@ def build_pdf():
 
     pdf.ln(1)
     pdf.styled_table(
-        ["Grade", "Criteria"],
+        ["Score", "Meaning", "Example"],
         [
-            ["Pass (10)", "Correct, complete, properly sourced. No hallucinations."],
-            ["Partial (5)", "Key facts present but incomplete, or minor errors (wrong time, missing source)."],
-            ["Fail (0)", "Wrong answer, hallucination, or critical omission presented with confidence."],
+            ["10", "Fully correct, complete, properly sourced", "All facts match ground truth, sources cited"],
+            ["8-9", "Correct on key facts, one minor detail missing", "Found all statements but missed one source page"],
+            ["5", "Partially correct or incomplete", "Found one of two data sources, or wrong time"],
+            ["1-4", "Meaningful attempt but significant gaps", "Found the right case but missed key facts"],
+            ["0", "Wrong, hallucinated, or dangerously confident", "Quoted real citation, drew wrong conclusion"],
         ],
-        col_widths=[30, 140],
+        col_widths=[16, 70, 84],
         row_height=7,
-        font_size=8,
+        font_size=7.5,
     )
 
     pdf.ln(3)
-    pdf.body_text("Process:", bold_lead=None)
-    pdf.bullet("10 prompts with known ground truth answers (from synthetic case data we control)")
-    pdf.bullet("Same prompt sent to every agent configuration -- side-by-side comparison")
-    pdf.bullet("Graded by Claude against ground truth during live demo -- not subjective opinion")
+    pdf.body_text("How scores become totals:", bold_lead=None)
+    pdf.bullet("Each prompt scored 0-10 against known ground truth (one run per agent)")
+    pdf.bullet("Per-prompt scores averaged across all prompts for that agent")
     pdf.bullet("462 test runs across 21 agent configurations and 6 models")
+    pdf.bullet("Graded by Claude against ground truth during live demo")
 
-    pdf.visual_note("Left: rubric table. Right: process steps. Bottom callout box.")
+    pdf.visual_note("Left: 0-10 scale table with anchors. Right: process steps. Bottom callout box.")
 
     pdf.speaker_note(
         "We grade against data we wrote. Every correct answer is verifiable. "
         "Every wrong answer is provably wrong -- not a matter of interpretation. "
+        "The 0-10 scale lets us distinguish between an agent that found the right "
+        "case but missed a key detail (8) versus one that got half the answer (5) "
+        "versus one that confidently gave the wrong answer (0). "
         "During the live demo, I'll paste agent responses into Claude Code and it will "
         "grade them against the ground truth in real time."
     )

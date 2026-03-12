@@ -1150,6 +1150,7 @@ def build_pdf():
         ["Copilot Studio SP/PDF/Com", "GPT-4.1", "10/10"],
         ["Copilot Studio KB/DOCX/Com", "GPT-4.1", "10/10"],
         ["Copilot Studio DV/Com", "Sonnet 4.6", "10/10"],
+        ["Copilot Studio DV/Com", "GPT-5 Reasoning", "10/10"],
         ["Copilot Studio SP/DOCX/Com", "GPT-4.1", "9/10"],
         ["Copilot Studio MCP/GCC", "GPT-4o", "9/10"],
         ["Copilot Studio SP/PDF/GCC", "GPT-4o", "9/10"],
@@ -1159,7 +1160,6 @@ def build_pdf():
         ["Copilot Studio SP/DOCX/GCC", "GPT-4o", "7/10"],
         ["Copilot Studio DV/Com", "GPT-4.1", "6/10"],
         ["Copilot Studio DV/Com", "GPT-5 Auto", "4/10"],
-        ["Copilot Studio DV/Com", "GPT-5 Reasoning", "10/10"],
         ["Copilot Studio DV/GCC", "GPT-4o", "2/10"],
     ]
     pdf.styled_table(sc1_headers, sc1_rows, sc1_widths, font_size=7)
@@ -1183,9 +1183,9 @@ def build_pdf():
 
     pdf.ln(3)
     pdf.body_text(
-        "Ranked by final score. Dataverse MCP tested across 4 models on identical "
-        "infrastructure: Sonnet 4.6 (10/10), GPT-4.1 (6/10), GPT-5 Auto (4/10), "
-        "GPT-4o (2/10). Newer models are not always better."
+        "Ranked by final score. Dataverse MCP tested across 5 models on identical "
+        "infrastructure: Sonnet 4.6 (10/10), GPT-5 Reasoning (10/10), GPT-4.1 (6/10), "
+        "GPT-5 Auto (4/10), GPT-4o (2/10). Newer models are not always better."
     )
 
     pdf.talking_point(

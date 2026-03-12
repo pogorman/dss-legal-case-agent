@@ -247,14 +247,14 @@ def slide_01_title(prs):
                 alignment=PP_ALIGN.CENTER)
     # Slide count + date
     add_textbox(slide, 4, 4.8, 5.3, 0.5,
-                "27 Slides  |  March 2026",
+                "28 Slides  |  March 2026",
                 font_size=16, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
     # Level bar
     add_level_bar(slide, top=5.6)
     # Stats line
     add_textbox(slide, 2, 6.3, 9.3, 0.4,
-                "462 test runs  |  21 agents  |  6 models  |  27 slides  |  2 use cases",
+                "462 test runs  |  21 agents  |  6 models  |  28 slides  |  2 use cases",
                 font_size=14, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
     add_speaker_notes(slide,
@@ -1192,6 +1192,62 @@ def slide_16_gcc(prs):
         "Know what works today. Plan for what's coming.")
 
 
+def slide_16b_scoring(prs):
+    """S21: How We Score -- Ground Truth Grading."""
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "How We Score: Ground Truth Grading",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    add_textbox(slide, 1.2, 1.35, 10.9, 0.6,
+                "Every grade is verifiable -- we wrote the data",
+                font_size=22, bold=True, color=DARK_TEXT)
+
+    # ── Left side: Rubric table ──
+    rubric_headers = ["Grade", "Criteria"]
+    rubric_rows = [
+        ("Pass (10)", "Correct, complete, properly sourced. No hallucinations."),
+        ("Partial (5)", "Key facts present but incomplete, or minor errors."),
+        ("Fail (0)", "Wrong answer, hallucination, or confident critical omission."),
+    ]
+    rubric_col_widths = [1.3, 4.5]
+    add_table(slide, 1.2, 2.2, 5.8, rubric_col_widths,
+              rubric_headers, rubric_rows, font_size=13)
+
+    # ── Right side: Process steps ──
+    add_textbox(slide, 7.5, 2.2, 5.0, 0.4,
+                "The Process",
+                font_size=18, bold=True, color=DARK_NAVY)
+    add_rect(slide, 7.5, 2.6, 4.5, 0.04, ACCENT_BLUE)
+
+    process_items = [
+        "10 prompts with known ground truth answers",
+        "Same prompt to every agent -- side by side",
+        "Graded by Claude against ground truth (live)",
+        "462 test runs, 21 agents, 6 models",
+    ]
+    add_bullet_list(slide, 7.5, 2.8, 5.0, 2.5, process_items,
+                    font_size=15, color=DARK_TEXT, spacing=Pt(10))
+
+    # ── Bottom callout box ──
+    callout = add_rounded_rect(slide, 1.2, 5.0, 10.9, 1.2,
+                               RGBColor(0xE8, 0xF0, 0xF8))
+    add_rect(slide, 1.2, 5.0, 0.15, 1.2, ACCENT_BLUE)
+    add_textbox(slide, 1.6, 5.1, 10.2, 1.0,
+                '"We grade against data we wrote. Every correct answer is '
+                'verifiable. Every wrong answer is provably wrong -- not a '
+                'matter of interpretation."',
+                font_size=16, color=MEDIUM_TEXT)
+
+    add_confidential_footer(slide)
+    add_speaker_notes(slide,
+        "All 50 cases are synthetic -- we control the ground truth for every prompt. "
+        "During the live demo, I paste agent responses into Claude Code and it grades "
+        "them against the ground truth in real time. This is not opinion-based scoring.")
+
+
 def slide_17_demo(prs):
     slide = add_blank_slide(prs)
     # Full navy background
@@ -1612,13 +1668,14 @@ def main():
     slide_14_why_copilot_studio(prs) # S18 Why Copilot Studio
     slide_15_what_to_do(prs)         # S19 What to Do
     slide_16_gcc(prs)                # S20 GCC
-    slide_17_demo(prs)               # S21 Live Demo
-    slide_17b_one_prompt(prs)        # S22 One Prompt, Three Interventions
-    slide_18_challenged_premise(prs) # S23 Surprising: Premise
-    slide_19_false_negative(prs)     # S24 Surprising: False Negative
-    slide_20_bottom_line(prs)        # S25 The Bottom Line
-    slide_24_scorecard(prs)          # S26 Full Scorecard
-    slide_25_next_steps(prs)         # S27 Next Steps
+    slide_16b_scoring(prs)           # S21 How We Score
+    slide_17_demo(prs)               # S22 Live Demo
+    slide_17b_one_prompt(prs)        # S23 One Prompt, Three Interventions
+    slide_18_challenged_premise(prs) # S24 Surprising: Premise
+    slide_19_false_negative(prs)     # S25 Surprising: False Negative
+    slide_20_bottom_line(prs)        # S26 The Bottom Line
+    slide_24_scorecard(prs)          # S27 Full Scorecard
+    slide_25_next_steps(prs)         # S28 Next Steps
 
     out_dir = os.path.join(os.path.dirname(__file__), "..", "decks")
     os.makedirs(out_dir, exist_ok=True)

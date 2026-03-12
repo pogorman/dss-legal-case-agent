@@ -2204,3 +2204,22 @@ Tables and columns received rich descriptions including valid values, query hint
 - `docs/demo-cheat-sheet.md` — round count 5 → 6
 - `scripts/generate-executive-pdf.py` — round count 5 → 6 (two locations)
 - All PDFs regenerated, slide deck regenerated
+
+## Session 51 — 2026-03-12
+
+### What was done
+- **Added scoring methodology slide** (new Slide 21: "How We Score: Ground Truth Grading")
+  - Rubric table: Pass (10) / Partial (5) / Fail (0) with criteria
+  - Process: 10 prompts, ground truth, Claude Code live grading during demo
+  - Callout: "We grade against data we wrote -- every answer is verifiable"
+  - Positioned right before the Live Demo title card
+- Updated slide counts: outline 26 → 27, deck 27 → 28
+- Regenerated `docs/pdf/slide-outline.pdf` and `decks/agent-fidelity-spectrum.pptx`
+- **Live demo grading prep**: Claude Code loaded with all 10 prompt ground truths, ready to grade agent responses in real time during the demo (6 prompts per live-demo-script.md)
+
+### Files changed
+- `scripts/generate-slide-outline-pdf.py` — new slide 21, renumbered 21-26 → 22-27, updated counts
+- `scripts/generate-slide-deck.py` — new `slide_16b_scoring()` function, updated main() and counts
+- `docs/pdf/slide-outline.pdf` — regenerated (27 slides)
+- `decks/agent-fidelity-spectrum.pptx` — regenerated (28 slides)
+- `docs/session-log.md` — this entry

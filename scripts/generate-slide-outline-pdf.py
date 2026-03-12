@@ -1,5 +1,5 @@
 """
-Generate a slide-outline PDF from the 26-slide presentation outline.
+Generate a slide-outline PDF from the 27-slide presentation outline.
 Uses fpdf2 -- no external dependencies beyond what's already installed.
 
 Usage: python scripts/generate-slide-outline-pdf.py
@@ -224,14 +224,14 @@ def build_pdf():
 
     pdf.set_draw_color(80, 140, 200)
     pdf.set_line_width(0.4)
-    line_y = 71.5  # centered between "Slide Outline" (bottom ~68) and "26 Slides" (top 75)
+    line_y = 71.5  # centered between "Slide Outline" (bottom ~68) and "27 Slides" (top 75)
     pdf.line(pdf.w * 0.3, line_y, pdf.w * 0.7, line_y)
     pdf.set_line_width(0.2)
 
     pdf.set_y(75)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "26 Slides  |  March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "27 Slides  |  March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # Five colored level indicators on cover
     pdf.set_y(130)
@@ -256,13 +256,13 @@ def build_pdf():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*MED)
     pdf.multi_cell(0, 6.5, sanitize_text(
-        "Target: 26 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)"
+        "Target: 27 slides, 50-60 minutes (40-45 min presentation + live demo + 10-15 min Q&A)"
     ), align="C")
 
     pdf.ln(8)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(*ACCENT)
-    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  6 models  |  26 slides  |  2 use cases"),
+    pdf.cell(0, 7, sanitize_text("462 test runs  |  21 agents  |  6 models  |  27 slides  |  2 use cases"),
              align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ====================================================================
@@ -1016,9 +1016,51 @@ def build_pdf():
     pdf.talking_point("Know what works today. Plan for what's coming.")
 
     # ====================================================================
+    # SLIDE 16b: How We Score
+    # ====================================================================
+    pdf.slide_heading(21, "How We Score: Ground Truth Grading")
+
+    pdf.headline("Every grade is verifiable -- we wrote the data")
+
+    pdf.body_text(
+        "All 50 cases are synthetic. We control the ground truth for every prompt. "
+        "Grading is not subjective -- a correct answer is provably correct, and a wrong "
+        "answer is provably wrong."
+    )
+
+    pdf.ln(1)
+    pdf.styled_table(
+        ["Grade", "Criteria"],
+        [
+            ["Pass (10)", "Correct, complete, properly sourced. No hallucinations."],
+            ["Partial (5)", "Key facts present but incomplete, or minor errors (wrong time, missing source)."],
+            ["Fail (0)", "Wrong answer, hallucination, or critical omission presented with confidence."],
+        ],
+        col_widths=[30, 140],
+        row_height=7,
+        font_size=8,
+    )
+
+    pdf.ln(3)
+    pdf.body_text("Process:", bold_lead=None)
+    pdf.bullet("10 prompts with known ground truth answers (from synthetic case data we control)")
+    pdf.bullet("Same prompt sent to every agent configuration -- side-by-side comparison")
+    pdf.bullet("Graded by Claude against ground truth during live demo -- not subjective opinion")
+    pdf.bullet("462 test runs across 21 agent configurations and 6 models")
+
+    pdf.visual_note("Left: rubric table. Right: process steps. Bottom callout box.")
+
+    pdf.speaker_note(
+        "We grade against data we wrote. Every correct answer is verifiable. "
+        "Every wrong answer is provably wrong -- not a matter of interpretation. "
+        "During the live demo, I'll paste agent responses into Claude Code and it will "
+        "grade them against the ground truth in real time."
+    )
+
+    # ====================================================================
     # SLIDE 17: Live Demo Title Card
     # ====================================================================
-    pdf.slide_heading(21, "Live Demo Title Card")
+    pdf.slide_heading(22, "Live Demo Title Card")
 
     pdf.headline('"Same agent. Change one variable. Watch the result change."')
 
@@ -1051,7 +1093,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 18: Surprising Finding -- Agent Challenged Its Own Premise
     # ====================================================================
-    pdf.slide_heading(22, "Surprising Finding -- Agent Challenged Its Own Premise")
+    pdf.slide_heading(23, "Surprising Finding -- Agent Challenged Its Own Premise")
 
     pdf.headline("A pro-code agent questioned the question -- and was right")
 
@@ -1075,7 +1117,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 19: Surprising Finding -- False Negative
     # ====================================================================
-    pdf.slide_heading(23, "Surprising Finding -- False Negative")
+    pdf.slide_heading(24, "Surprising Finding -- False Negative")
 
     pdf.headline("The model retrieved the answer and didn't recognize it")
 
@@ -1101,7 +1143,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 20: The Bottom Line
     # ====================================================================
-    pdf.slide_heading(24, "The Bottom Line")
+    pdf.slide_heading(25, "The Bottom Line")
 
     pdf.headline("Three numbers to remember")
 
@@ -1136,7 +1178,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 21: Full Scorecard
     # ====================================================================
-    pdf.slide_heading(25, "Full Scorecard")
+    pdf.slide_heading(26, "Full Scorecard")
 
     pdf.headline("462 test runs, 21 agent configurations, 6 models, 2 use cases")
 
@@ -1196,7 +1238,7 @@ def build_pdf():
     # ====================================================================
     # SLIDE 22: Next Steps
     # ====================================================================
-    pdf.slide_heading(26, "Next Steps")
+    pdf.slide_heading(27, "Next Steps")
 
     pdf.headline("Start the conversation")
 

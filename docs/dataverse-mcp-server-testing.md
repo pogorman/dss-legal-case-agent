@@ -408,6 +408,26 @@ WHERE legal_casetype = 'TPR'
 
 **R4 vs prior rounds:** Instructions are the most effective single lever for GCC GPT-4o. They helped with direct filter queries (LE statements, TPR cases) but couldn't overcome the model's limitations on cross-table reasoning, value mapping, or fuzzy text matching.
 
+### Round 5 — Value-mapping instructions (2026-03-12)
+
+**Changes:** Added two value-mapping instructions to R4 agent:
+1. "When users say 'hospital staff', filter legal_madeto = 'Medical Staff'"
+2. "When they name a specific person like 'Lt. Odom', filter legal_madeto = 'Law Enforcement'"
+
+Only P2 and P10 retested (only prompts affected by value-mapping).
+
+#### P2: Marcus Webb statements
+- **Result:** 0 (regression from R4's 5). Agent returned nothing — instruction to map "hospital staff" to `Medical Staff` did not influence SQL generation. Model still generated `WHERE legal_madeto = 'Hospital Staff'`.
+- **Score:** 0
+
+#### P10: Dena Holloway statements comparison
+- **Result:** Partial. Found both LE statements (Lt. Odom mapping worked). Missed hospital staff statement (Medical Staff mapping failed). Correctly identified what changed between the two LE statements.
+- **Score:** 5
+
+**R5 Total: 3.2/10** (35/110, same as R4). P2 regressed (5 to 0), P10 improved (0 to 5). Net zero.
+
+**R5 conclusion:** Instructions can map person names to recipient categories (Lt. Odom to Law Enforcement) but cannot override the model's natural language when stored values don't match (hospital staff != Medical Staff). The MCP SQL generator uses the user's exact phrasing for filter values, ignoring instruction-level value mappings. **Next step: rename 'Medical Staff' to 'Hospital Staff' in Dataverse data.**
+
 ---
 
 ## Commercial Testing
@@ -683,7 +703,18 @@ Each round attempted a different strategy to improve MCP SQL generation quality.
 
 **What didn't improve:** P1, P3, P4, P5, P8, P10, P11 (all 0). These prompts require cross-table reasoning, indirect entity resolution, value mapping, or fuzzy text matching — capabilities that GPT-4o lacks regardless of instructions or metadata. The model ceiling is the binding constraint.
 
-**Conclusion:** Instructions are the most effective single lever for GCC GPT-4o, outperforming metadata enrichment (R2) and denormalization (R3) alone. However, instructions + metadata still only reach 3.2/10 — well below what better models achieve on identical infrastructure (GPT-5 Reasoning 10/11, Sonnet 4.6 11/11). **The improvement narrative across 5 rounds (R0-R4) confirms: the model is the primary driver, and no amount of zero-code configuration can close the gap between GPT-4o and a reasoning-capable model.**
+**Conclusion:** Instructions are the most effective single lever for GCC GPT-4o, outperforming metadata enrichment (R2) and denormalization (R3) alone. However, instructions + metadata still only reach 3.2/10 — well below what better models achieve on identical infrastructure (GPT-5 Reasoning 10/11, Sonnet 4.6 11/11). **The improvement narrative across 6 rounds (R0-R5) confirms: the model is the primary driver, and no amount of zero-code configuration can close the gap between GPT-4o and a reasoning-capable model.**
+
+### Round 4 -> Round 5: Value-Mapping Instructions (2026-03-12)
+**Hypothesis:** R4 showed that "hospital staff" != `Medical Staff` and "Lt. Odom" != `Law Enforcement` were causing filter failures. If we add explicit value-mapping instructions ("when users say X, filter on Y"), the agent might generate correct filter values.
+
+**What we did:**
+- Added two instructions to the R4 agent: (1) "When users say 'hospital staff', filter legal_madeto = 'Medical Staff'" and (2) "When they name a specific person like 'Lt. Odom', filter legal_madeto = 'Law Enforcement'"
+- Retested only P2 and P10 (the two prompts affected by these mappings)
+
+**Result: 3.2/10** (same as R4). P2 regressed (5 to 0) — the "hospital staff" to "Medical Staff" mapping was ignored by the SQL generator. P10 improved (0 to 5) — the "Lt. Odom" to "Law Enforcement" mapping worked. Net effect: score shifted but did not improve.
+
+**Key insight:** Instructions can map **person names to categories** (Lt. Odom is Law Enforcement) because the model treats this as entity classification. Instructions **cannot override value selection** when the user's natural language directly names the filter value ("hospital staff") — the SQL generator uses the user's exact phrasing regardless of instruction-level remapping. This confirms the data itself must change: rename `'Medical Staff'` to `'Hospital Staff'` in Dataverse so the stored value matches what users naturally say.
 
 ---
 
@@ -701,11 +732,13 @@ Despite rich column descriptions explicitly telling the agent to use `legal_case
 ### 3. Non-deterministic query generation
 The same prompt produces different SQL on each attempt. P2 succeeded 1 out of 5 identical attempts in R2. This makes the agent unreliable even when it can theoretically generate the correct query.
 
-### 4. Wrong filter values
-The agent appears to guess filter values rather than using the valid values listed in column descriptions:
+### 4. Wrong filter values — instructions partially help
+The agent uses the user's exact phrasing for filter values rather than the valid values listed in column descriptions:
 - `'Emergency Action'` instead of `'Medical'` for ER events
 - `'Hospital Staff'` instead of `'Medical Staff'` for madeto
 - `LIKE '%put Jaylen to bed%'` instead of broader text search
+
+R5 tested whether instructions could remap values. Result: instructions can map **person names to categories** (Lt. Odom to Law Enforcement — entity classification) but **cannot override direct value phrasing** (hospital staff still generates 'Hospital Staff', not 'Medical Staff'). The fix is to rename stored values to match natural language.
 
 ### 5. Simple single-table queries are fragile but recoverable
 P9 (list TPR cases) is a simple `WHERE legal_casetype = 'TPR'` query with no joins. It worked in R0 but regressed in R1-R3 after instructions/descriptions were added. In R4, fresh comprehensive instructions recovered P9 (10/10) — the agent used full text 'Termination of Parental Rights'. This suggests that agent instructions can influence value selection for simple queries, even though metadata descriptions alone cannot.
@@ -721,7 +754,7 @@ R3 testing confirmed that table and column descriptions are used by the agent fo
 This is the most important finding for the product team — enriching descriptions cannot fix SQL generation quality.
 
 ### 8. The model is the primary driver of SQL generation quality
-Five models tested on identical schema/data/descriptions produced dramatically different results: GPT-4o (GCC) = 1/11, GPT-5 Auto (Com) = 4/11, GPT-4.1 (Com) = 6/11, GPT-5 Reasoning (Com) = 10/11, Sonnet 4.6 (Com) = 11/11. The range from 1/11 to 11/11 on identical infrastructure confirms the model, not the connector or metadata, is the decisive factor.
+Five models tested on identical schema/data/descriptions produced dramatically different results: GPT-4o (GCC) = 3.2/11 (best after 6 rounds), GPT-5 Auto (Com) = 4/11, GPT-4.1 (Com) = 6/11, GPT-5 Reasoning (Com) = 10/11, Sonnet 4.6 (Com) = 11/11. The range from 3.2/11 to 11/11 on identical infrastructure confirms the model, not the connector or metadata, is the decisive factor.
 
 ### 9. Copilot Studio Commercial offers 5 model options including Anthropic
 The Commercial model picker includes GPT-4o, GPT-4.1, GPT-5 Auto, GPT-5 Reasoning, and Claude Sonnet 4.6. This is significant for customers: the same no-code Copilot Studio agent with Dataverse MCP can achieve near-perfect or perfect scores simply by selecting a different model. No code changes, no schema changes, no description changes required.
@@ -736,13 +769,13 @@ Every OpenAI model — including GPT-5 Reasoning — generates `WHERE legal_case
 
 ## Score Summary
 
-| Agent | Model | R0 | R1 | R2 | R3 | R4 |
-|-------|-------|----|----|----|----|-----|
-| CS/DV/GCC | GPT-4o | 1 | 1 | 2 | 1 | 3.2 |
-| CS/DV/Com (GPT-4.1) | GPT-4.1 | 6 | -- | -- | -- | -- |
-| CS/DV/Com (GPT-5 Auto) | GPT-5 Auto | 4 | -- | -- | -- | -- |
-| CS/DV/Com (GPT-5 Reasoning) | GPT-5 Reasoning | 10 | -- | -- | -- | -- |
-| CS/DV/Com (Sonnet 4.6) | Sonnet 4.6 | 11 | -- | -- | -- | -- |
+| Agent | Model | R0 | R1 | R2 | R3 | R4 | R5 |
+|-------|-------|----|----|----|----|-----|-----|
+| CS/DV/GCC | GPT-4o | 1 | 1 | 2 | 1 | 3.2 | 3.2 |
+| CS/DV/Com (GPT-4.1) | GPT-4.1 | 6 | -- | -- | -- | -- | -- |
+| CS/DV/Com (GPT-5 Auto) | GPT-5 Auto | 4 | -- | -- | -- | -- | -- |
+| CS/DV/Com (GPT-5 Reasoning) | GPT-5 Reasoning | 10 | -- | -- | -- | -- | -- |
+| CS/DV/Com (Sonnet 4.6) | Sonnet 4.6 | 11 | -- | -- | -- | -- | -- |
 
 ---
 
@@ -774,8 +807,8 @@ Five models were tested on the same Commercial Dataverse environment with identi
 - **GPT-5 Auto (4/11) performed worse than GPT-4.1 (6/11)** — "auto" routing does not optimize for structured data retrieval. Dedicated reasoning capability does.
 - **Q10 (TPR filtering) is a connector-level bug** — every OpenAI model generates the abbreviation `'TPR'` instead of full text `'Termination of Parental Rights'`. Only Sonnet generates the correct filter. This is the sole difference between 10/11 and 11/11.
 - **P6 (timeline) is the only universal pass** — all five models handle it.
-- **The model is everything.** The connector, schema, descriptions, and denormalized columns are identical across all tests. The only variable is the model, and it drives a range from 1/11 to 11/11. GPT-4o with instructions (R4) reaches 3.2/11 — a 3x improvement over baseline but still far below reasoning-capable models.
-- **Instructions are the best zero-code lever for GPT-4o.** R4 showed that comprehensive agent instructions outperform metadata enrichment and denormalization alone, recovering P7 (LE statements) and P9 (TPR cases) from 0 to 10.
+- **The model is everything.** The connector, schema, descriptions, and denormalized columns are identical across all tests. The only variable is the model, and it drives a range from 3.2/11 to 11/11. GPT-4o with 6 rounds of optimization (R0-R5) reaches 3.2/11 — a 3x improvement over baseline but still far below reasoning-capable models.
+- **Instructions are the best zero-code lever for GPT-4o.** R4 showed that comprehensive agent instructions outperform metadata enrichment and denormalization alone, recovering P7 (LE statements) and P9 (TPR cases) from 0 to 10. R5 showed instructions can map person names to categories but cannot override value selection when the user's phrasing directly names the filter value.
 - **Customers have options today.** Both Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11) are available in the Commercial Copilot Studio model picker. GCC currently defaults to GPT-4o (3.2/11 with instructions), with expanded model availability on the roadmap.
 
 ---

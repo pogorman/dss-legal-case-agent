@@ -2176,3 +2176,31 @@ Tables and columns received rich descriptions including valid values, query hint
 - `scripts/generate-slide-outline-pdf.py` — model gap table, scorecard, battery line
 - `scripts/generate-cheat-sheet-pdf.py` — model gap stat, UC2 card text
 - All PDFs regenerated, slide deck regenerated
+
+---
+
+## Session 50 — 2026-03-12
+
+### What was done
+- **GCC Dataverse MCP R5** — tested value-mapping instructions on top of R4
+  - Added 2 instructions: "hospital staff" → `Medical Staff`, "Lt. Odom" → `Law Enforcement`
+  - Retested P2 and P10 only (the two prompts affected by value mapping)
+  - **P2 regressed** (5 → 0): "hospital staff" → `Medical Staff` instruction ignored by SQL generator
+  - **P10 improved** (0 → 5): "Lt. Odom" → `Law Enforcement` mapping worked, found both LE statements
+  - **R5 Total: 3.2/10** (same as R4 — score shifted, net zero)
+- Updated all documentation with R5 results (6 rounds total, R0-R5)
+- Updated round counts: "5 rounds" → "6 rounds" in whitepaper, cheat sheet
+- Regenerated all PDFs + PPTX
+
+### Key findings
+- Instructions can map **person names to categories** (Lt. Odom → Law Enforcement = entity classification)
+- Instructions **cannot override value selection** when user phrasing directly names the filter value (hospital staff → still generates 'Hospital Staff', not 'Medical Staff')
+- The data must change: rename `'Medical Staff'` → `'Hospital Staff'` in Dataverse to match natural language
+- 6 rounds of GCC DV MCP optimization (R0-R5) all plateau at 3.2/10 — model ceiling confirmed
+
+### Files changed
+- `docs/demo-day-test-run-1.md` — R5 column in score table, R5 section with P2/P10 results
+- `docs/dataverse-mcp-server-testing.md` — R5 section, score summary, What We Tried, Key Findings #4 and #8
+- `docs/demo-cheat-sheet.md` — round count 5 → 6
+- `scripts/generate-executive-pdf.py` — round count 5 → 6 (two locations)
+- All PDFs regenerated, slide deck regenerated

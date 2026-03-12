@@ -321,20 +321,20 @@ What was the exact time gap between the thump Dena heard and when they took Jayl
 **Change:** Fresh agent instructions pasted (same as Commercial agent template + query guidance hints)
 **Baseline:** Best prior score R2 = 2/10 (timeline + partial Marcus Webb)
 
-| # | Prompt | R0 | R1 | R2 | R3 | R4 (this run) |
-|---|--------|----|----|----|----|----------------|
-| 1 | Jaylen Webb ER admission | 0 | 0 | 0 | 0 | 0 |
-| 2 | Marcus Webb statements | 0 | 0 | ~1 | 0 | 5 |
-| 3 | Crystal Price drug tests | 0 | 0 | 0 | 0 | 0 |
-| 4 | Crystal Price transportation | 1 | 1 | 0 | 0 | 0 |
-| 5 | Skeletal survey fractures | 0 | 0 | 0 | 0 | 0 |
-| 6 | Timeline for case | 0 | 10 | 10 | 10 | 10 |
-| 7 | Statements to law enforcement | 0 | 0 | 0 | 0 | 10 |
-| 8 | People in Price TPR | 0 | 0 | 0 | 0 | 0 |
-| 9 | TPR cases | 10 | 0 | 0 | 0 | 10 |
-| 10 | Dena Holloway statements comparison | 0 | 0 | 0 | 0 | 0 |
-| 11 | Time gap thump to hospital | 0 | 0 | 0 | 0 | 0 |
-| **Total** | | **1** | **1** | **2** | **1** | **35** |
+| # | Prompt | R0 | R1 | R2 | R3 | R4 | R5 |
+|---|--------|----|----|----|----|----|----|
+| 1 | Jaylen Webb ER admission | 0 | 0 | 0 | 0 | 0 | -- |
+| 2 | Marcus Webb statements | 0 | 0 | ~1 | 0 | 5 | 0 |
+| 3 | Crystal Price drug tests | 0 | 0 | 0 | 0 | 0 | -- |
+| 4 | Crystal Price transportation | 1 | 1 | 0 | 0 | 0 | -- |
+| 5 | Skeletal survey fractures | 0 | 0 | 0 | 0 | 0 | -- |
+| 6 | Timeline for case | 0 | 10 | 10 | 10 | 10 | -- |
+| 7 | Statements to law enforcement | 0 | 0 | 0 | 0 | 10 | -- |
+| 8 | People in Price TPR | 0 | 0 | 0 | 0 | 0 | -- |
+| 9 | TPR cases | 10 | 0 | 0 | 0 | 10 | -- |
+| 10 | Dena Holloway statements comparison | 0 | 0 | 0 | 0 | 0 | 5 |
+| 11 | Time gap thump to hospital | 0 | 0 | 0 | 0 | 0 | -- |
+| **Total** | | **1** | **1** | **2** | **1** | **35** | **35** |
 
 ---
 
@@ -544,4 +544,49 @@ What was the exact time gap between the thump Dena heard and when they took Jayl
 *(Second attempt):* "There are no records in the legal_timelineevent table with the event type 'Thump Heard.'"
 
 **Analysis:** Same failure as R0-R3. The agent searched for exact event type matches ("Thump Heard") instead of searching description text with LIKE. The thump event exists (event_type = 'Family', description contains 'thump') but the agent can't do fuzzy text matching on descriptions. Instructions didn't help.
+
+---
+
+## GCC Dataverse MCP R5 — Value-Mapping Instructions (2026-03-12)
+
+**Agent under test:** Case Analyst - Dataverse MCP (GCC Copilot Studio)
+**Model:** GPT-4o (GCC default, no model picker)
+**Change:** Added two value-mapping instructions to R4 agent:
+1. "When users say 'hospital staff', filter legal_madeto = 'Medical Staff'"
+2. "When they name a specific person like 'Lt. Odom', filter legal_madeto = 'Law Enforcement'"
+
+**Only P2 and P10 retested** — these are the only prompts affected by value-mapping instructions.
+
+### P2: Marcus Webb statements
+
+```
+What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement?
+```
+
+**Score: 0 (regression from R4's 5)**
+
+Agent returned nothing. The instruction to map "hospital staff" to `Medical Staff` did not influence SQL generation — the model still generated `WHERE legal_madeto = 'Hospital Staff'` and got zero results. The LE half also failed this run (non-deterministic regression).
+
+### P10: Dena Holloway statements comparison
+
+```
+Compare Dena Holloway's initial hospital statement with her later statement to Lt. Odom. What changed?
+```
+
+**Score: 5 (improvement from R4's 0)**
+
+The "Lt. Odom" to Law Enforcement mapping **worked** — agent found both LE statements with direct quotes and page citations. But "hospital staff" to Medical Staff mapping **did not work** — agent still searched for 'Hospital Staff' and got no results.
+
+#### Response
+
+No statements from Dena Holloway made to hospital staff in the database. However, found two LE statements:
+
+1. (June 13, Sheriff Report p. 8): "Marcus has a temper. He gets frustrated when Jaylen won't stop crying. I have seen him grab Jaylen roughly by the arm before, maybe two or three times. I should have said something sooner."
+2. (June 13, Sheriff Report p. 7): "Actually, I need to correct something. Around 9:30 PM I heard a loud thump from Jaylen room. I assumed Marcus was in there. I called out and Marcus said everything was fine. I did not check on Jaylen at that time."
+
+Agent correctly identified what changed: Statement 1 describes Marcus's temper and rough handling. Statement 2 corrects her account by adding the 9:30 PM thump detail and her failure to check on Jaylen.
+
+**R5 Total: 3.2/10** (35/110, same as R4). Score shifted but did not improve — P2 regressed (5 to 0), P10 improved (0 to 5).
+
+**R5 Key Finding:** Instructions can map person names to recipient categories (Lt. Odom to Law Enforcement) but cannot override the model's natural language when stored values don't match what users say (hospital staff != Medical Staff). The MCP SQL generator uses the user's exact phrasing for filter values, ignoring instruction-level mappings. **Next step: rename 'Medical Staff' to 'Hospital Staff' in Dataverse data so the stored value matches natural language.**
 

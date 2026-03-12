@@ -71,4 +71,4 @@
 | Worst-to-best arc | Triage: 0/10 → 10/10 in 5 rounds |
 | Models tested | 5 (GPT-4o, 4.1, 5 Auto, 5 Reasoning, Sonnet 4.6) |
 | Model gap | Sonnet 11/11, GPT-5 Reasoning 10/11, GPT-4o 3.2/11 best (same infra) |
-| GCC DV MCP rounds | 5 (R0-R4), best = 3.2/10 with instructions |
+| GCC DV MCP rounds | 6 (R0-R5), best = 3.2/10 with instructions |

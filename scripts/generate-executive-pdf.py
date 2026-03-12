@@ -1277,7 +1277,7 @@ def build_pdf():
         "plateaued at 4/10 despite receiving every improvement the other agents received, "
         "confirming a model-level ceiling for these workloads with GPT-4o. "
         "A multi-model test of the native Dataverse MCP connector proved the model is everything: "
-        "GPT-4o scored 3.2/11 (best after 5 rounds of optimization), GPT-5 Auto 4/11, GPT-4.1 6/11, GPT-5 Reasoning 10/11, and Sonnet 4.6 achieved a perfect "
+        "GPT-4o scored 3.2/11 (best after 6 rounds of optimization), GPT-5 Auto 4/11, GPT-4.1 6/11, GPT-5 Reasoning 10/11, and Sonnet 4.6 achieved a perfect "
         "11/11 on identical schema and data across 5 models. GPT-5 Reasoning nearly matches Sonnet, losing only on a "
         "connector-level abbreviation bug. GPT-5 Auto still performed worse than GPT-4.1.",
         bold_lead="Combined result:"
@@ -1535,7 +1535,7 @@ def build_pdf():
         "Ranked by final score. All agents retested with cross-referenced "
         "documents. PDF outperformed DOCX in 3 of 4 matchups; KB/DOCX/Com "
         "was the exception (10/10). Dataverse MCP tested across 5 models: "
-        "Sonnet 4.6 achieved 10/10 (perfect); GPT-5 Reasoning 10/10; GPT-4o/GCC reached 3.2/10 after 5 rounds of optimization."
+        "Sonnet 4.6 achieved 10/10 (perfect); GPT-5 Reasoning 10/10; GPT-4o/GCC reached 3.2/10 after 6 rounds of optimization."
     ))
 
     # -- UC2 Table --

@@ -2223,3 +2223,30 @@ Tables and columns received rich descriptions including valid values, query hint
 - `docs/pdf/slide-outline.pdf` — regenerated (27 slides)
 - `decks/agent-fidelity-spectrum.pptx` — regenerated (28 slides)
 - `docs/session-log.md` — this entry
+
+## Session 52 — 2026-03-12
+
+### What was done
+- **Live demo grading — Part 1 (Document Quality), 3 SharePoint libraries (Raw / Cross-Ref / Enriched)**
+- Graded all responses for P1 (Skeletal Survey) and P2 (Marcus Webb Statements) across all 3 libraries
+- P3 (Timeline) pending — user clearing context and resuming in a new session
+
+### Results
+
+| Prompt | Raw | Cross-Ref | Enriched |
+|--------|-----|-----------|---------|
+| P1 — Skeletal Survey | FAIL | PASS | PASS |
+| P2 — Marcus Statements | FAIL | PARTIAL | PASS* |
+| P3 — Timeline | pending | pending | skip |
+
+### Key findings
+- **P1 Raw FAIL**: Quoted Sheriff "no fractures," never checked Medical Records — textbook Danger #2 (misleading source faithfully reproduced)
+- **P1 XRef/Enriched PASS**: Cross-reference headers fixed the false negative; both fractures correctly reported
+- **P2 Raw FAIL**: Said Marcus gave "no specific details to hospital staff" (wrong) — hospital statement invisible without metadata
+- **P2 XRef PARTIAL**: Found hospital statement but oversimplified ("same answer" — LE statement adds crib theory + explicit room denial). Wrong source citation.
+- **P2 Enriched PASS\***: Both statements correct, nuanced language ("similar"), Holloway conflict noted. ASTERISK: citation still DSS IR, not Medical Records nursing notes p.8 — metadata keywords improved content retrieval but not sourcing
+- Naming quirk: XRef library uses -case2.pdf suffixes on filenames — expected per setup, not penalized
+
+### Files changed
+- C:/Users/pogorman/.copilot/session-state/.../files/grading-init.md — new init file for resuming grading in next session
+- docs/session-log.md — this entry

@@ -989,29 +989,33 @@ def build_pdf():
     # ====================================================================
     pdf.slide_heading(20, "Government Cloud Customers")
 
-    pdf.headline("The GCC reality today")
+    pdf.headline("Copilot Studio works at every level -- the levers differ")
 
-    pdf.bullet("Copilot Studio defaults to GPT-4o (adequate for Levels 1-3)")
-    pdf.bullet("Pro-code agents can use GPT-4.1 via Azure OpenAI (Levels 4-5)")
-    pdf.bullet("Monitor model updates -- GCC parity will improve over time")
+    pdf.ln(1)
+    pdf.body_text("What to use at each level:", bold_lead=None)
+
+    pdf.bullet(
+        "Copilot Studio, any configuration.",
+        bold_lead="Level 1-3:"
+    )
+    pdf.bullet(
+        "Copilot Studio with good document hygiene (9/10 proven in GCC with GPT-4o).",
+        bold_lead="Level 4 (documents):"
+    )
+    pdf.bullet(
+        "Model selection matters. Sonnet 4.6 (Commercial) scored 11/11. "
+        "In GCC today, pro-code agents with GPT-4.1 via Azure OpenAI.",
+        bold_lead="Level 4-5 (structured data):"
+    )
 
     pdf.ln(2)
-    pdf.body_text("Decision tree:", bold_lead=None)
+    pdf.body_text("The GCC gap:", bold_lead=None)
 
-    pdf.bullet(
-        "Use Copilot Studio today.",
-        bold_lead="Is your use case Level 1-3?"
-    )
-    pdf.bullet(
-        "Deploy a pro-code agent with GPT-4.1.",
-        bold_lead="Is your use case Level 4-5?"
-    )
-    pdf.bullet(
-        "Start building ground truth test suites now.",
-        bold_lead="Are you planning for Level 4-5 in the future?"
-    )
+    pdf.bullet("Model selection not yet available in GCC Copilot Studio -- document quality is your lever today")
+    pdf.bullet("When expanded model availability arrives in GCC, every agent improves overnight with zero changes")
+    pdf.bullet("Start building ground truth test suites now so you are ready to measure the improvement")
 
-    pdf.visual_note("Decision tree flowchart")
+    pdf.visual_note("Three-tier layout with level colors, GCC gap callout at bottom")
 
     pdf.talking_point("Know what works today. Plan for what's coming.")
 

@@ -1157,38 +1157,46 @@ def slide_16_gcc(prs):
     add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
 
     add_textbox(slide, 1.2, 1.5, 10.9, 0.5,
-                "The GCC reality today",
+                "Copilot Studio works at every level -- the levers differ",
                 font_size=22, bold=True, color=DARK_TEXT)
 
-    add_bullet_list(slide, 1.2, 2.2, 10.9, 1.5, [
-        "Copilot Studio defaults to GPT-4o (adequate for Levels 1-3)",
-        "Pro-code agents can use GPT-4.1 via Azure OpenAI (Levels 4-5)",
-        "Monitor model updates -- GCC parity will improve over time",
-    ], font_size=17)
-
-    # Decision tree boxes
-    decisions = [
-        ("Is your use case Level 1-3?", "Use Copilot Studio today.", L1_GREEN),
-        ("Is your use case Level 4-5?", "Deploy a pro-code agent\nwith GPT-4.1.", L4_DEEP_ORANGE),
-        ("Planning for Level 4-5\nin the future?", "Start building ground truth\ntest suites now.", MEDIUM_BLUE),
+    # Three-tier recommendation boxes
+    tiers = [
+        (L2_LIME, RGBColor(0xF1, 0xF8, 0xE9),
+         "Levels 1-3", "Copilot Studio,\nany configuration"),
+        (L4_DEEP_ORANGE, RGBColor(0xFB, 0xE9, 0xE7),
+         "Level 4 (Documents)", "Copilot Studio +\ngood document hygiene\n(9/10 proven, GPT-4o, GCC)"),
+        (MEDIUM_BLUE, RGBColor(0xE8, 0xF0, 0xF8),
+         "Level 4-5 (Structured Data)", "Model selection matters\nSonnet 4.6 = 11/11 (Commercial)\nGPT-4.1 via Azure OpenAI (GCC)"),
     ]
 
-    for i, (question, answer, color) in enumerate(decisions):
+    for i, (color, tint, label, body) in enumerate(tiers):
         x = 1.2 + i * 3.9
-        # Question box
-        q_box = add_rounded_rect(slide, x, 4.0, 3.5, 1.0, LIGHT_GRAY)
-        add_textbox(slide, x + 0.15, 4.0, 3.2, 1.0, question,
-                    font_size=14, bold=True, color=DARK_TEXT,
-                    alignment=PP_ALIGN.CENTER)
-        # Answer box
-        a_box = add_rounded_rect(slide, x, 5.2, 3.5, 1.0, color)
-        add_textbox(slide, x + 0.15, 5.2, 3.2, 1.0, answer,
-                    font_size=14, bold=True, color=WHITE,
-                    alignment=PP_ALIGN.CENTER)
+        add_rounded_rect(slide, x, 2.3, 3.5, 2.2, tint)
+        add_rect(slide, x, 2.3, 0.15, 2.2, color)
+        add_textbox(slide, x + 0.3, 2.4, 3.0, 0.4, label,
+                    font_size=14, bold=True, color=color)
+        add_textbox(slide, x + 0.3, 2.85, 3.0, 1.5, body,
+                    font_size=14, color=DARK_TEXT)
+
+    # GCC gap callout
+    gap_box = add_rounded_rect(slide, 1.2, 4.8, 10.9, 1.5,
+                               RGBColor(0xF5, 0xF5, 0xF5))
+    add_rect(slide, 1.2, 4.8, 0.15, 1.5, ACCENT_BLUE)
+    add_textbox(slide, 1.6, 4.85, 3.0, 0.35, "The GCC Gap",
+                font_size=16, bold=True, color=DARK_NAVY)
+    add_bullet_list(slide, 1.6, 5.2, 9.8, 1.0, [
+        "Model selection not yet available in GCC Copilot Studio -- document quality is your lever today",
+        "When expanded model availability arrives, every agent improves overnight with zero changes",
+        "Start building ground truth test suites now so you are ready to measure the improvement",
+    ], font_size=13, color=DARK_TEXT, spacing=Pt(4))
 
     add_level_bar(slide)
     add_confidential_footer(slide)
     add_speaker_notes(slide,
+        "Copilot Studio is not just for Levels 1-3. We proved 9/10 at Level 4 "
+        "with document agents in GCC using GPT-4o -- no code, just better documents. "
+        "The gap is only for structured data queries where model selection matters. "
         "Know what works today. Plan for what's coming.")
 
 

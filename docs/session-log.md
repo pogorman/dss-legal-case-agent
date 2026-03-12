@@ -2115,6 +2115,20 @@ Tables and columns received rich descriptions including valid values, query hint
 
 ### Decisions made
 - GCC narrative: "currently defaults to GPT-4o" (not "stuck on" or "capped by")
+
+## Session 48 — 2026-03-11
+
+### What was done
+- **Fixed score-ranked table ordering** across all docs
+  - Sonnet 4.6 (10/10) and GPT-5 Reasoning (10/10) were appended at the bottom of "ranked by score" tables instead of sorted into position
+  - Fixed Round 2 table and UC1 Appendix table in `generate-executive-pdf.py`
+  - Fixed UC1 scorecard table in `generate-slide-outline-pdf.py` (also updated footnote: "4 models" → "5 models")
+  - `generate-slide-deck.py` was already correctly sorted — no change needed
+- **Regenerated all docs**: whitepaper, slide outline, demo guide, user guide, FAQs, architecture, cheat sheet, DV testing PDF, slide deck
+- **Cleaned up MEMORY.md** — moved detailed content (scores, fpdf2 patterns, Dataverse MCP, live demo) into separate topic files to stay under 200-line limit
+
+### Decisions made
+- Tables sorted by final score descending; within same score, original agents before newer Dataverse MCP variants
 - Framing: model picker is the product, not wait-for-future-models
 - Include model count in stats wherever test runs/agent configs are listed
 

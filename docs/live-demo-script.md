@@ -115,11 +115,11 @@ prepare for hearings by analyzing case documents. When answering questions:
 
 ### 5. Create One Dataverse MCP Agent (Commercial)
 
-This is the existing CS/DV/Com agent. Before the demo, set it to **GPT-4o** (to start at the weakest model).
+This is the existing CS/DV/Com agent. Before the demo, set it to **GPT-4.1** (to start at the baseline model).
 
 | Agent Name | Data Source | Starting Model |
 |---|---|---|
-| **Case Analyst - Dataverse** | Dataverse MCP connector | GPT-4o (switch during demo) |
+| **Case Analyst - Dataverse** | Dataverse MCP connector | GPT-4.1 (switch to Sonnet 4.6 during demo) |
 
 ### 6. Warm-Up (10 min before demo)
 
@@ -198,13 +198,13 @@ What is the complete timeline of events for case 2024-DR-42-0892?
 
 **Narrative:** "Same agent. Same data. Same Dataverse schema. The only thing that changes is the model."
 
-**Setup:** The Dataverse MCP agent starts on GPT-4o (the GCC default). You will swap to Sonnet 4.6 during the demo. Optionally show GPT-4.1 as a middle tier.
+**Setup:** The Dataverse MCP agent (Commercial) starts on GPT-4.1. You will swap to Sonnet 4.6 during the demo. Optionally show GPT-5 Reasoning as an intermediate step.
 
 ### Demo Flow
 
-**Step 1: Run all 3 prompts on GPT-4o**
+**Step 1: Run all 3 prompts on GPT-4.1**
 
-Run these one at a time. Let the audience see the failures.
+Run these one at a time. Let the audience see where GPT-4.1 falls short.
 
 #### Model Prompt 1 — Aggregate Query
 
@@ -214,8 +214,7 @@ Which cases involve Termination of Parental Rights?
 
 | Model | Expected Result |
 |---|---|
-| GPT-4o | FAIL — generates `WHERE legal_casetype = 'TPR'` (abbreviation). Returns zero results. The actual stored value is 'Termination of Parental Rights'. |
-| GPT-4.1 | FAIL — same abbreviation problem. |
+| GPT-4.1 | FAIL — generates `WHERE legal_casetype = 'TPR'` (abbreviation). Returns zero results. The actual stored value is 'Termination of Parental Rights'. |
 | GPT-5 Reasoning | FAIL — same abbreviation problem. Confirms this is a connector-level bug, not a model reasoning issue. |
 | Sonnet 4.6 | PASS — correctly uses full text value, returns all 9 TPR cases with case numbers, counties, circuits, statuses. |
 
@@ -229,12 +228,11 @@ What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and di
 
 | Model | Expected Result |
 |---|---|
-| GPT-4o | FAIL — can't resolve Marcus Webb to the right case, can't do the two-step GUID lookup. Returns nothing or errors. |
-| GPT-4.1 | PASS (9/10) — finds all 3 statements, compares them, identifies consistency. |
-| GPT-5 Reasoning | PASS (9/10) — finds all 3 statements including hospital staff (which Auto missed), compares accounts. |
+| GPT-4.1 | PASS (9/10) — finds all 3 statements, compares them, identifies consistency. Misses one minor detail. |
+| GPT-5 Reasoning | PASS (9/10) — finds all 3 statements including hospital staff, compares accounts. |
 | Sonnet 4.6 | PASS (10/10) — full comparison table, correct quotes, flags the crib-climbing theory as a new claim in the LE statement. |
 
-**Why this prompt:** Shows a real cross-document reasoning task. GPT-4o can't even start. GPT-4.1 and GPT-5 Reasoning get close. Sonnet nails it.
+**Why this prompt:** Shows a real cross-document reasoning task. GPT-4.1 and GPT-5 Reasoning get close. Sonnet nails it.
 
 #### Model Prompt 3 — Time Calculation
 
@@ -244,36 +242,35 @@ What was the exact time gap between the thump Dena heard and when they took Jayl
 
 | Model | Expected Result |
 |---|---|
-| GPT-4o | FAIL — can't find timeline events matching "thump" or "hospital." |
 | GPT-4.1 | PASS — finds both events, calculates 4h30m (thump to departure) and 5h45m (thump to ER admission). |
 | GPT-5 Reasoning | PASS — finds all three events (thump, departure, admission), calculates both time gaps correctly. |
 | Sonnet 4.6 | PASS — same calculation plus contextual notes about disclosure inconsistency. |
 
-**Why this prompt:** Requires finding events by semantic meaning (not exact column values), then doing arithmetic. GPT-4o fails at step 1. Reasoning models handle it.
+**Why this prompt:** Requires finding events by semantic meaning (not exact column values), then doing arithmetic. All three models handle it, but Sonnet adds analytical depth.
 
 **Step 2: Swap to Sonnet 4.6**
 
 1. Open agent settings
-2. Change model from GPT-4o to Claude Sonnet 4.6
+2. Change model from GPT-4.1 to Claude Sonnet 4.6
 3. Publish (takes ~30 seconds)
 4. Re-run the same 3 prompts
 
 **Talking point while publishing:** "No code changes. No schema changes. No prompt changes. Just a different model selection in the dropdown. Same Copilot Studio, same Dataverse connector."
 
-**Step 3 (Optional): Show GPT-4.1 as middle tier**
+**Step 3 (Optional): Show GPT-5 Reasoning as intermediate**
 
-If time allows, swap to GPT-4.1 and re-run Prompt 1 (TPR cases) to show it also fails on the abbreviation problem. This reinforces that it's not just "old model vs new model" — it's a fundamental difference in how models reason about structured data.
+If time allows, swap to GPT-5 Reasoning and re-run Prompt 1 (TPR cases) to show it also fails on the abbreviation problem. This reinforces that it's not just "old model vs new model" — it's a fundamental difference in how models handle filter values.
 
 ### Model Demo Summary
 
-| Prompt | GPT-4o (GCC) | GPT-4.1 (Com) | GPT-5 Reasoning (Com) | Sonnet 4.6 (Com) |
-|---|---|---|---|---|
-| TPR cases (filter) | 0 | 0 | 0 | 10 |
-| Marcus Webb (cross-ref) | 0 | 9 | 9 | 10 |
-| Time gap (arithmetic) | 0 | 10 | 10 | 10 |
-| **Total** | **0/3** | **2/3** | **2/3** | **3/3** |
+| Prompt | GPT-4.1 | GPT-5 Reasoning | Sonnet 4.6 |
+|---|---|---|---|
+| TPR cases (filter) | 0 | 0 | 10 |
+| Marcus Webb (cross-ref) | 9 | 9 | 10 |
+| Time gap (arithmetic) | 10 | 10 | 10 |
+| **Total** | **2/3** | **2/3** | **3/3** |
 
-Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11.
+Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, GPT-5 Reasoning = 10/11, Sonnet 4.6 = 11/11. All tested on the same Commercial Dataverse MCP agent.
 
 **Talking point:** "The model is the single biggest lever. Better documents took us from 3/10 to 9/10 with zero code. A better model took us from 1/11 to 11/11 with zero code. Both Sonnet 4.6 and GPT-5 Reasoning are available today in Commercial Copilot Studio."
 
@@ -286,15 +283,15 @@ Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, 
 | Lever | What It Controls | Who Can Pull It | Cost |
 |---|---|---|---|
 | Document quality | Reasoning accuracy (false negatives, case contamination) | Any SharePoint admin | $0, 45 minutes |
-| Model selection | Query generation quality (structured data, arithmetic, filtering) | Copilot Studio admin (Commercial only today) | $0, 30 seconds |
+| Model selection | Query generation quality (structured data, arithmetic, filtering) | Copilot Studio admin (Commercial today, GCC roadmap) | $0, 30 seconds |
 
-### The GCC Reality
+### Copilot Studio at Every Level
 
-"In GCC today, you have one lever: document quality. And it's powerful — we proved you can go from 3/10 to 9/10 with 45 minutes of free work. For structured data agents, GCC currently defaults to GPT-4o, with expanded model availability on the roadmap. In Commercial, customers already have two models that solve the problem — Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11). When those models arrive in GCC, every agent improves overnight with zero changes."
+"Copilot Studio works at every level — the levers differ. For document-backed agents, we proved 9/10 at Level 4 in GCC with GPT-4o — no code, just better documents. For structured data agents, model selection matters — Sonnet 4.6 (11/11) and GPT-5 Reasoning (10/11) are available today in Commercial Copilot Studio. When expanded model availability arrives in GCC, every agent improves overnight with zero changes."
 
 ### The Bottom Line
 
-"Match your investment to your fidelity requirement. For document summarization, GCC with good documents is excellent. For cross-referencing structured data, model selection is everything."
+"Match your investment to your fidelity requirement. Document-backed agents in GCC already deliver Level 4-5 quality with good document hygiene. For structured data queries, model selection is the lever — and it's available today in Commercial."
 
 ---
 
@@ -303,7 +300,7 @@ Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, 
 | If... | Then... |
 |---|---|
 | Document agent returns correct answer on Raw Docs | "Great — this particular question worked. Let me show you the one where document quality makes the difference." Jump to skeletal survey. |
-| Dataverse agent fails on Sonnet 4.6 | "Non-deterministic query generation is a known limitation. Let me re-run." (Sonnet was 11/11 in testing but individual runs can vary.) |
+| Dataverse agent fails on Sonnet 4.6 | "Non-deterministic -- let me re-run." (Sonnet was 11/11 in testing but individual runs can vary.) |
 | Model swap takes too long to publish | "While this publishes, let me show you the test results." Pull up the multi-model comparison table. |
 | Any agent gives an unexpected answer | "This is exactly the point — non-determinism is why Level 5 requires human review. Always." |
 | Copilot Studio is slow/throttled | "Cold starts happen. In production you'd pin these agents." Fill with the narrative about the skeletal survey trap. |
@@ -320,13 +317,13 @@ Full test battery (5 models): GPT-4o = 1/11, GPT-5 Auto = 4/11, GPT-4.1 = 6/11, 
 | 2 | What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement? | FAIL → PARTIAL → PASS |
 | 3 | What is the complete timeline of events for case 2024-DR-42-0892? | FAIL → PASS → PASS |
 
-### Model Selection Prompts (run on Dataverse agent, swap model between runs)
+### Model Selection Prompts (run on Commercial Dataverse agent, swap model between runs)
 
-| # | Prompt | GPT-4o | Sonnet 4.6 |
+| # | Prompt | GPT-4.1 | Sonnet 4.6 |
 |---|---|---|---|
 | 1 | Which cases involve Termination of Parental Rights? | FAIL | PASS |
-| 2 | What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement? | FAIL | PASS |
-| 3 | What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital? | FAIL | PASS |
+| 2 | What did Marcus Webb tell hospital staff about when he put Jaylen to bed, and did he give the same answer to law enforcement? | PASS (9) | PASS (10) |
+| 3 | What was the exact time gap between the thump Dena heard and when they took Jaylen to the hospital? | PASS | PASS |
 
 ---
 

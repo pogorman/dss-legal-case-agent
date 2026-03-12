@@ -996,16 +996,17 @@ def build_pdf():
 
     pdf.bullet(
         "Copilot Studio, any configuration.",
-        bold_lead="Level 1-3:"
+        bold_lead="Levels 1-3:"
     )
     pdf.bullet(
         "Copilot Studio with good document hygiene (9/10 proven in GCC with GPT-4o).",
-        bold_lead="Level 4 (documents):"
+        bold_lead="Levels 4-5 (documents):"
     )
     pdf.bullet(
-        "Model selection matters. Sonnet 4.6 (Commercial) scored 11/11. "
+        "Model selection matters for structured data queries. Sonnet 4.6 scored 11/11, "
+        "GPT-5 Reasoning scored 10/11 (both Commercial). "
         "In GCC today, pro-code agents with GPT-4.1 via Azure OpenAI.",
-        bold_lead="Level 4-5 (structured data):"
+        bold_lead="Structured data gap:"
     )
 
     pdf.ln(2)

@@ -1165,9 +1165,9 @@ def slide_16_gcc(prs):
         (L2_LIME, RGBColor(0xF1, 0xF8, 0xE9),
          "Levels 1-3", "Copilot Studio,\nany configuration"),
         (L4_DEEP_ORANGE, RGBColor(0xFB, 0xE9, 0xE7),
-         "Level 4 (Documents)", "Copilot Studio +\ngood document hygiene\n(9/10 proven, GPT-4o, GCC)"),
+         "Levels 4-5 (Documents)", "Copilot Studio +\ngood document hygiene\n(9/10 proven, GPT-4o, GCC)"),
         (MEDIUM_BLUE, RGBColor(0xE8, 0xF0, 0xF8),
-         "Level 4-5 (Structured Data)", "Model selection matters\nSonnet 4.6 = 11/11 (Commercial)\nGPT-4.1 via Azure OpenAI (GCC)"),
+         "Structured Data Gap", "Model selection matters\nSonnet 4.6 = 11/11 (Commercial)\nGPT-5 Reasoning = 10/11 (Commercial)\nGPT-4.1 via Azure OpenAI (GCC)"),
     ]
 
     for i, (color, tint, label, body) in enumerate(tiers):

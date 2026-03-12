@@ -247,14 +247,14 @@ def slide_01_title(prs):
                 alignment=PP_ALIGN.CENTER)
     # Slide count + date
     add_textbox(slide, 4, 4.8, 5.3, 0.5,
-                "26 Slides  |  March 2026",
+                "27 Slides  |  March 2026",
                 font_size=16, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
     # Level bar
     add_level_bar(slide, top=5.6)
     # Stats line
     add_textbox(slide, 2, 6.3, 9.3, 0.4,
-                "462 test runs  |  21 agents  |  26 slides  |  2 use cases",
+                "462 test runs  |  21 agents  |  27 slides  |  2 use cases",
                 font_size=14, bold=True, color=ACCENT_BLUE,
                 alignment=PP_ALIGN.CENTER)
     add_speaker_notes(slide,
@@ -1251,6 +1251,105 @@ def slide_17_demo(prs):
                 alignment=PP_ALIGN.CENTER)
 
 
+def slide_17b_one_prompt(prs):
+    """S22: One Prompt, Three Interventions — Marcus Webb progression."""
+    slide = add_blank_slide(prs)
+    set_slide_bg(slide, WHITE)
+    add_textbox(slide, 0.8, 0.4, 11.7, 0.7,
+                "One Prompt, Three Interventions",
+                font_size=32, bold=True, color=DARK_NAVY)
+    add_rect(slide, 0.8, 1.1, 2, 0.06, ACCENT_BLUE)
+
+    # The prompt
+    prompt_box = add_rounded_rect(slide, 1.2, 1.35, 10.9, 0.7,
+                                   RGBColor(0xF5, 0xF5, 0xF5))
+    add_textbox(slide, 1.5, 1.4, 10.3, 0.6,
+                '"What did Marcus Webb tell hospital staff about when he put Jaylen '
+                'to bed, and did he give the same answer to law enforcement?"',
+                font_size=15, bold=True, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
+
+    # Three columns: Raw, Cross-Ref, Enriched
+    col_configs = [
+        (SEV_CRITICAL, RGBColor(0xFF, 0xEB, 0xEE), "Raw Documents",
+         "FAIL",
+         "Found: Sheriff Report interview",
+         "Missed: Nursing notes in Medical Records",
+         "The agent has no reason to look\nin a medical record for\nparent statements."),
+        (SEV_MEDIUM, RGBColor(0xFF, 0xF8, 0xE1), "Cross-Referenced",
+         "PARTIAL",
+         "Found: Both sources identified",
+         "Missed: Specific nursing note detail",
+         "Cross-reference header points to\nMedical Records, but the agent\nstill can't find nursing notes."),
+        (L1_GREEN, RGBColor(0xE8, 0xF5, 0xE9), "Enriched + Metadata",
+         "PASS",
+         "Found: Both statements, correct times",
+         "Missed: Nothing",
+         'SP metadata: "nursing interview,\nparent statements" on Medical\nRecords enables retrieval.'),
+    ]
+
+    for i, (color, tint, title, result, found, missed, explanation) in enumerate(col_configs):
+        x = 0.9 + i * 4.1
+        # Card background
+        add_rounded_rect(slide, x, 2.25, 3.7, 3.7, tint)
+        # Color stripe at top
+        add_rect(slide, x, 2.25, 3.7, 0.12, color)
+        # Title
+        add_textbox(slide, x + 0.15, 2.45, 3.4, 0.35, title,
+                    font_size=16, bold=True, color=DARK_TEXT,
+                    alignment=PP_ALIGN.CENTER)
+        # Result pill
+        pill = add_rounded_rect(slide, x + 1.15, 2.85, 1.4, 0.4, color)
+        tf = pill.text_frame
+        p = tf.paragraphs[0]
+        p.text = result
+        p.font.size = Pt(14)
+        p.font.bold = True
+        p.font.color.rgb = WHITE
+        p.font.name = "Calibri"
+        p.alignment = PP_ALIGN.CENTER
+
+        # Found / Missed
+        add_textbox(slide, x + 0.2, 3.4, 3.3, 0.45, found,
+                    font_size=12, color=DARK_TEXT)
+        add_textbox(slide, x + 0.2, 3.85, 3.3, 0.45, missed,
+                    font_size=12, bold=True, color=color)
+        # Explanation
+        add_textbox(slide, x + 0.2, 4.4, 3.3, 1.2, explanation,
+                    font_size=11, color=MEDIUM_TEXT)
+
+    # Arrows between columns
+    for i in range(2):
+        ax = 4.55 + i * 4.1
+        arrow = slide.shapes.add_shape(
+            MSO_SHAPE.RIGHT_ARROW,
+            Inches(ax), Inches(3.7), Inches(0.5), Inches(0.35)
+        )
+        arrow.fill.solid()
+        arrow.fill.fore_color.rgb = ACCENT_BLUE
+        arrow.line.fill.background()
+
+    # Bottom callout
+    callout = add_rounded_rect(slide, 1.5, 6.15, 10.3, 0.55,
+                                RGBColor(0xE3, 0xF2, 0xFD))
+    add_rect(slide, 1.5, 6.15, 0.12, 0.55, ACCENT_BLUE)
+    add_textbox(slide, 1.8, 6.2, 9.8, 0.45,
+                "Cross-references fix reasoning errors. "
+                "Metadata fixes retrieval errors. You need both.",
+                font_size=16, bold=True, color=DARK_NAVY,
+                alignment=PP_ALIGN.CENTER)
+
+    add_level_bar(slide)
+    add_confidential_footer(slide)
+    add_speaker_notes(slide,
+        "This is the most relatable prompt in the deck. Everyone understands "
+        "'did the parent tell the same story to the nurse and the police?' "
+        "Raw docs: agent only found the Sheriff Report. Cross-refs: found both "
+        "sources but couldn't retrieve the nursing notes detail. Metadata: the "
+        "keywords 'nursing interview' and 'parent statements' on Medical Records "
+        "told the agent exactly where to look. $0, 45 minutes, no code.")
+
+
 def slide_18_challenged_premise(prs):
     slide = add_blank_slide(prs)
     set_slide_bg(slide, WHITE)
@@ -1513,11 +1612,12 @@ def main():
     slide_15_what_to_do(prs)         # S19 What to Do
     slide_16_gcc(prs)                # S20 GCC
     slide_17_demo(prs)               # S21 Live Demo
-    slide_18_challenged_premise(prs) # S22 Surprising: Premise
-    slide_19_false_negative(prs)     # S23 Surprising: False Negative
-    slide_20_bottom_line(prs)        # S24 The Bottom Line
-    slide_24_scorecard(prs)          # S25 Full Scorecard
-    slide_25_next_steps(prs)         # S26 Next Steps
+    slide_17b_one_prompt(prs)        # S22 One Prompt, Three Interventions
+    slide_18_challenged_premise(prs) # S23 Surprising: Premise
+    slide_19_false_negative(prs)     # S24 Surprising: False Negative
+    slide_20_bottom_line(prs)        # S25 The Bottom Line
+    slide_24_scorecard(prs)          # S26 Full Scorecard
+    slide_25_next_steps(prs)         # S27 Next Steps
 
     out_dir = os.path.join(os.path.dirname(__file__), "..", "decks")
     os.makedirs(out_dir, exist_ok=True)

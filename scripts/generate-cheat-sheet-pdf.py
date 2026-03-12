@@ -344,7 +344,220 @@ def build_pdf():
     pdf.set_xy(rx + 3, y_r + 10)
     pdf.cell(col_w - 6, 3.5, "API: dss-case-agent.victoriouspond-48a6f41b.eastus2.azurecontainerapps.io")
 
-    # Footer
+    # Footer (page 1)
+    pdf.set_xy(pdf.l_margin, pdf.h - 8)
+    pdf.set_font("Helvetica", "I", 6)
+    pdf.set_text_color(*LIGHT)
+    pdf.cell(usable_w, 4, sanitize_text("Agent Fidelity Spectrum for Copilot Studio | March 2026 | Confidential"),
+             align="C")
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # PAGE 2 — Use Case Stories
+    # ══════════════════════════════════════════════════════════════════════════
+    pdf.add_page()
+
+    # Title bar
+    pdf.set_fill_color(*NAVY)
+    pdf.rect(0, 0, pdf.w, 14, "F")
+    pdf.set_xy(pdf.l_margin, 3)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_text_color(*WHITE)
+    pdf.cell(usable_w, 8, "The Two Use Cases", align="C")
+
+    # ── Intro blurb ──
+    y2 = 18
+    pdf.set_xy(pdf.l_margin, y2)
+    pdf.set_font("Helvetica", "", 8)
+    pdf.set_text_color(*DARK)
+    pdf.multi_cell(usable_w, 4, sanitize_text(
+        "Both use cases follow the same pattern: a government worker protecting "
+        "vulnerable people needs to cross-reference records, spot contradictions, "
+        "and build a case that holds up. The difference is where the data lives -- "
+        "one in documents, the other in databases. The question is the same: can an "
+        "AI agent do this work reliably enough to trust?"
+    ))
+    y2 = pdf.get_y() + 4
+
+    # ── Helper: story card ──
+    def draw_story_card(pdf, x, y, w, color, uc_label, title, subtitle,
+                        setting, complication, stakes, data_note, connection):
+        """Draw a use-case story card. Returns bottom y."""
+        pad = 4
+        inner_w = w - 2 * pad
+
+        # Measure all text blocks to compute card height
+        pdf.set_font("Helvetica", "", 7.5)
+        setting_h = pdf.multi_cell(inner_w, 3.8, sanitize_text(setting),
+                                   dry_run=True, output="HEIGHT")
+        complication_h = pdf.multi_cell(inner_w, 3.8, sanitize_text(complication),
+                                        dry_run=True, output="HEIGHT")
+        stakes_h = pdf.multi_cell(inner_w, 3.8, sanitize_text(stakes),
+                                   dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "I", 7)
+        data_h = pdf.multi_cell(inner_w, 3.5, sanitize_text(data_note),
+                                 dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "B", 7)
+        conn_h = pdf.multi_cell(inner_w, 3.5, sanitize_text(connection),
+                                 dry_run=True, output="HEIGHT")
+
+        # header(8) + subtitle(5) + 3 labeled sections + data + connection + padding
+        card_h = (8 + 5 + (5 + setting_h) + (5 + complication_h) +
+                  (5 + stakes_h) + 3 + data_h + 3 + conn_h + 6)
+
+        # Card background
+        tint = tuple(int(c * 0.08 + 255 * 0.92) for c in color)
+        pdf.set_fill_color(*tint)
+        pdf.rect(x, y, w, card_h, "F")
+        # Color stripe
+        pdf.set_fill_color(*color)
+        pdf.rect(x, y, 3, card_h, "F")
+
+        cy = y + 2
+
+        # UC label + title
+        pdf.set_xy(x + pad + 1, cy)
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_text_color(*color)
+        pdf.cell(14, 5, uc_label)
+        pdf.set_text_color(*NAVY)
+        pdf.cell(inner_w - 14, 5, sanitize_text(title))
+        cy += 7
+
+        # Subtitle
+        pdf.set_xy(x + pad + 1, cy)
+        pdf.set_font("Helvetica", "", 7.5)
+        pdf.set_text_color(*MED)
+        pdf.cell(inner_w, 4, sanitize_text(subtitle))
+        cy += 6
+
+        # Section helper
+        def draw_section(label, text, font_style=""):
+            nonlocal cy
+            pdf.set_xy(x + pad + 1, cy)
+            pdf.set_font("Helvetica", "B", 7)
+            pdf.set_text_color(*ACCENT)
+            pdf.cell(inner_w, 4, label)
+            cy += 4.5
+            pdf.set_xy(x + pad + 1, cy)
+            pdf.set_font("Helvetica", font_style, 7.5)
+            pdf.set_text_color(*DARK)
+            pdf.multi_cell(inner_w, 3.8, sanitize_text(text))
+            cy = pdf.get_y() + 1
+
+        draw_section("THE SETTING", setting)
+        draw_section("THE COMPLICATION", complication)
+        draw_section("THE STAKES", stakes)
+
+        cy += 1
+        # Data note (italic)
+        pdf.set_xy(x + pad + 1, cy)
+        pdf.set_font("Helvetica", "I", 7)
+        pdf.set_text_color(*MED)
+        pdf.multi_cell(inner_w, 3.5, sanitize_text(data_note))
+        cy = pdf.get_y() + 2
+
+        # Connection callout
+        pdf.set_fill_color(*color)
+        pdf.rect(x + pad + 1, cy, 1.5, conn_h + 2, "F")
+        pdf.set_xy(x + pad + 4, cy + 1)
+        pdf.set_font("Helvetica", "B", 7)
+        pdf.set_text_color(*color)
+        pdf.multi_cell(inner_w - 4, 3.5, sanitize_text(connection))
+
+        return y + card_h
+
+    # ── UC1 Card ──
+    UC1_COLOR = (41, 98, 163)   # blue
+    UC2_COLOR = (183, 110, 30)  # amber
+
+    y2 = draw_story_card(
+        pdf, pdf.l_margin, y2, usable_w, UC1_COLOR,
+        "UC1", "Document Fidelity",
+        "Can an AI agent prepare a child welfare case from legal documents?",
+
+        setting=(
+            "An attorney in the Department of Social Services is preparing for "
+            "a probable cause hearing on Thursday. A two-year-old named Jaylen "
+            "was admitted to the ER at 3 AM with bilateral fractures. Both parents "
+            "say he fell from his crib. The attorney has 11 documents -- dictation "
+            "notes, medical records, a sheriff's report, court filings -- scattered "
+            "across SharePoint."
+        ),
+        complication=(
+            "The mother's story changed between the hospital and the sheriff's "
+            "interview. At the ER, she said she heard crying at 2 AM. The next day, "
+            "she told the detective she heard a loud thump at 9:30 PM -- four and a "
+            "half hours earlier -- and that the father had a temper and had grabbed "
+            "the child roughly before. Meanwhile, the radiologist found fractures at "
+            "different stages of healing, meaning two separate injury events days "
+            "apart. A single crib fall cannot explain that."
+        ),
+        stakes=(
+            "The attorney needs every discrepancy, every contradiction, every "
+            "timeline gap surfaced before the hearing. Miss one, and a judge may "
+            "not find probable cause. But one of the documents -- the sheriff's "
+            "report -- says the skeletal survey showed 'no fractures.' The medical "
+            "records say the opposite. Seven of eight document agents quoted the "
+            "sheriff without cross-checking. The citation was real. The confidence "
+            "was justified. The conclusion was dangerous."
+        ),
+        data_note=(
+            "50 synthetic cases, 277 people, 333 timeline events, 338 statements, "
+            "151 discrepancies. All data modeled after real DSS legal pleadings, "
+            "all PII replaced with fictional names."
+        ),
+        connection=(
+            "This is why fidelity matters: the answer looked right, cited a real "
+            "source, and was dead wrong. Level 5 requires human review -- always."
+        ),
+    )
+
+    y2 += 5
+
+    # ── UC2 Card ──
+    y2 = draw_story_card(
+        pdf, pdf.l_margin, y2, usable_w, UC2_COLOR,
+        "UC2", "Investigative Analytics",
+        "Can an AI agent investigate a slumlord from a 34-million-row property database?",
+
+        setting=(
+            "A city investigator notices a pattern: one LLC owns 194 properties "
+            "across Philadelphia. 178 are vacant lots. They buy at sheriff's sales "
+            "for pennies on the dollar -- a $357,000 stone colonial for $230,000, "
+            "a $629,000 multi-family building for $46,000. No rental licenses. No "
+            "business licenses. The entity's mailing address is a house 1.2 miles "
+            "from its most valuable property."
+        ),
+        complication=(
+            "The properties accumulate 1,411 code violations. 823 failed inspections. "
+            "Lots fill with debris while assessed values climb in gentrifying "
+            "neighborhoods. One property -- 2400 Bryn Mawr, a 4,100 sq ft stone "
+            "colonial -- has 34 violations and a condition rating of 7 out of 7 "
+            "(near-uninhabitable). The investigator needs to trace the ownership "
+            "chain, calculate acquisition discounts, map violation patterns across "
+            "zip codes. The data spans 34 million rows."
+        ),
+        stakes=(
+            "Every MCP-backed agent can count the properties, pull the violations, "
+            "and trace the ownership chain -- but only with the right model. GPT-4o "
+            "scores 1/11 on the same Dataverse MCP infrastructure where Sonnet 4.6 "
+            "scores 11/11. Same data, same tools, same agent -- different model, "
+            "completely different outcome. And every SQL-backed agent struggles with "
+            "address resolution: 15 attempts across three prompts, only 2 correct "
+            "parcel matches."
+        ),
+        data_note=(
+            "Real public data from the City of Philadelphia. 584K properties, "
+            "1.6M violations, 34M total rows. Five investigation PDFs written from "
+            "the data for document agent comparison."
+        ),
+        connection=(
+            "This is why model choice matters: infrastructure is necessary but not "
+            "sufficient. The gap between models is larger than the gap between tools."
+        ),
+    )
+
+    # Footer (page 2)
     pdf.set_xy(pdf.l_margin, pdf.h - 8)
     pdf.set_font("Helvetica", "I", 6)
     pdf.set_text_color(*LIGHT)

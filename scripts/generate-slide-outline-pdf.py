@@ -1019,18 +1019,33 @@ def build_pdf():
     # ====================================================================
     pdf.slide_heading(21, "Live Demo Title Card")
 
-    pdf.headline('"Let me show you the difference between Level 2 and Level 4."')
+    pdf.headline('"Same agent. Change one variable. Watch the result change."')
 
-    pdf.body_text("[Switch to live demo -- follow the presenter guide]")
+    pdf.body_text("[Switch to Copilot Studio -- all demos run in the platform]")
 
-    pdf.bullet("Level 2: SharePoint document summarization (2 min)")
-    pdf.bullet('Level 3: "How many cases by type?" aggregate query (2 min)')
-    pdf.bullet(
-        "Level 4: The money prompt -- timeline, discrepancies, statements (5 min)"
-    )
-    pdf.bullet("Level 5: The skeletal survey question (3 min)")
+    pdf.ln(2)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.set_text_color(*DARK)
+    pdf.cell(0, 6, "Part 1: Document Quality (~10 min)", ln=True)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.bullet("3 agents, same model (GPT-4o/GCC), 3 SharePoint libraries: Raw, Cross-Referenced, Enriched")
+    pdf.bullet('Prompt 1: "Did the Sheriff\'s Office find fractures in the skeletal survey?" (FAIL -> PASS -> PASS)')
+    pdf.bullet('Prompt 2: "What did Marcus Webb tell hospital staff?" (FAIL -> PARTIAL -> PASS)')
+    pdf.bullet('Prompt 3: "Complete timeline for case 2024-DR-42-0892" (FAIL -> PASS -> PASS)')
+    pdf.bullet("Score arc: 3/10 -> 7/10 -> 8/10 for $0 and 45 minutes")
 
-    pdf.visual_note("Demo URL and case number reference")
+    pdf.ln(2)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.set_text_color(*DARK)
+    pdf.cell(0, 6, "Part 2: Model Selection (~8 min)", ln=True)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.bullet("1 Dataverse MCP agent, swap model live: GPT-4o -> Sonnet 4.6")
+    pdf.bullet('Prompt 1: "Which cases involve Termination of Parental Rights?" (0 -> 10)')
+    pdf.bullet('Prompt 2: "What did Marcus Webb tell hospital staff?" (0 -> 10)')
+    pdf.bullet('Prompt 3: "Time gap between thump and hospital?" (0 -> 10)')
+    pdf.bullet("Full battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11")
+
+    pdf.visual_note("Two-part layout: document quality levers on left, model selection on right")
 
     # ====================================================================
     # SLIDE 18: Surprising Finding -- Agent Challenged Its Own Premise

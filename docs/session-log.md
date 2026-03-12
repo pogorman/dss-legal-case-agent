@@ -2031,3 +2031,54 @@ Tables and columns received rich descriptions including valid values, query hint
 - `docs/final-analysis.md` — New (full pre-demo audit)
 - `CLAUDE.md` — Updated documentation requirements + key file paths
 - `docs/session-log.md` — Session 44
+
+## Session 45 — 2026-03-11
+**Focus:** Demo cheat sheet page 2 (use case stories), SharePoint site planning
+
+### What happened
+- **Demo cheat sheet page 2** — Added "The Two Use Cases" page to `scripts/generate-cheat-sheet-pdf.py`
+  - `draw_story_card()` helper renders Setting/Complication/Stakes with colored stripe, data note, connection callout
+  - UC1 card (blue): Document Fidelity — Jaylen Webb story, skeletal survey trap, 7/8 agents reproduced dangerous false negative
+  - UC2 card (amber): Investigative Analytics — GEENA LLC story, 194 properties, 1,411 violations, model gap (GPT-4o 1/11 vs Sonnet 4.6 11/11)
+  - Each card ends with bold takeaway
+  - Regenerated `docs/pdf/demo-cheat-sheet.pdf` (now 2 pages)
+- **SharePoint site discussion** — O'G asked about theming a SharePoint site to serve both UCs. Recommended "Office of Legal Services" with two document libraries (Family Services, Community Protection). O'G created the site manually.
+
+### Files changed
+- `scripts/generate-cheat-sheet-pdf.py` — Added page 2 (~150 lines)
+- `docs/pdf/demo-cheat-sheet.pdf` — Regenerated (2 pages)
+- `docs/session-log.md` — Session 45
+
+## Session 46 — 2026-03-11
+**Focus:** Live demo restructure — Copilot Studio focus, GCC emphasis, document quality + model selection
+
+### What happened
+- **Demo restructured** for Copilot Studio only — no custom code Web UI in the live demo
+- **Live demo script** — Created `docs/live-demo-script.md` with complete setup and execution guide
+  - **Part 1: Document Quality (~10 min)** — 3 SharePoint libraries (Raw, Cross-Referenced, Enriched), same GCC agent, 3 prompts
+    - Library 1: Original 11 PDFs
+    - Library 2: Same PDFs with cross-reference headers (zero content changes)
+    - Library 3: Cross-ref PDFs + SharePoint metadata columns (Case Number, Document Type, Key Topics)
+    - Prompt 1: Skeletal survey trap (FAIL → PASS → PASS) — the signature dangerous false negative
+    - Prompt 2: Marcus Webb statements (FAIL → PARTIAL → PASS) — shows metadata fixing retrieval
+    - Prompt 3: Timeline (FAIL → PASS → PASS) — shows cross-refs preventing case contamination
+    - Score arc: 3/10 → 7/10 → 8/10 for $0 and 45 minutes
+  - **Part 2: Model Selection (~8 min)** — 1 Dataverse MCP agent, swap models live
+    - Prompt 1: TPR cases filter (0 → 10) — abbreviation trap, all OpenAI models fail
+    - Prompt 2: Marcus Webb cross-ref (0 → 10) — multi-step reasoning
+    - Prompt 3: Time gap calculation (0 → 10) — semantic search + arithmetic
+    - Full battery: GPT-4o = 1/11, GPT-4.1 = 6/11, Sonnet 4.6 = 11/11
+  - Includes: exact file lists per library, metadata values per document, agent config, warm-up steps, talking points, fallback plan, full proven test results tables
+- **Metadata tags compiled** — Full Key Topics metadata for all 11 documents across both cases, derived from testing (Session 31 Medical_Records tags + new tags for remaining 10 docs)
+
+### Decisions made
+- Live demo is now 100% Copilot Studio — no switching to custom Web UI
+- Document quality demo uses 3 GCC agents pointing at 3 different SharePoint libraries
+- Model demo uses 1 Commercial Dataverse MCP agent with live model swap (GPT-4o → Sonnet 4.6)
+- 3 doc prompts selected for clearest improvement arc across all 3 library levels
+- 3 model prompts selected for maximum differentiation (all 0 on GPT-4o, all 10 on Sonnet)
+- Optional GPT-4.1 as middle tier if time allows
+
+### Files changed
+- `docs/live-demo-script.md` — New (complete demo setup + execution script)
+- `docs/session-log.md` — Sessions 45-46

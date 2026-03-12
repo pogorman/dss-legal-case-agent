@@ -1197,32 +1197,58 @@ def slide_17_demo(prs):
     # Full navy background
     set_slide_bg(slide, DARK_NAVY)
 
-    add_textbox(slide, 1.5, 1.0, 10.3, 1.0,
+    add_textbox(slide, 1.5, 0.6, 10.3, 1.0,
                 "Live Demo",
                 font_size=44, bold=True, color=WHITE,
                 alignment=PP_ALIGN.CENTER)
-    add_textbox(slide, 1.5, 2.2, 10.3, 0.8,
-                '"Let me show you the difference\nbetween Level 2 and Level 4."',
-                font_size=24, color=RGBColor(0xA0, 0xC4, 0xE8),
+    add_textbox(slide, 1.5, 1.6, 10.3, 0.6,
+                '"Same agent. Change one variable. Watch the result change."',
+                font_size=22, color=RGBColor(0xA0, 0xC4, 0xE8),
                 alignment=PP_ALIGN.CENTER)
 
-    demos = [
-        ("Level 2:", "SharePoint document summarization", "2 min"),
-        ("Level 3:", '"How many cases by type?" aggregate query', "2 min"),
-        ("Level 4:", "The money prompt -- timeline, discrepancies, statements", "5 min"),
-        ("Level 5:", "The skeletal survey question", "3 min"),
-    ]
+    # Part 1: Document Quality (left side)
+    part1_x = 1.0
+    add_textbox(slide, part1_x, 2.5, 5.5, 0.5,
+                "Part 1: Document Quality  (~10 min)",
+                font_size=18, bold=True, color=WHITE)
+    add_rect(slide, part1_x, 3.0, 5.5, 0.04, ACCENT_BLUE)
 
-    for i, (level, desc, time) in enumerate(demos):
-        y = 3.5 + i * 0.7
-        add_textbox(slide, 2.5, y, 1.5, 0.5, level,
-                    font_size=16, bold=True, color=LEVEL_COLORS[i + 1],
-                    alignment=PP_ALIGN.RIGHT)
-        add_textbox(slide, 4.2, y, 5.5, 0.5, desc,
-                    font_size=16, color=WHITE)
-        add_textbox(slide, 10.0, y, 1.5, 0.5, time,
-                    font_size=14, color=RGBColor(0x88, 0xAA, 0xCC),
-                    alignment=PP_ALIGN.RIGHT)
+    part1_items = [
+        "3 agents, same model, 3 SharePoint libraries",
+        "Raw  ->  Cross-Referenced  ->  Enriched",
+        "Skeletal survey: FAIL -> PASS -> PASS",
+        "Marcus Webb: FAIL -> PARTIAL -> PASS",
+        "Score arc: 3/10 -> 7/10 -> 8/10",
+        "Cost: $0, 45 minutes of document hygiene",
+    ]
+    for i, item in enumerate(part1_items):
+        add_textbox(slide, part1_x + 0.3, 3.2 + i * 0.55, 5.2, 0.5,
+                    item, font_size=14, color=RGBColor(0xCC, 0xDD, 0xEE))
+
+    # Part 2: Model Selection (right side)
+    part2_x = 7.0
+    add_textbox(slide, part2_x, 2.5, 5.5, 0.5,
+                "Part 2: Model Selection  (~8 min)",
+                font_size=18, bold=True, color=WHITE)
+    add_rect(slide, part2_x, 3.0, 5.5, 0.04, ACCENT_BLUE)
+
+    part2_items = [
+        "1 Dataverse MCP agent, swap model live",
+        "GPT-4o  ->  Sonnet 4.6",
+        "TPR case filter: 0 -> 10",
+        "Cross-doc reasoning: 0 -> 10",
+        "Time gap calculation: 0 -> 10",
+        "Full battery: 1/11 -> 6/11 -> 11/11",
+    ]
+    for i, item in enumerate(part2_items):
+        add_textbox(slide, part2_x + 0.3, 3.2 + i * 0.55, 5.2, 0.5,
+                    item, font_size=14, color=RGBColor(0xCC, 0xDD, 0xEE))
+
+    # Bottom tagline
+    add_textbox(slide, 1.5, 6.5, 10.3, 0.5,
+                "All demos run in Copilot Studio -- no custom code UI",
+                font_size=14, bold=True, color=RGBColor(0x88, 0xAA, 0xCC),
+                alignment=PP_ALIGN.CENTER)
 
 
 def slide_18_challenged_premise(prs):

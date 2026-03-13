@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "connectionParameters": {
+      "api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "APIM Subscription Key",
+          "description": "The Ocp-Apim-Subscription-Key for the DSS Case API",
+          "tooltip": "Enter your APIM subscription key",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+      }
+    },
+    "iconBrandColor": "#0078d4",
+    "capabilities": [],
+    "scriptOperations": null,
+    "publisher": "Office of Legal Services",
+    "stackOwner": "Office of Legal Services"
+  }
+}

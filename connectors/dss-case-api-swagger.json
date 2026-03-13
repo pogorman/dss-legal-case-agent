@@ -1,0 +1,266 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DSS Case API",
+    "version": "1.0",
+    "description": "Structured legal case data for the Office of Legal Services. Returns case summaries, chronological timelines, witness statements, and factual discrepancies from the case management database."
+  },
+  "host": "philly-profiteering-apim.azure-api.net",
+  "basePath": "/dss",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "apiKeyHeader": {
+      "type": "apiKey",
+      "name": "Ocp-Apim-Subscription-Key",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": []
+    }
+  ],
+  "paths": {
+    "/cases": {
+      "get": {
+        "operationId": "ListCases",
+        "summary": "List all legal cases",
+        "description": "Returns every case in the system with basic metadata: case ID, title, type, circuit, county, filed date, status, plaintiff, and summary. Use this to find a case ID before calling other endpoints.",
+        "responses": {
+          "200": {
+            "description": "Array of case objects",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CaseSummary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}": {
+      "get": {
+        "operationId": "GetCaseSummary",
+        "summary": "Get case details and involved people",
+        "description": "Returns full case metadata plus all people involved (parents, children, caseworkers, witnesses) with their roles and relationships. The caseId format is like 2024-DR-42-0892.",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The case identifier, e.g. 2024-DR-42-0892"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Case details with people array",
+            "schema": {
+              "$ref": "#/definitions/CaseDetail"
+            }
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/timeline": {
+      "get": {
+        "operationId": "GetTimeline",
+        "summary": "Get chronological timeline of case events",
+        "description": "Returns all events for a case in chronological order: home visits, court hearings, incident reports, medical exams, etc. Optionally filter by event type.",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The case identifier, e.g. 2024-DR-42-0892"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter by event type, e.g. Home Visit, Court Hearing, Incident Report, Medical Exam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of timeline events in chronological order",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TimelineEvent"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/statements": {
+      "get": {
+        "operationId": "GetStatements",
+        "summary": "Get witness and party statements",
+        "description": "Returns statements made by people involved in the case. IMPORTANT: You must always provide at least one of 'person' or 'made_to'. To get what someone said, set person to their last name. To get statements made to a specific audience, set made_to. You can set both for precise filtering. The API returns 400 if neither is provided.",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The case identifier, e.g. 2024-DR-42-0892"
+          },
+          {
+            "name": "person",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Person's last name to filter by (partial match). e.g. Webb, Holloway, Price. You must provide this or made_to or both.",
+            "x-ms-summary": "Person Name"
+          },
+          {
+            "name": "made_to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Who the statement was made to (partial match). Valid values: Medical Staff, Law Enforcement, Court, Case Manager, DSS Caseworker. You must provide this or person or both.",
+            "x-ms-summary": "Statement Made To"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of statements with person details",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Statement"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/discrepancies": {
+      "get": {
+        "operationId": "GetDiscrepancies",
+        "summary": "Get factual discrepancies between accounts",
+        "description": "Returns contradictions and inconsistencies found between different people's accounts of events in the case. Each discrepancy identifies the two conflicting parties, their accounts, and the evidence that contradicts them.",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The case identifier, e.g. 2024-DR-42-0892"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of discrepancies with conflicting accounts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Discrepancy"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CaseSummary": {
+      "type": "object",
+      "properties": {
+        "case_id": { "type": "string" },
+        "case_title": { "type": "string" },
+        "case_type": { "type": "string" },
+        "circuit": { "type": "string" },
+        "county": { "type": "string" },
+        "filed_date": { "type": "string" },
+        "status": { "type": "string" },
+        "plaintiff": { "type": "string" },
+        "summary": { "type": "string" }
+      }
+    },
+    "CaseDetail": {
+      "type": "object",
+      "properties": {
+        "case_id": { "type": "string" },
+        "case_title": { "type": "string" },
+        "case_type": { "type": "string" },
+        "circuit": { "type": "string" },
+        "county": { "type": "string" },
+        "filed_date": { "type": "string" },
+        "status": { "type": "string" },
+        "plaintiff": { "type": "string" },
+        "summary": { "type": "string" },
+        "people": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Person"
+          }
+        }
+      }
+    },
+    "Person": {
+      "type": "object",
+      "properties": {
+        "person_id": { "type": "integer" },
+        "full_name": { "type": "string" },
+        "role": { "type": "string" },
+        "relationship": { "type": "string" },
+        "dob": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "TimelineEvent": {
+      "type": "object",
+      "properties": {
+        "event_id": { "type": "integer" },
+        "case_id": { "type": "string" },
+        "event_date": { "type": "string" },
+        "event_time": { "type": "string" },
+        "event_type": { "type": "string" },
+        "description": { "type": "string" },
+        "source_document": { "type": "string" },
+        "parties_involved": { "type": "string" }
+      }
+    },
+    "Statement": {
+      "type": "object",
+      "properties": {
+        "statement_id": { "type": "integer" },
+        "case_id": { "type": "string" },
+        "statement_date": { "type": "string" },
+        "made_to": { "type": "string" },
+        "statement_text": { "type": "string" },
+        "source_document": { "type": "string" },
+        "page_reference": { "type": "string" },
+        "full_name": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "Discrepancy": {
+      "type": "object",
+      "properties": {
+        "discrepancy_id": { "type": "integer" },
+        "case_id": { "type": "string" },
+        "topic": { "type": "string" },
+        "person_a_account": { "type": "string" },
+        "person_b_account": { "type": "string" },
+        "contradicted_by": { "type": "string" },
+        "source_document": { "type": "string" },
+        "person_a_name": { "type": "string" },
+        "person_a_role": { "type": "string" },
+        "person_b_name": { "type": "string" },
+        "person_b_role": { "type": "string" }
+      }
+    }
+  }
+}

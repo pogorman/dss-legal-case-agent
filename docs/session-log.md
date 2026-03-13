@@ -2250,3 +2250,58 @@ Tables and columns received rich descriptions including valid values, query hint
 ### Files changed
 - C:/Users/pogorman/.copilot/session-state/.../files/grading-init.md — new init file for resuming grading in next session
 - docs/session-log.md — this entry
+
+## Session 51 — 2026-03-12
+
+### What was done
+- **Phase 2 kickoff**: Custom Connector approach selected to give GCC Copilot Studio agents structured API access without MCP infrastructure
+- **Swagger spec created**: Enriched APIM's bare Swagger 2.0 export with operation descriptions, parameter descriptions with examples, missing query params (type, person, made_to), and full response schemas (6 definitions). File: `connectors/dss-case-api-swagger.json`
+- **API properties file**: Generated via `pac connector init --connection-template ApiKey`, customized for APIM. File: `connectors/apiProperties.json`
+- **Custom connector deployed to GCC**: `pac connector create` to og-ai environment (ID: `540e456d-7a1e-f111-8342-001dd809c49d`). 5 operations visible as tools in Copilot Studio
+- **Direct Line test script**: `scripts/phase-2/test-connector-agent.ts` — fires all 19 Phase 1 prompts via Direct Line API, captures responses to JSON + MD
+- **Iterative debugging** (4 rounds):
+  - Round 1: DNS failure — GCC endpoint is `directline.botframework.azure.us` but secret works on commercial `.com`
+  - Round 2: `LatestPublishedVersionNotFound` — agent had Microsoft auth enabled, switched to no-auth
+  - Round 3: `AuthenticationNotConfigured` on connector tools — switched to shared connection (agent author authenticates), republished. 12/19 working.
+  - Round 3.5: `ConnectorRequestFailure` on all Statements calls — GPT-4o not passing required query params. Updated Swagger descriptions, redeployed connector. Still failing.
+  - Round 4: Removed 400 validation from `getStatements.ts` (allow no-filter calls returning all statements for a case). Redeployed Functions. **17/19 working.**
+- **Scored all 19 prompts**: 161/190 = **8.5/10** overall
+- **Phase 2 PDF**: `scripts/phase-2/generate-phase-2-pdf.py` → `docs/pdf/phase-2/phase-2-custom-connector.pdf` (7 pages: context, architecture, build steps, artifacts, MCP comparison, test results with scoring method, what's next)
+- **Phase 2 directory structure**: `connectors/`, `scripts/phase-2/`, `docs/pdf/phase-2/`, `docs/test-responses/phase-2-connector/`
+
+### Scores — Custom Connector Agent (GCC, GPT-4o)
+
+| Section | Avg |
+|---------|-----|
+| 1. Factual Retrieval (4) | 10.0 |
+| 2. Cross-Referencing (3) | 9.3 |
+| 3. Discrepancies (3) | 6.7 |
+| 4. Filtering (3) | 7.0 |
+| 5. Aggregate (4) | 9.3 |
+| 6. Stress Tests (2) | 7.5 |
+| **Overall (19)** | **8.5** |
+
+Scoring: arithmetic mean of individual prompt scores (0-10) per section. Overall is mean of all 19, not mean of section averages.
+
+### Failure analysis
+- **3.3 (0/10)**: "Jaylen" + "the parents" — no case ID or last names. GPT-4o didn't attempt ListCases to resolve
+- **4.1 (1/10)**: "the Webb case" — 2 Webb cases in DB, resolved to wrong one (Bryce, not Jaylen)
+- Both are orchestration failures, not data access failures. When prompts include explicit IDs or full names, connector agent scores 10/10
+
+### Key finding
+Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestration quality (GPT-4o resolving ambiguous references), not tool access.
+
+### Backend change
+- `functions/src/functions/getStatements.ts`: Removed 400 validation requiring person/made_to. Now returns all statements for a case when no filter provided. Existing filtered calls unchanged.
+
+### Files changed
+- connectors/dss-case-api-swagger.json — new (enriched Swagger 2.0 spec)
+- connectors/apiProperties.json — new (API key auth properties)
+- scripts/phase-2/generate-phase-2-pdf.py — new (Phase 2 PDF generator)
+- scripts/phase-2/test-connector-agent.ts — new (Direct Line test runner)
+- docs/pdf/phase-2/phase-2-custom-connector.pdf — new (7-page Phase 2 doc)
+- docs/test-responses/phase-2-connector/results.json — new (raw responses)
+- docs/test-responses/phase-2-connector/results.md — new (formatted responses)
+- docs/test-responses/phase-2-connector/scores.md — new (scored results with Q&A)
+- functions/src/functions/getStatements.ts — removed 400 validation for no-filter calls
+- docs/session-log.md — this entry

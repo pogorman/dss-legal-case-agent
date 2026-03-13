@@ -18,12 +18,7 @@ async function getStatements(
   const personName = request.query.get("person");
   const madeTo = request.query.get("made_to");
 
-  if (!personName && !madeTo) {
-    return {
-      status: 400,
-      jsonBody: { error: "person and/or made_to query parameter is required" },
-    };
-  }
+  // If no filters provided, return all statements for the case
 
   try {
     const pool = await getPool();

@@ -264,6 +264,8 @@ def build_pdf(md_path, out_path):
     pdf.multi_cell(0, 6, sanitize_text(
         "March 2026 | Internal Technical Reference"
     ), align="C")
+    pdf.ln(2)
+    pdf.multi_cell(0, 6, "Patrick O'Gorman  |  Microsoft", align="C")
 
     # ── Content pages ──
     pdf.add_page()

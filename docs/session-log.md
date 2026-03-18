@@ -2305,3 +2305,34 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - docs/test-responses/phase-2-connector/scores.md — new (scored results with Q&A)
 - functions/src/functions/getStatements.ts — removed 400 validation for no-filter calls
 - docs/session-log.md — this entry
+
+## Session 53 — 2026-03-18
+
+### What was done
+- **Author attribution**: Added "Patrick O'Gorman | Microsoft" to the cover page of all 10 PDF generator scripts and the PowerPoint slide deck generator
+- Regenerated all 10 PDFs + slide deck with author name on cover pages
+
+### Scripts updated
+- scripts/generate-executive-pdf.py
+- scripts/generate-demo-guide-pdf.py
+- scripts/generate-slide-outline-pdf.py
+- scripts/generate-user-guide-pdf.py
+- scripts/generate-faqs-pdf.py
+- scripts/generate-architecture-pdf.py
+- scripts/generate-dv-testing-pdf.py
+- scripts/generate-demo-script-pdf.py
+- scripts/generate-slide-deck.py
+- scripts/phase-2/generate-phase-2-pdf.py
+
+### Outputs regenerated
+- docs/pdf/improving-agents-whitepaper-v1.pdf
+- docs/pdf/demo-guide.pdf
+- docs/pdf/slide-outline.pdf
+- docs/pdf/user-guide.pdf
+- docs/pdf/faqs.pdf
+- docs/pdf/architecture.pdf
+- docs/pdf/dataverse-mcp-server-testing.pdf
+- docs/pdf/live-demo-script.pdf
+- docs/pdf/phase-2/phase-2-custom-connector.pdf
+- docs/pdf/demo-cheat-sheet.pdf
+- decks/agent-fidelity-spectrum.pptx

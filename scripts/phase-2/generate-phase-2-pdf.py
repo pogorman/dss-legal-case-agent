@@ -206,6 +206,7 @@ def build_pdf():
     pdf.set_text_color(*LIGHT)
     pdf.cell(0, 6, "Office of Legal Services", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, "March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "Patrick O'Gorman  |  Microsoft", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # -- Section 1: Context --------------------------------------------------
     pdf.add_page()

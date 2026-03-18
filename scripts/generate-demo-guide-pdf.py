@@ -252,6 +252,8 @@ def build_pdf():
     pdf.set_text_color(160, 185, 210)
     pdf.cell(0, 7, "Presenter Guide | March 2026", align="C",
              new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Patrick O'Gorman  |  Microsoft", align="C",
+             new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_y(115)
     pdf.set_font("Helvetica", "", 10)

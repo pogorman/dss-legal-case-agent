@@ -250,6 +250,11 @@ def slide_01_title(prs):
                 "28 Slides  |  March 2026",
                 font_size=16, color=MEDIUM_TEXT,
                 alignment=PP_ALIGN.CENTER)
+    # Author
+    add_textbox(slide, 4, 5.2, 5.3, 0.4,
+                "Patrick O'Gorman  |  Microsoft",
+                font_size=14, color=MEDIUM_TEXT,
+                alignment=PP_ALIGN.CENTER)
     # Level bar
     add_level_bar(slide, top=5.6)
     # Stats line

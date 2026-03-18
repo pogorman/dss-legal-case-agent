@@ -272,6 +272,8 @@ def build_pdf(md_path, out_path):
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(*DARK)
     pdf.multi_cell(0, 6, "March 2026", align="C")
+    pdf.ln(2)
+    pdf.multi_cell(0, 6, "Patrick O'Gorman  |  Microsoft", align="C")
 
     # -- Content pages --
     pdf.add_page()

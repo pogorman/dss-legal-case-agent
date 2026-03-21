@@ -1,0 +1,20 @@
+meta {
+  name: List Cases
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{apimBaseUrl}}/cases
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

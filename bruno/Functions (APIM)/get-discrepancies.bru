@@ -1,0 +1,20 @@
+meta {
+  name: Get Discrepancies
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}/discrepancies
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

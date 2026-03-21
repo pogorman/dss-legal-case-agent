@@ -1,0 +1,20 @@
+meta {
+  name: Get Timeline
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}/timeline
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

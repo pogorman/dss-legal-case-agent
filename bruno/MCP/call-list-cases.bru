@@ -1,0 +1,28 @@
+meta {
+  name: MCP Call - List Cases
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{containerAppUrl}}/mcp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {
+      "name": "list_cases",
+      "arguments": {}
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.content: isDefined
+}

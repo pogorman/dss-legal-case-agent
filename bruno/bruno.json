@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "DSS Legal Case Agent",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

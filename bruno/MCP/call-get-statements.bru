@@ -1,0 +1,31 @@
+meta {
+  name: MCP Call - Get Statements
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{containerAppUrl}}/mcp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "method": "tools/call",
+    "params": {
+      "name": "get_statements_by_person",
+      "arguments": {
+        "case_id": "{{caseId}}",
+        "person_name": "Marcus Webb"
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.content: isDefined
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Get Statements
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}/statements
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

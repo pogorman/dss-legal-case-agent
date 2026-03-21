@@ -1,0 +1,26 @@
+meta {
+  name: MCP Initialize
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{containerAppUrl}}/mcp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {}
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.protocolVersion: isDefined
+  res.body.result.serverInfo.name: eq dss-case-agent
+}

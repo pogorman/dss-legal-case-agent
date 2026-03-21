@@ -1,0 +1,20 @@
+meta {
+  name: Get Timeline (Filtered)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}/timeline?type=Medical
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

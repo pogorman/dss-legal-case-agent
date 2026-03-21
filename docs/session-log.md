@@ -2306,6 +2306,20 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - functions/src/functions/getStatements.ts — removed 400 validation for no-filter calls
 - docs/session-log.md — this entry
 
+## Session 54 — 2026-03-20
+
+### What was done
+- **Bruno API collection**: Created `bruno/` folder with 23 files covering all project endpoints
+- **Environments**: `azure` (deployed Container App + APIM) and `local` (localhost dev)
+- **Request groups**:
+  - Health (1): Container App `/healthz`
+  - Chat (2): `/chat` completions — basic list + case-specific query
+  - MCP (8): JSON-RPC 2.0 — `initialize`, `tools/list`, and all 5 tool calls (list_cases, get_case_summary, get_timeline, get_timeline filtered, get_statements, get_discrepancies)
+  - Functions via APIM (7): All 5 REST endpoints + filtered variants for timeline and statements
+  - Warm-up (1): Full cold-start chain primer
+- All requests include assertions for status codes and response shape
+- Updated `CLAUDE.md` Key File Paths with Bruno collection reference
+
 ## Session 53 — 2026-03-18
 
 ### What was done

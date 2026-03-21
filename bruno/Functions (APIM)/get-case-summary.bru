@@ -1,0 +1,21 @@
+meta {
+  name: Get Case Summary
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body.case_id: isDefined
+  res.body.people: isArray
+}

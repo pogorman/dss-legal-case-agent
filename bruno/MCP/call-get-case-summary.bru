@@ -1,0 +1,30 @@
+meta {
+  name: MCP Call - Get Case Summary
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{containerAppUrl}}/mcp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "method": "tools/call",
+    "params": {
+      "name": "get_case_summary",
+      "arguments": {
+        "case_id": "{{caseId}}"
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.content: isDefined
+}

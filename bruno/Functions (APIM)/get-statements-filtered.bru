@@ -1,0 +1,20 @@
+meta {
+  name: Get Statements (Filtered)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{apimBaseUrl}}/cases/{{caseId}}/statements?person=Marcus Webb&made_to=Law Enforcement
+  body: none
+  auth: none
+}
+
+headers {
+  Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

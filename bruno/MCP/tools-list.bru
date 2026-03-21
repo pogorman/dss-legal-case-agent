@@ -1,0 +1,25 @@
+meta {
+  name: MCP List Tools
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{containerAppUrl}}/mcp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/list",
+    "params": {}
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.result.tools: isDefined
+}

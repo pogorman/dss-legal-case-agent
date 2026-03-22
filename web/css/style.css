@@ -684,28 +684,9 @@ body {
   background: var(--navy-dark); color: rgba(255,255,255,0.7);
   flex-shrink: 0; margin-top: auto;
 }
-.footer-inner {
-  max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 32px; padding: 32px;
-}
-.footer-col h4 {
-  color: var(--gold-light); font-size: 12px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;
-}
-.footer-col p { font-size: 12px; line-height: 1.5; margin-bottom: 2px; }
-.footer-phone { margin-top: 6px; font-weight: 600; color: rgba(255,255,255,0.9); }
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 6px; }
-.footer-col ul a {
-  color: rgba(255,255,255,0.6); text-decoration: none;
-  font-size: 12px; transition: color 0.15s;
-}
-.footer-col ul a:hover { color: white; }
-
+.footer-inner { display: none; }
 .footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding: 14px 32px;
+  padding: 10px 32px;
 }
 .footer-bottom-inner {
   max-width: 1400px; margin: 0 auto;
@@ -728,7 +709,6 @@ body {
 @media (max-width: 1024px) {
   .sidebar { display: none; }
   .nav-search { display: none; }
-  .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
   .header { padding: 0 16px; height: 56px; }
@@ -739,6 +719,5 @@ body {
   .chat-widget { width: calc(100vw - 20px); right: 10px; bottom: 80px; height: calc(100vh - 100px); }
   .chat-fab { bottom: 16px; right: 16px; width: 52px; height: 52px; }
   .browser-panel { padding: 16px; }
-  .footer-inner { grid-template-columns: 1fr; gap: 20px; }
   .footer-bottom-inner { flex-direction: column; gap: 4px; text-align: center; }
 }

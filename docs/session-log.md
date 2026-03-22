@@ -2350,3 +2350,27 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - docs/pdf/phase-2/phase-2-custom-connector.pdf
 - docs/pdf/demo-cheat-sheet.pdf
 - decks/agent-fidelity-spectrum.pptx
+
+## Session 55 — 2026-03-22
+
+### What was done
+- **BFG Repo Cleaner investigation** — thorough audit of full git history for real PII from original SC DSS case
+  - Searched all 64 commits: deleted files, commit messages, diff content
+  - No real .docx/.msg files were ever committed — `.gitignore` was in place from the initial commit
+  - All sharepoint-docs are entirely synthetic (written from scratch)
+  - SQL seed data was always synthetic
+  - Deleted test response `.txt` files only reference synthetic names (Webb, Holloway, Jaylen, Price)
+  - **Conclusion: BFG unnecessary — repo has been clean since day one**
+- **'Medical Staff' → 'Hospital Staff' rename** — scoped the full change across all layers (Dataverse GCC + Commercial, Azure SQL, seed files, generator, description patches). Deferred to a future session.
+- **Created TODO.md** — project-level task list for open items
+- **Removed unused footer CSS** from `web/css/style.css` (footer-inner grid, footer-col styles, responsive overrides)
+
+### Decisions made
+- BFG is off the table — no real PII in git history, gitignore prevented leakage from the start
+- Medical Staff rename touches 6+ files and 2 Dataverse environments — will do as a batch later
+- TODO.md added to project root for tracking open work items
+
+### Files changed
+- TODO.md — new (open items tracker)
+- web/css/style.css — removed unused footer grid CSS
+- docs/session-log.md — this entry

@@ -77,7 +77,7 @@ class ExecutivePDF(FPDF):
         self.set_font("Helvetica", "", 7)
         self.set_text_color(*LIGHT)
         self.ln(3)
-        self.cell(0, 4, sanitize_text("March 2026  |  v1.0"), align="C")
+        self.cell(0, 4, sanitize_text("March 2026  |  v1.1"), align="C")
 
     # -- Helpers --------------------------------------------------------------
     def section_title(self, text, link=None):
@@ -336,7 +336,7 @@ def build_pdf():
     pdf.set_y(103)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(160, 185, 210)
-    pdf.cell(0, 7, "Whitepaper  |  v1.0", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Whitepaper  |  v1.1", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "Patrick O'Gorman  |  Microsoft", align="C", new_x="LMARGIN", new_y="NEXT")
 
@@ -381,7 +381,8 @@ def build_pdf():
         "The agent accelerates the human; it does not replace them. "
         "Mandatory human review, citation linking, audit logging, and "
         "organizational culture that treats AI output as a draft, never "
-        "a decision. This is the only responsible operating model."
+        "a decision. Aligned with the NIST AI Risk Management Framework. "
+        "This is the only responsible operating model."
     ), align="C")
 
     # ====================================================================
@@ -398,6 +399,7 @@ def build_pdf():
         "The Iterative Process",
         "Government Cloud (GCC) Options",
         "Five Findings That Surprised Us",
+        "Risk Management and Responsible AI",
         "Conclusion",
         "Appendix: Meet Your Agents",
         "Appendix: Test Prompts",
@@ -1439,6 +1441,69 @@ def build_pdf():
         "Instead of calculating the answer, it checked the source data, found the premise "
         "was wrong, and recalculated using verified numbers. No other agent questioned "
         "the input."
+    )
+
+    # ====================================================================
+    # RISK MANAGEMENT AND RESPONSIBLE AI
+    # ====================================================================
+    pdf.add_page()
+    pdf.section_title("Risk Management and Responsible AI",
+                      link=toc_links["Risk Management and Responsible AI"])
+
+    pdf.body_text(
+        "The fidelity framework presented in this report is not just a testing methodology "
+        "- it is a risk-tiering system. Each level maps increasing consequence of failure "
+        "to increasing investment in tools, data, models, and human oversight. This aligns "
+        "directly with NIST's AI Risk Management Framework (AI 100-1), which provides "
+        "the most widely recognized standard for managing AI risk in government."
+    )
+
+    pdf.ln(2)
+    pdf.subsection_title("Mapping to NIST AI RMF")
+    pdf.body_text(
+        "The four core functions of NIST AI RMF each have a direct counterpart in this "
+        "framework's methodology and findings."
+    )
+
+    rmf_headers = ["NIST AI RMF Function", "What This Framework Provides"]
+    rmf_widths = [50, 120]
+    rmf_rows = [
+        ["GOVERN\nEstablish policies and roles\nfor AI risk",
+         "Five fidelity levels as a risk-tiering policy.\n"
+         "Human-in-the-loop operating model at Level 5.\n"
+         "Agent is research assistant, never the decision-maker."],
+        ["MAP\nIdentify and contextualize\nAI risks",
+         "Danger taxonomy: five failure modes documented\n"
+         "across 462 test runs, ranked by severity.\n"
+         "Each failure mode traced to specific agent types."],
+        ["MEASURE\nQuantify risks with metrics\nand testing",
+         "Ground-truth test suites with verified answers.\n"
+         "10-point scoring rubric applied consistently.\n"
+         "Iterative retesting after every change."],
+        ["MANAGE\nAct on risks and monitor\nover time",
+         "Improvement Playbook: five-step cycle.\n"
+         "Round-over-round regression testing.\n"
+         "Model comparison across 6 configurations."],
+    ]
+    pdf.styled_table(rmf_headers, rmf_rows, rmf_widths, row_height=5, font_size=7.5,
+                      col_aligns=["L", "L"])
+
+    pdf.ln(4)
+    pdf.subsection_title("Trust but Verify as an Operating Model")
+    pdf.body_text(
+        "At every level where consequences are material (Level 3 and above), this framework "
+        "treats AI output as a draft, never a decision. The agent surfaces evidence, timelines, "
+        "and discrepancies. A human reviewer evaluates that output against source records before "
+        "any action is taken. This is not a guardrail bolted on after deployment - it is the "
+        "design premise of every agent tested in this report."
+    )
+
+    pdf.body_text(
+        "This framework is complementary to, not a replacement for, an organization's broader "
+        "responsible AI governance. The fidelity levels, danger taxonomy, and improvement playbook "
+        "are designed to slot into an existing NIST AI RMF process - providing the MEASURE and "
+        "MAP functions with empirical data while reinforcing the GOVERN and MANAGE functions "
+        "with concrete operating procedures."
     )
 
     # ====================================================================

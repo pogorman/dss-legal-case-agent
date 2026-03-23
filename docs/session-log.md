@@ -2374,3 +2374,23 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - TODO.md — new (open items tracker)
 - web/css/style.css — removed unused footer grid CSS
 - docs/session-log.md — this entry
+
+## Session 56 — 2026-03-22
+
+### What was done
+- **Whitepaper v1.1** — Added Responsible AI / NIST AI RMF section in response to reviewer feedback
+  - New TOC entry: "Risk Management and Responsible AI" (between "Five Findings" and "Conclusion")
+  - New page 15: intro paragraph positioning fidelity framework as risk-tiering system, 4-row NIST AI RMF mapping table (GOVERN/MAP/MEASURE/MANAGE), "Trust but Verify as an Operating Model" subsection, closing paragraph on complementary governance
+  - Cover page: added "Aligned with the NIST AI Risk Management Framework" to italic manifesto text
+  - Version bump: v1.0 → v1.1 on cover page and all footers
+  - PDF now 20 pages (was 19)
+
+### Decisions made
+- Light-touch RAI integration — one new section, not a rewrite of every level
+- No Microsoft Responsible AI Principles section (different doc for that)
+- Kept output filename as `improving-agents-whitepaper-v1.pdf` since CLAUDE.md and other docs reference it
+
+### Files changed
+- scripts/generate-executive-pdf.py — new RAI section, cover page update, version bump
+- docs/pdf/improving-agents-whitepaper-v1.pdf — regenerated (v1.1, 20 pages)
+- docs/session-log.md — this entry

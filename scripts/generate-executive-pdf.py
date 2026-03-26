@@ -312,7 +312,7 @@ def build_pdf():
     # ====================================================================
     pdf.add_page()
     pdf.set_fill_color(*NAVY)
-    pdf.rect(0, 0, pdf.w, 120, "F")
+    pdf.rect(0, 0, pdf.w, 128, "F")
 
     pdf.set_y(30)
     pdf.set_font("Helvetica", "B", 28)
@@ -341,7 +341,7 @@ def build_pdf():
     pdf.cell(0, 7, "Patrick O'Gorman  |  Microsoft", align="C", new_x="LMARGIN", new_y="NEXT")
 
     # Five colored level indicators on cover
-    pdf.set_y(130)
+    pdf.set_y(136)
     levels = [
         (LVL1_COLOR, "Discovery"),
         (LVL2_COLOR, "Summarization"),
@@ -381,8 +381,11 @@ def build_pdf():
         "The agent accelerates the human; it does not replace them. "
         "Mandatory human review, citation linking, audit logging, and "
         "organizational culture that treats AI output as a draft, never "
-        "a decision. Aligned with the NIST AI Risk Management Framework. "
-        "This is the only responsible operating model."
+        "a decision."
+    ), align="C")
+    pdf.ln(2)
+    pdf.multi_cell(0, 6, sanitize_text(
+        "Aligned with the NIST AI Risk Management Framework."
     ), align="C")
 
     # ====================================================================
@@ -1465,28 +1468,67 @@ def build_pdf():
         "framework's methodology and findings."
     )
 
-    rmf_headers = ["NIST AI RMF Function", "What This Framework Provides"]
-    rmf_widths = [50, 120]
+    rmf_col_widths = [50, 120]
     rmf_rows = [
-        ["GOVERN\nEstablish policies and roles\nfor AI risk",
+        ("GOVERN", "Establish policies and roles for AI risk",
          "Five fidelity levels as a risk-tiering policy.\n"
          "Human-in-the-loop operating model at Level 5.\n"
-         "Agent is research assistant, never the decision-maker."],
-        ["MAP\nIdentify and contextualize\nAI risks",
+         "Agent is research assistant, never the decision-maker."),
+        ("MAP", "Identify and contextualize AI risks",
          "Danger taxonomy: five failure modes documented\n"
          "across 462 test runs, ranked by severity.\n"
-         "Each failure mode traced to specific agent types."],
-        ["MEASURE\nQuantify risks with metrics\nand testing",
+         "Each failure mode traced to specific agent types."),
+        ("MEASURE", "Quantify risks with metrics and testing",
          "Ground-truth test suites with verified answers.\n"
          "10-point scoring rubric applied consistently.\n"
-         "Iterative retesting after every change."],
-        ["MANAGE\nAct on risks and monitor\nover time",
+         "Iterative retesting after every change."),
+        ("MANAGE", "Act on risks and monitor over time",
          "Improvement Playbook: five-step cycle.\n"
          "Round-over-round regression testing.\n"
-         "Model comparison across 6 configurations."],
+         "Model comparison across 6 configurations."),
     ]
-    pdf.styled_table(rmf_headers, rmf_rows, rmf_widths, row_height=5, font_size=7.5,
-                      col_aligns=["L", "L"])
+    # Header row
+    pdf.set_font("Helvetica", "B", 7.5)
+    pdf.set_fill_color(*TABLE_HEADER_BG)
+    pdf.set_text_color(*TABLE_HEADER_FG)
+    pdf.cell(rmf_col_widths[0], 6, "NIST AI RMF Function", border=0, align="C", fill=True)
+    pdf.cell(rmf_col_widths[1], 6, "What This Framework Provides", border=0, align="C", fill=True)
+    pdf.ln()
+    # Data rows with bold function name
+    rh = 4.5
+    for r_idx, (func_name, func_desc, provides) in enumerate(rmf_rows):
+        bg = ROW_ALT if r_idx % 2 == 0 else ROW_WHT
+        # Measure heights for both columns
+        pdf.set_font("Helvetica", "B", 7.5)
+        name_h = pdf.multi_cell(rmf_col_widths[0], rh, func_name, dry_run=True, output="HEIGHT")
+        pdf.set_font("Helvetica", "", 7.5)
+        desc_h = pdf.multi_cell(rmf_col_widths[0], rh, func_desc, dry_run=True, output="HEIGHT")
+        col1_h = name_h + desc_h
+        col2_h = pdf.multi_cell(rmf_col_widths[1], rh, sanitize_text(provides), dry_run=True, output="HEIGHT")
+        max_h = max(col1_h, col2_h)
+        # Page break check
+        if pdf.get_y() + max_h > pdf.h - pdf.b_margin:
+            pdf.add_page()
+        row_top = pdf.get_y()
+        # Background
+        pdf.set_fill_color(*bg)
+        pdf.rect(pdf.l_margin, row_top, sum(rmf_col_widths), max_h, "F")
+        # Column 1: bold function name + regular description
+        pdf.set_xy(pdf.l_margin, row_top)
+        pdf.set_text_color(*DARK)
+        pdf.set_font("Helvetica", "B", 7.5)
+        pdf.multi_cell(rmf_col_widths[0], rh, func_name)
+        pdf.set_xy(pdf.l_margin, row_top + name_h)
+        pdf.set_font("Helvetica", "", 7)
+        pdf.set_text_color(100, 100, 100)
+        pdf.multi_cell(rmf_col_widths[0], rh, func_desc)
+        # Column 2
+        pdf.set_xy(pdf.l_margin + rmf_col_widths[0], row_top)
+        pdf.set_text_color(*DARK)
+        pdf.set_font("Helvetica", "", 7.5)
+        pdf.multi_cell(rmf_col_widths[1], rh, sanitize_text(provides))
+        # Advance to bottom of row
+        pdf.set_xy(pdf.l_margin, row_top + max_h)
 
     pdf.ln(4)
     pdf.subsection_title("Trust but Verify as an Operating Model")
@@ -1499,11 +1541,10 @@ def build_pdf():
     )
 
     pdf.body_text(
-        "This framework is complementary to, not a replacement for, an organization's broader "
-        "responsible AI governance. The fidelity levels, danger taxonomy, and improvement playbook "
-        "are designed to slot into an existing NIST AI RMF process - providing the MEASURE and "
-        "MAP functions with empirical data while reinforcing the GOVERN and MANAGE functions "
-        "with concrete operating procedures."
+        "For organizations implementing NIST AI RMF, this framework provides the empirical "
+        "substrate for the MAP and MEASURE functions: ground-truth test suites, scored results, "
+        "and a documented failure taxonomy. The fidelity levels and improvement playbook reinforce "
+        "the GOVERN and MANAGE functions with concrete risk-tiering policies and operating procedures."
     )
 
     # ====================================================================
@@ -1526,6 +1567,14 @@ def build_pdf():
         "Copilot Studio agents are included with existing Microsoft 365 and Power Platform "
         "licenses. Foundry and pro-code agents use consumption-based Azure OpenAI pricing. "
         "The licensing cost scales with the level of investment, not the number of agents."
+    )
+
+    pdf.body_text(
+        "The improvement playbook described in this report maps directly to the iterative "
+        "cycle at the core of NIST AI RMF: identify risks, measure them empirically, act on "
+        "the findings, and retest. Organizations required to demonstrate RMF alignment in "
+        "procurement or ATO documentation can use the fidelity levels, scoring rubric, and "
+        "round-over-round results as evidence of that process in practice."
     )
 
     pdf.ln(6)

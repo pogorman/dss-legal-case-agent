@@ -2394,3 +2394,35 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - scripts/generate-executive-pdf.py — new RAI section, cover page update, version bump
 - docs/pdf/improving-agents-whitepaper-v1.pdf — regenerated (v1.1, 20 pages)
 - docs/session-log.md — this entry
+
+## Session 57 — 2026-03-26
+
+### What was done
+- **Whitepaper v2.0** — Created `improving-agents-whitepaper-v2.pdf` (34 pages) incorporating three major additions:
+  1. **Use Case 3: Policy Compliance** — Full Medicaid policy chatbot study (12 agents, 25 questions, 276 test runs). Baseline audit found customer-reported 70% accuracy was actually 57% after independent review. Document enrichment + alternative retrieval (KB upload, AI Search) improved accuracy from 39% to 91%. Content gap analysis identified 3 unanswerable questions (missing source content).
+  2. **Phase 2: Structured API Without MCP** — Custom connector delivers 8.5/10 (85% of MCP fidelity) with zero code. Same backend, same 19 evaluation prompts. 2 failures were orchestration issues (GPT-4o couldn't resolve ambiguous case references), not data access. Full comparison table: MCP vs Custom Connector.
+  3. **Three data visualizations** (matplotlib → PNG → embedded in PDF):
+     - Model Gap bar chart (GPT-4.1 vs GPT-4o at Level 4)
+     - Improvement Heatmap (agents × rounds color grid)
+     - UC3 Retrieval Bubble Chart (retrieval method vs accuracy by doc quality)
+- Updated stats: 757 test runs, 34 agents, 6 models, 45 prompts, 3 use cases
+- Updated framework: "Four Gaps" (model, data, tool, retrieval), 6-step Improvement Playbook, 7 GCC paths, 6 surprising findings
+- PDFs reorganized into `docs/pdf/phase-1/` and `docs/pdf/phase-2/` folders
+
+### New sections in v2
+- "Phase 2: Structured API Without MCP" — hypothesis, 4-step build, 5 operations, results by section, failure analysis, MCP vs Connector comparison
+- "Use Case 3: Policy Compliance" — baseline audit, retrieval problem, document enrichment path, content gaps, full 12-agent score table, bubble chart
+- "The Retrieval Gap" — new 4th gap with retrieval-method-vs-accuracy table
+- Finding #6: customer accuracy grading inflated by 13 percentage points
+
+### Decisions made
+- v2 goes in `docs/pdf/phase-2/`, v1 stays in `docs/pdf/phase-1/` (phase-1 frozen under peer review)
+- UC3 genericized to "a state Medicaid agency" (no SC references in whitepaper)
+- Custom connector scored as UC1 agent (same 19 prompts, same backend)
+- Used matplotlib for charts (same approach as DHHS project) rather than fpdf2 drawing primitives
+
+### Files changed
+- scripts/generate-executive-pdf-v2.py — new (v2 PDF generator with matplotlib charts)
+- docs/pdf/phase-2/improving-agents-whitepaper-v2.pdf — new (34 pages, 3 charts)
+- CLAUDE.md — updated PDF paths to reflect phase-1/phase-2 folder structure
+- docs/session-log.md — this entry

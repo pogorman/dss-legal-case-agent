@@ -2426,3 +2426,34 @@ Zero-code custom connector delivers 85% of MCP fidelity. The gap is orchestratio
 - docs/pdf/phase-2/improving-agents-whitepaper-v2.pdf — new (34 pages, 3 charts)
 - CLAUDE.md — updated PDF paths to reflect phase-1/phase-2 folder structure
 - docs/session-log.md — this entry
+
+## Session 58 — 2026-03-27
+
+### What was done
+- **Purview testing (GCC)** — Explored the Purview portal on the GCC tenant (`testtestmsftgccfo.onmicrosoft.com`):
+  - Confirmed unified audit log is ON and working (entries back 7+ days)
+  - Confirmed AI Hub is NOT available in GCC (still rolling out)
+  - Confirmed DSPM for AI is visible in left nav (not yet explored)
+  - Found O'G's audit entries: SharePoint file ops (PolicyxRefPDF downloads, PolicyxRef/Forms access) and Copilot Studio bot component creation
+  - No agent conversation activity logged yet (no prompts fired)
+- **Purview learning curriculum** — Created `purview-learning/` directory with structured 10-module curriculum:
+  - `CLAUDE.md`, `MEMORY.md`, `README.md` (curriculum index)
+  - `docs/md/`, `docs/pdf/`, `docs/html/`, `docs/pptx/` subfolders
+  - Module 01 (Foundations) written: governance landscape, Purview history/merger story, portal navigation, licensing, Power Platform governance split (Purview DLP vs PP Admin Center DLP)
+  - Every section distinguishes industry standard concepts from Microsoft-specific implementations
+- **Memory cleanup** — Removed 3 completed/dropped open items, kept only deferred Dataverse rename. Updated purview-testing.md with GCC findings.
+
+### Decisions made
+- GCC is the right tenant to start Purview testing (government demo narrative)
+- Purview learning is a structured curriculum (not ad-hoc) with 10 modules building on each other
+- O'G is learning Purview at their own pace — wait for them to drive exploration
+- Non-code directory: CLAUDE.md + MEMORY.md + README.md (curriculum index exception)
+
+### Files changed
+- purview-learning/CLAUDE.md — new (project instructions for learning curriculum)
+- purview-learning/MEMORY.md — new (progress tracking)
+- purview-learning/README.md — new (curriculum index, 10 modules)
+- purview-learning/docs/md/01-foundations.md — new (Module 01: governance landscape, Purview evolution, licensing, Power Platform)
+- memory/purview-testing.md — updated with GCC findings (audit ON, AI Hub missing, DSPM visible, O'G's audit entries)
+- memory/MEMORY.md — cleaned up open items, added purview learning reference
+- docs/session-log.md — this entry
